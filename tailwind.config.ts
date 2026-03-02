@@ -14,6 +14,7 @@ export default {
   			sm: 'calc(var(--radius) - 4px)'
   		},
   		colors: {
+  			// shadcn/ui tokens
   			background: 'hsl(var(--background))',
   			foreground: 'hsl(var(--foreground))',
   			card: {
@@ -23,10 +24,6 @@ export default {
   			popover: {
   				DEFAULT: 'hsl(var(--popover))',
   				foreground: 'hsl(var(--popover-foreground))'
-  			},
-  			primary: {
-  				DEFAULT: 'hsl(var(--primary))',
-  				foreground: 'hsl(var(--primary-foreground))'
   			},
   			secondary: {
   				DEFAULT: 'hsl(var(--secondary))',
@@ -53,7 +50,20 @@ export default {
   				'3': 'hsl(var(--chart-3))',
   				'4': 'hsl(var(--chart-4))',
   				'5': 'hsl(var(--chart-5))'
-  			}
+  			},
+  			// SSAFYnity semantic tokens
+  			primary: {
+  				DEFAULT: '#2563EB',
+  				hover:   '#1D4ED8',
+  			},
+  			surface: {
+  				DEFAULT: '#FFFFFF',
+  				muted:   '#F8FAFC',
+  			},
+  			text: {
+  				DEFAULT: '#0F172A',
+  				muted:   '#64748B',
+  			},
   		}
   	}
   },
