@@ -25,11 +25,11 @@ export const siteData = {
 
   // ─── SNS 채널 ──────────────────────────────────────────────────
   sns: [
+    { name: 'Gmail',     url: 'mailto:ssafynity@gmail.com',                            desc: '공식 이메일',     color: '#EA4335', icon: 'gmail'     },
+    { name: 'GitHub',    url: 'https://github.com/SSAFYnity',                          desc: '오픈소스 기여',   color: '#181717', icon: 'github'    },
     { name: 'KakaoTalk', url: 'http://pf.kakao.com/_GdeRX',                            desc: '공식 오픈카톡',    color: '#FEE500', icon: 'kakao'     },
     { name: 'Instagram', url: 'https://www.instagram.com/ssafynity/',                  desc: '활동 사진 공유',   color: '#E1306C', icon: 'instagram' },
     { name: 'LinkedIn',  url: 'https://www.linkedin.com/company/ssafynity',            desc: '커리어 네트워킹', color: '#0077B5', icon: 'linkedin'  },
-    { name: 'GitHub',    url: 'https://github.com/SSAFYnity',                          desc: '오픈소스 기여',   color: '#181717', icon: 'github'    },
-    { name: 'Gmail',     url: 'mailto:ssafynity@gmail.com',                            desc: '공식 이메일',     color: '#EA4335', icon: 'gmail'     },
     { name: 'Discord',   url: '[업데이트 필요]',                                        desc: '실시간 소통',     color: '#5865F2', icon: 'discord'   },
   ],
 

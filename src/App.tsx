@@ -1,5 +1,6 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import Navbar from '@/components/Navbar'
+import Footer from '@/components/Footer'
 import HomePage from '@/pages/index'
 import AboutStoryPage from '@/pages/about/story'
 import AboutValuesPage from '@/pages/about/values'
@@ -21,12 +22,16 @@ import JoinInquiryPage from '@/pages/join/inquiry'
 import CommunityPage from '@/pages/community'
 import CommunityFaqPage from '@/pages/community/faq'
 import CommunitySnsPage from '@/pages/community/sns'
+import PrivacyPage from '@/pages/privacy'
+import TermsPage from '@/pages/terms'
 import NotFoundPage from '@/pages/not-found'
 
 export default function App() {
   return (
     <BrowserRouter>
+      <div className="flex flex-col min-h-screen">
       <Navbar />
+      <main className="flex-1">
       <Routes>
         <Route path="/" element={<HomePage />} />
         <Route path="/about/story" element={<AboutStoryPage />} />
@@ -49,8 +54,13 @@ export default function App() {
         <Route path="/community" element={<CommunityPage />} />
         <Route path="/community/faq" element={<CommunityFaqPage />} />
         <Route path="/community/sns" element={<CommunitySnsPage />} />
+        <Route path="/privacy" element={<PrivacyPage />} />
+        <Route path="/terms" element={<TermsPage />} />
         <Route path="*" element={<NotFoundPage />} />
       </Routes>
+      </main>
+      <Footer />
+      </div>
     </BrowserRouter>
   )
 }
