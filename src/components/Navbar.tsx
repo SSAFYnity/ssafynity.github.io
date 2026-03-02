@@ -77,7 +77,7 @@ export default function Navbar() {
                               : 'text-slate-500 hover:text-blue-900 hover:bg-slate-50'
                           }`
                           if (isExternal) {
-                            return item.path ? (
+                            return (
                               <a
                                 key={item.label}
                                 href={item.path}
@@ -88,13 +88,6 @@ export default function Navbar() {
                                 {item.label}
                                 <ExternalLink size={10} className="opacity-50" />
                               </a>
-                            ) : (
-                              <span
-                                key={item.label}
-                                className={`${baseClass} opacity-40 cursor-not-allowed`}
-                              >
-                                {item.label}
-                              </span>
                             )
                           }
                           return (
@@ -134,7 +127,7 @@ export default function Navbar() {
                               : 'text-slate-500 hover:text-blue-900'
                           }`
                           if (isExternal) {
-                            return item.path ? (
+                            return (
                               <a
                                 key={item.label}
                                 href={item.path}
@@ -145,10 +138,6 @@ export default function Navbar() {
                                 {item.label}
                                 <ExternalLink size={10} className="opacity-50" />
                               </a>
-                            ) : (
-                              <span key={item.label} className={`${baseClass} opacity-40`}>
-                                {item.label}
-                              </span>
                             )
                           }
                           return (
