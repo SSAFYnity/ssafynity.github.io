@@ -1,1 +1,1 @@
-export default function JoinMembershipPage() { return <div>JoinMembershipPage</div> }
+export default function JoinMembershipPage() { return null }

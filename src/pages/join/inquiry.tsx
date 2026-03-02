@@ -1,1 +1,1 @@
-export default function JoinInquiryPage() { return <div>JoinInquiryPage</div> }
+export default function JoinInquiryPage() { return null }

@@ -1,1 +1,1 @@
-export default function TeamOrganizationPage() { return <div>TeamOrganizationPage</div> }
+export default function TeamOrganizationPage() { return null }

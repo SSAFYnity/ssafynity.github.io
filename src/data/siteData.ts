@@ -53,25 +53,29 @@ export const siteData = {
       { label: '운영진 소개', path: '/team/intro' },
       { label: '조직 안내',   path: '/team/organization' },
       { label: '역대 운영진', path: '/team/history' },
-      { label: '운영진 모집', path: '/team/apply' },
     ]},
     { label: '행사', items: [
+      { label: '행사 안내', path: '/events/apply' },
       { label: '행사 일정', path: '/events/upcoming' },
       { label: '역대 행사', path: '/events/archive' },
-      { label: '행사 안내', path: '/events/apply' },
     ]},
     { label: '동아리', items: [
-      { label: '동아리 목록', path: '/clubs' },
+      { label: '동아리 혜택', path: '/clubs/benefits' },
+      { label: '등록 리스트', path: '/clubs' },
     ]},
     { label: '참여하기', items: [
-      { label: '동문회 가입',  path: '/join/membership' },
-      { label: '정회원 혜택',  path: '/join/benefits' },
+      { label: '동문회 가입',    path: '/join/membership' },
+      { label: '정회원 혜택',    path: '/join/benefits' },
+      { label: '동아리 신청',    path: '/clubs/apply' },
+      { label: '운영진 모집',    path: '/team/apply' },
       { label: '후원·제휴 문의', path: '/join/inquiry' },
-      { label: '소식 수신',   path: '' }, // Google Forms 직접 연결 (forms.newsletter)
+      // { label: '소식 수신', path: '', external: true }, // [업데이트 필요] forms.newsletter URL 생성 후 입력
     ]},
     { label: '커뮤니티', items: [
-      { label: '공지사항', path: '' }, // 블로그 외부 링크
-      { label: 'FAQ · SNS', path: '/community' },
+      { label: '공지사항', path: 'https://ssafynity.github.io/blog/공지', external: true },
+      { label: '블로그',   path: 'https://ssafynity.github.io/blog', external: true },
+      { label: 'SNS',      path: '/community/sns' },
+      { label: 'FAQ',      path: '/community/faq' },
     ]},
   ],
 

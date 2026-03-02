@@ -1,1 +1,1 @@
-export default function EventsUpcomingPage() { return <div>EventsUpcomingPage</div> }
+export default function EventsUpcomingPage() { return null }

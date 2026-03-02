@@ -1,4 +1,5 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
+import Navbar from '@/components/Navbar'
 import HomePage from '@/pages/index'
 import AboutStoryPage from '@/pages/about/story'
 import AboutValuesPage from '@/pages/about/values'
@@ -12,15 +13,20 @@ import EventsArchivePage from '@/pages/events/archive'
 import EventsApplyPage from '@/pages/events/apply'
 import ClubsPage from '@/pages/clubs/index'
 import ClubDetailPage from '@/pages/clubs/detail'
+import ClubsBenefitsPage from '@/pages/clubs/benefits'
+import ClubsApplyPage from '@/pages/clubs/apply'
 import JoinMembershipPage from '@/pages/join/membership'
 import JoinBenefitsPage from '@/pages/join/benefits'
 import JoinInquiryPage from '@/pages/join/inquiry'
 import CommunityPage from '@/pages/community'
+import CommunityFaqPage from '@/pages/community/faq'
+import CommunitySnsPage from '@/pages/community/sns'
 import NotFoundPage from '@/pages/not-found'
 
 export default function App() {
   return (
     <BrowserRouter>
+      <Navbar />
       <Routes>
         <Route path="/" element={<HomePage />} />
         <Route path="/about/story" element={<AboutStoryPage />} />
@@ -34,11 +40,15 @@ export default function App() {
         <Route path="/events/archive" element={<EventsArchivePage />} />
         <Route path="/events/apply" element={<EventsApplyPage />} />
         <Route path="/clubs" element={<ClubsPage />} />
+        <Route path="/clubs/benefits" element={<ClubsBenefitsPage />} />
+        <Route path="/clubs/apply" element={<ClubsApplyPage />} />
         <Route path="/clubs/:slug" element={<ClubDetailPage />} />
         <Route path="/join/membership" element={<JoinMembershipPage />} />
         <Route path="/join/benefits" element={<JoinBenefitsPage />} />
         <Route path="/join/inquiry" element={<JoinInquiryPage />} />
         <Route path="/community" element={<CommunityPage />} />
+        <Route path="/community/faq" element={<CommunityFaqPage />} />
+        <Route path="/community/sns" element={<CommunitySnsPage />} />
         <Route path="*" element={<NotFoundPage />} />
       </Routes>
     </BrowserRouter>

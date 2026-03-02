@@ -1,1 +1,1 @@
-export default function AboutValuesPage() { return <div>AboutValuesPage</div> }
+export default function AboutValuesPage() { return null }

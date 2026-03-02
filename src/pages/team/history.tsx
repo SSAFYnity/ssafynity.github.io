@@ -1,1 +1,1 @@
-export default function TeamHistoryPage() { return <div>TeamHistoryPage</div> }
+export default function TeamHistoryPage() { return null }

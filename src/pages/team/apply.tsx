@@ -1,1 +1,1 @@
-export default function TeamApplyPage() { return <div>TeamApplyPage</div> }
+export default function TeamApplyPage() { return null }

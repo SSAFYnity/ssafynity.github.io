@@ -1,1 +1,1 @@
-export default function EventsArchivePage() { return <div>EventsArchivePage</div> }
+export default function EventsArchivePage() { return null }

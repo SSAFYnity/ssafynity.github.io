@@ -1,1 +1,1 @@
-export default function AboutPartnersPage() { return <div>AboutPartnersPage</div> }
+export default function AboutPartnersPage() { return null }

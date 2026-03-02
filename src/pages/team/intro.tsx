@@ -1,1 +1,1 @@
-export default function TeamIntroPage() { return <div>TeamIntroPage</div> }
+export default function TeamIntroPage() { return null }

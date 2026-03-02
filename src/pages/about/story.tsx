@@ -1,1 +1,1 @@
-export default function AboutStoryPage() { return <div>AboutStoryPage</div> }
+export default function AboutStoryPage() { return null }
