@@ -1,0 +1,46 @@
+name: 빌드 및 GitHub Pages 배포
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  배포:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.배포.outputs.page_url }}
+    steps:
+      - name: 코드 체크아웃
+        uses: actions/checkout@v4
+
+      - name: Node.js 설정
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: 의존성 설치
+        run: npm ci
+
+      - name: 빌드
+        run: npm run build
+
+      - name: SPA 404 처리 (직접 URL 접근 대응)
+        run: cp dist/index.html dist/404.html
+
+      - name: Pages 설정
+        uses: actions/configure-pages@v4
+
+      - name: 빌드 결과물 업로드
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: dist
+
+      - name: GitHub Pages 배포
+        uses: actions/deploy-pages@v4
+        id: 배포

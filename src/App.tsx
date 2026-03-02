@@ -16,6 +16,7 @@ import JoinMembershipPage from '@/pages/join/membership'
 import JoinBenefitsPage from '@/pages/join/benefits'
 import JoinInquiryPage from '@/pages/join/inquiry'
 import CommunityPage from '@/pages/community'
+import NotFoundPage from '@/pages/not-found'
 
 export default function App() {
   return (
@@ -38,6 +39,7 @@ export default function App() {
         <Route path="/join/benefits" element={<JoinBenefitsPage />} />
         <Route path="/join/inquiry" element={<JoinInquiryPage />} />
         <Route path="/community" element={<CommunityPage />} />
+        <Route path="*" element={<NotFoundPage />} />
       </Routes>
     </BrowserRouter>
   )
