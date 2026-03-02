@@ -1,0 +1,75 @@
+name: 이슈 생성 시 Project 자동 연동
+
+on:
+  issues:
+    types: [opened]
+
+jobs:
+  add-to-project:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Project에 추가 및 Backlog 설정
+        env:
+          GH_TOKEN: ${{ secrets.PROJECT_PAT }}
+          ISSUE_NODE_ID: ${{ github.event.issue.node_id }}
+        run: |
+          PROJECT_DATA=$(gh api graphql \
+            -f query='
+              query($org: String!, $num: Int!) {
+                organization(login: $org) {
+                  projectV2(number: $num) {
+                    id
+                    fields(first: 20) {
+                      nodes {
+                        ... on ProjectV2SingleSelectField {
+                          id
+                          name
+                          options { id name }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            ' \
+            -F org="SSAFYnity" \
+            -F num=3)
+
+          PROJECT_ID=$(echo "$PROJECT_DATA" | jq -r '.data.organization.projectV2.id')
+          STATUS_FIELD_ID=$(echo "$PROJECT_DATA" | jq -r '[.data.organization.projectV2.fields.nodes[] | select(.name == "Status")] | .[0].id')
+          BACKLOG_OPTION_ID=$(echo "$PROJECT_DATA" | jq -r '[.data.organization.projectV2.fields.nodes[] | select(.name == "Status")] | .[0].options[] | select(.name == "Backlog") | .id')
+
+          ITEM_ID=$(gh api graphql \
+            -f query='
+              mutation($projectId: ID!, $contentId: ID!) {
+                addProjectV2ItemById(input: {
+                  projectId: $projectId,
+                  contentId: $contentId
+                }) {
+                  item { id }
+                }
+              }
+            ' \
+            -F projectId="$PROJECT_ID" \
+            -F contentId="$ISSUE_NODE_ID" \
+            | jq -r '.data.addProjectV2ItemById.item.id')
+
+          gh api graphql \
+            -f query='
+              mutation($projectId: ID!, $itemId: ID!, $fieldId: ID!, $optionId: String!) {
+                updateProjectV2ItemFieldValue(input: {
+                  projectId: $projectId,
+                  itemId: $itemId,
+                  fieldId: $fieldId,
+                  value: { singleSelectOptionId: $optionId }
+                }) {
+                  projectV2Item { id }
+                }
+              }
+            ' \
+            -F projectId="$PROJECT_ID" \
+            -F itemId="$ITEM_ID" \
+            -F fieldId="$STATUS_FIELD_ID" \
+            -F optionId="$BACKLOG_OPTION_ID"
+
+          echo "Issue #${{ github.event.issue.number }} → Project Backlog 추가 완료"
