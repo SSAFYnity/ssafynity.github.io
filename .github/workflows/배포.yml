@@ -5,7 +5,8 @@ on:
     branches: [main]
 
 jobs:
-  배포:
+  deploy:
+    name: 배포
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -13,7 +14,7 @@ jobs:
       id-token: write
     environment:
       name: github-pages
-      url: ${{ steps.배포.outputs.page_url }}
+      url: ${{ steps.deployment.outputs.page_url }}
     steps:
       - name: 코드 체크아웃
         uses: actions/checkout@v4
@@ -43,4 +44,4 @@ jobs:
 
       - name: GitHub Pages 배포
         uses: actions/deploy-pages@v4
-        id: 배포
+        id: deployment
