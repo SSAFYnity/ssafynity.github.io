@@ -9,6 +9,7 @@
 
 import { siteData } from './siteData'
 import { events2022 } from './events/2022'
+import type { PartnerType, Status } from './constants'
 import { partnerSamsung } from './partners/samsung'
 import { partnerMulticampus } from './partners/multicampus'
 import { partnerSsafy } from './partners/ssafy'
@@ -29,7 +30,18 @@ const allEvents = [
 ]
 
 // ─── 협력사 전체 목록 ─────────────────────────────────────────
-export const allPartners = [partnerSamsung, partnerMulticampus, partnerSsafy]
+export type Partner = {
+  slug:      string
+  name:      string
+  types:     readonly PartnerType[]
+  status:    Status
+  desc:      string
+  keywords?: string[]
+  logo:      string
+  url:       string
+}
+
+export const allPartners: Partner[] = [partnerSamsung, partnerMulticampus, partnerSsafy]
 // 새 협력사 추가 시 여기에도 추가
 
 // ─── 플레이스홀더 필터 ─────────────────────────────────────────
