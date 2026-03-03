@@ -13,15 +13,48 @@ export const siteData = {
   },
 
   // ─── 통계 ──────────────────────────────────────────────────────
-  stats: {
-    totalMembers:   0,      // [업데이트 필요] 전체 회원 수
-    regularMembers: 0,      // [업데이트 필요] 정회원 수
-    cohorts:        0,      // [업데이트 필요] 참여 기수 수
-  },
-  impactStats: {
-    employedCompanies: 0,   // [업데이트 필요] 취업 기업 수
-    avgSalary: '0억',       // [업데이트 필요]
-  },
+  // [업데이트 필요] 새 기수 합류 시 cohortStats에 항목 추가
+  // 함께하는 동문 수 / 참여 기수 수는 cohortStats 기반으로 computed.ts에서 자동 계산
+  // 누적 행사 횟수 / 누적 참가자 수 / 운영 연수 / 동아리 수 / 파트너사 수도 computed.ts에서 자동 계산
+  stats: [
+    { label: '정회원', value: '43', suffix: '명' }, // [업데이트 필요] 매 기수 시작 시 수동 수정
+  ],
+
+  // ─── SSAFY 기수별 동문 수 ───────────────────────────────────
+  // [업데이트 필요] 새 기수 합류 시 항목 추가
+  // cohort: SSAFY 기수 번호, count: 해당 기수 동문회 가입 인원
+  cohortStats: [
+    { cohort:  1, count: 166 },
+    { cohort:  2, count: 178 },
+    { cohort:  3, count: 237 },
+    { cohort:  4, count: 177 },
+    { cohort:  5, count: 305 },
+    { cohort:  6, count: 512 },
+    { cohort:  7, count: 566 },
+    { cohort:  8, count: 559 },
+    { cohort:  9, count: 497 },
+    { cohort: 10, count: 379 },
+    { cohort: 11, count: 215 },
+    { cohort: 12, count: 354 },
+    { cohort: 13, count: 243 },
+    { cohort: 14, count:  25 },
+  ],
+
+  // ─── 임팩트 지표 (메인 홈 Career Impact 배너) ─────────────────
+  // [업데이트 필요] 연 1회 또는 유의미한 변화 시 수정
+  impactStats: [
+    { label: 'IT 취업률',  value: '0%'  },
+    { label: '기술 멘토진', value: '0+'  },
+    { label: '공식 밋업',  value: '0회' },
+  ],
+
+  // ─── 재직 기업 (메인 홈 Alumni Presence 그리드) ───────────────
+  // [업데이트 필요] 연 1회 주요 재직 기업 현행화
+  companyNames: [
+    'SAMSUNG', 'NAVER', 'KAKAO', 'LINE',
+    'COUPANG', 'BAEMIN', 'TOSS', 'HYUNDAI',
+    'SK', 'DAANGN', 'ZIGBANG', 'YANOLJA',
+  ],
 
   // ─── SNS 채널 ──────────────────────────────────────────────────
   sns: [
@@ -55,7 +88,7 @@ export const siteData = {
       { label: '역대 운영진', path: '/team/history' },
     ]},
     { label: '행사', items: [
-      { label: '행사 안내', path: '/events/apply' },
+      { label: '행사 안내', path: '/events/introduce' },
       { label: '행사 일정', path: '/events/upcoming' },
       { label: '역대 행사', path: '/events/archive' },
     ]},
@@ -92,9 +125,7 @@ export const siteData = {
   // 상세 데이터는 src/data/events/{year}.ts 참조
   // 새 연도 추가 시: 파일 생성 후 eventYears 배열에 연도 추가
   upcomingEventYear: 2026,        // [업데이트 필요] 다가오는 행사가 있는 연도
-  eventYears: [
-    2022, // [업데이트 필요]
-  ],
+  eventYears: [2022, 2023, 2024, 2025, 2026],
 
   // ─── 파트너 & 협력사 ───────────────────────────────────────────
   // 상세 데이터는 src/data/partners/{slug}.ts 참조
@@ -129,7 +160,11 @@ export const siteData = {
   // 상세 데이터는 src/data/operator/{year}.ts 참조
   // 새 기수 추가 시: 파일 생성 후 아래 배열에 한 줄 추가
   teamGenerations: [
-    { generation: 1, year: 2022 }, // [업데이트 필요]
+    { generation: 1, year: 2022 },
+    { generation: 2, year: 2023 },
+    { generation: 3, year: 2024 },
+    { generation: 4, year: 2025 },
+    { generation: 5, year: 2026 },
   ],
 
   // ─── 동아리 목록 ───────────────────────────────────────────────
@@ -141,8 +176,5 @@ export const siteData = {
 
   // ─── FAQ ───────────────────────────────────────────────────────
   // 상세 데이터는 src/data/faqs.ts 참조
-
-  // ─── 공지사항 미리보기 (메인 홈) ──────────────────────────────
-  // 상세 데이터는 src/data/announcements.ts 참조
 
 } as const

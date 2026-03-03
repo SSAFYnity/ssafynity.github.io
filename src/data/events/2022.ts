@@ -1,15 +1,48 @@
 // 2022년 행사 목록
-// [업데이트 필요] 실제 행사 정보로 교체하세요.
 
 export const events2022 = [
   {
-    title:     '[업데이트 필요]', // 행사명
-    date:      '[업데이트 필요]', // YYYY-MM-DD
-    location:  '[업데이트 필요]', // 장소
-    category:  '[업데이트 필요]', // 예: 'Networking' | 'Seminar' | 'Workshop'
-    summary:   '[업데이트 필요]', // 한 줄 요약 (역대 행사 카드에 표시)
-    img:       '',                // [업데이트 필요] 행사 사진 경로
-    upcoming:  false,             // 다가오는 행사이면 true, 종료된 행사이면 false
-    formUrl:   '',                // [업데이트 필요] 신청 Forms URL (upcoming: true 일 때만)
+    title:        '발대식',
+    date:         '2022-06-09',
+    location:     '[업데이트 필요]',
+    category:     'Opening',
+    summary:      '싸피니티 공식 출범을 알리는 첫 번째 행사',
+    img:          '',
+    upcoming:     false,
+    formUrl:      '',
+    participants: 0, // [업데이트 필요]
+  },
+  {
+    title:        '집행부 MT',
+    date:         '2022-07-30',
+    location:     '[업데이트 필요]',
+    category:     'Internal',
+    summary:      '1박 2일 집행부 워크숍 및 친목 도모',
+    img:          '',
+    upcoming:     false,
+    formUrl:      '',
+    participants: 0, // [업데이트 필요]
+  },
+  {
+    title:        '오픈토크',
+    date:         '2022-08-27',
+    location:     '[업데이트 필요]',
+    category:     'Seminar',
+    summary:      '현업 동문들과 함께하는 자유로운 토크 세션',
+    img:          '',
+    upcoming:     false,
+    formUrl:      '',
+    participants: 0, // [업데이트 필요]
+  },
+  {
+    title:        '가을 운동회',
+    date:         '2022-10-22',
+    location:     '[업데이트 필요]',
+    category:     'Sports',
+    summary:      '동문들과 함께하는 가을 체육 행사',
+    img:          '',
+    upcoming:     false,
+    formUrl:      '',
+    participants: 0, // [업데이트 필요]
   },
 ]

@@ -11,7 +11,7 @@ import TeamHistoryPage from '@/pages/team/history'
 import TeamApplyPage from '@/pages/team/apply'
 import EventsUpcomingPage from '@/pages/events/upcoming'
 import EventsArchivePage from '@/pages/events/archive'
-import EventsApplyPage from '@/pages/events/apply'
+import EventsIntroducePage from '@/pages/events/introduce'
 import ClubsPage from '@/pages/clubs/index'
 import ClubDetailPage from '@/pages/clubs/detail'
 import ClubsBenefitsPage from '@/pages/clubs/benefits'
@@ -41,9 +41,9 @@ export default function App() {
         <Route path="/team/organization" element={<TeamOrganizationPage />} />
         <Route path="/team/history" element={<TeamHistoryPage />} />
         <Route path="/team/apply" element={<TeamApplyPage />} />
+        <Route path="/events/introduce" element={<EventsIntroducePage />} />
         <Route path="/events/upcoming" element={<EventsUpcomingPage />} />
         <Route path="/events/archive" element={<EventsArchivePage />} />
-        <Route path="/events/apply" element={<EventsApplyPage />} />
         <Route path="/clubs" element={<ClubsPage />} />
         <Route path="/clubs/benefits" element={<ClubsBenefitsPage />} />
         <Route path="/clubs/apply" element={<ClubsApplyPage />} />
