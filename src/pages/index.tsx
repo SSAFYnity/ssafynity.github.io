@@ -2,7 +2,7 @@ import { Link } from 'react-router-dom'
 import { ArrowRight, Star, Heart, Trophy, Zap, Users, MessageCircle, Globe, BookOpen, Smile, BadgeCheck } from 'lucide-react'
 import { motion, type Variants } from 'framer-motion'
 import { siteData } from '@/data/siteData'
-import { computed } from '@/data/computed'
+import { computed, allPartners } from '@/data/computed'
 
 const STATS = [
   { label: '함께하는 동문', value: computed.totalMembers,    suffix: '명' },
@@ -55,6 +55,20 @@ const FEATURES = [
     to: '/join/benefits',
   },
 ]
+
+function PartnerCard({ p }: { p: typeof allPartners[number] }) {
+  return (
+    <div className="flex flex-col items-center gap-3 w-40 shrink-0">
+      <div className="w-full h-20 bg-white border border-slate-200 rounded-xl flex items-center justify-center shadow-sm">
+        {p.logo
+          ? <img src={p.logo} alt={p.name} className="max-h-10 max-w-[120px] object-contain" />
+          : <span className="text-xs text-slate-400 font-bold">LOGO</span>
+        }
+      </div>
+      <span className="text-[11px] text-slate-500 font-bold text-center leading-tight">{p.name}</span>
+    </div>
+  )
+}
 
 const containerVariants: Variants = {
   initial: {},
@@ -277,6 +291,70 @@ export default function HomePage() {
           </motion.div>
 
         </div>
+      </section>
+
+      {/* Partners */}
+      <section className="bg-slate-50 py-20 lg:py-28 border-t border-slate-100">
+
+        {/* 섹션 헤더 — 중앙 정렬 */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
+          className="text-center mb-12 px-6"
+        >
+          <div className="inline-flex items-center gap-2 px-3 py-1.5 bg-blue-50 border border-blue-100 text-blue-600 rounded-full mb-5">
+            <span className="text-[10px] font-black uppercase tracking-widest">후원 · 협력사</span>
+          </div>
+          <h2 className="text-3xl md:text-4xl font-extrabold text-slate-900 tracking-tight leading-tight">
+            우리의 비전에 공감하는<br />
+            <span className="text-blue-600">후원·협력사</span>
+          </h2>
+        </motion.div>
+
+        {/* 파트너 로고 목록 */}
+        <motion.div
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6 }}
+          className={allPartners.length >= 6 ? 'relative overflow-hidden' : 'container mx-auto px-6 lg:px-12 max-w-7xl'}
+        >
+          {allPartners.length >= 6 ? (
+            <>
+              {/* 좌우 페이드 */}
+              <div className="absolute left-0 top-0 bottom-0 w-24 bg-gradient-to-r from-slate-50 to-transparent z-10 pointer-events-none" />
+              <div className="absolute right-0 top-0 bottom-0 w-24 bg-gradient-to-l from-slate-50 to-transparent z-10 pointer-events-none" />
+              <motion.div
+                animate={{ x: ['0%', '-50%'] }}
+                transition={{ duration: 20, repeat: Infinity, ease: 'linear' }}
+                className="flex gap-6 w-max py-4"
+              >
+                {[...allPartners, ...allPartners, ...allPartners, ...allPartners].map((p, i) => (
+                  <PartnerCard key={i} p={p} />
+                ))}
+              </motion.div>
+            </>
+          ) : (
+            <div className="flex flex-wrap justify-center gap-6 py-4">
+              {allPartners.map((p, i) => (
+                <PartnerCard key={i} p={p} />
+              ))}
+            </div>
+          )}
+        </motion.div>
+
+        {/* 파트너십 자세히 보기 */}
+        <div className="text-center mt-10">
+          <Link
+            to="/about/partners"
+            className="inline-flex items-center gap-1.5 text-sm font-bold text-slate-500 hover:text-blue-600 transition-colors"
+          >
+            후원·협력사 자세히 보기 <ArrowRight size={14} />
+          </Link>
+        </div>
+
       </section>
 
     </div>

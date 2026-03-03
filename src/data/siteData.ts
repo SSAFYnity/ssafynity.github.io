@@ -131,7 +131,10 @@ export const siteData = {
   // 상세 데이터는 src/data/partners/{slug}.ts 참조
   // 새 파트너 추가 시: 파일 생성 후 아래 배열에 slug 추가
   partnerSlugs: [
-    '[업데이트 필요]', // 예: 'some-company'
+    'partner-a',
+    'partner-b',
+    'partner-c',
+    // 새 파트너 추가 시 여기에 slug 추가
   ],
 
   // ─── 멤버십 ────────────────────────────────────────────────────
