@@ -9,10 +9,10 @@
 
 import { siteData } from './siteData'
 import { events2022 } from './events/2022'
-import { partnerA } from './partners/partner-a'
-import { partnerB } from './partners/partner-b'
-import { partnerC } from './partners/partner-c'
-// 새 파트너 추가 시: partners/{slug}.ts 생성 후 import + allPartners에 추가
+import { partnerSamsung } from './partners/samsung'
+import { partnerMulticampus } from './partners/multicampus'
+import { partnerSsafy } from './partners/ssafy'
+// 새 협력사 추가 시: partners/{slug}.ts 생성 후 import + allPartners에 추가
 import { events2023 } from './events/2023'
 import { events2024 } from './events/2024'
 import { events2025 } from './events/2025'
@@ -28,9 +28,9 @@ const allEvents = [
   ...events2026,
 ]
 
-// ─── 파트너 전체 목록 ─────────────────────────────────────────
-export const allPartners = [partnerA, partnerB, partnerC]
-// 새 파트너 추가 시 여기에도 추가
+// ─── 협력사 전체 목록 ─────────────────────────────────────────
+export const allPartners = [partnerSamsung, partnerMulticampus, partnerSsafy]
+// 새 협력사 추가 시 여기에도 추가
 
 // ─── 플레이스홀더 필터 ─────────────────────────────────────────
 const validClubs = siteData.clubSlugs.filter(s => s !== '[업데이트 필요]')
@@ -55,6 +55,6 @@ export const computed = {
   /** 동아리 수 — clubSlugs 기준 (플레이스홀더 제외) */
   clubCount: validClubs.length,
 
-  /** 파트너사 수 — allPartners 기준 */
+  /** 협력사 수 — allPartners 기준 */
   partnerCount: allPartners.length,
 }

@@ -17,7 +17,7 @@ export default function AboutStoryPage() {
     <div className="flex flex-col">
 
       {/* Hero + 단체 소개 */}
-      <section className="bg-white pt-28 pb-20 lg:pt-36 lg:pb-28">
+      <section className="bg-white pt-24 pb-10 lg:pt-28 lg:pb-14">
         <div className="container mx-auto px-6 lg:px-12 max-w-3xl">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -118,7 +118,7 @@ export default function AboutStoryPage() {
                           </span>
                         )}
                         <h3 className="text-base font-extrabold text-slate-900 mt-0.5 mb-1">{m.label}</h3>
-                        <p className="text-sm text-slate-500 leading-relaxed">{m.desc}</p>
+                        <p className="text-sm text-slate-500 leading-relaxed whitespace-pre-line">{m.desc}</p>
                       </div>
                     </div>
                   ))}

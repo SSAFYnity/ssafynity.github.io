@@ -15,9 +15,9 @@ const ICON_STYLE = {
 }
 
 const ORBIT_POS = [
-  { top: 'calc(12% - 28px)', left: 'calc(50% - 28px)' },  // 연결  (0°)
-  { top: 'calc(69% - 28px)', left: 'calc(17% - 28px)' },  // 성장  (240°)
-  { top: 'calc(69% - 28px)', left: 'calc(83% - 28px)' },  // 자발적 기여 (120°)
+  { top: 'calc(12% - 32px)', left: 'calc(50% - 32px)' },  // 연결  (0°)
+  { top: 'calc(69% - 32px)', left: 'calc(17% - 32px)' },  // 성장  (240°)
+  { top: 'calc(69% - 32px)', left: 'calc(83% - 32px)' },  // 자발적 기여 (120°)
 ]
 
 export default function AboutValuesPage() {
@@ -71,7 +71,7 @@ export default function AboutValuesPage() {
             <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-10
                             px-4 py-3 rounded-2xl bg-white
                             shadow-md shadow-slate-200/60 border border-slate-100">
-              <img src="/logo-rect.png" alt="SSAFYnity" className="h-8 w-auto" />
+              <img src="/logo-rect.png" alt="SSAFYnity" className="h-10 w-auto" />
             </div>
 
             {/* 가치관 노드 */}
@@ -81,14 +81,14 @@ export default function AboutValuesPage() {
               return (
                 <div
                   key={v.title}
-                  className="absolute flex flex-col items-center gap-1"
+                  className="absolute flex flex-col items-center gap-2"
                   style={ORBIT_POS[i]}
                 >
-                  <div className={`w-14 h-14 rounded-full ${style.bg} ring-4 ${style.ring}
+                  <div className={`w-16 h-16 rounded-full ${style.bg} ring-4 ${style.ring}
                                    flex items-center justify-center shadow-md`}>
-                    <Icon size={22} className="text-white" strokeWidth={1.8} />
+                    <Icon size={26} className="text-white" strokeWidth={1.8} />
                   </div>
-                  <span className="text-[11px] font-black text-slate-700 whitespace-nowrap">
+                  <span className="text-sm font-black text-slate-700 whitespace-nowrap">
                     {v.title}
                   </span>
                 </div>
@@ -105,10 +105,8 @@ export default function AboutValuesPage() {
             className="text-center mb-16"
           >
             <p className="text-[3rem] leading-none font-black text-blue-100 select-none">"</p>
-            <p className="text-lg md:text-xl font-bold text-slate-700 leading-relaxed max-w-xl mx-auto -mt-3 break-keep">
-              {siteData.brand.vision.split(' — ').map((part, i) => (
-                <span key={i}>{i > 0 && <><br />{'— '}</>}{part}</span>
-              ))}
+            <p className="text-lg md:text-xl font-bold text-slate-700 leading-relaxed max-w-xl mx-auto -mt-3 break-keep whitespace-pre-line">
+              {siteData.brand.vision}
             </p>
             <div className="mt-6 w-8 h-0.5 bg-blue-300 mx-auto" />
             <p className="mt-4 text-[10px] font-black text-slate-400 tracking-[0.25em] uppercase">
@@ -140,14 +138,7 @@ export default function AboutValuesPage() {
                     <Icon size={22} className={style.text} strokeWidth={1.8} />
                   </div>
                   <h3 className="font-black text-slate-900 mb-2">{v.title}</h3>
-                  <p className="text-sm text-slate-500 leading-relaxed break-keep">
-                    {v.desc.split('. ').map((sentence, i, arr) => (
-                      <span key={i}>
-                        {sentence}{i < arr.length - 1 && '.'}
-                        {i < arr.length - 1 && <br />}
-                      </span>
-                    ))}
-                  </p>
+                  <p className="text-sm text-slate-500 leading-relaxed break-keep whitespace-pre-line">{v.desc}</p>
                 </motion.div>
               )
             })}

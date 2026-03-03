@@ -10,7 +10,7 @@ export const siteData = {
     name: 'SSAFYnity',
     slogan: '싸피 수료생들이 직접 운영하는 동문회',
     email: 'ssafynity@gmail.com',
-    vision: '연결이 성장을 만들고, 성장이 다시 기여로 돌아오는 선순환 — 싸피니티가 지향하는 공동체의 모습입니다.',
+    vision: '연결이 성장을 만들고, 성장이 다시 기여로 돌아오는 선순환\n싸피니티가 지향하는 공동체의 모습입니다.',
   },
 
   // ─── 핵심 가치 (/about/values) ────────────────────────────────
@@ -60,15 +60,7 @@ export const siteData = {
     { cohort: 14, count:  25 },
   ],
 
-  // ─── 재직 기업 (메인 홈 Alumni Presence 그리드) ───────────────
-  // [업데이트 필요] 연 1회 주요 재직 기업 현행화
-  companyNames: [
-    'SAMSUNG', 'NAVER', 'KAKAO', 'LINE',
-    'COUPANG', 'BAEMIN', 'TOSS', 'HYUNDAI',
-    'SK', 'DAANGN', 'ZIGBANG', 'YANOLJA',
-  ],
-
-  // ─── SNS 채널 ──────────────────────────────────────────────────
+// ─── SNS 채널 ──────────────────────────────────────────────────
   sns: [
     { name: 'Gmail',     url: 'mailto:ssafynity@gmail.com',                            desc: '공식 이메일',     color: '#EA4335', icon: 'gmail'     },
     { name: 'GitHub',    url: 'https://github.com/SSAFYnity',                          desc: '오픈소스 기여',   color: '#181717', icon: 'github'    },
@@ -146,14 +138,15 @@ export const siteData = {
   upcomingEventYear: 2026,        // [업데이트 필요] 다가오는 행사가 있는 연도
   eventYears: [2022, 2023, 2024, 2025, 2026],
 
-  // ─── 파트너 & 협력사 ───────────────────────────────────────────
+  // ─── 협력사 ────────────────────────────────────────────────────────
   // 상세 데이터는 src/data/partners/{slug}.ts 참조
-  // 새 파트너 추가 시: 파일 생성 후 아래 배열에 slug 추가
+  // type:   '재정 후원' | '물품 후원' | '교육 지원' | '재능 기부'
+  // status: '현재' | '이전'
+  // 새 협력사 추가 시: 파일 생성 후 아래 배열에 slug 추가
   partnerSlugs: [
-    'partner-a',
-    'partner-b',
-    'partner-c',
-    // 새 파트너 추가 시 여기에 slug 추가
+    'samsung',
+    'multicampus',
+    // 새 협력사 추가 시 여기에 slug 추가
   ],
 
   // ─── 멤버십 ────────────────────────────────────────────────────
