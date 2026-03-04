@@ -11,9 +11,9 @@
 // vacant:    공석 (이름 없이 역할만 표시)
 // url:       대표 URL — 본인 동의 시에만 기재
 
-export const operator{year} = {
+export const operatorYYYY = {
   generation:   0,           // 기수 번호
-  year:         0000,        // 연도
+  year:         2000,        // 연도
   memberCount:  0,           // 총 운영진 수 (수동 입력)
   teamCount:    0,           // 전담 팀 수 (임원진 제외)
   // note: '',               // 특이사항 (비상대책위 등)
