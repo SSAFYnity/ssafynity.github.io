@@ -60,6 +60,7 @@ export type Operator = {
   generation:   number
   year:         number
   memberCount?: number
+  teamCount?:   number
   note?:        string
   groups:       readonly OperatorGroup[]
 }

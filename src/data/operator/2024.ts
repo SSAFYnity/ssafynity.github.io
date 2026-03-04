@@ -6,6 +6,7 @@ export const operator2024 = {
   generation:   3,
   year:         2024,
   memberCount:  19,
+  teamCount:    5,
   note:         '비상대책위원회 체제로 운영',
   groups: [
     {

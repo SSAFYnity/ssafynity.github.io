@@ -50,7 +50,7 @@ export default function TeamIntroPage() {
       g.members.filter(m => !m.vacant).map(m => m.name)
     )
   ).size
-  const teamCount   = currentOperator.groups.filter(g => g.name !== '임원진').length
+  const teamCount   = currentOperator.teamCount ?? currentOperator.groups.filter(g => g.name !== '임원진').length
 
   return (
     <div className="flex flex-col">

@@ -5,6 +5,7 @@ export const operator2022 = {
   generation:   1,
   year:         2022,
   memberCount:  51,
+  teamCount:    3,
   groups: [
     {
       name: '임원진',
