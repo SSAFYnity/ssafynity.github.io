@@ -27,7 +27,7 @@ export const operator2023 = {
     },
     {
       name: '기획국',
-      desc: '동문회 행사의 기획·준비·운영 전반을 담당합니다.',
+      desc: '동문회 행사의 기획·준비 전반을 담당합니다.',
       members: [
         { role: '국장', name: '당현아', cohort: 5, campus: '서울', url: 'https://github.com/hadevyi' },
         { role: '국원', name: '김병완', cohort: 6, campus: '광주', url: 'https://www.linkedin.com/in/lactea94' },
@@ -45,7 +45,7 @@ export const operator2023 = {
     },
     {
       name: '홍보국',
-      desc: 'SNS 채널 운영과 온·오프라인 홍보를 담당합니다.',
+      desc: 'SNS 채널 운영과 온·오프라인 홍보·디자인 물품을 담당합니다.',
       members: [
         { role: '국장', name: '신00' },
         { role: '국원', name: '박00' },

@@ -28,7 +28,7 @@ export const operator2024 = {
     },
     {
       name: '기획팀',
-      desc: '동문회 행사의 기획·준비·운영 전반을 담당합니다.',
+      desc: '동문회 행사의 기획·준비 전반을 담당합니다.',
       members: [
         { role: '팀장', name: '김병완', cohort: 6, campus: '광주', url: 'https://www.linkedin.com/in/lactea94' },
         { role: '팀원', name: '김00' },
@@ -39,7 +39,7 @@ export const operator2024 = {
     },
     {
       name: '인사팀',
-      desc: '운영진 채용과 내부 조직 관리를 담당합니다.',
+      desc: '동문회 인적관리와 내부 조직 관리를 담당합니다.',
       members: [
         { role: '팀장', name: '당현아', cohort: 5, campus: '서울', url: 'https://github.com/hadevyi' },
         { role: '팀원', name: '권경민', cohort: 7, campus: '서울', url: 'https://rudalsd.tistory.com' },

@@ -53,9 +53,10 @@ export type OperatorMember = {
 }
 
 export type OperatorGroup = {
-  name:    string
-  desc:    string
-  members: readonly OperatorMember[]
+  name:       string
+  desc:       string
+  members:    readonly OperatorMember[]
+  vacancies?: number  // 현재 모집 인원 (0이면 마감, undefined면 미표시)
 }
 
 export type OperatorAchievement = {
