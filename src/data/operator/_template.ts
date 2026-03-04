@@ -5,7 +5,8 @@
 //   1. computed.ts에 import 추가
 //   2. allOperators 배열에 추가
 //
-// vacancies: 현재 모집 인원. 0이면 지원 불가로 표시됨. 미표시 시 undefined 유지.
+// vacancies:  현재 모집 인원. 0이면 지원 불가로 표시됨. 미표시 시 undefined 유지.
+// nameEn:    팀 영문명 (조직 안내 카드 상단 표시). 예: 'Planning', 'Public Relations', 'External Affairs'
 // council:   회장단 여부 (임원진 섹션 상단 카드로 표시됨)
 // concurrent: 겸직 멤버 (다른 팀과 중복 활동)
 // vacant:    공석 (이름 없이 역할만 표시)
@@ -31,6 +32,7 @@ export const operatorYYYY = {
     },
     {
       name: '○○팀',
+      nameEn: '',            // 영문 팀명 (조직 안내 카드 상단 표시)
       desc: '',
       vacancies: 0,          // 모집 인원 (apply 페이지에 표시)
       members: [

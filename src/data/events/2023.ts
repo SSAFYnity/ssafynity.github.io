@@ -22,6 +22,7 @@ export const events2023 = [
     upcoming:     false,
     formUrl:      '',
     participants: 0, // [업데이트 필요]
+    internal:     true,
   },
   {
     title:        'SSAFYnale',

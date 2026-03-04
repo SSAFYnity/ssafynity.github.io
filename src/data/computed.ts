@@ -32,7 +32,20 @@ import { operator2026 } from './operator/2026'
 // 새 운영진 추가 시: operator/{year}.ts 생성 후 import + allOperators에 추가
 
 // ─── 행사 전체 목록 ───────────────────────────────────────────
-const allEvents = [
+export type Event = {
+  title:       string
+  date:        string
+  location:    string
+  category:    string
+  summary:     string
+  img:         string
+  upcoming:    boolean
+  formUrl:     string
+  participants: number
+  internal?:   boolean  // true면 행사 일정에서 제외, 역대 행사에는 표시
+}
+
+export const allEvents: Event[] = [
   ...events2022,
   ...events2023,
   ...events2024,
@@ -54,6 +67,7 @@ export type OperatorMember = {
 
 export type OperatorGroup = {
   name:       string
+  nameEn?:    string  // 영문 팀명 (조직 안내 카드 상단 표시용)
   desc:       string
   members:    readonly OperatorMember[]
   vacancies?: number  // 현재 모집 인원 (0이면 마감, undefined면 미표시)

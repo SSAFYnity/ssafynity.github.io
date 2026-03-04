@@ -76,7 +76,10 @@ export default function TeamOrganizationPage() {
             transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
           >
             <p className="text-[10px] font-black text-blue-600 uppercase tracking-widest mb-2">Leadership</p>
-            <h2 className="text-lg font-extrabold text-slate-900 mb-8">리더십</h2>
+            <h2 className="text-lg font-extrabold text-slate-900 mb-2">리더십</h2>
+            <p className="text-sm text-slate-500 leading-relaxed break-keep mb-8">
+              회장과 팀장은 동문회 운영기관의 임원진으로, 보궐 시 상호 대리할 수 있습니다.
+            </p>
             <div className="grid sm:grid-cols-2 gap-4">
               <div className="bg-white border border-slate-100 rounded-2xl p-6 flex gap-4">
                 <div className="w-10 h-10 rounded-xl bg-blue-50 flex items-center justify-center shrink-0">
@@ -95,10 +98,9 @@ export default function TeamOrganizationPage() {
                   <Users className="w-5 h-5 text-blue-600" />
                 </div>
                 <div>
-                  <h3 className="text-sm font-extrabold text-slate-800 mb-1.5">팀장 (임원진)</h3>
+                  <h3 className="text-sm font-extrabold text-slate-800 mb-1.5">팀장</h3>
                   <p className="text-sm text-slate-500 leading-relaxed break-keep">
-                    각 팀을 이끌며 팀별 업무를 총괄합니다.
-                    임원진으로서 동문회 운영 전반에도 함께 참여합니다.
+                    각 팀의 업무를 총괄하고, 팀 간 협조가 필요할 때 해당 팀의 대표로 의사를 전달합니다.
                   </p>
                 </div>
               </div>
@@ -122,7 +124,7 @@ export default function TeamOrganizationPage() {
             <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
               {teams.map((team, i) => (
                 <div key={i} className="border border-slate-100 rounded-2xl p-6">
-                  <p className="text-xs font-black text-blue-600 tracking-widest mb-2 uppercase">Team</p>
+                  <p className="text-xs font-black text-blue-600 tracking-widest mb-2 uppercase">{team.nameEn ?? 'Team'}</p>
                   <h3 className="text-base font-extrabold text-slate-900 mb-2">{team.name}</h3>
                   <p className="text-sm text-slate-500 leading-relaxed break-keep">{team.desc}</p>
                 </div>

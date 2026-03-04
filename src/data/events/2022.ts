@@ -22,6 +22,7 @@ export const events2022 = [
     upcoming:     false,
     formUrl:      '',
     participants: 0, // [업데이트 필요]
+    internal:     true,
   },
   {
     title:        '오픈토크',

@@ -19,6 +19,7 @@ export const operator2026 = {
     },
     {
       name: '기획팀',
+      nameEn: 'Planning',
       desc: '동문회 행사의 기획·준비 전반을 담당합니다.',
       vacancies: 2,
       members: [
@@ -29,6 +30,7 @@ export const operator2026 = {
     },
     {
       name: '홍보팀',
+      nameEn: 'Public Relations',
       desc: 'SNS 채널 운영과 온·오프라인 홍보·디자인 물품을 담당합니다.',
       vacancies: 3,
       members: [
@@ -39,6 +41,7 @@ export const operator2026 = {
     },
     {
       name: '대외협력팀',
+      nameEn: 'External Relations',
       desc: '외부 기관·기업과의 협력 및 파트너십 구축을 담당합니다.',
       vacancies: 0,
       members: [
