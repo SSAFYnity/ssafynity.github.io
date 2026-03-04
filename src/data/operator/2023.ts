@@ -19,7 +19,7 @@ export const operator2023 = {
         { role: '회장',  name: '황00', council: true },
         { role: '부회장', name: '이00', council: true },
         { role: '기획국장',    name: '당현아', cohort: 5, campus: '서울', url: 'https://github.com/hadevyi' },
-        { role: '소통국장',    name: '권00' },
+        { role: '소통국장',    name: '권경민', cohort: 7, campus: '서울', url: 'https://rudalsd.tistory.com' },
         { role: '홍보국장',    name: '신00' },
         { role: '인사관리국장', name: '이00' },
         { role: '경영지원국장', name: '윤일준', cohort: 7, campus: '대전' },
@@ -30,7 +30,7 @@ export const operator2023 = {
       desc: '동문회 행사의 기획·준비·운영 전반을 담당합니다.',
       members: [
         { role: '국장', name: '당현아', cohort: 5, campus: '서울', url: 'https://github.com/hadevyi' },
-        { role: '국원', name: '김00' },
+        { role: '국원', name: '김병완', cohort: 6, campus: '광주', url: 'https://www.linkedin.com/in/lactea94' },
         { role: '국원', name: '차유진', cohort: 7, campus: '서울', url: 'https://kr.linkedin.com/in/yoojin-cha-57895816a' },
       ],
     },
@@ -38,7 +38,7 @@ export const operator2023 = {
       name: '소통국',
       desc: '회원과의 소통 창구 운영 및 커뮤니티 관리를 담당합니다.',
       members: [
-        { role: '국장', name: '권00' },
+        { role: '국장', name: '권경민', cohort: 7, campus: '서울', url: 'https://rudalsd.tistory.com' },
         { role: '국원', name: '김00' },
         { role: '국원', name: '김00' },
       ],

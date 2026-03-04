@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Link } from 'react-router-dom'
-import { Users, Globe, ClipboardList, Megaphone, Wrench, MessageCircle, UserPlus, Receipt, Wallet, FileText, Palette, ExternalLink, type LucideIcon } from 'lucide-react'
+import { Users, Globe, ClipboardList, Megaphone, Wrench, MessageCircle, UserPlus, Receipt, Wallet, FileText, Palette, ExternalLink, ChevronUp, ChevronDown, type LucideIcon } from 'lucide-react'
 import { allOperators } from '@/data/computed'
 
 
@@ -22,7 +22,12 @@ const generations = [...allOperators].reverse()
 
 export default function TeamHistoryPage() {
   const [activeTab, setActiveTab] = useState(0)
+  const [page, setPage] = useState(0)
   const current = generations[activeTab]
+
+  const PAGE_SIZE = 5
+  const totalPages = Math.ceil(generations.length / PAGE_SIZE)
+  const visibleGenerations = generations.slice(page * PAGE_SIZE, (page + 1) * PAGE_SIZE)
 
   const LEADERSHIP_GROUPS = ['임원진']
 
@@ -52,33 +57,69 @@ export default function TeamHistoryPage() {
       </section>
 
       {/* 탭 + 콘텐츠 */}
-      <section className="bg-slate-50 py-16 lg:py-20">
+      <section className="bg-slate-50 py-16 lg:py-20 min-h-[800px]">
         <div className="container mx-auto px-6 lg:px-12 max-w-5xl">
           <div className="flex flex-col lg:flex-row gap-8 lg:gap-12">
 
             {/* 탭 네비게이션 */}
-            <div className="lg:w-1/5 shrink-0">
-              <p className="text-xs text-slate-400 mb-3 flex items-center gap-1.5">
-                <span className="text-[10px] font-black text-blue-700 bg-blue-100 px-1.5 py-0.5 rounded shrink-0">임원진</span>
-                동문회 운영의 최종 결정권자
-              </p>
+            <div className="lg:w-1/5 shrink-0 flex flex-col">
               <div className="flex lg:flex-col gap-2 overflow-x-auto pb-2 lg:pb-0">
-                {generations.map((gen, i) => (
+                {totalPages > 1 && (
                   <button
-                    key={gen.generation}
-                    onClick={() => setActiveTab(i)}
-                    className={`flex-shrink-0 px-5 py-4 rounded-xl border transition-all duration-200 text-left ${
-                      activeTab === i
-                        ? 'bg-blue-600 border-blue-600 text-white shadow-lg shadow-blue-600/20'
-                        : 'bg-white border-slate-100 text-slate-400 hover:border-blue-200 hover:bg-white'
-                    }`}
+                    onClick={() => setPage(p => p - 1)}
+                    disabled={page === 0}
+                    className="hidden lg:flex items-center justify-center w-full py-2 rounded-xl border border-slate-100 bg-white text-slate-400 hover:border-blue-200 hover:text-blue-500 disabled:opacity-20 disabled:pointer-events-none transition-all"
                   >
-                    <p className={`text-[10px] font-black uppercase tracking-widest mb-0.5 ${activeTab === i ? 'text-blue-200' : 'text-slate-400'}`}>
-                      {gen.year}
-                    </p>
-                    <p className="text-base font-extrabold">{gen.generation}기 {gen.generation <= 2 ? '집행부' : '운영진'}</p>
+                    <ChevronUp className="w-4 h-4" />
                   </button>
-                ))}
+                )}
+                {visibleGenerations.map((gen, i) => {
+                  const globalIndex = page * PAGE_SIZE + i
+                  return (
+                    <button
+                      key={gen.generation}
+                      onClick={() => setActiveTab(globalIndex)}
+                      className={`flex-shrink-0 px-5 py-4 rounded-xl border transition-all duration-200 text-left ${
+                        activeTab === globalIndex
+                          ? 'bg-blue-600 border-blue-600 text-white shadow-lg shadow-blue-600/20'
+                          : 'bg-white border-slate-100 text-slate-400 hover:border-blue-200 hover:bg-white'
+                      }`}
+                    >
+                      <p className={`text-[10px] font-black uppercase tracking-widest mb-0.5 ${activeTab === globalIndex ? 'text-blue-200' : 'text-slate-400'}`}>
+                        {gen.year}
+                      </p>
+                      <p className="text-base font-extrabold">{gen.generation}기 {gen.generation <= 2 ? '집행부' : '운영진'}</p>
+                    </button>
+                  )
+                })}
+                {totalPages > 1 && (
+                  <button
+                    onClick={() => setPage(p => p + 1)}
+                    disabled={page === totalPages - 1}
+                    className="hidden lg:flex items-center justify-center w-full py-2 rounded-xl border border-slate-100 bg-white text-slate-400 hover:border-blue-200 hover:text-blue-500 disabled:opacity-20 disabled:pointer-events-none transition-all"
+                  >
+                    <ChevronDown className="w-4 h-4" />
+                  </button>
+                )}
+              </div>
+              <div className="mt-3 lg:mt-0 lg:mb-3 lg:order-first flex flex-col gap-1">
+                <p className="text-xs text-slate-400 flex items-center gap-1.5">
+                  <span className="text-[10px] font-black text-blue-700 bg-blue-100 px-1.5 py-0.5 rounded shrink-0">임원진</span>
+                  동문회 운영의 최종 결정권자
+                </p>
+                <div className="relative group/anon">
+                  <div className="flex items-start gap-1.5 cursor-default">
+                    <span className="w-4 h-4 rounded-full bg-slate-200 text-slate-500 flex items-center justify-center text-[9px] font-black shrink-0 mt-0.5">?</span>
+                    <p className="text-xs text-slate-400 leading-relaxed">익명은 공개 거절 또는 미확인 인원</p>
+                  </div>
+                  <div className="absolute top-full left-0 mt-2 w-60 bg-slate-800 text-white text-xs rounded-xl p-3 leading-relaxed opacity-0 group-hover/anon:opacity-100 transition-opacity z-50 pointer-events-none shadow-lg">
+                    <p>공개를 하고 싶은 경우,<br />(필수) 본인 기수/캠퍼스/성명,<br />(선택) 대표 URL 1개<br /> 위 내용을 ssafynity 메일로 보내주세요.</p>
+                    <ul className="mt-2 text-slate-300 flex flex-col gap-0.5">
+                      <li>· 공개 후엔 비공개처리할 수 없습니다.</li>
+                      <li>· URL은 변경할 수 있습니다.</li>
+                    </ul>
+                  </div>
+                </div>
               </div>
             </div>
 
@@ -91,7 +132,7 @@ export default function TeamHistoryPage() {
                   animate={{ opacity: 1, x: 0 }}
                   exit={{ opacity: 0, x: -16 }}
                   transition={{ duration: 0.25 }}
-                  className="bg-white rounded-2xl border border-slate-100 p-8 lg:p-10"
+                  className="bg-white rounded-2xl border border-slate-100 p-8 lg:p-10 min-h-[480px]"
                 >
                   {/* 헤더 + 성과 */}
                   {(() => {
@@ -201,10 +242,11 @@ export default function TeamHistoryPage() {
                                     const isExec = m.role.endsWith('장')
                                     return (() => {
                                       const hasUrl = 'url' in m && m.url
+                                      const isAnon = m.name?.endsWith('00') ?? false
                                       const badge = <span className={`text-[10px] font-black px-1.5 py-0.5 rounded shrink-0 inline-block w-12 text-center ${isExec ? 'text-blue-700 bg-blue-100' : 'text-blue-600 bg-blue-50'}`}>{m.role}</span>
                                       const meta = (
                                         <span className="inline-flex items-center gap-1.5 flex-wrap">
-                                          <span className="text-xs font-extrabold text-slate-800 group-hover:text-blue-600 transition-colors">{m.name ?? '(공석)'}</span>
+                                          <span className={`text-xs font-extrabold transition-colors ${isAnon ? 'text-slate-500 group-hover:text-slate-600' : 'text-slate-800 group-hover:text-blue-600'}`}>{m.name ?? '(공석)'}</span>
                                           {'cohort' in m && m.cohort != null && (
                                             <span className="text-[10px] text-slate-400 group-hover:text-blue-500 transition-colors">{m.cohort}기</span>
                                           )}

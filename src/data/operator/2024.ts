@@ -19,7 +19,7 @@ export const operator2024 = {
       desc: '운영진 및 팀을 대표하는 인원으로, 동문회의 전체 운영 방향을 최종 결정합니다.',
       members: [
         { role: '회장', vacant: true, council: true },
-        { role: '기획팀장',   name: '김00' },
+        { role: '기획팀장',   name: '김병완', cohort: 6, campus: '광주', url: 'https://www.linkedin.com/in/lactea94' },
         { role: '인사팀장',   name: '당현아', cohort: 5, campus: '서울', url: 'https://github.com/hadevyi' },
         { role: '소통팀장',   name: '백00' },
         { role: '재무팀장',   name: '안00' },
@@ -30,7 +30,7 @@ export const operator2024 = {
       name: '기획팀',
       desc: '동문회 행사의 기획·준비·운영 전반을 담당합니다.',
       members: [
-        { role: '팀장', name: '김00' },
+        { role: '팀장', name: '김병완', cohort: 6, campus: '광주', url: 'https://www.linkedin.com/in/lactea94' },
         { role: '팀원', name: '김00' },
         { role: '팀원', name: '임00' },
         { role: '팀원', name: '송00' },
@@ -42,7 +42,7 @@ export const operator2024 = {
       desc: '운영진 채용과 내부 조직 관리를 담당합니다.',
       members: [
         { role: '팀장', name: '당현아', cohort: 5, campus: '서울', url: 'https://github.com/hadevyi' },
-        { role: '팀원', name: '권00' },
+        { role: '팀원', name: '권경민', cohort: 7, campus: '서울', url: 'https://rudalsd.tistory.com' },
         { role: '팀원', name: '박00' },
         { role: '팀원', name: '최소희', cohort: 6, campus: '부울경', url: 'https://www.linkedin.com/in/huisso' },
       ],
@@ -82,7 +82,7 @@ export const operator2024 = {
       name: '디자인팀',
       desc: '행사·홍보물의 시각 디자인과 브랜딩을 담당합니다.',
       members: [
-        { role: '팀원', name: '김00', concurrent: true },
+        { role: '팀원', name: '김병완', cohort: 6, campus: '광주', url: 'https://www.linkedin.com/in/lactea94', concurrent: true },
         { role: '팀원', name: '김00', concurrent: true },
         { role: '팀원', name: '당현아', cohort: 5, campus: '서울', url: 'https://github.com/hadevyi', concurrent: true },
         { role: '팀원', name: '박00', concurrent: true },

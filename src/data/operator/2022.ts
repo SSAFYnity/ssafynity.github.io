@@ -16,7 +16,7 @@ export const operator2022 = {
       desc: '운영진 및 팀을 대표하는 인원으로, 동문회의 전체 운영 방향을 최종 결정합니다.',
       members: [
         { role: '수료생 회장',   name: '황00', council: true },
-        { role: '재학생 회장',   name: '권00', council: true },
+        { role: '재학생 회장',   name: '권경민', cohort: 7, campus: '서울', url: 'https://rudalsd.tistory.com', council: true },
         { role: '재학생 부회장', name: '이00', council: true },
         { role: '기획국장',   name: '당현아', cohort: 5, campus: '서울', url: 'https://github.com/hadevyi' },
         { role: '기획부국장', name: '박00' },
@@ -34,7 +34,7 @@ export const operator2022 = {
         { role: '부국장', name: '박00' },
         { role: '국원',  name: '강00' },
         { role: '국원',  name: '공00' },
-        { role: '국원',  name: '김00' },
+        { role: '국원',  name: '김병완', cohort: 6, campus: '광주', url: 'https://www.linkedin.com/in/lactea94' },
         { role: '국원',  name: '문00' },
         { role: '국원',  name: '박00' },
         { role: '국원',  name: '박00' },
