@@ -6,6 +6,11 @@
 //   1. events/{year}.ts 생성
 //   2. 아래 import 추가
 //   3. allEvents spread에 추가
+//
+// 새 운영진 연도 파일 추가 시:
+//   1. operator/{year}.ts 생성
+//   2. 아래 import 추가
+//   3. allOperators 배열에 추가
 
 import { siteData } from './siteData'
 import { events2022 } from './events/2022'
@@ -19,6 +24,12 @@ import { events2024 } from './events/2024'
 import { events2025 } from './events/2025'
 import { events2026 } from './events/2026'
 // 새 연도 추가 시: events/{year}.ts 생성 후 import + allEvents에 추가
+import { operator2022 } from './operator/2022'
+import { operator2023 } from './operator/2023'
+import { operator2024 } from './operator/2024'
+import { operator2025 } from './operator/2025'
+import { operator2026 } from './operator/2026'
+// 새 운영진 추가 시: operator/{year}.ts 생성 후 import + allOperators에 추가
 
 // ─── 행사 전체 목록 ───────────────────────────────────────────
 const allEvents = [
@@ -28,6 +39,41 @@ const allEvents = [
   ...events2025,
   ...events2026,
 ]
+
+// ─── 운영진 전체 목록 ─────────────────────────────────────────
+export type OperatorMember = {
+  role:        string
+  name?:       string
+  cohort?:     number
+  campus?:     string
+  concurrent?: boolean
+  vacant?:     boolean
+}
+
+export type OperatorGroup = {
+  name:    string
+  desc:    string
+  members: readonly OperatorMember[]
+}
+
+export type Operator = {
+  generation:   number
+  year:         number
+  memberCount?: number
+  note?:        string
+  groups:       readonly OperatorGroup[]
+}
+
+export const allOperators: Operator[] = [
+  operator2022,
+  operator2023,
+  operator2024,
+  operator2025,
+  operator2026,
+]
+// 새 운영진 추가 시 여기에도 추가
+
+export const currentOperator: Operator = allOperators[allOperators.length - 1]
 
 // ─── 협력사 전체 목록 ─────────────────────────────────────────
 export type Partner = {

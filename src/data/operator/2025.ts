@@ -1,18 +1,59 @@
-// 4기 운영진 (2025)
-// [업데이트 필요] 실제 운영진 정보로 교체하세요.
+// src/data/operator/2025.ts
+// 4대 SSAFYnity 운영진 (2025년)
 
 export const operator2025 = {
-  generation: 4,
-  year: 2025,
-  members: [
-    { role: '회장',         name: '[업데이트 필요]', cohort: 0 },
-    { role: '부회장',       name: '[업데이트 필요]', cohort: 0 },
-    { role: '기획팀장',     name: '[업데이트 필요]', cohort: 0 },
-    { role: '홍보팀장',     name: '[업데이트 필요]', cohort: 0 },
-    { role: '대외협력팀장', name: '[업데이트 필요]', cohort: 0 },
-    // [업데이트 필요] 팀원 추가
+  generation:   4,
+  year:         2025,
+  memberCount:  15,
+  groups: [
+    {
+      name: '임원진',
+      desc: '동문회 전체 운영 방향을 수립하고 대표 업무를 수행합니다.',
+      members: [
+        { role: '회장',        name: '당현아', cohort: 5, campus: '서울' },
+        { role: '기획팀장',    name: '김00' },
+        { role: '재무팀장',    name: '이00' },
+        { role: '홍보팀장',    name: '고00' },
+        { role: '대외협력팀장', name: '박00' },
+      ],
+    },
+    {
+      name: '기획팀',
+      desc: '동문회 행사의 기획·준비·운영 전반을 담당합니다.',
+      members: [
+        { role: '팀장', name: '김00' },
+        { role: '팀원', name: '김00' },
+        { role: '팀원', name: '김00' },
+        { role: '팀원', name: '박00' },
+      ],
+    },
+    {
+      name: '재무팀',
+      desc: '동문회 예산 편성과 회계 관리를 담당합니다.',
+      members: [
+        { role: '팀장', name: '이00' },
+        { role: '팀원', name: '권00' },
+        { role: '팀원', name: '손00' },
+        { role: '팀원', name: '안00' },
+        { role: '팀원', name: '이00' },
+      ],
+    },
+    {
+      name: '홍보팀',
+      desc: 'SNS 채널 운영과 온·오프라인 홍보를 담당합니다.',
+      members: [
+        { role: '팀장', name: '고00' },
+        { role: '팀원', name: '이00' },
+      ],
+    },
+    {
+      name: '대외협력팀',
+      desc: '외부 기관·기업과의 협력 및 파트너십 구축을 담당합니다.',
+      members: [
+        { role: '팀장', name: '박00' },
+        { role: '팀원', name: '박00' },
+        { role: '팀원', name: '윤00' },
+      ],
+    },
   ],
-  achievements: [
-    '[업데이트 필요]',
-  ],
-}
+} as const

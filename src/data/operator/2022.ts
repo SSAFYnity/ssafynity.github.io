@@ -1,18 +1,91 @@
-// 1기 운영진 (2022)
-// [업데이트 필요] 실제 운영진 정보로 교체하세요.
+// src/data/operator/2022.ts
+// 1대 SSAFYnity 운영진 (2022년)
 
 export const operator2022 = {
-  generation: 1,
-  year: 2022,
-  members: [
-    { role: '회장',         name: '[업데이트 필요]', cohort: 0 },
-    { role: '부회장',       name: '[업데이트 필요]', cohort: 0 },
-    { role: '기획팀장',     name: '[업데이트 필요]', cohort: 0 },
-    { role: '홍보팀장',     name: '[업데이트 필요]', cohort: 0 },
-    { role: '대외협력팀장', name: '[업데이트 필요]', cohort: 0 },
-    // [업데이트 필요] 팀원 추가
+  generation:   1,
+  year:         2022,
+  memberCount:  51,
+  groups: [
+    {
+      name: '임원진',
+      desc: '동문회 전체 운영 방향을 수립하고 대표 업무를 수행합니다.',
+      members: [
+        { role: '수료생 회장',   name: '황00' },
+        { role: '재학생 회장',   name: '권00' },
+        { role: '재학생 부회장', name: '이00' },
+        { role: '기획국장',     name: '당현아', cohort: 5, campus: '서울' },
+        { role: '기획부국장',   name: '박00' },
+        { role: '홍보국장',     name: '심00' },
+        { role: '홍보부국장',   name: '안00' },
+        { role: '운영국장',     name: '김00' },
+        { role: '운영부국장',   name: '이00' },
+      ],
+    },
+    {
+      name: '기획국',
+      desc: '동문회 행사의 기획·준비·운영 전반을 담당합니다.',
+      members: [
+        { role: '국장',  name: '당현아', cohort: 5, campus: '서울' },
+        { role: '부국장', name: '박00' },
+        { role: '국원',  name: '강00' },
+        { role: '국원',  name: '공00' },
+        { role: '국원',  name: '김00' },
+        { role: '국원',  name: '문00' },
+        { role: '국원',  name: '박00' },
+        { role: '국원',  name: '박00' },
+        { role: '국원',  name: '박00' },
+        { role: '국원',  name: '송00' },
+        { role: '국원',  name: '윤00' },
+        { role: '국원',  name: '윤00' },
+        { role: '국원',  name: '이00' },
+        { role: '국원',  name: '이00' },
+        { role: '국원',  name: '이00' },
+        { role: '국원',  name: '이00' },
+        { role: '국원',  name: '전00' },
+        { role: '국원',  name: '정00' },
+        { role: '국원',  name: '조00' },
+        { role: '국원',  name: '조00' },
+        { role: '국원',  name: '차00' },
+        { role: '국원',  name: '최00' },
+        { role: '국원',  name: '최00' },
+        { role: '국원',  name: '하00' },
+        { role: '국원',  name: '황00' },
+      ],
+    },
+    {
+      name: '홍보국',
+      desc: 'SNS 채널 운영과 온·오프라인 홍보를 담당합니다.',
+      members: [
+        { role: '국장',  name: '심00' },
+        { role: '부국장', name: '안00' },
+        { role: '국원',  name: '공00' },
+        { role: '국원',  name: '권00' },
+        { role: '국원',  name: '박00' },
+        { role: '국원',  name: '이00' },
+        { role: '국원',  name: '이00' },
+        { role: '국원',  name: '장00' },
+        { role: '국원',  name: '한00' },
+      ],
+    },
+    {
+      name: '운영국',
+      desc: '동문회 운영 지원 및 회원 관리를 담당합니다.',
+      members: [
+        { role: '국장',  name: '김00' },
+        { role: '부국장', name: '이00' },
+        { role: '국원',  name: '강00' },
+        { role: '국원',  name: '강00' },
+        { role: '국원',  name: '김00' },
+        { role: '국원',  name: '김00' },
+        { role: '국원',  name: '김00' },
+        { role: '국원',  name: '박00' },
+        { role: '국원',  name: '방00' },
+        { role: '국원',  name: '변00' },
+        { role: '국원',  name: '송00' },
+        { role: '국원',  name: '신00' },
+        { role: '국원',  name: '이00' },
+        { role: '국원',  name: '정00' },
+      ],
+    },
   ],
-  achievements: [
-    '[업데이트 필요]', // 예: '공식 네이버 카페 개설'
-  ],
-}
+} as const
