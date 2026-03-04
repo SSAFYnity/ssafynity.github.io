@@ -180,7 +180,14 @@ export default function TeamHistoryPage() {
                         <p className="text-[10px] font-black text-blue-600 uppercase tracking-widest mb-3">{current.generation <= 2 ? '전담 국' : '전담 팀'}</p>
                         <div className={`grid sm:grid-cols-2 gap-3 ${teams.length % 3 === 1 ? 'lg:grid-cols-2' : 'lg:grid-cols-3'}`}>
                           {teams.map((group, i) => {
-                            const activeMembers = group.members.filter(m => !m.vacant)
+                            const activeMembers = [...group.members.filter(m => !m.vacant)].sort((a, b) => {
+                              const aLead = a.role.endsWith('장') ? 0 : 1
+                              const bLead = b.role.endsWith('장') ? 0 : 1
+                              if (aLead !== bLead) return aLead - bLead
+                              const aPublic = a.name?.endsWith('00') ? 1 : 0
+                              const bPublic = b.name?.endsWith('00') ? 1 : 0
+                              return aPublic - bPublic
+                            })
                             return (
                               <div key={i} className="bg-slate-50 rounded-xl p-4 border border-slate-100">
                                 <div className="flex items-center gap-2 mb-3">
@@ -192,25 +199,35 @@ export default function TeamHistoryPage() {
                                 <div className="flex flex-col gap-1.5">
                                   {activeMembers.map((m, mi) => {
                                     const isExec = m.role.endsWith('장')
-                                    return (
-                                    <div key={mi} className="flex items-center gap-2 flex-wrap">
-                                      <span className={`text-[10px] font-black px-1.5 py-0.5 rounded shrink-0 inline-block w-12 text-center ${isExec ? 'text-blue-700 bg-blue-100' : 'text-blue-600 bg-blue-50'}`}>{m.role}</span>
-                                      {'url' in m && m.url ? (
-                                        <a href={m.url} target="_blank" rel="noopener noreferrer"
-                                          className="text-xs font-extrabold text-slate-800 hover:text-blue-600 hover:underline transition-colors">
-                                          {m.name}
+                                    return (() => {
+                                      const hasUrl = 'url' in m && m.url
+                                      const badge = <span className={`text-[10px] font-black px-1.5 py-0.5 rounded shrink-0 inline-block w-12 text-center ${isExec ? 'text-blue-700 bg-blue-100' : 'text-blue-600 bg-blue-50'}`}>{m.role}</span>
+                                      const meta = (
+                                        <span className="inline-flex items-center gap-1.5 flex-wrap">
+                                          <span className="text-xs font-extrabold text-slate-800 group-hover:text-blue-600 transition-colors">{m.name ?? '(공석)'}</span>
+                                          {'cohort' in m && m.cohort != null && (
+                                            <span className="text-[10px] text-slate-400 group-hover:text-blue-500 transition-colors">{m.cohort}기</span>
+                                          )}
+                                          {'campus' in m && m.campus != null && (
+                                            <span className="text-[10px] text-slate-400 group-hover:text-blue-500 transition-colors">{m.campus}</span>
+                                          )}
+                                          {hasUrl && <ExternalLink className="w-3 h-3 text-blue-300 shrink-0" />}
+                                        </span>
+                                      )
+                                      return hasUrl ? (
+                                        <a key={mi} href={m.url} target="_blank" rel="noopener noreferrer"
+                                          className="group flex items-center gap-1.5">
+                                          {badge}
+                                          {meta}
                                         </a>
                                       ) : (
-                                        <span className="text-xs font-extrabold text-slate-800">{m.name ?? '(공석)'}</span>
-                                      )}
-                                      <span className="w-3 h-3 shrink-0 flex items-center justify-center">
-                                        {'url' in m && m.url && <ExternalLink className="w-3 h-3 text-blue-300" />}
-                                      </span>
-                                      {'cohort' in m && m.cohort != null && (
-                                        <span className="text-[10px] text-slate-400">{m.cohort}기{('campus' in m && m.campus != null) ? ` · ${m.campus}` : ''}</span>
-                                      )}
-                                    </div>
-                                  )})}
+                                        <div key={mi} className="flex items-center gap-1.5 flex-wrap">
+                                          {badge}
+                                          {meta}
+                                        </div>
+                                      )
+                                    })()
+                                  })}
                                 </div>
                               </div>
                             )
