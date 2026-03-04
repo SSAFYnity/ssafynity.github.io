@@ -13,7 +13,7 @@ export const operator2026 = {
       members: [
         { role: '회장', name: '당현아', cohort: 5, campus: '서울', url: 'https://github.com/hadevyi', council: true },
         { role: '기획팀장',    name: '김00' },
-        { role: '홍보팀장',    name: '고00' },
+        { role: '홍보팀장',    name: '고준수', cohort: 8, campus: '광주', url: 'https://www.instagram.com/kojunsu1004' },
         { role: '대외협력팀장', name: '박00' },
       ],
     },
@@ -22,7 +22,7 @@ export const operator2026 = {
       desc: '동문회 행사의 기획·준비·운영 전반을 담당합니다.',
       members: [
         { role: '팀장', name: '김00' },
-        { role: '팀원', name: '이00' },
+        { role: '팀원', name: '이준호', cohort: 8, campus: '대전', url: 'https://github.com/LJH5' },
         { role: '팀원', name: '이00' },
       ],
     },
@@ -30,7 +30,7 @@ export const operator2026 = {
       name: '홍보팀',
       desc: 'SNS 채널 운영과 온·오프라인 홍보를 담당합니다.',
       members: [
-        { role: '팀장', name: '고00' },
+        { role: '팀장', name: '고준수', cohort: 8, campus: '광주', url: 'https://www.instagram.com/kojunsu1004' },
         { role: '팀원', name: '안00' },
         { role: '팀원', name: '박00' },
       ],

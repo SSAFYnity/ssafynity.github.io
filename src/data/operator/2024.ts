@@ -44,7 +44,7 @@ export const operator2024 = {
         { role: '팀장', name: '당현아', cohort: 5, campus: '서울', url: 'https://github.com/hadevyi' },
         { role: '팀원', name: '권00' },
         { role: '팀원', name: '박00' },
-        { role: '팀원', name: '최00' },
+        { role: '팀원', name: '최소희', cohort: 6, campus: '부울경', url: 'https://www.linkedin.com/in/huisso' },
       ],
     },
     {
@@ -62,7 +62,7 @@ export const operator2024 = {
       desc: '동문회 예산 편성과 회계 관리를 담당합니다.',
       members: [
         { role: '팀장', name: '안00' },
-        { role: '팀원', name: '손00' },
+        { role: '팀원', name: '손승운', cohort: 7, campus: '구미', url: 'https://www.linkedin.com/in/승운-손-2384652ba' },
         { role: '팀원', name: '신00' },
         { role: '팀원', name: '김00' },
       ],
@@ -72,7 +72,7 @@ export const operator2024 = {
       desc: '동문회 콘텐츠 기획과 제작을 담당합니다.',
       members: [
         { role: '팀장', name: '박00' },
-        { role: '팀원', name: '고00' },
+        { role: '팀원', name: '고준수', cohort: 8, campus: '광주', url: 'https://www.instagram.com/kojunsu1004' },
         { role: '팀원', name: '김00', concurrent: true },
         { role: '팀원', name: '당현아', cohort: 5, campus: '서울', url: 'https://github.com/hadevyi', concurrent: true },
         { role: '팀원', name: '박00', concurrent: true },

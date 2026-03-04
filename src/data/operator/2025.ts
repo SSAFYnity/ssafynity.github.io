@@ -17,8 +17,8 @@ export const operator2025 = {
       members: [
         { role: '회장', name: '당현아', cohort: 5, campus: '서울', url: 'https://github.com/hadevyi', council: true },
         { role: '기획팀장',    name: '김00' },
-        { role: '재무팀장',    name: '이00' },
-        { role: '홍보팀장',    name: '고00' },
+        { role: '재무팀장',    name: '이준호', cohort: 8, campus: '대전', url: 'https://github.com/LJH5' },
+        { role: '홍보팀장',    name: '고준수', cohort: 8, campus: '광주', url: 'https://www.instagram.com/kojunsu1004' },
         { role: '대외협력팀장', name: '박00' },
       ],
     },
@@ -36,9 +36,9 @@ export const operator2025 = {
       name: '재무팀',
       desc: '동문회 예산 편성과 회계 관리를 담당합니다.',
       members: [
-        { role: '팀장', name: '이00' },
+        { role: '팀장', name: '이준호', cohort: 8, campus: '대전', url: 'https://github.com/LJH5' },
         { role: '팀원', name: '권00' },
-        { role: '팀원', name: '손00' },
+        { role: '팀원', name: '손승운', cohort: 7, campus: '구미', url: 'https://www.linkedin.com/in/승운-손-2384652ba' },
         { role: '팀원', name: '안00' },
         { role: '팀원', name: '이00' },
       ],
@@ -47,7 +47,7 @@ export const operator2025 = {
       name: '홍보팀',
       desc: 'SNS 채널 운영과 온·오프라인 홍보를 담당합니다.',
       members: [
-        { role: '팀장', name: '고00' },
+        { role: '팀장', name: '고준수', cohort: 8, campus: '광주', url: 'https://www.instagram.com/kojunsu1004' },
         { role: '팀원', name: '이00' },
       ],
     },

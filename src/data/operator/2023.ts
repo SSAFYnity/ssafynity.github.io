@@ -31,7 +31,7 @@ export const operator2023 = {
       members: [
         { role: '국장', name: '당현아', cohort: 5, campus: '서울', url: 'https://github.com/hadevyi' },
         { role: '국원', name: '김00' },
-        { role: '국원', name: '차00' },
+        { role: '국원', name: '차유진', cohort: 7, campus: '서울', url: 'https://kr.linkedin.com/in/yoojin-cha-57895816a' },
       ],
     },
     {
@@ -67,7 +67,7 @@ export const operator2023 = {
       desc: '동문회 행정 및 재무 지원을 담당합니다.',
       members: [
         { role: '국장', name: '윤일준', cohort: 7, campus: '대전' },
-        { role: '국원', name: '손00' },
+        { role: '국원', name: '손승운', cohort: 7, campus: '구미', url: 'https://www.linkedin.com/in/승운-손-2384652ba' },
       ],
     },
   ],

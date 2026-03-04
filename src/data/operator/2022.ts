@@ -50,7 +50,7 @@ export const operator2022 = {
         { role: '국원',  name: '정00' },
         { role: '국원',  name: '조00' },
         { role: '국원',  name: '조00' },
-        { role: '국원',  name: '차00' },
+        { role: '국원',  name: '차유진', cohort: 7, campus: '서울', url: 'https://kr.linkedin.com/in/yoojin-cha-57895816a' },
         { role: '국원',  name: '최00' },
         { role: '국원',  name: '최00' },
         { role: '국원',  name: '하00' },
