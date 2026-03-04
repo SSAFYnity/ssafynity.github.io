@@ -1,5 +1,26 @@
 // 사이트 전반에서 공유하는 상수 및 레이블 매핑
 
+// ─── 행사 타입 ──────────────────────────────────────────────────────
+export type EventDate = {
+  start:          string   // 행사 시작일 (YYYY-MM-DD)
+  end?:           string   // 행사 종료일 — 양일 이상일 때만 기재
+  recruitStart?:  string   // 모집 시작일
+  recruitEnd?:    string   // 모집 마감일
+}
+
+export type Event = {
+  title:        string
+  date:         EventDate
+  location:     string
+  category:     string
+  summary:      string
+  img:          string
+  upcoming:     boolean
+  formUrl:      string
+  participants: number
+  internal?:    boolean  // true면 행사 일정에서 제외, 역대 행사에는 표시
+}
+
 // ─── 공통 상태 ──────────────────────────────────────────────────────
 // 협력사, 동아리, 운영진 등 여러 곳에서 재사용
 export const STATUS_LABEL = {

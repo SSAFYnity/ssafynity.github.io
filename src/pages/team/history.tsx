@@ -154,15 +154,15 @@ export default function TeamHistoryPage() {
                                 const inner = (
                                   <>
                                     <p className="text-[10px] font-black text-blue-700 bg-blue-100 inline-block px-1.5 py-0.5 rounded mb-1">{m.role}</p>
+                                    {'cohort' in m && m.cohort != null && (
+                                      <p className="text-[10px] text-slate-400 mb-0.5">{m.cohort}기{('campus' in m && m.campus != null) ? ` · ${m.campus}` : ''}</p>
+                                    )}
                                     <p className="text-sm font-extrabold text-slate-800 whitespace-nowrap">
                                       <span className="inline-flex items-center gap-1">
                                         {m.name ?? '(공석)'}
                                         {'url' in m && m.url && <ExternalLink className="w-3 h-3 text-blue-400 shrink-0" />}
                                       </span>
                                     </p>
-                                    {'cohort' in m && m.cohort != null && (
-                                      <p className="text-[10px] text-slate-400 mt-0.5">{m.cohort}기{('campus' in m && m.campus != null) ? ` · ${m.campus}` : ''}</p>
-                                    )}
                                   </>
                                 )
                                 return 'url' in m && m.url ? (

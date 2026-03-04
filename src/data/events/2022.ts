@@ -3,7 +3,7 @@
 export const events2022 = [
   {
     title:        '발대식',
-    date:         '2022-06-09',
+    date:         { start: '2022-06-09' },
     location:     '[업데이트 필요]',
     category:     'Opening',
     summary:      '싸피니티 공식 출범을 알리는 첫 번째 행사',
@@ -14,7 +14,7 @@ export const events2022 = [
   },
   {
     title:        '집행부 MT',
-    date:         '2022-07-30',
+    date:         { start: '2022-07-30' },
     location:     '[업데이트 필요]',
     category:     'Internal',
     summary:      '1박 2일 집행부 워크숍 및 친목 도모',
@@ -26,7 +26,7 @@ export const events2022 = [
   },
   {
     title:        '오픈토크',
-    date:         '2022-08-27',
+    date:         { start: '2022-08-27' },
     location:     '[업데이트 필요]',
     category:     'Seminar',
     summary:      '현업 동문들과 함께하는 자유로운 토크 세션',
@@ -37,7 +37,7 @@ export const events2022 = [
   },
   {
     title:        '가을 운동회',
-    date:         '2022-10-22',
+    date:         { start: '2022-10-22' },
     location:     '[업데이트 필요]',
     category:     'Sports',
     summary:      '동문들과 함께하는 가을 체육 행사',

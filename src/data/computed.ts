@@ -14,7 +14,7 @@
 
 import { siteData } from './siteData'
 import { events2022 } from './events/2022'
-import type { PartnerType, Status } from './constants'
+import type { PartnerType, Status, Event, EventDate } from './constants'
 import { partnerSamsung } from './partners/samsung'
 import { partnerMulticampus } from './partners/multicampus'
 import { partnerSsafy } from './partners/ssafy'
@@ -32,18 +32,7 @@ import { operator2026 } from './operator/2026'
 // 새 운영진 추가 시: operator/{year}.ts 생성 후 import + allOperators에 추가
 
 // ─── 행사 전체 목록 ───────────────────────────────────────────
-export type Event = {
-  title:       string
-  date:        string
-  location:    string
-  category:    string
-  summary:     string
-  img:         string
-  upcoming:    boolean
-  formUrl:     string
-  participants: number
-  internal?:   boolean  // true면 행사 일정에서 제외, 역대 행사에는 표시
-}
+export type { Event, EventDate }  // constants.ts에서 re-export
 
 export const allEvents: Event[] = [
   ...events2022,
