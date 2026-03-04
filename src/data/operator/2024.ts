@@ -7,15 +7,20 @@ export const operator2024 = {
   year:         2024,
   memberCount:  19,
   teamCount:    5,
-  note:         '비상대책위원회 체제로 운영',
+  note:         '회장 사퇴로 인한 임원진 비상대책위원회 체제 운영',
+  achievements: [
+    { text: '자주적 운영 기반 조직 개편: 집행부→운영진, 국→팀' },
+    { text: '정기행사 이원화: 동문 친목 행사·오픈 IT 행사' },
+    { text: '최초 외부 활동: SSAFYnale 컨퍼런스 개최·인프콘 참석' },
+  ],
   groups: [
     {
       name: '임원진',
-      desc: '동문회 전체 운영 방향을 수립하고 대표 업무를 수행합니다.',
+      desc: '운영진 및 팀을 대표하는 인원으로, 동문회의 전체 운영 방향을 최종 결정합니다.',
       members: [
-        { role: '회장',       vacant: true },
+        { role: '회장', vacant: true, council: true },
         { role: '기획팀장',   name: '김00' },
-        { role: '인사팀장',   name: '당현아', cohort: 5, campus: '서울' },
+        { role: '인사팀장',   name: '당현아', cohort: 5, campus: '서울', url: 'https://github.com/hadevyi' },
         { role: '소통팀장',   name: '백00' },
         { role: '재무팀장',   name: '안00' },
         { role: '컨텐츠팀장', name: '박00' },
@@ -36,7 +41,7 @@ export const operator2024 = {
       name: '인사팀',
       desc: '운영진 채용과 내부 조직 관리를 담당합니다.',
       members: [
-        { role: '팀장', name: '당현아', cohort: 5, campus: '서울' },
+        { role: '팀장', name: '당현아', cohort: 5, campus: '서울', url: 'https://github.com/hadevyi' },
         { role: '팀원', name: '권00' },
         { role: '팀원', name: '박00' },
         { role: '팀원', name: '최00' },
@@ -48,7 +53,7 @@ export const operator2024 = {
       members: [
         { role: '팀장', name: '백00' },
         { role: '팀원', name: '김00' },
-        { role: '팀원', name: '김00' },
+        { role: '팀원', name: '김종혁', cohort: 8, campus: '구미' },
         { role: '팀원', name: '채00' },
       ],
     },
@@ -69,7 +74,7 @@ export const operator2024 = {
         { role: '팀장', name: '박00' },
         { role: '팀원', name: '고00' },
         { role: '팀원', name: '김00', concurrent: true },
-        { role: '팀원', name: '당현아', cohort: 5, campus: '서울', concurrent: true },
+        { role: '팀원', name: '당현아', cohort: 5, campus: '서울', url: 'https://github.com/hadevyi', concurrent: true },
         { role: '팀원', name: '박00', concurrent: true },
       ],
     },
@@ -79,7 +84,7 @@ export const operator2024 = {
       members: [
         { role: '팀원', name: '김00', concurrent: true },
         { role: '팀원', name: '김00', concurrent: true },
-        { role: '팀원', name: '당현아', cohort: 5, campus: '서울', concurrent: true },
+        { role: '팀원', name: '당현아', cohort: 5, campus: '서울', url: 'https://github.com/hadevyi', concurrent: true },
         { role: '팀원', name: '박00', concurrent: true },
         { role: '팀원', name: '채00', concurrent: true },
       ],

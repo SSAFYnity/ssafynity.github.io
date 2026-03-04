@@ -6,12 +6,16 @@ export const operator2025 = {
   year:         2025,
   memberCount:  15,
   teamCount:    4,
+  achievements: [
+    { text: '운영 지속성 확보를 위한 업무 계정·도구 인수인계 체계 수립' },
+    { text: '지속 가능한 운영을 위한 후원·협력사 소통 시작' },
+  ],
   groups: [
     {
       name: '임원진',
-      desc: '동문회 전체 운영 방향을 수립하고 대표 업무를 수행합니다.',
+      desc: '운영진 및 팀을 대표하는 인원으로, 동문회의 전체 운영 방향을 최종 결정합니다.',
       members: [
-        { role: '회장',        name: '당현아', cohort: 5, campus: '서울' },
+        { role: '회장', name: '당현아', cohort: 5, campus: '서울', url: 'https://github.com/hadevyi', council: true },
         { role: '기획팀장',    name: '김00' },
         { role: '재무팀장',    name: '이00' },
         { role: '홍보팀장',    name: '고00' },

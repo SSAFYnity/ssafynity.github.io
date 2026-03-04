@@ -46,6 +46,8 @@ export type OperatorMember = {
   name?:       string
   cohort?:     number
   campus?:     string
+  url?:        string   // 대표 URL (GitHub, LinkedIn 등) — 동의한 인원만 기재
+  council?:    boolean  // 회장단 여부 (회장/부회장 등)
   concurrent?: boolean
   vacant?:     boolean
 }
@@ -56,13 +58,18 @@ export type OperatorGroup = {
   members: readonly OperatorMember[]
 }
 
+export type OperatorAchievement = {
+  text: string
+}
+
 export type Operator = {
-  generation:   number
-  year:         number
-  memberCount?: number
-  teamCount?:   number
-  note?:        string
-  groups:       readonly OperatorGroup[]
+  generation:    number
+  year:          number
+  memberCount?:  number
+  teamCount?:    number
+  note?:         string
+  achievements?: readonly OperatorAchievement[]  // 최대 3개까지만 작성
+  groups:        readonly OperatorGroup[]
 }
 
 export const allOperators: Operator[] = [

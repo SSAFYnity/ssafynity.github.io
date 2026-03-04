@@ -1,32 +1,36 @@
 // src/data/operator/2022.ts
-// 1대 SSAFYnity 운영진 (2022년)
+// 1대 SSAFYnity 집행부 (2022년)
 
 export const operator2022 = {
   generation:   1,
   year:         2022,
   memberCount:  51,
   teamCount:    3,
+  achievements: [
+    { text: '동문회 창단 및 6월 발대식 개최' },
+    { text: "최초 동문회 행사 '오픈토크' 개최" },
+  ],
   groups: [
     {
       name: '임원진',
-      desc: '동문회 전체 운영 방향을 수립하고 대표 업무를 수행합니다.',
+      desc: '운영진 및 팀을 대표하는 인원으로, 동문회의 전체 운영 방향을 최종 결정합니다.',
       members: [
-        { role: '수료생 회장',   name: '황00' },
-        { role: '재학생 회장',   name: '권00' },
-        { role: '재학생 부회장', name: '이00' },
-        { role: '기획국장',     name: '당현아', cohort: 5, campus: '서울' },
-        { role: '기획부국장',   name: '박00' },
-        { role: '홍보국장',     name: '심00' },
-        { role: '홍보부국장',   name: '안00' },
-        { role: '운영국장',     name: '김00' },
-        { role: '운영부국장',   name: '이00' },
+        { role: '수료생 회장',   name: '황00', council: true },
+        { role: '재학생 회장',   name: '권00', council: true },
+        { role: '재학생 부회장', name: '이00', council: true },
+        { role: '기획국장',   name: '당현아', cohort: 5, campus: '서울', url: 'https://github.com/hadevyi' },
+        { role: '기획부국장', name: '박00' },
+        { role: '홍보국장',   name: '심00' },
+        { role: '홍보부국장', name: '안00' },
+        { role: '운영국장',   name: '김00' },
+        { role: '운영부국장', name: '이00' },
       ],
     },
     {
       name: '기획국',
       desc: '동문회 행사의 기획·준비·운영 전반을 담당합니다.',
       members: [
-        { role: '국장',  name: '당현아', cohort: 5, campus: '서울' },
+        { role: '국장',  name: '당현아', cohort: 5, campus: '서울', url: 'https://github.com/hadevyi' },
         { role: '부국장', name: '박00' },
         { role: '국원',  name: '강00' },
         { role: '국원',  name: '공00' },

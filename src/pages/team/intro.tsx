@@ -1,5 +1,4 @@
 import { motion } from 'framer-motion'
-import { Link } from 'react-router-dom'
 import { Heart, Zap, Users, Clock, Layers, Wifi, Scale } from 'lucide-react'
 import { currentOperator } from '@/data/computed'
 
@@ -129,7 +128,7 @@ export default function TeamIntroPage() {
       </section>
 
       {/* 업무 방식 */}
-      <section className="bg-slate-900 py-16 lg:py-20">
+      <section className="bg-slate-100 py-16 lg:py-20">
         <div className="container mx-auto px-6 lg:px-12 max-w-5xl">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -137,17 +136,17 @@ export default function TeamIntroPage() {
             viewport={{ once: true }}
             transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
           >
-            <p className="text-[10px] font-black text-blue-400 uppercase tracking-widest mb-2">How We Work</p>
-            <h2 className="text-lg font-extrabold text-white mb-8">업무 방식</h2>
-            <div className="grid sm:grid-cols-2 gap-px bg-white/5 rounded-2xl overflow-hidden">
+            <p className="text-[10px] font-black text-blue-600 uppercase tracking-widest mb-2">How We Work</p>
+            <h2 className="text-lg font-extrabold text-slate-900 mb-8">업무 방식</h2>
+            <div className="grid sm:grid-cols-2 gap-px bg-slate-200 rounded-2xl overflow-hidden">
               {HOW_WE_WORK.map((item, i) => (
-                <div key={i} className="bg-slate-900 p-6 flex gap-4">
-                  <div className="w-9 h-9 rounded-xl bg-blue-600/15 flex items-center justify-center shrink-0 mt-0.5">
-                    <item.icon className="w-4 h-4 text-blue-400" />
+                <div key={i} className="bg-slate-100 p-6 flex gap-4">
+                  <div className="w-9 h-9 rounded-xl bg-blue-50 flex items-center justify-center shrink-0 mt-0.5">
+                    <item.icon className="w-4 h-4 text-blue-600" />
                   </div>
                   <div>
-                    <p className="text-sm font-extrabold text-white mb-1">{item.label}</p>
-                    <p className="text-sm text-slate-400 leading-relaxed break-keep whitespace-pre-line">{item.desc}</p>
+                    <p className="text-sm font-extrabold text-slate-900 mb-1">{item.label}</p>
+                    <p className="text-sm text-slate-500 leading-relaxed break-keep whitespace-pre-line">{item.desc}</p>
                   </div>
                 </div>
               ))}
@@ -156,20 +155,6 @@ export default function TeamIntroPage() {
         </div>
       </section>
 
-      {/* CTA */}
-      <section className="bg-white py-16 border-t border-slate-100">
-        <div className="container mx-auto px-6 lg:px-12 max-w-5xl text-center">
-          <p className="text-sm text-slate-500 mb-4">함께 싸피니티를 만들어가고 싶으신가요?</p>
-          <Link
-            to="/team/apply"
-            className="inline-flex items-center gap-2 px-6 py-2.5 rounded-full
-                       bg-blue-600 text-white text-sm font-black tracking-wide
-                       hover:bg-blue-700 transition-colors"
-          >
-            운영진 지원하기
-          </Link>
-        </div>
-      </section>
 
     </div>
   )
