@@ -22,7 +22,7 @@ export const operator2023 = {
         { role: '소통국장',    name: '권00' },
         { role: '홍보국장',    name: '신00' },
         { role: '인사관리국장', name: '이00' },
-        { role: '경영지원국장', name: '윤00' },
+        { role: '경영지원국장', name: '윤일준', cohort: 7, campus: '대전' },
       ],
     },
     {
@@ -66,7 +66,7 @@ export const operator2023 = {
       name: '경영지원국',
       desc: '동문회 행정 및 재무 지원을 담당합니다.',
       members: [
-        { role: '국장', name: '윤00' },
+        { role: '국장', name: '윤일준', cohort: 7, campus: '대전' },
         { role: '국원', name: '손00' },
       ],
     },

@@ -138,8 +138,8 @@ export default function TeamHistoryPage() {
                             </div>
                           )}
                         </div>
-                        <div className="flex gap-6 justify-between items-end">
-                          {current.achievements && current.achievements.length > 0 ? (
+                        <div className="flex flex-col sm:flex-row sm:justify-between sm:items-end gap-4">
+                          {current.achievements && current.achievements.length > 0 && (
                             <div className="flex-1">
                               <p className="text-[10px] font-black text-blue-600 uppercase tracking-widest mb-2">주요 성과</p>
                               <ul className="flex flex-col gap-1.5">
@@ -151,8 +151,8 @@ export default function TeamHistoryPage() {
                                 ))}
                               </ul>
                             </div>
-                          ) : <div className="flex-1" />}
-                          <div className="shrink-0 flex gap-2">
+                          )}
+                          <div className="flex gap-2 self-end sm:shrink-0">
                             {current.memberCount != null && (
                               <div className="rounded-xl px-4 py-3 text-center">
                                 <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">총원</p>

@@ -57,7 +57,7 @@ export const operator2025 = {
       members: [
         { role: '팀장', name: '박00' },
         { role: '팀원', name: '박00' },
-        { role: '팀원', name: '윤00' },
+        { role: '팀원', name: '윤일준', cohort: 7, campus: '대전' },
       ],
     },
   ],

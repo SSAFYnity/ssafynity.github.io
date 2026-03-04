@@ -40,7 +40,7 @@ export const operator2022 = {
         { role: '국원',  name: '박00' },
         { role: '국원',  name: '박00' },
         { role: '국원',  name: '송00' },
-        { role: '국원',  name: '윤00' },
+        { role: '국원',  name: '윤일준', cohort: 7, campus: '대전' },
         { role: '국원',  name: '윤00' },
         { role: '국원',  name: '이00' },
         { role: '국원',  name: '이00' },
