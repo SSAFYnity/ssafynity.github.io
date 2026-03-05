@@ -21,9 +21,9 @@ export const operator2024 = {
         { role: '회장', vacant: true, council: true },
         { role: '기획팀장',   name: '김병완', cohort: 6, campus: '광주', url: 'https://www.linkedin.com/in/lactea94' },
         { role: '인사팀장',   name: '당현아', cohort: 5, campus: '서울', url: 'https://github.com/hadevyi' },
-        { role: '소통팀장',   name: '백00' },
+        { role: '소통팀장',   name: '백정훈', cohort: 3, campus: '구미', url: 'https://open.kakao.com/o/s6XqPBPb' },
         { role: '재무팀장',   name: '안00' },
-        { role: '컨텐츠팀장', name: '박00' },
+        { role: '컨텐츠팀장', name: '박지은', cohort: 3, campus: '구미', url: 'https://www.instagram.com/jjiiiiinie' },
       ],
     },
     {
@@ -51,7 +51,7 @@ export const operator2024 = {
       name: '소통팀',
       desc: '회원과의 소통 창구 운영 및 커뮤니티 관리를 담당합니다.',
       members: [
-        { role: '팀장', name: '백00' },
+        { role: '팀장', name: '백정훈', cohort: 3, campus: '구미', url: 'https://open.kakao.com/o/s6XqPBPb' },
         { role: '팀원', name: '김00' },
         { role: '팀원', name: '김종혁', cohort: 8, campus: '구미' },
         { role: '팀원', name: '채00' },
@@ -71,7 +71,7 @@ export const operator2024 = {
       name: '컨텐츠팀',
       desc: '동문회 콘텐츠 기획과 제작을 담당합니다.',
       members: [
-        { role: '팀장', name: '박00' },
+        { role: '팀장', name: '박지은', cohort: 3, campus: '구미', url: 'https://www.instagram.com/jjiiiiinie' },
         { role: '팀원', name: '고준수', cohort: 8, campus: '광주', url: 'https://www.instagram.com/kojunsu1004' },
         { role: '팀원', name: '김00', concurrent: true },
         { role: '팀원', name: '당현아', cohort: 5, campus: '서울', url: 'https://github.com/hadevyi', concurrent: true },
