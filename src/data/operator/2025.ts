@@ -48,7 +48,7 @@ export const operator2025 = {
       desc: 'SNS 채널 운영과 온·오프라인 홍보·디자인 물품을 담당합니다.',
       members: [
         { role: '팀장', name: '고준수', cohort: 8, campus: '광주', url: 'https://www.instagram.com/kojunsu1004' },
-        { role: '팀원', name: '이00' },
+        { role: '팀원', name: '이가빈', cohort: 5, campus: '서울' },
       ],
     },
     {
