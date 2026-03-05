@@ -7,6 +7,7 @@ import { siteData } from '@/data/siteData'
 export default function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false)
   const [activeMenu, setActiveMenu] = useState<string | null>(null)
+  const [mobileOpen, setMobileOpen] = useState(false)
   const location = useLocation()
 
   useEffect(() => {
@@ -107,7 +108,7 @@ export default function Navbar() {
           {/* 모바일 햄버거 */}
           <div className="flex items-center lg:hidden ml-auto">
             {/* 모바일 Sheet 드로어 */}
-            <Sheet>
+            <Sheet open={mobileOpen} onOpenChange={setMobileOpen}>
               <SheetTrigger asChild>
                 <button className="lg:hidden p-2 text-slate-900 bg-slate-50 rounded-lg">
                   <Menu size={20} />
@@ -134,6 +135,7 @@ export default function Navbar() {
                                 target="_blank"
                                 rel="noopener noreferrer"
                                 className={baseClass}
+                                onClick={() => setMobileOpen(false)}
                               >
                                 {item.label}
                                 <ExternalLink size={10} className="opacity-50" />
@@ -141,7 +143,7 @@ export default function Navbar() {
                             )
                           }
                           return (
-                            <Link key={item.label} to={item.path} className={baseClass}>
+                            <Link key={item.label} to={item.path} className={baseClass} onClick={() => setMobileOpen(false)}>
                               {item.label}
                             </Link>
                           )

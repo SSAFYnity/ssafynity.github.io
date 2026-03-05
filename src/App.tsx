@@ -12,12 +12,13 @@ import HomePage from '@/pages/index'
 import AboutStoryPage from '@/pages/about/story'
 import AboutValuesPage from '@/pages/about/values'
 import AboutPartnersPage from '@/pages/about/partners'
-import TeamIntroPage from '@/pages/team/intro'
-import TeamOrganizationPage from '@/pages/team/organization'
-import TeamHistoryPage from '@/pages/team/history'
-import TeamApplyPage from '@/pages/team/apply'
+import TeamIntroPage from '@/pages/operator/intro'
+import TeamOrganizationPage from '@/pages/operator/organization'
+import TeamHistoryPage from '@/pages/operator/history'
+import TeamApplyPage from '@/pages/operator/apply'
 import EventsUpcomingPage from '@/pages/events/upcoming'
 import EventsArchivePage from '@/pages/events/archive'
+import EventsArchiveDetailPage from '@/pages/events/archive-detail'
 import EventsIntroducePage from '@/pages/events/introduce'
 import ClubsPage from '@/pages/clubs/index'
 import ClubDetailPage from '@/pages/clubs/detail'
@@ -45,13 +46,14 @@ export default function App() {
         <Route path="/about/story" element={<AboutStoryPage />} />
         <Route path="/about/values" element={<AboutValuesPage />} />
         <Route path="/about/partners" element={<AboutPartnersPage />} />
-        <Route path="/team/intro" element={<TeamIntroPage />} />
-        <Route path="/team/organization" element={<TeamOrganizationPage />} />
-        <Route path="/team/history" element={<TeamHistoryPage />} />
-        <Route path="/team/apply" element={<TeamApplyPage />} />
+        <Route path="/operator/introduce" element={<TeamIntroPage />} />
+        <Route path="/operator/organization" element={<TeamOrganizationPage />} />
+        <Route path="/operator/history" element={<TeamHistoryPage />} />
+        <Route path="/operator/apply" element={<TeamApplyPage />} />
         <Route path="/events/introduce" element={<EventsIntroducePage />} />
         <Route path="/events/upcoming" element={<EventsUpcomingPage />} />
         <Route path="/events/archive" element={<EventsArchivePage />} />
+        <Route path="/events/archive/:slug" element={<EventsArchiveDetailPage />} />
         <Route path="/clubs" element={<ClubsPage />} />
         <Route path="/clubs/benefits" element={<ClubsBenefitsPage />} />
         <Route path="/clubs/apply" element={<ClubsApplyPage />} />

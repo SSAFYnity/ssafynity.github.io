@@ -31,14 +31,14 @@ export default function TeamApplyPage() {
             transition={{ duration: 0.75, ease: [0.22, 1, 0.36, 1] }}
           >
             <div className="inline-flex items-center gap-2 px-3.5 py-1.5 border border-slate-200 text-slate-500 rounded-full mb-8 bg-slate-50">
-              <span className="text-[10px] font-black uppercase tracking-widest">✦ Staff Recruitment</span>
+              <span className="text-[10px] font-black uppercase tracking-widest">✦ Operator Recruitment</span>
             </div>
             <h1 className="text-3xl md:text-4xl font-extrabold tracking-tight leading-[1.2] text-slate-900 mb-5">
               싸피니티를 함께<br />
               <span className="text-blue-600">만들어갈 분을 찾습니다</span>
             </h1>
             <p className="text-sm text-slate-500 leading-relaxed break-keep max-w-lg">
-              싸피니티 운영진은 SSAFY 수료생들이 자발적으로 모여 동문회를 이끌어가는 사람들입니다.
+              싸피니티 운영진은 SSAFYnity 회원 중 자원하여 동문회를 이끌어가는 사람들입니다.
               보수 없이 재능과 시간을 나누는 자리이지만, 그만큼 값진 경험과 연결을 얻을 수 있습니다.
             </p>
           </motion.div>
@@ -75,7 +75,7 @@ export default function TeamApplyPage() {
             <p className="text-[10px] font-black text-blue-600 uppercase tracking-widest mb-4">활동 방식</p>
             <div className="flex flex-col gap-2">
               <Link
-                to="/team/intro"
+                to="/operator/introduce"
                 className="group relative overflow-hidden flex items-center justify-between bg-white rounded-2xl border border-slate-100 hover:border-blue-200 hover:bg-blue-50 transition-colors p-6"
               >
                 <div className="relative z-10 flex items-center justify-between w-full">
@@ -88,7 +88,7 @@ export default function TeamApplyPage() {
                 <Users className="absolute -right-4 top-1/2 -translate-y-1/2 w-24 h-24 text-slate-100 group-hover:text-blue-100 transition-colors" />
               </Link>
               <Link
-                to="/team/organization"
+                to="/operator/organization"
                 className="group relative overflow-hidden flex items-center justify-between bg-white rounded-2xl border border-slate-100 hover:border-blue-200 hover:bg-blue-50 transition-colors p-6"
               >
                 <div className="relative z-10 flex items-center justify-between w-full">

@@ -54,7 +54,7 @@ export const operator2023 = {
     },
     {
       name: '인사관리국',
-      desc: '운영진 채용과 내부 조직 관리를 담당합니다.',
+      desc: '동문회 인적관리와 내부 조직 관리를 담당합니다.',
       members: [
         { role: '국장', name: '이00' },
         { role: '국원', name: '박00' },

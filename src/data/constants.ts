@@ -1,24 +1,77 @@
 // 사이트 전반에서 공유하는 상수 및 레이블 매핑
 
-// ─── 행사 타입 ──────────────────────────────────────────────────────
-export type EventDate = {
-  start:          string   // 행사 시작일 (YYYY-MM-DD)
-  end?:           string   // 행사 종료일 — 양일 이상일 때만 기재
-  recruitStart?:  string   // 모집 시작일
-  recruitEnd?:    string   // 모집 마감일
+// ─── 행사 종류 / 참여 대상 ───────────────────────────────────────────
+export const EVENT_KIND_LABEL = {
+  regular: '정기',
+  ongoing: '상시',
+} as const
+
+export type EventKind = keyof typeof EVENT_KIND_LABEL
+
+export const EVENT_AUDIENCE_LABEL = {
+  open:     '공개',
+  members:  '동문회',
+  regular:  '정회원',
+  operator: '운영진',
+} as const
+
+export type EventAudience = keyof typeof EVENT_AUDIENCE_LABEL
+
+// ─── 행사 진행 방식 ──────────────────────────────────────────────────
+// 복수 선택 가능 (예: ['online', 'offline', 'recorded'])
+export const EVENT_FORMAT_LABEL = {
+  online:   '온라인',
+  offline:  '오프라인',
+  recorded: '녹화제공',
+} as const
+
+export type EventFormat = keyof typeof EVENT_FORMAT_LABEL
+
+export const FORMAT_ORDER: EventFormat[] = ['offline', 'online', 'recorded']
+
+// ─── 행사 날짜 ──────────────────────────────────────────────────────
+// 날짜 범위 — 하루면 end 생략, 여러 날이면 end 기재
+export type EventDateRange = {
+  start:      string   // 시작일 (YYYY-MM-DD)
+  end?:       string   // 종료일 (YYYY-MM-DD) — 당일 행사면 생략
+  startTime?: string   // 시작 시각 (예: '19:00')
+  endTime?:   string   // 종료 시각 (예: '21:00')
+}
+
+// 접수 기간 — 시각 생략 시 기본값: startTime '00:00' / endTime '23:59'
+export type RecruitDateRange = {
+  start:      string   // 접수 시작일 (YYYY-MM-DD)
+  end?:       string   // 접수 종료일 (YYYY-MM-DD)
+  startTime?: string   // 접수 시작 시각 (기본 '00:00')
+  endTime?:   string   // 접수 종료 시각 (기본 '23:59')
 }
 
 export type Event = {
-  title:        string
-  date:         EventDate
-  location:     string
-  category:     string
-  summary:      string
-  img:          string
-  upcoming:     boolean
-  formUrl:      string
-  participants: number
-  internal?:    boolean  // true면 행사 일정에서 제외, 역대 행사에는 표시
+  slug:          string          // URL 식별자 겸 이미지 파일명 기준 (예: '2022-founding-ceremony')
+  title:         string
+  eventDate:     EventDateRange          // 행사 날짜 (하루 또는 여러 날)
+  recruitDate?:  RecruitDateRange        // 모집 기간 (시작 ~ 마감)
+  location?:     string
+  locationUrl?: {
+    naver?:  string
+    kakao?:  string
+    google?: string
+  }
+  format:        readonly [EventFormat, ...EventFormat[]]  // 진행 방식 (최소 1개 필수)
+  kind?:         EventKind               // 정기(연 2회) / 상시(비정기 소규모)
+  audience?:     EventAudience           // 동문회원 / 정회원(정회원 전용) / 공개(외부인 포함)
+  keywords?:     string[]                // 검색용 태그
+  summary:       string
+  img:           string
+  formUrl?:      string                  // 접수 폼 URL (만료되면 생략)
+  capacity?:     number                  // 정원
+  participants?: {
+    regular?:  number  // 정회원
+    members?:  number  // 일반회원
+    external?: number  // 외부인
+  }
+  note?:         string                  // 내부 메모 (운영진 참고용, 사이트에 노출 안 됨)
+  internal?:     boolean                 // true면 행사 일정에서 제외, 역대 행사에는 표시
 }
 
 // ─── 공통 상태 ──────────────────────────────────────────────────────

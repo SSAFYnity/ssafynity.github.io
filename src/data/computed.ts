@@ -14,7 +14,7 @@
 
 import { siteData } from './siteData'
 import { events2022 } from './events/2022'
-import type { PartnerType, Status, Event, EventDate } from './constants'
+import type { PartnerType, Status, Event, EventDateRange, RecruitDateRange } from './constants'
 import { partnerSamsung } from './partners/samsung'
 import { partnerMulticampus } from './partners/multicampus'
 import { partnerSsafy } from './partners/ssafy'
@@ -32,7 +32,7 @@ import { operator2026 } from './operator/2026'
 // 새 운영진 추가 시: operator/{year}.ts 생성 후 import + allOperators에 추가
 
 // ─── 행사 전체 목록 ───────────────────────────────────────────
-export type { Event, EventDate }  // constants.ts에서 re-export
+export type { Event, EventDateRange, RecruitDateRange }  // constants.ts에서 re-export
 
 export const allEvents: Event[] = [
   ...events2022,
@@ -120,7 +120,11 @@ export const computed = {
   totalEvents: allEvents.length,
 
   /** 누적 행사 참가자 수 — 각 행사의 participants 합산 */
-  totalParticipants: allEvents.reduce((sum, e) => sum + e.participants, 0),
+  totalParticipants: allEvents.reduce((sum, e) => {
+    const p = e.participants
+    if (!p) return sum
+    return sum + (p.regular ?? 0) + (p.members ?? 0) + (p.external ?? 0)
+  }, 0),
 
   /** 동아리 수 — clubSlugs 기준 (플레이스홀더 제외) */
   clubCount: validClubs.length,

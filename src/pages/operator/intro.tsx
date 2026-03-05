@@ -67,7 +67,7 @@ export default function TeamIntroPage() {
               className="flex-1"
             >
               <div className="inline-flex items-center gap-2 px-3.5 py-1.5 border border-slate-200 text-slate-500 rounded-full mb-8 bg-slate-50">
-                <span className="text-[10px] font-black uppercase tracking-widest">✦ Staff Introduction</span>
+                <span className="text-[10px] font-black uppercase tracking-widest">✦ Operator Introduction</span>
               </div>
               <h1 className="text-3xl md:text-4xl font-extrabold tracking-tight leading-[1.2] text-slate-900 mb-5">
                 자율로 완성하는<br />

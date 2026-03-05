@@ -43,7 +43,7 @@ export default function TeamHistoryPage() {
             transition={{ duration: 0.75, ease: [0.22, 1, 0.36, 1] }}
           >
             <div className="inline-flex items-center gap-2 px-3.5 py-1.5 border border-slate-200 text-slate-500 rounded-full mb-8 bg-slate-50">
-              <span className="text-[10px] font-black uppercase tracking-widest">✦ Alumni Staff History</span>
+              <span className="text-[10px] font-black uppercase tracking-widest">✦ Operator History</span>
             </div>
             <h1 className="text-3xl md:text-4xl font-extrabold tracking-tight leading-[1.2] text-slate-900 mb-5">
               싸피니티를 지켜온<br />
@@ -292,7 +292,7 @@ export default function TeamHistoryPage() {
           <h2 className="text-xl font-extrabold text-white mb-3">함께 역사를 만들어갈 다음 주인공을 기다립니다.</h2>
           <p className="text-sm text-blue-200 mb-8">여러분의 기여가 SSAFYnity 동문회의 내일을 바꿉니다.</p>
           <Link
-            to="/team/apply"
+            to="/operator/apply"
             className="inline-flex items-center gap-2 px-6 py-2.5 rounded-full
                        bg-white text-blue-950 text-sm font-black tracking-wide
                        hover:bg-blue-100 transition-colors"

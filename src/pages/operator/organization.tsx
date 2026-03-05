@@ -53,7 +53,7 @@ export default function TeamOrganizationPage() {
             transition={{ duration: 0.75, ease: [0.22, 1, 0.36, 1] }}
           >
             <div className="inline-flex items-center gap-2 px-3.5 py-1.5 border border-slate-200 text-slate-500 rounded-full mb-8 bg-slate-50">
-              <span className="text-[10px] font-black uppercase tracking-widest">✦ Organization</span>
+              <span className="text-[10px] font-black uppercase tracking-widest">✦ Operator Organization</span>
             </div>
             <h1 className="text-3xl md:text-4xl font-extrabold tracking-tight leading-[1.2] text-slate-900 mb-5">
               함께 만드는<br />

@@ -87,9 +87,9 @@ export const siteData = {
       { label: '후원·협력사', path: '/about/partners' },
     ]},
     { label: '운영진', items: [
-      { label: '운영진 소개', path: '/team/intro' },
-      { label: '조직 안내',   path: '/team/organization' },
-      { label: '역대 운영진', path: '/team/history' },
+      { label: '운영진 소개', path: '/operator/introduce' },
+      { label: '조직 안내',   path: '/operator/organization' },
+      { label: '역대 운영진', path: '/operator/history' },
     ]},
     { label: '행사', items: [
       { label: '행사 안내', path: '/events/introduce' },
@@ -104,7 +104,7 @@ export const siteData = {
       { label: '동문회 가입',    path: '/join/membership' },
       { label: '정회원 혜택',    path: '/join/benefits' },
       { label: '동아리 신청',    path: '/clubs/apply' },
-      { label: '운영진 모집',    path: '/team/apply' },
+      { label: '운영진 모집',    path: '/operator/apply' },
       { label: '후원·제휴 문의', path: '/join/inquiry' },
       // { label: '소식 수신', path: '', external: true }, // [업데이트 필요] forms.newsletter URL 생성 후 입력
     ]},

@@ -31,7 +31,7 @@ const FEATURES = [
     iconBg: 'bg-emerald-400',
     title: '운영진 기여',
     desc: '싸피니티를 직접 만들어가는 운영진으로 합류해보세요. 받은 도움을 다음 기수에게 되돌려주는 선순환.',
-    to: '/team/apply',
+    to: '/operator/apply',
   },
   {
     icon: BookOpen,
