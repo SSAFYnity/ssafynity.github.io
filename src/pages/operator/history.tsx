@@ -243,7 +243,8 @@ export default function TeamHistoryPage() {
                                     return (() => {
                                       const hasUrl = 'url' in m && m.url
                                       const isAnon = m.name?.endsWith('00') ?? false
-                                      const badge = <span className={`text-[10px] font-black px-1.5 py-0.5 rounded shrink-0 inline-block w-12 text-center ${isExec ? 'text-blue-700 bg-blue-100' : 'text-blue-600 bg-blue-50'}`}>{m.role}</span>
+                                      const isConcurrent = 'concurrent' in m && m.concurrent
+                                      const badge = <span className={`text-[10px] font-black px-1.5 py-0.5 rounded shrink-0 inline-block w-12 text-center ${isExec ? 'text-blue-700 bg-blue-100' : isConcurrent ? 'text-slate-500 bg-slate-100' : 'text-blue-600 bg-blue-50'}`}>{isConcurrent ? '겸직' : m.role}</span>
                                       const meta = (
                                         <span className="inline-flex items-center gap-1.5 flex-wrap">
                                           <span className={`text-xs font-extrabold transition-colors ${isAnon ? 'text-slate-500 group-hover:text-slate-600' : 'text-slate-800 group-hover:text-blue-600'}`}>{m.name ?? '(공석)'}</span>
