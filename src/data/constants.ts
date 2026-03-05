@@ -46,6 +46,16 @@ export type RecruitDateRange = {
   endTime?:   string   // 접수 종료 시각 (기본 '23:59')
 }
 
+// ─── 행사 참여자 분류 ────────────────────────────────────────────────
+export type ParticipantBreakdown = {
+  members?:  number  // 일반회원
+  regular?:  number  // 정회원
+  external?: number  // 외부인
+  operator?: number  // 운영진
+  partner?:  number  // 관계자 (후원/협력사)
+  invited?:  number  // 초청인원 (발표자/VIP)
+}
+
 export type Event = {
   slug:          string          // URL 식별자 겸 이미지 파일명 기준 (예: '2022-founding-ceremony')
   title:         string
@@ -65,11 +75,8 @@ export type Event = {
   img:           string
   formUrl?:      string                  // 접수 폼 URL (만료되면 생략)
   capacity?:     number                  // 정원
-  participants?: {
-    regular?:  number  // 정회원
-    members?:  number  // 일반회원
-    external?: number  // 외부인
-  }
+  registrants?:  ParticipantBreakdown   // 최종 접수자
+  attendees?:    ParticipantBreakdown   // 실제 참여자
   note?:         string                  // 내부 메모 (운영진 참고용, 사이트에 노출 안 됨)
   internal?:     boolean                 // true면 행사 일정에서 제외, 역대 행사에는 표시
 }

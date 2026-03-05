@@ -119,11 +119,11 @@ export const computed = {
   /** 누적 행사 횟수 — events/{year}.ts 항목 합산 */
   totalEvents: allEvents.length,
 
-  /** 누적 행사 참가자 수 — 각 행사의 participants 합산 */
+  /** 누적 행사 참가자 수 — 각 행사의 attendees 합산 */
   totalParticipants: allEvents.reduce((sum, e) => {
-    const p = e.participants
+    const p = e.attendees
     if (!p) return sum
-    return sum + (p.regular ?? 0) + (p.members ?? 0) + (p.external ?? 0)
+    return sum + (p.members ?? 0) + (p.regular ?? 0) + (p.external ?? 0) + (p.operator ?? 0) + (p.partner ?? 0) + (p.invited ?? 0)
   }, 0),
 
   /** 동아리 수 — clubSlugs 기준 (플레이스홀더 제외) */

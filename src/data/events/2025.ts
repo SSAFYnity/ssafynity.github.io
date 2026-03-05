@@ -15,6 +15,9 @@ export const events2025: Event[] = [
     audience:  'members',
     summary:   '새 운영진과 동문들이 함께하는 신년 네트워킹 파티',
     img:       '/events/2025-night-of-ssafynity.jpg',
+    capacity:    70,
+    registrants: { members: 37, regular: 25, operator: 13, partner: 10 },
+    attendees:   { members: 36, regular: 25, operator: 13, partner: 10 },
   },
   {
     slug:      '2025-ssafynale',
@@ -28,6 +31,9 @@ export const events2025: Event[] = [
     audience:  'open',
     summary:   '동문회원이 직접 발표자로 나서 성장과 고민을 공유하는 IT 컨퍼런스',
     img:       '/events/2025-ssafynale.png',
+    capacity:    100,
+    registrants: { members: 16, regular: 12, external: 31, operator: 13, partner: 2 },
+    attendees:   { members: 13, regular: 11, external: 29, operator: 13, partner: 2 },
   },
   {
     slug:      '2025-potluck-party',
@@ -39,8 +45,11 @@ export const events2025: Event[] = [
     format:     ['offline'],
     kind:       'ongoing',
     audience:   'members',
-    summary:    '동문들이 함께 즐기는 포트락 스타일 파티',
+    summary:    '각자 소개하고 싶은 음식을 나누고 게임으로 함께 즐기는 동문 친목 파티',
     img:        '/events/2025-potluck-party.jpg',
+    capacity:    50,
+    registrants: { members: 17, regular: 18, operator: 8 },
+    attendees:   { members: 15, regular: 14, operator: 8 },
   },
   {
     slug:      '2025-career-party',
@@ -54,5 +63,8 @@ export const events2025: Event[] = [
     audience:    'open',
     summary:     '직무·도메인·취미 단위로 소통하는 커리어 네트워킹 파티',
     img:         '/events/2025-career-party.jpg',
+    capacity:    100,
+    registrants: { members: 37, regular: 9, external: 36, partner: 2, invited: 17 },
+    attendees:   { members: 31, regular: 9, external: 26, partner: 2, invited: 16 },
   },
 ]

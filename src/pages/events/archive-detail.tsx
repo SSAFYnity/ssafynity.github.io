@@ -163,26 +163,45 @@ export default function EventsArchiveDetailPage() {
                 )}
 
                 {/* 참여 현황 */}
-                {(event.capacity != null || event.participants != null) && (
-                  <div className="flex flex-col gap-1">
-                    <p className="text-xs font-black text-slate-400">참여 현황</p>
-                    <div className="flex flex-wrap gap-x-4 gap-y-1 text-sm font-medium text-slate-700">
-                      {event.capacity != null && (
-                        <span>정원 {event.capacity.toLocaleString()}명</span>
-                      )}
-                      {event.participants != null && (() => {
-                        const p = event.participants
-                        const total = (p.regular ?? 0) + (p.members ?? 0) + (p.external ?? 0)
-                        return <>
-                          {total > 0 && <span className="font-bold">총 {total.toLocaleString()}명</span>}
-                          {p.regular  != null && <span>정회원 {p.regular.toLocaleString()}명</span>}
-                          {p.members  != null && <span>일반회원 {p.members.toLocaleString()}명</span>}
-                          {p.external != null && <span>외부인 {p.external.toLocaleString()}명</span>}
-                        </>
-                      })()}
+                {(event.capacity != null || event.registrants != null || event.attendees != null) && (() => {
+                  const sumBreakdown = (p: NonNullable<typeof event.attendees>) =>
+                    (p.members ?? 0) + (p.regular ?? 0) + (p.external ?? 0) + (p.operator ?? 0) + (p.partner ?? 0) + (p.invited ?? 0)
+                  const breakdown = (p: NonNullable<typeof event.attendees>) => <>
+                    {p.regular   != null && <span>정회원 {p.regular.toLocaleString()}명</span>}
+                    {p.members   != null && <span>일반회원 {p.members.toLocaleString()}명</span>}
+                    {p.external  != null && <span>외부인 {p.external.toLocaleString()}명</span>}
+                    {p.operator  != null && <span>운영진 {p.operator.toLocaleString()}명</span>}
+                    {p.partner     != null && <span>관계자 {p.partner.toLocaleString()}명</span>}
+                    {p.invited   != null && <span>초청인원 {p.invited.toLocaleString()}명</span>}
+                  </>
+                  return (
+                    <div className="flex flex-col gap-1">
+                      <p className="text-xs font-black text-slate-400">참여 현황</p>
+                      <div className="flex flex-col gap-1 text-sm font-medium text-slate-700">
+                        {event.capacity != null && (
+                          <div className="flex flex-wrap gap-x-4">
+                            <span className="w-12 text-slate-400">정원</span>
+                            <span className="font-bold">{event.capacity.toLocaleString()}명</span>
+                          </div>
+                        )}
+                        {event.registrants != null && (
+                          <div className="flex flex-wrap gap-x-4">
+                            <span className="w-12 text-slate-400">접수</span>
+                            <span className="font-bold">{sumBreakdown(event.registrants).toLocaleString()}명</span>
+                            {breakdown(event.registrants)}
+                          </div>
+                        )}
+                        {event.attendees != null && (
+                          <div className="flex flex-wrap gap-x-4">
+                            <span className="w-12 text-slate-400">참여</span>
+                            <span className="font-bold">{sumBreakdown(event.attendees).toLocaleString()}명</span>
+                            {breakdown(event.attendees)}
+                          </div>
+                        )}
+                      </div>
                     </div>
-                  </div>
-                )}
+                  )
+                })()}
 
               </div>
             </div>

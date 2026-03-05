@@ -15,6 +15,9 @@ export const events2024: Event[] = [
     audience:  'members',
     summary:   '한 해를 마무리하며 동문들과 함께하는 네트워킹 파티',
     img:       '/events/2024-night-of-ssafynity.jpeg',
+    capacity:    80,
+    registrants: { members: 23, regular: 34, operator: 15, partner: 7 },
+    attendees:   { members: 20, regular: 29, operator: 15, partner: 7 },
   },
   {
     slug:      '2024-operator-spring-mt',
@@ -28,6 +31,9 @@ export const events2024: Event[] = [
     note:      '동문회비 미사용, 운영진 자부담으로 진행',
     img:       '/events/2024-operator-spring-mt.png',
     internal:  true,
+    capacity:    19,
+    registrants: { operator: 7 },
+    attendees:   { operator: 7 },
   },
   {
     slug:      '2024-member-mt',
@@ -41,6 +47,9 @@ export const events2024: Event[] = [
     audience:  'regular',
     summary:   '1박 2일 정회원 워크숍 및 친목 도모',
     img:       '/events/2024-member-mt.jpg',
+    capacity:    20,
+    registrants: { regular: 25, operator: 5 },
+    attendees:   { regular: 25, operator: 5 },
   },
   {
     slug:      '2024-ssafynale',
@@ -54,6 +63,9 @@ export const events2024: Event[] = [
     audience:  'open',
     summary:   '동문회원이 직접 발표자로 나서 성장과 고민을 공유하는 IT 컨퍼런스',
     img:       '/events/2024-ssafynale.jpg',
+    capacity:    100,
+    registrants: { members: 53, regular: 22, external: 70, partner: 3, invited: 4 },
+    attendees:   { members: 47, regular: 21, external: 67, partner: 3, invited: 4 },
   },
   {
     slug:      '2024-sports-day',
@@ -67,6 +79,9 @@ export const events2024: Event[] = [
     audience:   'members',
     summary:    '동문들과 함께하는 가을 체육 행사',
     img:        '/events/2024-sports-day.png',
+    capacity:    50,
+    registrants: { members: 7, regular: 11, operator: 15 },
+    attendees:   { members: 3, regular: 9, operator: 15 },
   },
   {
     slug:      '2024-seminar',
@@ -80,5 +95,8 @@ export const events2024: Event[] = [
     audience:    'open',
     summary:     '현직 시니어 전문가를 초청한 커리어·기술 세미나',
     img:       '/events/2024-seminar.jpg',
+    capacity:    100,
+    registrants: { members: 65, regular: 22, external: 36, operator: 8, partner: 2, invited: 4 },
+    attendees:   { members: 51, regular: 20, external: 30, operator: 8, partner: 2, invited: 4 },
   },
 ]
