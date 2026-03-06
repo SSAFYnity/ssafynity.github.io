@@ -144,6 +144,7 @@ function EventCard({ event }: { event: Event }) {
     >
       <Link
         to={`/events/archive/${event.slug}`}
+        state={{ from: 'archive' }}
         className="group flex flex-col bg-white border border-slate-200 rounded-2xl overflow-hidden
                    hover:border-blue-200 hover:shadow-md transition-all duration-200"
       >

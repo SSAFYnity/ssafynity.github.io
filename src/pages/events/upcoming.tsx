@@ -148,6 +148,7 @@ export default function EventsUpcomingPage() {
                   >
                     <Link
                       to={`/events/archive/${event.slug}`}
+                      state={{ from: 'upcoming' }}
                       className={`relative overflow-hidden group flex items-start gap-4 bg-white border rounded-2xl px-5 py-4 pr-14
                                   hover:border-blue-200 hover:shadow-md transition-all duration-200
                                   ${isPast ? 'border-slate-100' : 'border-slate-200'}`}

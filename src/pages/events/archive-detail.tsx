@@ -1,4 +1,4 @@
-import { useParams, Link } from 'react-router-dom'
+import { useParams, useLocation, Link } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import { ChevronLeft, MapPin, CalendarDays, Users, Globe, Monitor, Tv, ExternalLink } from 'lucide-react'
 import { allEvents } from '@/data/computed'
@@ -9,14 +9,18 @@ const FORMAT_ICON = { offline: MapPin, online: Monitor, recorded: Tv }
 
 export default function EventsArchiveDetailPage() {
   const { slug } = useParams<{ slug: string }>()
+  const { state } = useLocation()
   const event = allEvents.find(e => e.slug === slug)
+
+  const backTo    = state?.from === 'upcoming' ? '/events/upcoming' : '/events/archive'
+  const backLabel = state?.from === 'upcoming' ? '올해 행사 일정' : '역대 행사'
 
   if (!event) {
     return (
       <div className="flex flex-col items-center justify-center min-h-[60vh] gap-4">
         <p className="text-slate-400 text-sm">행사를 찾을 수 없습니다.</p>
-        <Link to="/events/archive" className="text-xs font-black text-blue-500 hover:text-blue-700">
-          ← 역대 행사로 돌아가기
+        <Link to={backTo} className="text-xs font-black text-blue-500 hover:text-blue-700">
+          ← {backLabel}로 돌아가기
         </Link>
       </div>
     )
@@ -38,10 +42,10 @@ export default function EventsArchiveDetailPage() {
 
             {/* 뒤로가기 */}
             <Link
-              to="/events/archive"
+              to={backTo}
               className="inline-flex items-center gap-1.5 text-xs font-black text-slate-400 hover:text-blue-500 transition-colors w-fit"
             >
-              <ChevronLeft size={14} /> 역대 행사
+              <ChevronLeft size={14} /> {backLabel}
             </Link>
 
             {/* 메인 레이아웃: 좌 정보 + 우 이미지 */}
