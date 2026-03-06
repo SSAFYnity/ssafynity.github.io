@@ -13,8 +13,6 @@ const PAGE_SIZE = 9
 function getEventRibbon(event: Event): { label: string; className: string } | null {
   const today = new Date()
   today.setHours(0, 0, 0, 0)
-  const pad = (s: string) => s  // already YYYY-MM-DD
-
   const toDate = (s: string) => { const d = new Date(s); d.setHours(0,0,0,0); return d }
 
   const eventStart = toDate(event.eventDate.start)
