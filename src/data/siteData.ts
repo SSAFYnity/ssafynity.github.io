@@ -140,14 +140,7 @@ export const siteData = {
 
   // ─── 협력사 ────────────────────────────────────────────────────────
   // 상세 데이터는 src/data/partners/{slug}.ts 참조
-  // type:   '재정 후원' | '물품 후원' | '교육 지원' | '재능 기부'
-  // status: '현재' | '이전'
-  // 새 협력사 추가 시: 파일 생성 후 아래 배열에 slug 추가
-  partnerSlugs: [
-    'samsung',
-    'multicampus',
-    // 새 협력사 추가 시 여기에 slug 추가
-  ],
+  // 새 협력사 추가 시: partners/{slug}.ts 생성 후 computed.ts의 allPartners에 추가
 
   // ─── 멤버십 ────────────────────────────────────────────────────
   membership: {

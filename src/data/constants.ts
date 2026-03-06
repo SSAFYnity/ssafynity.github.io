@@ -1,33 +1,60 @@
 // 사이트 전반에서 공유하는 상수 및 레이블 매핑
 
 // ─── 행사 종류 / 참여 대상 ───────────────────────────────────────────
-export const EVENT_KIND_LABEL = {
-  regular: '정기',
-  ongoing: '상시',
+export type EventKind = 'regular' | 'ongoing'
+
+export const EVENT_KIND: Record<EventKind, { label: string; desc: string }> = {
+  regular: {
+    label: '정기',
+    desc:  'SSAFYnity를 대표하는 대규모 정기 행사예요.\n연 2회(상*하반기 1회씩), 50~100명 이상 규모로 진행되는 동문회의 정체성을 담은 행사입니다',
+  },
+  ongoing: {
+    label: '상시',
+    desc:  '정회원을 위한 소규모 행사를 상시 운영합니다.\n더 자주, 더 가깝게 동문들과 만날 수 있는 자리입니다. 일부 공석에 대해 일반회원도 참여가능해요.',
+  },
+}
+
+// label만 필요한 곳에서 사용
+export const EVENT_KIND_LABEL: { [K in EventKind]: string } = {
+  regular: EVENT_KIND.regular.label,
+  ongoing: EVENT_KIND.ongoing.label,
+}
+
+export const EVENT_AUDIENCE = {
+  open:     { label: '공개',    desc: '동문 여부와 관계없이 누구나 참여할 수 있어요.' },
+  members:  { label: '동문회',  desc: '동문회원이라면 누구나 참여할 수 있어요.' },
+  regular:  { label: '정회원',  desc: '정회원만 참여할 수 있는 행사예요.' },
+  operator: { label: '운영진',  desc: '운영진만 참여하는 내부 행사예요.' },
 } as const
 
-export type EventKind = keyof typeof EVENT_KIND_LABEL
+export type EventAudience = keyof typeof EVENT_AUDIENCE
 
-export const EVENT_AUDIENCE_LABEL = {
-  open:     '공개',
-  members:  '동문회',
-  regular:  '정회원',
-  operator: '운영진',
-} as const
-
-export type EventAudience = keyof typeof EVENT_AUDIENCE_LABEL
+// label만 필요한 곳에서 사용
+export const EVENT_AUDIENCE_LABEL: { [K in EventAudience]: string } = {
+  open:     EVENT_AUDIENCE.open.label,
+  members:  EVENT_AUDIENCE.members.label,
+  regular:  EVENT_AUDIENCE.regular.label,
+  operator: EVENT_AUDIENCE.operator.label,
+}
 
 // ─── 행사 진행 방식 ──────────────────────────────────────────────────
 // 복수 선택 가능 (예: ['online', 'offline', 'recorded'])
-export const EVENT_FORMAT_LABEL = {
-  online:   '온라인',
-  offline:  '오프라인',
-  recorded: '녹화제공',
+export const EVENT_FORMAT = {
+  offline:  { label: '오프라인', desc: '현장에 직접 방문하여 참여하는 행사예요.' },
+  online:   { label: '온라인',   desc: '온라인으로 참여하는 행사예요. 참여 링크는 별도 안내돼요.' },
+  recorded: { label: '녹화제공', desc: '참석하지 못해도 추후 녹화본을 제공해드려요.' },
 } as const
 
-export type EventFormat = keyof typeof EVENT_FORMAT_LABEL
+export type EventFormat = keyof typeof EVENT_FORMAT
 
 export const FORMAT_ORDER: EventFormat[] = ['offline', 'online', 'recorded']
+
+// label만 필요한 곳에서 사용
+export const EVENT_FORMAT_LABEL: { [K in EventFormat]: string } = {
+  offline:  EVENT_FORMAT.offline.label,
+  online:   EVENT_FORMAT.online.label,
+  recorded: EVENT_FORMAT.recorded.label,
+}
 
 // ─── 행사 날짜 ──────────────────────────────────────────────────────
 // 날짜 범위 — 하루면 end 생략, 여러 날이면 end 기재

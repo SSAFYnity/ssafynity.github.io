@@ -1,46 +1,15 @@
 import { motion } from 'framer-motion'
 import { Link } from 'react-router-dom'
-import { CalendarDays, MapPin, Monitor, Tv } from 'lucide-react'
+import { CalendarDays, MapPin } from 'lucide-react'
 import { allEvents } from '@/data/computed'
 import { EVENT_KIND_LABEL, EVENT_FORMAT_LABEL, FORMAT_ORDER } from '@/data/constants'
-import type { Event } from '@/data/constants'
-import { formatEventDate } from '@/lib/utils'
+import { formatEventDate, getEventStatus, EVENT_STATUS_CONFIG, FORMAT_ICON } from '@/lib/utils'
+import type { EventStatus } from '@/lib/utils'
+import type { Event } from '@/data/computed'
 import { siteData } from '@/data/siteData'
 
 const YEAR = siteData.upcomingEventYear
 const MONTH_KO = ['1월','2월','3월','4월','5월','6월','7월','8월','9월','10월','11월','12월']
-const FORMAT_ICON = { offline: MapPin, online: Monitor, recorded: Tv }
-
-type EventStatus = 'past' | 'today' | 'recruiting' | 'recruit-closed' | 'before-recruit' | 'no-recruit' | 'planning'
-
-function getStatus(event: Event): EventStatus {
-  const today = new Date(); today.setHours(0, 0, 0, 0)
-  const toDate = (s: string) => { const d = new Date(s); d.setHours(0, 0, 0, 0); return d }
-
-  const eventStart = toDate(event.eventDate.start)
-  const eventEnd   = toDate(event.eventDate.end ?? event.eventDate.start)
-
-  if (today > eventEnd)                              return 'past'
-  if (today >= eventStart && today <= eventEnd)      return 'today'
-  if (!event.recruitDate)                            return event.audience === 'operator' ? 'no-recruit' : 'planning'
-
-  const recruitStart = toDate(event.recruitDate.start)
-  const recruitEnd   = toDate(event.recruitDate.end ?? event.recruitDate.start)
-
-  if (today < recruitStart)  return 'before-recruit'
-  if (today <= recruitEnd)   return 'recruiting'
-  return 'recruit-closed'
-}
-
-const STATUS_CONFIG: Record<EventStatus, { label: string; className: string }> = {
-  'past':           { label: '종료',       className: 'bg-slate-100 text-slate-400' },
-  'today':          { label: '오늘 진행중', className: 'bg-blue-600 text-white' },
-  'recruiting':     { label: '접수 중',    className: 'bg-emerald-500 text-white' },
-  'recruit-closed': { label: '접수 마감',  className: 'bg-slate-700 text-white' },
-  'before-recruit': { label: '접수 예정',  className: 'bg-amber-500 text-white' },
-  'no-recruit':     { label: '운영진',     className: 'bg-slate-100 text-slate-500' },
-  'planning':       { label: '계획중',     className: 'bg-slate-200 text-slate-500' },
-}
 
 function shouldShowRibbon(event: Event, status: EventStatus): boolean {
   if (status === 'past' || status === 'planning') return false
@@ -66,7 +35,7 @@ export default function EventsUpcomingPage() {
     })
     .sort((a, b) => a.eventDate.start.localeCompare(b.eventDate.start))
 
-  const hasPlanningEvents = events.some(e => getStatus(e) === 'planning')
+  const hasPlanningEvents = events.some(e => getEventStatus(e) === 'planning')
 
   return (
     <div className="flex flex-col">
@@ -133,8 +102,8 @@ export default function EventsUpcomingPage() {
               className="flex flex-col gap-2.5"
             >
               {events.map(event => {
-                const status = getStatus(event)
-                const cfg    = STATUS_CONFIG[status]
+                const status = getEventStatus(event)
+                const cfg    = EVENT_STATUS_CONFIG[status]
                 const isPast = status === 'past'
                 const d      = new Date(event.eventDate.start)
 

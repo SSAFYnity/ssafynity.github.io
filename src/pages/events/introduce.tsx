@@ -1,5 +1,6 @@
 import { motion } from 'framer-motion'
 import { Users, Globe, CalendarX, RefreshCw, Lock, Check, Minus } from 'lucide-react'
+import { EVENT_KIND } from '@/data/constants'
 
 const REGULAR_EVENTS = [
   {
@@ -101,9 +102,8 @@ export default function EventsIntroducePage() {
           >
             <p className="text-[10px] font-black text-blue-600 uppercase tracking-widest mb-2">Regular Events</p>
             <h2 className="text-lg font-extrabold text-slate-900 mb-2">정기 행사</h2>
-            <p className="text-sm text-slate-500 leading-relaxed break-keep">
-              매년 <strong className="text-slate-700">상반기 1회, 하반기 1회</strong> 총 2회 개최되는 싸피니티의 대표 행사입니다.<br />
-              최소 60명에서 최대 200명 규모로 열리며, 동문회의 정체성을 담고 있습니다.
+            <p className="text-sm text-slate-500 leading-relaxed break-keep whitespace-pre-line">
+              {EVENT_KIND.regular.desc}
             </p>
           </motion.div>
 
@@ -149,9 +149,8 @@ export default function EventsIntroducePage() {
           >
             <p className="text-[10px] font-black text-blue-600 uppercase tracking-widest mb-2">Ongoing Events</p>
             <h2 className="text-lg font-extrabold text-slate-900 mb-2">상시 행사</h2>
-            <p className="text-sm text-slate-500 leading-relaxed break-keep">
-              정기행사 외에도 정회원을 위한 소규모 행사를 상시 운영합니다.
-              더 자주, 더 가깝게 동문들과 만날 수 있는 자리입니다.
+            <p className="text-sm text-slate-500 leading-relaxed break-keep whitespace-pre-line">
+              {EVENT_KIND.ongoing.desc}
             </p>
           </motion.div>
 

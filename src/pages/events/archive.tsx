@@ -3,7 +3,7 @@ import { motion } from 'framer-motion'
 import { Link } from 'react-router-dom'
 import { Search, MapPin, CalendarDays, ChevronRight, ChevronLeft, ChevronDown, Check, X } from 'lucide-react'
 import { allEvents } from '@/data/computed'
-import { EVENT_KIND_LABEL, EVENT_AUDIENCE_LABEL, EVENT_FORMAT_LABEL, FORMAT_ORDER } from '@/data/constants'
+import { EVENT_KIND, EVENT_KIND_LABEL, EVENT_AUDIENCE, EVENT_AUDIENCE_LABEL, EVENT_FORMAT, EVENT_FORMAT_LABEL, FORMAT_ORDER } from '@/data/constants'
 import type { EventKind, EventAudience, EventFormat, Event } from '@/data/constants'
 import { formatEventDate } from '@/lib/utils'
 
@@ -45,21 +45,9 @@ const ALL_YEARS = [...new Set(
   allEvents.map(e => new Date(e.eventDate.start).getFullYear())
 )].sort((a, b) => b - a)
 
-const KIND_OPTIONS:     Array<{ key: EventKind;     label: string }> = [
-  { key: 'regular', label: EVENT_KIND_LABEL.regular },
-  { key: 'ongoing', label: EVENT_KIND_LABEL.ongoing },
-]
-const AUDIENCE_OPTIONS: Array<{ key: EventAudience; label: string }> = [
-  { key: 'open',     label: EVENT_AUDIENCE_LABEL.open     },
-  { key: 'members',  label: EVENT_AUDIENCE_LABEL.members  },
-  { key: 'regular',  label: EVENT_AUDIENCE_LABEL.regular  },
-  { key: 'operator', label: EVENT_AUDIENCE_LABEL.operator },
-]
-const FORMAT_OPTIONS:   Array<{ key: EventFormat;   label: string }> = [
-  { key: 'offline',  label: EVENT_FORMAT_LABEL.offline  },
-  { key: 'online',   label: EVENT_FORMAT_LABEL.online   },
-  { key: 'recorded', label: EVENT_FORMAT_LABEL.recorded },
-]
+const KIND_OPTIONS     = Object.entries(EVENT_KIND).map(([key, { label }]) => ({ key: key as EventKind, label }))
+const AUDIENCE_OPTIONS = Object.entries(EVENT_AUDIENCE).map(([key, { label }]) => ({ key: key as EventAudience, label }))
+const FORMAT_OPTIONS   = Object.entries(EVENT_FORMAT).map(([key, { label }]) => ({ key: key as EventFormat, label }))
 
 // ─── 멀티 셀렉트 드롭박스 ────────────────────────────────────────────
 function MultiSelectDropdown<T extends string>({
