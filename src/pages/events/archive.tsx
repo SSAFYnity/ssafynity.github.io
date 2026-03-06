@@ -9,6 +9,39 @@ import { formatEventDate } from '@/lib/utils'
 
 const PAGE_SIZE = 9
 
+// ─── 행사 상태 판별 ──────────────────────────────────────────────────
+function getEventRibbon(event: Event): { label: string; className: string } | null {
+  const today = new Date()
+  today.setHours(0, 0, 0, 0)
+  const pad = (s: string) => s  // already YYYY-MM-DD
+
+  const toDate = (s: string) => { const d = new Date(s); d.setHours(0,0,0,0); return d }
+
+  const eventStart = toDate(event.eventDate.start)
+  const eventEnd   = toDate(event.eventDate.end ?? event.eventDate.start)
+
+  // 행사 당일
+  if (today >= eventStart && today <= eventEnd)
+    return { label: '오늘 진행중', className: 'bg-blue-600 text-white' }
+
+  // 행사 종료
+  if (today > eventEnd) return null
+
+  // 행사 전
+  if (!event.recruitDate) return null
+
+  const recruitStart = toDate(event.recruitDate.start)
+  const recruitEnd   = toDate(event.recruitDate.end ?? event.recruitDate.start)
+
+  if (today < recruitStart)
+    return { label: '곧 접수 시작', className: 'bg-amber-500 text-white' }
+
+  if (today <= recruitEnd)
+    return { label: '접수 중', className: 'bg-emerald-500 text-white' }
+
+  return { label: '접수 종료 · 당일날 봐요', className: 'bg-slate-700 text-white' }
+}
+
 // ─── 필터 데이터 ────────────────────────────────────────────────────
 const ALL_YEARS = [...new Set(
   allEvents.map(e => new Date(e.eventDate.start).getFullYear())
@@ -100,8 +133,9 @@ function MultiSelectDropdown<T extends string>({
 
 // ─── 이벤트 카드 ────────────────────────────────────────────────────
 function EventCard({ event }: { event: Event }) {
-  const year = new Date(event.eventDate.start).getFullYear()
+  const year   = new Date(event.eventDate.start).getFullYear()
   const hasImg = !!event.img
+  const ribbon = getEventRibbon(event)
 
   return (
     <motion.div
@@ -127,6 +161,13 @@ function EventCard({ event }: { event: Event }) {
                 <span className="text-4xl font-black text-slate-200">{year}</span>
               </div>
           }
+
+          {/* 상태 리본 */}
+          {ribbon && (
+            <div className={`absolute bottom-0 left-0 right-0 py-2 text-center text-xs font-black tracking-wide ${ribbon.className}`}>
+              {ribbon.label}
+            </div>
+          )}
 
           {/* 뱃지 */}
           <div className="absolute top-2 right-2 flex flex-wrap justify-end gap-1">
@@ -200,7 +241,17 @@ export default function EventsArchivePage() {
 
   const filtered = useMemo(() => {
     const kw = query.trim().toLowerCase()
+    const today = new Date(); today.setHours(0, 0, 0, 0)
+    const twoWeeksBefore = (dateStr: string) => {
+      const d = new Date(dateStr); d.setHours(0, 0, 0, 0); d.setDate(d.getDate() - 14); return d
+    }
     return allEvents
+      .filter(e => {
+        const eventEnd = new Date(e.eventDate.end ?? e.eventDate.start); eventEnd.setHours(0,0,0,0)
+        if (today > eventEnd) return true                      // 지난 행사는 항상 노출
+        if (!e.recruitDate) return e.audience === 'operator'  // 접수 없는 운영진 행사는 노출, 나머지 숨김
+        return today >= twoWeeksBefore(e.recruitDate.start)  // 접수 2주 전부터 노출
+      })
       .filter(e => years.length === 0 || years.includes(String(new Date(e.eventDate.start).getFullYear())))
       .filter(e => kinds.length     === 0  || (e.kind     != null && kinds.includes(e.kind)))
       .filter(e => audiences.length === 0  || (e.audience != null && audiences.includes(e.audience)))

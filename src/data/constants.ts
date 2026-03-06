@@ -32,10 +32,12 @@ export const FORMAT_ORDER: EventFormat[] = ['offline', 'online', 'recorded']
 // ─── 행사 날짜 ──────────────────────────────────────────────────────
 // 날짜 범위 — 하루면 end 생략, 여러 날이면 end 기재
 export type EventDateRange = {
-  start:      string   // 시작일 (YYYY-MM-DD)
-  end?:       string   // 종료일 (YYYY-MM-DD) — 당일 행사면 생략
-  startTime?: string   // 시작 시각 (예: '19:00')
-  endTime?:   string   // 종료 시각 (예: '21:00')
+  start:       string    // 시작일 (YYYY-MM-DD) — precision:'month'일 땐 월의 1일, candidates 있을 땐 첫 번째 후보일 (정렬 기준)
+  end?:        string    // 종료일 (YYYY-MM-DD) — 당일 행사면 생략
+  startTime?:  string    // 시작 시각 (예: '19:00')
+  endTime?:    string    // 종료 시각 (예: '21:00')
+  precision?:  'month' | 'day'  // 생략 시 'day'. 'month'면 일 미확정 → "2026년 9월 중" 표기
+  candidates?: string[]  // 후보 날짜 목록 (YYYY-MM-DD) — 있으면 "9/13 · 9/20 · 9/27 중 1일" 표기
 }
 
 // 접수 기간 — 시각 생략 시 기본값: startTime '00:00' / endTime '23:59'
@@ -72,7 +74,7 @@ export type Event = {
   audience?:     EventAudience           // 동문회원 / 정회원(정회원 전용) / 공개(외부인 포함)
   keywords?:     string[]                // 검색용 태그
   summary:       string
-  img:           string
+  img?:          string
   formUrl?:      string                  // 접수 폼 URL (만료되면 생략)
   capacity?:     number                  // 정원
   registrants?:  ParticipantBreakdown   // 최종 접수자

@@ -92,9 +92,9 @@ export const siteData = {
       { label: '역대 운영진', path: '/operator/history' },
     ]},
     { label: '행사', items: [
-      { label: '행사 안내', path: '/events/introduce' },
-      { label: '행사 일정', path: '/events/upcoming' },
-      { label: '역대 행사', path: '/events/archive' },
+      { label: '동문회 행사 안내', path: '/events/introduce' },
+      { label: '올해 행사 일정',   path: '/events/upcoming' },
+      { label: '역대 모든 행사',   path: '/events/archive' },
     ]},
     { label: '동아리', items: [
       { label: '동아리 혜택', path: '/clubs/benefits' },
