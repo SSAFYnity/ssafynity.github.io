@@ -2,8 +2,8 @@ import { motion } from 'framer-motion'
 import { Link } from 'react-router-dom'
 import { CalendarDays, MapPin } from 'lucide-react'
 import { allEvents } from '@/data/computed'
-import { EVENT_KIND_LABEL, EVENT_FORMAT_LABEL, FORMAT_ORDER } from '@/data/constants'
-import { formatEventDate, getEventStatus, EVENT_STATUS_CONFIG, FORMAT_ICON } from '@/lib/utils'
+import { EVENT_KIND_LABEL, EVENT_AUDIENCE_LABEL, EVENT_FORMAT_LABEL, FORMAT_ORDER } from '@/data/constants'
+import { formatEventDate, getEventStatus, EVENT_STATUS_CONFIG } from '@/lib/utils'
 import type { EventStatus } from '@/lib/utils'
 import type { Event } from '@/data/computed'
 import { siteData } from '@/data/siteData'
@@ -12,7 +12,18 @@ const YEAR = siteData.upcomingEventYear
 const MONTH_KO = ['1월','2월','3월','4월','5월','6월','7월','8월','9월','10월','11월','12월']
 
 function shouldShowRibbon(event: Event, status: EventStatus): boolean {
-  if (status === 'past' || status === 'planning') return false
+  if (status === 'past' || status === 'planning' || status === 'no-recruit') return false
+  if (status === 'before-recruit') {
+    const today = new Date(); today.setHours(0, 0, 0, 0)
+    const recruitStart = new Date(event.recruitDate!.start); recruitStart.setHours(0, 0, 0, 0)
+    const daysUntil = (recruitStart.getTime() - today.getTime()) / (1000 * 60 * 60 * 24)
+    return daysUntil <= 14
+  }
+  return true
+}
+
+function isClickable(event: Event, status: EventStatus): boolean {
+  if (status === 'planning') return false
   if (status === 'before-recruit') {
     const today = new Date(); today.setHours(0, 0, 0, 0)
     const recruitStart = new Date(event.recruitDate!.start); recruitStart.setHours(0, 0, 0, 0)
@@ -115,6 +126,7 @@ export default function EventsUpcomingPage() {
                       visible: { opacity: 1, y: 0, transition: { duration: 0.5, ease: [0.22, 1, 0.36, 1] } },
                     }}
                   >
+                    {isClickable(event, status) ? (
                     <Link
                       to={`/events/archive/${event.slug}`}
                       state={{ from: 'upcoming' }}
@@ -137,13 +149,23 @@ export default function EventsUpcomingPage() {
 
                       {/* 콘텐츠 */}
                       <div className="flex-1 min-w-0 flex flex-col gap-1.5">
-                        {event.kind && (
-                          <div className="flex flex-wrap items-center gap-1.5">
+                        <div className="flex flex-wrap items-center gap-1">
+                          {event.kind && (
                             <span className="text-[10px] font-black px-2 py-0.5 rounded-full bg-blue-50 text-blue-600">
                               {EVENT_KIND_LABEL[event.kind]}
                             </span>
-                          </div>
-                        )}
+                          )}
+                          {event.audience && (
+                            <span className="text-[10px] font-black px-2 py-0.5 rounded-full bg-slate-100 text-slate-500">
+                              {EVENT_AUDIENCE_LABEL[event.audience]}
+                            </span>
+                          )}
+                          {[...event.format].sort((a, b) => FORMAT_ORDER.indexOf(a) - FORMAT_ORDER.indexOf(b)).map(f => (
+                            <span key={f} className="text-[10px] font-black px-2 py-0.5 rounded-full bg-slate-100 text-slate-400">
+                              {EVENT_FORMAT_LABEL[f]}
+                            </span>
+                          ))}
+                        </div>
                         <p className={`text-sm font-extrabold leading-snug group-hover:text-blue-600 transition-colors
                                       ${isPast ? 'text-slate-400' : 'text-slate-900'}`}>
                           {event.title}
@@ -159,17 +181,6 @@ export default function EventsUpcomingPage() {
                               {event.location}
                             </span>
                           )}
-                          <span className="flex items-center gap-2">
-                            {[...event.format].sort((a, b) => FORMAT_ORDER.indexOf(a) - FORMAT_ORDER.indexOf(b)).map(f => {
-                              const Icon = FORMAT_ICON[f]
-                              return (
-                                <span key={f} className="flex items-center gap-0.5">
-                                  <Icon size={11} className="shrink-0" />
-                                  {EVENT_FORMAT_LABEL[f]}
-                                </span>
-                              )
-                            })}
-                          </span>
                         </div>
                       </div>
 
@@ -182,6 +193,57 @@ export default function EventsUpcomingPage() {
                         </div>
                       )}
                     </Link>
+                    ) : (
+                    <div className={`relative overflow-hidden flex items-start gap-4 bg-white border rounded-2xl px-5 py-4 pr-14 cursor-default
+                                    ${isPast ? 'border-slate-100' : 'border-slate-200'}`}>
+                      {/* 날짜 블록 */}
+                      <div className={`shrink-0 w-10 flex flex-col items-center pt-0.5 ${isPast ? 'opacity-40' : ''}`}>
+                        <span className="text-[10px] font-black text-blue-500">
+                          {MONTH_KO[d.getMonth()]}
+                        </span>
+                        <span className={`text-2xl font-black leading-none ${isPast ? 'text-slate-400' : 'text-slate-800'}`}>
+                          {status === 'planning' ? '○' : String(d.getDate()).padStart(2, '0')}
+                        </span>
+                      </div>
+                      {/* 구분선 */}
+                      <div className={`w-px self-stretch shrink-0 ${isPast ? 'bg-slate-100' : 'bg-slate-200'}`} />
+                      {/* 콘텐츠 */}
+                      <div className="flex-1 min-w-0 flex flex-col gap-1.5">
+                        <div className="flex flex-wrap items-center gap-1">
+                          {event.kind && (
+                            <span className="text-[10px] font-black px-2 py-0.5 rounded-full bg-blue-50 text-blue-600">
+                              {EVENT_KIND_LABEL[event.kind]}
+                            </span>
+                          )}
+                          {event.audience && (
+                            <span className="text-[10px] font-black px-2 py-0.5 rounded-full bg-slate-100 text-slate-500">
+                              {EVENT_AUDIENCE_LABEL[event.audience]}
+                            </span>
+                          )}
+                          {[...event.format].sort((a, b) => FORMAT_ORDER.indexOf(a) - FORMAT_ORDER.indexOf(b)).map(f => (
+                            <span key={f} className="text-[10px] font-black px-2 py-0.5 rounded-full bg-slate-100 text-slate-400">
+                              {EVENT_FORMAT_LABEL[f]}
+                            </span>
+                          ))}
+                        </div>
+                        <p className="text-sm font-extrabold leading-snug text-slate-900">
+                          {event.title}
+                        </p>
+                        <div className="flex flex-wrap items-center gap-x-3 gap-y-0.5 text-xs text-slate-400">
+                          <span className="flex items-center gap-1">
+                            <CalendarDays size={11} className="shrink-0" />
+                            {formatEventDate(event.eventDate)}
+                          </span>
+                          {event.location && (
+                            <span className="flex items-center gap-1">
+                              <MapPin size={11} className="shrink-0" />
+                              {event.location}
+                            </span>
+                          )}
+                        </div>
+                      </div>
+                    </div>
+                    )}
                   </motion.div>
                 )
               })}

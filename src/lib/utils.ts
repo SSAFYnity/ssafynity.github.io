@@ -11,7 +11,8 @@ export function cn(...inputs: ClassValue[]) {
 // ─── 행사 상태 ────────────────────────────────────────────────────────
 export type EventStatus =
   | 'past'
-  | 'today'
+  | 'today-upcoming'
+  | 'today-ongoing'
   | 'recruiting'
   | 'recruit-closed'
   | 'before-recruit'
@@ -19,25 +20,44 @@ export type EventStatus =
   | 'planning'
 
 export const EVENT_STATUS_CONFIG: Record<EventStatus, { label: string; className: string }> = {
-  'past':           { label: '종료',       className: 'bg-slate-100 text-slate-400' },
-  'today':          { label: '오늘 진행중', className: 'bg-blue-600 text-white' },
-  'recruiting':     { label: '접수 중',    className: 'bg-emerald-500 text-white' },
-  'recruit-closed': { label: '접수 마감',  className: 'bg-slate-700 text-white' },
-  'before-recruit': { label: '접수 예정',  className: 'bg-amber-500 text-white' },
-  'no-recruit':     { label: '운영진',     className: 'bg-slate-100 text-slate-500' },
-  'planning':       { label: '계획중',     className: 'bg-slate-200 text-slate-500' },
+  'past':           { label: '종료',     className: 'bg-slate-100 text-slate-400' },
+  'today-upcoming': { label: '오늘 시작', className: 'bg-orange-500 text-white' },
+  'today-ongoing':  { label: '진행 중',  className: 'bg-blue-600 text-white' },
+  'recruiting':     { label: '접수 중',  className: 'bg-emerald-500 text-white' },
+  'recruit-closed': { label: '접수 마감', className: 'bg-slate-700 text-white' },
+  'before-recruit': { label: '접수 예정', className: 'bg-amber-500 text-white' },
+  'no-recruit':     { label: '운영진',   className: 'bg-slate-100 text-slate-500' },
+  'planning':       { label: '계획중',   className: 'bg-slate-200 text-slate-500' },
 }
 
 export function getEventStatus(event: SiteEvent): EventStatus {
-  const today = new Date(); today.setHours(0, 0, 0, 0)
+  const now   = new Date()
+  const today = new Date(now); today.setHours(0, 0, 0, 0)
   const toDate = (s: string) => { const d = new Date(s); d.setHours(0, 0, 0, 0); return d }
 
-  const eventStart = toDate(event.eventDate.start)
-  const eventEnd   = toDate(event.eventDate.end ?? event.eventDate.start)
+  const eventStartDate = toDate(event.eventDate.start)
+  const eventEndDate   = toDate(event.eventDate.end ?? event.eventDate.start)
 
-  if (today > eventEnd)                         return 'past'
-  if (today >= eventStart && today <= eventEnd) return 'today'
-  if (!event.recruitDate)                       return event.audience === 'operator' ? 'no-recruit' : 'planning'
+  if (today > eventEndDate) return 'past'
+
+  if (today >= eventStartDate && today <= eventEndDate) {
+    if (!event.eventDate.startTime) return 'today-ongoing'
+
+    const [sh, sm] = event.eventDate.startTime.split(':').map(Number)
+    const eventStartDt = new Date(event.eventDate.start)
+    eventStartDt.setHours(sh, sm, 0, 0)
+
+    const endDateStr = event.eventDate.end ?? event.eventDate.start
+    const [eh, em]   = (event.eventDate.endTime ?? '23:59').split(':').map(Number)
+    const eventEndDt = new Date(endDateStr)
+    eventEndDt.setHours(eh, em, 0, 0)
+
+    if (now < eventStartDt)  return 'today-upcoming'
+    if (now <= eventEndDt)   return 'today-ongoing'
+    return 'past'
+  }
+
+  if (!event.recruitDate) return event.audience === 'operator' ? 'no-recruit' : 'planning'
 
   const recruitStart = toDate(event.recruitDate.start)
   const recruitEnd   = toDate(event.recruitDate.end ?? event.recruitDate.start)

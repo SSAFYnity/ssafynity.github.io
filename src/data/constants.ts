@@ -1,16 +1,20 @@
 // 사이트 전반에서 공유하는 상수 및 레이블 매핑
 
 // ─── 행사 종류 / 참여 대상 ───────────────────────────────────────────
-export type EventKind = 'regular' | 'ongoing'
+export type EventKind = 'regular' | 'ongoing' | 'special'
 
 export const EVENT_KIND: Record<EventKind, { label: string; desc: string }> = {
   regular: {
-    label: '정기',
+    label: '정기 행사',
     desc:  'SSAFYnity를 대표하는 대규모 정기 행사예요.\n연 2회(상*하반기 1회씩), 50~100명 이상 규모로 진행되는 동문회의 정체성을 담은 행사입니다',
   },
   ongoing: {
-    label: '상시',
-    desc:  '정회원을 위한 소규모 행사를 상시 운영합니다.\n더 자주, 더 가깝게 동문들과 만날 수 있는 자리입니다. 일부 공석에 대해 일반회원도 참여가능해요.',
+    label: '상시 행사',
+    desc:  '비정기적인 소규모 행사를 상시 운영합니다.\n주로 정회원 위주의 행사로 진행되며, 일부 공석에 대해서 일반회원도 참여할 수 있어요..',
+  },
+  special: {
+    label: '단발성 행사',
+    desc:  '일회성으로 기획된 특별 행사예요.\n정기·상시 일정과 별개로, 특정 목적이나 기회에 맞춰 열리는 행사입니다.',
   },
 }
 
@@ -18,6 +22,7 @@ export const EVENT_KIND: Record<EventKind, { label: string; desc: string }> = {
 export const EVENT_KIND_LABEL: { [K in EventKind]: string } = {
   regular: EVENT_KIND.regular.label,
   ongoing: EVENT_KIND.ongoing.label,
+  special: EVENT_KIND.special.label,
 }
 
 export const EVENT_AUDIENCE = {
@@ -41,8 +46,8 @@ export const EVENT_AUDIENCE_LABEL: { [K in EventAudience]: string } = {
 // 복수 선택 가능 (예: ['online', 'offline', 'recorded'])
 export const EVENT_FORMAT = {
   offline:  { label: '오프라인', desc: '현장에 직접 방문하여 참여하는 행사예요.' },
-  online:   { label: '온라인',   desc: '온라인으로 참여하는 행사예요. 참여 링크는 별도 안내돼요.' },
-  recorded: { label: '녹화제공', desc: '참석하지 못해도 추후 녹화본을 제공해드려요.' },
+  online:   { label: '온라인',   desc: '온라인으로 참여하는 행사예요. 참여 안내 및 링크는 별도 안내돼요.' },
+  recorded: { label: '녹화제공', desc: '추후 녹화본을 제공해드려요. 다만, 편집시간이 소요되니 최대 1~2개월 기다려주세요!' },
 } as const
 
 export type EventFormat = keyof typeof EVENT_FORMAT
@@ -75,6 +80,23 @@ export type RecruitDateRange = {
   endTime?:   string   // 접수 종료 시각 (기본 '23:59')
 }
 
+// ─── 행사 안내 (notices) ─────────────────────────────────────────────
+export type EventFee = {
+  members?:  number | string  // 일반회원 (숫자: 원, 문자: '무료', '자율' 등)
+  regular?:  number | string  // 정회원
+  external?: number | string  // 외부인
+  operator?: number | string  // 운영진
+  note?:     string           // 결제 방식 등 부가 안내 (\n 지원)
+}
+
+export type EventNotices = {
+  fee?:       EventFee    // 참여비
+  refund?:    string[]    // 환불 기준 (항목별, \n 지원)
+  checklist?: string[]    // 필수 확인 사항 (항목별, \n 지원)
+  items?:     string[]    // 준비물 (항목별, \n 지원)
+  custom?:    { title: string; body: string }[]  // 기타 자유 형식 안내 (\n 지원)
+}
+
 // ─── 행사 참여자 분류 ────────────────────────────────────────────────
 export type ParticipantBreakdown = {
   members?:  number  // 일반회원
@@ -103,9 +125,11 @@ export type Event = {
   summary:       string
   img?:          string
   formUrl?:      string                  // 접수 폼 URL (만료되면 생략)
-  capacity?:     number                  // 정원
+  capacity?:     number | 'unlimited'    // 정원 (숫자: 명, 'unlimited': 제한 없음)
   registrants?:  ParticipantBreakdown   // 최종 접수자
   attendees?:    ParticipantBreakdown   // 실제 참여자
+  completions?:  ParticipantBreakdown   // 수료자 (챌린지 등 수료 기준이 있는 행사)
+  notices?:      EventNotices            // 행사 안내 (참여비·환불·준비물·필수확인 등)
   note?:         string                  // 내부 메모 (운영진 참고용, 사이트에 노출 안 됨)
   internal?:     boolean                 // true면 행사 일정에서 제외, 역대 행사에는 표시
 }

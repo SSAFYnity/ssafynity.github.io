@@ -5,39 +5,15 @@ import { Search, MapPin, CalendarDays, ChevronRight, ChevronLeft, ChevronDown, C
 import { allEvents } from '@/data/computed'
 import { EVENT_KIND, EVENT_KIND_LABEL, EVENT_AUDIENCE, EVENT_AUDIENCE_LABEL, EVENT_FORMAT, EVENT_FORMAT_LABEL, FORMAT_ORDER } from '@/data/constants'
 import type { EventKind, EventAudience, EventFormat, Event } from '@/data/constants'
-import { formatEventDate } from '@/lib/utils'
+import { formatEventDate, getEventStatus, EVENT_STATUS_CONFIG } from '@/lib/utils'
 
 const PAGE_SIZE = 9
 
 // ─── 행사 상태 판별 ──────────────────────────────────────────────────
 function getEventRibbon(event: Event): { label: string; className: string } | null {
-  const today = new Date()
-  today.setHours(0, 0, 0, 0)
-  const toDate = (s: string) => { const d = new Date(s); d.setHours(0,0,0,0); return d }
-
-  const eventStart = toDate(event.eventDate.start)
-  const eventEnd   = toDate(event.eventDate.end ?? event.eventDate.start)
-
-  // 행사 당일
-  if (today >= eventStart && today <= eventEnd)
-    return { label: '오늘 진행중', className: 'bg-blue-600 text-white' }
-
-  // 행사 종료
-  if (today > eventEnd) return null
-
-  // 행사 전
-  if (!event.recruitDate) return null
-
-  const recruitStart = toDate(event.recruitDate.start)
-  const recruitEnd   = toDate(event.recruitDate.end ?? event.recruitDate.start)
-
-  if (today < recruitStart)
-    return { label: '곧 접수 시작', className: 'bg-amber-500 text-white' }
-
-  if (today <= recruitEnd)
-    return { label: '접수 중', className: 'bg-emerald-500 text-white' }
-
-  return { label: '접수 종료 · 당일날 봐요', className: 'bg-slate-700 text-white' }
+  const status = getEventStatus(event)
+  if (status === 'past' || status === 'no-recruit' || status === 'planning') return null
+  return EVENT_STATUS_CONFIG[status]
 }
 
 // ─── 필터 데이터 ────────────────────────────────────────────────────
@@ -226,6 +202,21 @@ export default function EventsArchivePage() {
 
   useEffect(() => { setPage(0) }, [years, kinds, audiences, formats, query])
 
+  const totalVisible = useMemo(() => {
+    const today = new Date(); today.setHours(0, 0, 0, 0)
+    const twoWeeksBefore = (dateStr: string) => {
+      const d = new Date(dateStr); d.setHours(0, 0, 0, 0); d.setDate(d.getDate() - 14); return d
+    }
+    return allEvents.filter(e => {
+      const eventEnd = new Date(e.eventDate.end ?? e.eventDate.start); eventEnd.setHours(0,0,0,0)
+      if (today > eventEnd) return true
+      if (!e.recruitDate) return e.audience === 'operator'
+      return today >= twoWeeksBefore(e.recruitDate.start)
+    })
+  }, [])
+
+  const totalYears = new Set(totalVisible.map(e => new Date(e.eventDate.start).getFullYear())).size
+
   const filtered = useMemo(() => {
     const kw = query.trim().toLowerCase()
     const today = new Date(); today.setHours(0, 0, 0, 0)
@@ -268,19 +259,33 @@ export default function EventsArchivePage() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.75, ease: [0.22, 1, 0.36, 1] }}
+            className="flex items-end justify-between gap-8"
           >
-            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 border border-slate-200 text-slate-500 rounded-full mb-8 bg-slate-50">
-              <span className="text-[10px] font-black uppercase tracking-widest">✦ Event Archive</span>
+            <div>
+              <div className="inline-flex items-center gap-2 px-3.5 py-1.5 border border-slate-200 text-slate-500 rounded-full mb-8 bg-slate-50">
+                <span className="text-[10px] font-black uppercase tracking-widest">✦ Event Archive</span>
+              </div>
+              <h1 className="text-2xl md:text-3xl font-extrabold tracking-tight leading-[1.2] text-slate-900 mb-2">
+                함께해온 모든 순간
+              </h1>
+              <p className="text-xl md:text-2xl font-black text-blue-600 mb-4">
+                역대 행사
+              </p>
+              <p className="text-sm text-slate-500 leading-relaxed break-keep">
+                싸피니티가 지금까지 개최한 모든 행사를 한눈에 확인해보세요.
+              </p>
             </div>
-            <h1 className="text-2xl md:text-3xl font-extrabold tracking-tight leading-[1.2] text-slate-900 mb-2">
-              함께해온 모든 순간
-            </h1>
-            <p className="text-xl md:text-2xl font-black text-blue-600 mb-4">
-              역대 행사
-            </p>
-            <p className="text-sm text-slate-500 leading-relaxed break-keep">
-              싸피니티가 지금까지 개최한 모든 행사를 한눈에 확인해보세요.
-            </p>
+            <div className="flex items-center gap-5 shrink-0 pb-0.5">
+              <div className="flex flex-col items-end gap-0.5">
+                <span className="text-xl sm:text-2xl font-black text-slate-900">{totalVisible.length}</span>
+                <span className="text-xs text-slate-400">총 행사</span>
+              </div>
+              <div className="w-px h-8 bg-slate-200" />
+              <div className="flex flex-col items-end gap-0.5">
+                <span className="text-xl sm:text-2xl font-black text-slate-900">{totalYears}</span>
+                <span className="text-xs text-slate-400">개 연도</span>
+              </div>
+            </div>
           </motion.div>
         </div>
       </section>
