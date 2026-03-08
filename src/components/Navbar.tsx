@@ -38,10 +38,17 @@ export default function Navbar() {
 
           {/* 데스크탑 메뉴 */}
           <div className="hidden lg:flex items-center gap-1 ml-auto">
-            {siteData.menu.map((category) => {
-              const isActive = category.items.some(
-                (item) => !('external' in item && item.external) && location.pathname.startsWith(item.path)
-              )
+            {(() => {
+            const hasExactMatch = siteData.menu.some(cat =>
+              cat.items.some(item => !('external' in item && item.external) && location.pathname === item.path)
+            )
+            return siteData.menu.map((category) => {
+              const isActive = category.items.some((item) => {
+                if ('external' in item && item.external) return false
+                if (location.pathname === item.path) return true
+                if (hasExactMatch) return false
+                return location.pathname.startsWith(item.path + '/')
+              })
               return (
                 <div
                   key={category.label}
@@ -102,7 +109,8 @@ export default function Navbar() {
                   )}
                 </div>
               )
-            })}
+            })
+          })()}
           </div>
 
           {/* 모바일 햄버거 */}

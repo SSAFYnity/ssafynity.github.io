@@ -21,8 +21,9 @@ import EventsArchivePage from '@/pages/events/archive'
 import EventsArchiveDetailPage from '@/pages/events/archive-detail'
 import EventsIntroducePage from '@/pages/events/introduce'
 import ClubsPage from '@/pages/clubs/index'
+import ClubsPrePage from '@/pages/clubs/pre'
 import ClubDetailPage from '@/pages/clubs/detail'
-import ClubsBenefitsPage from '@/pages/clubs/benefits'
+import ClubsBenefitsPage from '@/pages/clubs/intro'
 import ClubsApplyPage from '@/pages/clubs/apply'
 import JoinMembershipPage from '@/pages/join/membership'
 import JoinBenefitsPage from '@/pages/join/benefits'
@@ -55,7 +56,8 @@ export default function App() {
         <Route path="/events/archive" element={<EventsArchivePage />} />
         <Route path="/events/archive/:slug" element={<EventsArchiveDetailPage />} />
         <Route path="/clubs" element={<ClubsPage />} />
-        <Route path="/clubs/benefits" element={<ClubsBenefitsPage />} />
+        <Route path="/clubs/pre" element={<ClubsPrePage />} />
+        <Route path="/clubs/intro" element={<ClubsBenefitsPage />} />
         <Route path="/clubs/apply" element={<ClubsApplyPage />} />
         <Route path="/clubs/:slug" element={<ClubDetailPage />} />
         <Route path="/join/membership" element={<JoinMembershipPage />} />

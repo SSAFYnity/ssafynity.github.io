@@ -97,8 +97,9 @@ export const siteData = {
       { label: '역대 모든 행사',   path: '/events/archive' },
     ]},
     { label: '동아리', items: [
-      { label: '동아리 혜택', path: '/clubs/benefits' },
-      { label: '등록 리스트', path: '/clubs' },
+      { label: '동아리 안내', path: '/clubs/intro' },
+      { label: '정식 동아리', path: '/clubs' },
+      { label: '예비 동아리', path: '/clubs/pre' },
     ]},
     { label: '참여하기', items: [
       { label: '동문회 가입',    path: '/join/membership' },
