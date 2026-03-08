@@ -24,7 +24,7 @@ const APPLY_TYPES = [
     icon: ShieldCheck,
     type: '정식 동아리',
     desc: '5인 이상 구성이 완료된 경우 신청서를 제출해주세요. 검토 후 공식 동아리 리스트에 등록됩니다.',
-    note: '동아리 가입은 등록 리스트 페이지에서 직접 진행됩니다.',
+    note: '동아리 가입은 동아리 별 상세 페이지에서 확인하세요.',
     path: '/clubs',
     pathLabel: '정식 동아리 목록 보기',
     applyLabel: '정식 동아리 신청하기',

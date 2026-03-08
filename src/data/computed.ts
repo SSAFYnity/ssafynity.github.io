@@ -13,6 +13,13 @@
 //   3. allOperators 배열에 추가
 
 import { siteData } from './siteData'
+import { preClubs } from './preClubs'
+export type { PreClub } from './preClubs'
+export { PRE_CLUB_MIN_MEMBERS } from './preClubs'
+import { club as futsalClub } from './clubs/futsal-club'
+import { club as sideProjectClub } from './clubs/side-project'
+import { club as bookClub } from './clubs/book-club'
+// 새 정식 동아리 추가 시: clubs/{slug}.ts 생성 후 import + allClubs에 추가
 import { events2022 } from './events/2022'
 import type { PartnerType, Status, Event, EventDateRange, RecruitDateRange } from './constants'
 import { partnerSamsung } from './partners/samsung'
@@ -101,6 +108,31 @@ export type Partner = {
 
 export const allPartners: Partner[] = [partnerSamsung, partnerMulticampus, partnerSsafy]
 // 새 협력사 추가 시 여기에도 추가
+
+// ─── 정식 동아리 타입 ─────────────────────────────────────────
+export type Club = {
+  slug:        string
+  name:        string
+  category:    string   // 기술·개발 | 스포츠·운동 | 창작·예술 | 게임·취미 | 친목·여행 | 봉사
+  shortDesc:   string
+  desc:        string
+  activities:  string
+  memberCount: number
+  recruiting:  boolean
+  contact:     string
+  since:       string
+  images:      string[]
+}
+
+export const allClubs: Club[] = [
+  futsalClub,
+  sideProjectClub,
+  bookClub,
+]
+// 새 정식 동아리 추가 시: clubs/{slug}.ts 생성 후 import + 여기에 추가
+
+// ─── 예비 동아리 목록 ─────────────────────────────────────────
+export const allPreClubs = preClubs
 
 // ─── 플레이스홀더 필터 ─────────────────────────────────────────
 const validClubs = siteData.clubSlugs.filter(s => s !== '[업데이트 필요]')
