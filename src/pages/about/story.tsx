@@ -1,6 +1,9 @@
 import { motion } from 'framer-motion'
 import { siteData } from '@/data/siteData'
+import { Container } from '@/components/Container'
 
+import { HeroLabel } from '@/components/HeroLabel'
+import { BlueSectionBadge } from '@/components/BlueSectionBadge'
 type Milestone = (typeof siteData.milestones)[number]
 
 function groupByYear(milestones: readonly Milestone[]) {
@@ -18,15 +21,13 @@ export default function AboutStoryPage() {
 
       {/* Hero + 단체 소개 */}
       <section className="bg-white pt-24 pb-10 lg:pt-28 lg:pb-14">
-        <div className="container mx-auto px-6 lg:px-12 max-w-3xl">
+                <Container maxWidth="3xl">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.75, ease: [0.22, 1, 0.36, 1] }}
           >
-            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 border border-slate-200 text-slate-500 rounded-full mb-8 bg-slate-50">
-              <span className="text-[10px] font-black uppercase tracking-widest">✦ 동문회 소개</span>
-            </div>
+            <HeroLabel>동문회 소개</HeroLabel>
             <h1 className="text-2xl md:text-3xl font-extrabold tracking-tight leading-[1.2] text-slate-900 mb-2">
               {siteData.brand.slogan}
             </h1>
@@ -58,12 +59,12 @@ export default function AboutStoryPage() {
               </p>
             </div>
           </motion.div>
-        </div>
+                </Container>
       </section>
 
       {/* 연혁 타임라인 */}
       <section className="bg-slate-50 py-20 lg:py-28 border-t border-slate-100">
-        <div className="container mx-auto px-6 lg:px-12 max-w-3xl">
+                <Container maxWidth="3xl">
 
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -72,9 +73,7 @@ export default function AboutStoryPage() {
             transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
             className="mb-16"
           >
-            <div className="inline-flex items-center gap-2 px-3 py-1.5 bg-blue-50 border border-blue-100 text-blue-600 rounded-full mb-6">
-              <span className="text-[10px] font-black uppercase tracking-widest">History</span>
-            </div>
+            <BlueSectionBadge className="mb-6">History</BlueSectionBadge>
             <h2 className="text-3xl md:text-4xl font-extrabold text-slate-900 tracking-tight leading-tight">
               싸피니티의 <span className="text-blue-600">발자취</span>
             </h2>
@@ -127,7 +126,7 @@ export default function AboutStoryPage() {
             ))}
           </motion.div>
 
-        </div>
+                </Container>
       </section>
 
 

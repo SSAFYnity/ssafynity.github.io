@@ -17,6 +17,7 @@ dist/
 .claude/
 CLAUDE.md
 AGENTS.md
+AGENT.md
 .codex/
 .cursor/
 .cursorignore

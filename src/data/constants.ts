@@ -179,3 +179,12 @@ export type ClubCategoryKey = keyof typeof CLUB_CATEGORIES
 
 // 순서가 필요한 곳에서 사용 (FORMAT_ORDER 패턴과 동일)
 export const CLUB_CATEGORY_KEYS: ClubCategoryKey[] = ['tech', 'sports', 'art', 'hobby', 'social', 'volunteer']
+
+// ─── 동아리 활동 형태 ─────────────────────────────────────────────────
+// Club.modes 필드에서 사용. UI 표시용 label과 뱃지 className을 함께 관리.
+export const MODE_CONFIG = {
+  online:  { label: '온라인',   className: 'bg-slate-100 text-slate-500' },
+  offline: { label: '오프라인', className: 'bg-slate-100 text-slate-500' },
+} as const
+
+export type ModeKey = keyof typeof MODE_CONFIG

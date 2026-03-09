@@ -1,11 +1,15 @@
-import { useState, useMemo, useEffect, useRef } from 'react'
+﻿import { useState, useMemo } from 'react'
 import { motion } from 'framer-motion'
 import { Link } from 'react-router-dom'
-import { Search, MapPin, CalendarDays, ChevronRight, ChevronLeft, ChevronDown, Check, X } from 'lucide-react'
+import { MapPin, CalendarDays, ChevronRight, ChevronLeft, X } from 'lucide-react'
+import { MultiSelectDropdown } from '@/components/MultiSelectDropdown'
+import { SearchBar } from '@/components/SearchBar'
 import { allEvents } from '@/data/computed'
 import { EVENT_KIND, EVENT_KIND_LABEL, EVENT_AUDIENCE, EVENT_AUDIENCE_LABEL, EVENT_FORMAT, EVENT_FORMAT_LABEL, FORMAT_ORDER } from '@/data/constants'
 import type { EventKind, EventAudience, EventFormat, Event } from '@/data/constants'
 import { formatEventDate, getEventStatus, EVENT_STATUS_CONFIG } from '@/lib/utils'
+import { HERO_FADE_UP } from '@/lib/motion'
+import { HeroLabel } from '@/components/HeroLabel'
 
 const PAGE_SIZE = 9
 
@@ -24,74 +28,6 @@ const ALL_YEARS = [...new Set(
 const KIND_OPTIONS     = Object.entries(EVENT_KIND).map(([key, { label }]) => ({ key: key as EventKind, label }))
 const AUDIENCE_OPTIONS = Object.entries(EVENT_AUDIENCE).map(([key, { label }]) => ({ key: key as EventAudience, label }))
 const FORMAT_OPTIONS   = Object.entries(EVENT_FORMAT).map(([key, { label }]) => ({ key: key as EventFormat, label }))
-
-// ─── 멀티 셀렉트 드롭박스 ────────────────────────────────────────────
-function MultiSelectDropdown<T extends string>({
-  label, options, selected, onChange,
-}: {
-  label:    string
-  options:  Array<{ key: T; label: string }>
-  selected: T[]
-  onChange: (v: T[]) => void
-}) {
-  const [open, setOpen] = useState(false)
-  const ref = useRef<HTMLDivElement>(null)
-
-  useEffect(() => {
-    const handler = (e: MouseEvent) => {
-      if (ref.current && !ref.current.contains(e.target as Node)) setOpen(false)
-    }
-    document.addEventListener('mousedown', handler)
-    return () => document.removeEventListener('mousedown', handler)
-  }, [])
-
-  const toggle = (key: T) => {
-    onChange(selected.includes(key) ? selected.filter(k => k !== key) : [...selected, key])
-  }
-
-  const displayLabel = selected.length === 0
-    ? label
-    : selected.length === 1
-      ? options.find(o => o.key === selected[0])?.label ?? label
-      : `${label} ${selected.length}개`
-
-  const active = selected.length > 0
-
-  return (
-    <div ref={ref} className="relative">
-      <button
-        onClick={() => setOpen(o => !o)}
-        className={`flex items-center gap-1.5 pl-3.5 pr-2.5 py-1.5 rounded-full text-xs font-black border transition-colors
-          ${active
-            ? 'bg-blue-600 text-white border-blue-600'
-            : 'bg-white border-slate-200 text-slate-600 hover:border-blue-300 hover:text-blue-600'
-          }`}
-      >
-        {displayLabel}
-        <ChevronDown size={11} className={active ? 'text-blue-200' : 'text-slate-400'} />
-      </button>
-
-      {open && (
-        <div className="absolute top-full left-0 mt-1.5 bg-white border border-slate-200 rounded-xl shadow-lg z-20 w-max py-1">
-          {options.map(o => (
-            <button
-              key={o.key}
-              onClick={() => toggle(o.key)}
-              className="flex items-center gap-2.5 w-full px-3.5 py-2 text-xs font-medium text-slate-600 hover:bg-slate-50 transition-colors whitespace-nowrap"
-            >
-              <span className={`w-3.5 h-3.5 rounded flex items-center justify-center border transition-colors shrink-0
-                ${selected.includes(o.key) ? 'bg-blue-600 border-blue-600' : 'border-slate-300'}`}
-              >
-                {selected.includes(o.key) && <Check size={9} className="text-white" />}
-              </span>
-              {o.label}
-            </button>
-          ))}
-        </div>
-      )}
-    </div>
-  )
-}
 
 // ─── 이벤트 카드 ────────────────────────────────────────────────────
 function EventCard({ event }: { event: Event }) {
@@ -198,9 +134,7 @@ export default function EventsArchivePage() {
   const [query,      setQuery]      = useState('')
   const [page,       setPage]       = useState(0)
 
-  const applySearch = () => setQuery(inputValue)
-
-  useEffect(() => { setPage(0) }, [years, kinds, audiences, formats, query])
+  const applySearch = () => { setQuery(inputValue); setPage(0) }
 
   const totalVisible = useMemo(() => {
     const today = new Date(); today.setHours(0, 0, 0, 0)
@@ -246,7 +180,7 @@ export default function EventsArchivePage() {
   const paginated  = filtered.slice(page * PAGE_SIZE, (page + 1) * PAGE_SIZE)
 
   const resetAll = () => {
-    setYears([]); setKinds([]); setAudiences([]); setFormats([]); setQuery(''); setInputValue('')
+    setYears([]); setKinds([]); setAudiences([]); setFormats([]); setQuery(''); setInputValue(''); setPage(0)
   }
 
   return (
@@ -255,16 +189,9 @@ export default function EventsArchivePage() {
       {/* Hero */}
       <section className="bg-white pt-24 pb-10 lg:pt-28 lg:pb-14 border-b border-slate-100">
         <div className="container mx-auto px-6 lg:px-12 max-w-5xl">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.75, ease: [0.22, 1, 0.36, 1] }}
-            className="flex items-end justify-between gap-8"
-          >
+          <motion.div {...HERO_FADE_UP} className="flex items-end justify-between gap-8">
             <div>
-              <div className="inline-flex items-center gap-2 px-3.5 py-1.5 border border-slate-200 text-slate-500 rounded-full mb-8 bg-slate-50">
-                <span className="text-[10px] font-black uppercase tracking-widest">✦ Event Archive</span>
-              </div>
+              <HeroLabel>Event Archive</HeroLabel>
               <h1 className="text-2xl md:text-3xl font-extrabold tracking-tight leading-[1.2] text-slate-900 mb-2">
                 함께해온 모든 순간
               </h1>
@@ -305,38 +232,22 @@ export default function EventsArchivePage() {
                 label="연도 및 기수"
                 options={ALL_YEARS.map(y => ({ key: String(y), label: `${y}년 ${y - 2021}대` }))}
                 selected={years}
-                onChange={setYears}
+                onChange={(v) => { setYears(v); setPage(0) }}
               />
 
-              <MultiSelectDropdown label="종류"   options={KIND_OPTIONS}     selected={kinds}     onChange={setKinds}     />
-              <MultiSelectDropdown label="대상"   options={AUDIENCE_OPTIONS} selected={audiences} onChange={setAudiences} />
-              <MultiSelectDropdown label="방식"   options={FORMAT_OPTIONS}   selected={formats}   onChange={setFormats}   />
+              <MultiSelectDropdown label="종류"   options={KIND_OPTIONS}     selected={kinds}     onChange={(v) => { setKinds(v); setPage(0) }}     />
+              <MultiSelectDropdown label="대상"   options={AUDIENCE_OPTIONS} selected={audiences} onChange={(v) => { setAudiences(v); setPage(0) }} />
+              <MultiSelectDropdown label="방식"   options={FORMAT_OPTIONS}   selected={formats}   onChange={(v) => { setFormats(v); setPage(0) }}   />
 
               <div className="hidden sm:block w-px h-5 bg-slate-200 mx-1" />
 
               {/* 검색 */}
-              <div className="flex items-center gap-1.5 flex-1 min-w-[140px]">
-                <div className="relative flex-1">
-                  <Search size={13} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
-                  <input
-                    type="text"
-                    value={inputValue}
-                    onChange={e => setInputValue(e.target.value)}
-                    onKeyDown={e => e.key === 'Enter' && applySearch()}
-                    placeholder="행사 검색"
-                    className="pl-7 pr-4 py-1.5 rounded-full text-xs font-medium bg-white border border-slate-200
-                               text-slate-700 placeholder:text-slate-400 outline-none
-                               focus:border-blue-300 transition-colors w-full"
-                  />
-                </div>
-                <button
-                  onClick={applySearch}
-                  className="flex items-center gap-1 pl-3 pr-3.5 py-1.5 rounded-full text-xs font-black
-                             bg-blue-600 text-white hover:bg-blue-700 transition-colors shrink-0"
-                >
-                  <Search size={11} /> 검색
-                </button>
-              </div>
+              <SearchBar
+                value={inputValue}
+                onChange={setInputValue}
+                onSubmit={applySearch}
+                placeholder="행사 검색"
+              />
 
               {/* 초기화 */}
               {(years.length > 0 || kinds.length > 0 || audiences.length > 0 || formats.length > 0 || query) && (
@@ -355,7 +266,7 @@ export default function EventsArchivePage() {
                 {years.map(y => (
                   <span key={y} className="inline-flex items-center gap-1 pl-2.5 pr-1.5 py-1 rounded-full text-[10px] font-black bg-blue-50 text-blue-600">
                     {y}년 {Number(y) - 2021}대
-                    <button onClick={() => setYears(years.filter(v => v !== y))} className="flex items-center hover:text-blue-800 transition-colors">
+                    <button onClick={() => { setYears(years.filter(v => v !== y)); setPage(0) }} className="flex items-center hover:text-blue-800 transition-colors">
                       <X size={9} />
                     </button>
                   </span>
@@ -363,7 +274,7 @@ export default function EventsArchivePage() {
                 {kinds.map(k => (
                   <span key={k} className="inline-flex items-center gap-1 pl-2.5 pr-1.5 py-1 rounded-full text-[10px] font-black bg-blue-50 text-blue-600">
                     {EVENT_KIND_LABEL[k]}
-                    <button onClick={() => setKinds(kinds.filter(v => v !== k))} className="flex items-center hover:text-blue-800 transition-colors">
+                    <button onClick={() => { setKinds(kinds.filter(v => v !== k)); setPage(0) }} className="flex items-center hover:text-blue-800 transition-colors">
                       <X size={9} />
                     </button>
                   </span>
@@ -371,7 +282,7 @@ export default function EventsArchivePage() {
                 {audiences.map(a => (
                   <span key={a} className="inline-flex items-center gap-1 pl-2.5 pr-1.5 py-1 rounded-full text-[10px] font-black bg-blue-50 text-blue-600">
                     {EVENT_AUDIENCE_LABEL[a]}
-                    <button onClick={() => setAudiences(audiences.filter(v => v !== a))} className="flex items-center hover:text-blue-800 transition-colors">
+                    <button onClick={() => { setAudiences(audiences.filter(v => v !== a)); setPage(0) }} className="flex items-center hover:text-blue-800 transition-colors">
                       <X size={9} />
                     </button>
                   </span>
@@ -379,7 +290,7 @@ export default function EventsArchivePage() {
                 {formats.map(f => (
                   <span key={f} className="inline-flex items-center gap-1 pl-2.5 pr-1.5 py-1 rounded-full text-[10px] font-black bg-blue-50 text-blue-600">
                     {EVENT_FORMAT_LABEL[f]}
-                    <button onClick={() => setFormats(formats.filter(v => v !== f))} className="flex items-center hover:text-blue-800 transition-colors">
+                    <button onClick={() => { setFormats(formats.filter(v => v !== f)); setPage(0) }} className="flex items-center hover:text-blue-800 transition-colors">
                       <X size={9} />
                     </button>
                   </span>
@@ -387,7 +298,7 @@ export default function EventsArchivePage() {
                 {query && (
                   <span className="inline-flex items-center gap-1 pl-2.5 pr-1.5 py-1 rounded-full text-[10px] font-black bg-blue-50 text-blue-600">
                     {query}
-                    <button onClick={() => setQuery('')} className="flex items-center hover:text-blue-800 transition-colors">
+                    <button onClick={() => { setQuery(''); setPage(0) }} className="flex items-center hover:text-blue-800 transition-colors">
                       <X size={9} />
                     </button>
                   </span>

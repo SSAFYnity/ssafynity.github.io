@@ -2,6 +2,7 @@ import { Link } from 'react-router-dom'
 import { ExternalLink } from 'lucide-react'
 import { SiKakaotalk, SiInstagram, SiLinkedin, SiGithub, SiGmail, SiDiscord } from 'react-icons/si'
 import { siteData } from '@/data/siteData'
+import { Container } from '@/components/Container'
 
 const iconMap: Record<string, React.ReactNode> = {
   kakao:     <SiKakaotalk size={20} />,
@@ -15,7 +16,7 @@ const iconMap: Record<string, React.ReactNode> = {
 export default function Footer() {
   return (
     <footer className="bg-white border-t border-slate-100 pt-24 pb-16">
-      <div className="container mx-auto px-6 lg:px-12 max-w-7xl">
+      <Container maxWidth="7xl">
         <div className="grid lg:grid-cols-12 gap-16 mb-24">
 
           {/* 브랜드 */}
@@ -86,19 +87,18 @@ export default function Footer() {
         {/* 하단 바 */}
         <div className="pt-12 border-t border-slate-100 flex flex-col md:flex-row justify-between items-center gap-6">
           <p className="text-[10px] font-black text-slate-300 uppercase tracking-widest">
-            © {new Date().getFullYear()} SSAFYnity · Non-Profit Alumni Community
+            © {new Date().getFullYear()} SSAFYnity · 비영리 동문 커뮤니티
           </p>
           <div className="flex items-center gap-8">
             <Link to="/privacy" className="text-[10px] font-black text-slate-400 hover:text-blue-900 transition-colors uppercase tracking-widest">
-              Privacy
+              개인정보처리방침
             </Link>
             <Link to="/terms" className="text-[10px] font-black text-slate-400 hover:text-blue-900 transition-colors uppercase tracking-widest">
-              Terms
+              이용약관
             </Link>
           </div>
         </div>
-
-      </div>
+      </Container>
     </footer>
   )
 }

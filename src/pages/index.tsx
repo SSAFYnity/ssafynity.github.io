@@ -3,7 +3,9 @@ import { ArrowRight, Star, Heart, Trophy, Zap, Users, MessageCircle, Globe, Book
 import { motion, type Variants } from 'framer-motion'
 import { siteData } from '@/data/siteData'
 import { computed, allPartners } from '@/data/computed'
+import { Container } from '@/components/Container'
 
+import { BlueSectionBadge } from '@/components/BlueSectionBadge'
 const STATS = [
   { label: '함께하는 동문', value: computed.totalMembers,    suffix: '명' },
   { label: '정회원',        value: siteData.stats[0].value, suffix: siteData.stats[0].suffix },
@@ -86,7 +88,7 @@ export default function HomePage() {
       {/* Hero */}
       <section className="relative overflow-hidden min-h-[80vh] flex items-center" style={{ backgroundColor: '#edf1f8' }}>
 
-        <div className="container mx-auto px-6 lg:px-12 max-w-7xl relative z-10 py-28 lg:py-36">
+                <Container maxWidth="7xl" className="relative z-10 py-28 lg:py-36">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
 
             {/* 왼쪽: 텍스트 */}
@@ -208,12 +210,12 @@ export default function HomePage() {
             </div>
 
           </div>
-        </div>
+                </Container>
       </section>
 
       {/* Stats */}
       <section className="bg-white py-20 lg:py-28 border-t border-slate-100">
-        <div className="container mx-auto px-6 lg:px-12 max-w-7xl">
+                <Container maxWidth="7xl">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -236,12 +238,12 @@ export default function HomePage() {
               </div>
             ))}
           </motion.div>
-        </div>
+                </Container>
       </section>
 
       {/* Ecosystem */}
       <section className="bg-white py-20 lg:py-28 border-t border-slate-100">
-        <div className="container mx-auto px-6 lg:px-12 max-w-7xl">
+                <Container maxWidth="7xl">
 
           {/* 섹션 헤더 */}
           <motion.div
@@ -251,9 +253,7 @@ export default function HomePage() {
             transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
             className="mb-16"
           >
-            <div className="inline-flex items-center gap-2 px-3 py-1.5 bg-blue-50 border border-blue-100 text-blue-600 rounded-full mb-6">
-              <span className="text-[10px] font-black uppercase tracking-widest">Our Ecosystem</span>
-            </div>
+            <BlueSectionBadge className="mb-6">Our Ecosystem</BlueSectionBadge>
             <h2 className="text-3xl md:text-4xl lg:text-5xl font-extrabold text-slate-900 tracking-tight leading-tight">
               동료들과 함께 만드는<br />
               <span className="text-blue-600">성장 생태계</span>
@@ -290,7 +290,7 @@ export default function HomePage() {
             ))}
           </motion.div>
 
-        </div>
+                </Container>
       </section>
 
       {/* Partners */}
@@ -304,9 +304,7 @@ export default function HomePage() {
           transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
           className="text-center mb-12 px-6"
         >
-          <div className="inline-flex items-center gap-2 px-3 py-1.5 bg-blue-50 border border-blue-100 text-blue-600 rounded-full mb-5">
-            <span className="text-[10px] font-black uppercase tracking-widest">후원 · 협력사</span>
-          </div>
+          <BlueSectionBadge className="mb-5">후원 · 협력사</BlueSectionBadge>
           <h2 className="text-3xl md:text-4xl font-extrabold text-slate-900 tracking-tight leading-tight">
             우리의 비전에 공감하는<br />
             <span className="text-blue-600">후원·협력사</span>

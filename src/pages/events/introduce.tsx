@@ -1,6 +1,8 @@
-import { motion } from 'framer-motion'
+﻿import { motion } from 'framer-motion'
 import { Users, Globe, CalendarX, RefreshCw, Lock, Check, Minus } from 'lucide-react'
 import { EVENT_KIND } from '@/data/constants'
+import { HeroSection } from '@/components/HeroSection'
+import { HeroLabel } from '@/components/HeroLabel'
 
 const REGULAR_EVENTS = [
   {
@@ -69,16 +71,11 @@ export default function EventsIntroducePage() {
     <div className="flex flex-col">
 
       {/* Hero */}
-      <section className="bg-white pt-24 pb-16 lg:pt-28 lg:pb-20 border-b border-slate-100">
-        <div className="container mx-auto px-6 lg:px-12 max-w-3xl">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.75, ease: [0.22, 1, 0.36, 1] }}
-          >
-            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 border border-slate-200 text-slate-500 rounded-full mb-8 bg-slate-50">
-              <span className="text-[10px] font-black uppercase tracking-widest">✦ Events</span>
-            </div>
+<HeroSection
+  sectionClassName="bg-white pt-24 pb-16 lg:pt-28 lg:pb-20 border-b border-slate-100"
+  containerClassName="container mx-auto px-6 lg:px-12 max-w-3xl"
+>
+<HeroLabel>Events</HeroLabel>
             <h1 className="text-3xl md:text-4xl font-extrabold tracking-tight leading-[1.2] text-slate-900 mb-5">
               동문과 함께하는<br />
               <span className="text-blue-600">싸피니티의 행사</span>
@@ -87,9 +84,7 @@ export default function EventsIntroducePage() {
               싸피니티는 동문 간의 교류와 성장을 위해 정기적으로 행사를 운영합니다.<br />
               행사의 종류와 참여 자격을 미리 확인해보세요.
             </p>
-          </motion.div>
-        </div>
-      </section>
+</HeroSection>
 
       {/* 정기 행사 */}
       <section className="bg-slate-50 py-16 lg:py-20">

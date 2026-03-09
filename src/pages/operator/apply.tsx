@@ -1,8 +1,13 @@
+import type { ElementType } from 'react'
 import { motion } from 'framer-motion'
 import { Link } from 'react-router-dom'
 import { ExternalLink, CheckCircle2, Heart, Zap, Gift, Network, Users, Layers } from 'lucide-react'
 import { siteData } from '@/data/siteData'
 import { computed, currentOperator } from '@/data/computed'
+import { Container } from '@/components/Container'
+import { HeroLabel } from '@/components/HeroLabel'
+import { Kicker } from '@/components/Kicker'
+import { Card } from '@/components/Card'
 
 const QUALIFICATIONS = [
   <><strong className="text-slate-800">SSAFYnity 동문회원</strong>이라면 기수·캠퍼스 무관하게 지원 가능합니다.</>,
@@ -18,21 +23,43 @@ const BENEFITS = [
   { icon: Heart,   title: '의미 있는 기여', desc: '내가 기여한 노력이 수천 명의 동문에게 직접 닿습니다. 커뮤니티의 성장이 곧 나의 성장입니다.' },
 ]
 
+type OperatorInfoLinkCardProps = {
+  to: string
+  title: string
+  desc: string
+  BgIcon: ElementType
+}
+
+function OperatorInfoLinkCard({ to, title, desc, BgIcon }: OperatorInfoLinkCardProps) {
+  return (
+    <Link
+      to={to}
+      className="group relative overflow-hidden flex items-center justify-between bg-white rounded-2xl border border-slate-100 hover:border-blue-200 hover:bg-blue-50 transition-colors p-6"
+    >
+      <div className="relative z-10 flex items-center justify-between w-full">
+        <div>
+          <p className="text-sm font-extrabold text-slate-800 mb-1">{title}</p>
+          <p className="text-xs text-slate-400">{desc}</p>
+        </div>
+        <ExternalLink className="w-4 h-4 text-slate-400 group-hover:text-blue-400 transition-colors shrink-0 ml-4" />
+      </div>
+      <BgIcon className="absolute -right-4 top-1/2 -translate-y-1/2 w-24 h-24 text-slate-100 group-hover:text-blue-100 transition-colors" />
+    </Link>
+  )
+}
 export default function TeamApplyPage() {
   return (
     <div className="flex flex-col">
 
       {/* Hero */}
       <section className="bg-white pt-24 pb-16 lg:pt-28 lg:pb-20 border-b border-slate-100">
-        <div className="container mx-auto px-6 lg:px-12 max-w-3xl">
+                <Container maxWidth="3xl">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.75, ease: [0.22, 1, 0.36, 1] }}
           >
-            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 border border-slate-200 text-slate-500 rounded-full mb-8 bg-slate-50">
-              <span className="text-[10px] font-black uppercase tracking-widest">✦ Operator Recruitment</span>
-            </div>
+            <HeroLabel>Operator Recruitment</HeroLabel>
             <h1 className="text-3xl md:text-4xl font-extrabold tracking-tight leading-[1.2] text-slate-900 mb-5">
               싸피니티를 함께<br />
               <span className="text-blue-600">만들어갈 분을 찾습니다</span>
@@ -42,12 +69,12 @@ export default function TeamApplyPage() {
               보수 없이 재능과 시간을 나누는 자리이지만, 그만큼 값진 경험과 연결을 얻을 수 있습니다.
             </p>
           </motion.div>
-        </div>
+                </Container>
       </section>
 
       {/* 본문 */}
       <section className="bg-slate-50 py-16 lg:py-20">
-        <div className="container mx-auto px-6 lg:px-12 max-w-3xl flex flex-col gap-14">
+                <Container maxWidth="3xl" className="flex flex-col gap-14">
 
           {/* 지원 자격 */}
           <motion.div
@@ -55,15 +82,15 @@ export default function TeamApplyPage() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.1 }}
           >
-            <p className="text-[10px] font-black text-blue-600 uppercase tracking-widest mb-4">지원 자격</p>
-            <div className="bg-white rounded-2xl border border-slate-100 p-6 lg:p-8 flex flex-col gap-3">
+            <Kicker className="text-[10px] font-black text-blue-600 uppercase tracking-widest mb-4">지원 자격</Kicker>
+                        <Card className="bg-white rounded-2xl border border-slate-100 p-6 lg:p-8 flex flex-col gap-3">
               {QUALIFICATIONS.map((q, i) => (
                 <div key={i} className="flex items-start gap-3">
                   <CheckCircle2 className="w-4 h-4 text-blue-500 shrink-0 mt-0.5" />
                   <p className="text-sm text-slate-600 leading-relaxed break-keep">{q}</p>
                 </div>
               ))}
-            </div>
+                        </Card>
           </motion.div>
 
           {/* 활동 방식 링크 */}
@@ -72,34 +99,20 @@ export default function TeamApplyPage() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.15 }}
           >
-            <p className="text-[10px] font-black text-blue-600 uppercase tracking-widest mb-4">활동 방식</p>
+            <Kicker className="text-[10px] font-black text-blue-600 uppercase tracking-widest mb-4">활동 방식</Kicker>
             <div className="flex flex-col gap-2">
-              <Link
+              <OperatorInfoLinkCard
                 to="/operator/introduce"
-                className="group relative overflow-hidden flex items-center justify-between bg-white rounded-2xl border border-slate-100 hover:border-blue-200 hover:bg-blue-50 transition-colors p-6"
-              >
-                <div className="relative z-10 flex items-center justify-between w-full">
-                  <div>
-                    <p className="text-sm font-extrabold text-slate-800 mb-1">운영진 소개</p>
-                    <p className="text-xs text-slate-400">활동 방식, 팀 구성, 업무 원칙 등 자세한 내용을 안내합니다.</p>
-                  </div>
-                  <ExternalLink className="w-4 h-4 text-slate-400 group-hover:text-blue-400 transition-colors shrink-0 ml-4" />
-                </div>
-                <Users className="absolute -right-4 top-1/2 -translate-y-1/2 w-24 h-24 text-slate-100 group-hover:text-blue-100 transition-colors" />
-              </Link>
-              <Link
+                title="운영진 소개"
+                desc="활동 방식, 팀 구성, 업무 원칙 등 자세한 내용을 안내합니다."
+                BgIcon={Users}
+              />
+              <OperatorInfoLinkCard
                 to="/operator/organization"
-                className="group relative overflow-hidden flex items-center justify-between bg-white rounded-2xl border border-slate-100 hover:border-blue-200 hover:bg-blue-50 transition-colors p-6"
-              >
-                <div className="relative z-10 flex items-center justify-between w-full">
-                  <div>
-                    <p className="text-sm font-extrabold text-slate-800 mb-1">조직 안내</p>
-                    <p className="text-xs text-slate-400">현재 운영 중인 팀과 각 팀의 역할을 확인할 수 있습니다.</p>
-                  </div>
-                  <ExternalLink className="w-4 h-4 text-slate-400 group-hover:text-blue-400 transition-colors shrink-0 ml-4" />
-                </div>
-                <Layers className="absolute -right-4 top-1/2 -translate-y-1/2 w-24 h-24 text-slate-100 group-hover:text-blue-100 transition-colors" />
-              </Link>
+                title="조직 안내"
+                desc="현재 운영 중인 팀과 각 팀의 역할을 확인할 수 있습니다."
+                BgIcon={Layers}
+              />
             </div>
           </motion.div>
 
@@ -109,16 +122,16 @@ export default function TeamApplyPage() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.2 }}
           >
-            <p className="text-[10px] font-black text-blue-600 uppercase tracking-widest mb-4">활동 혜택</p>
+            <Kicker className="text-[10px] font-black text-blue-600 uppercase tracking-widest mb-4">활동 혜택</Kicker>
             <div className="grid sm:grid-cols-2 gap-3">
               {BENEFITS.map(({ icon: Icon, title, desc }) => (
-                <div key={title} className="bg-white rounded-2xl border border-slate-100 p-6">
+                <Card key={title} className="bg-white rounded-2xl border border-slate-100 p-6">
                   <div className="w-8 h-8 rounded-lg bg-blue-50 flex items-center justify-center mb-3">
                     <Icon className="w-4 h-4 text-blue-600" />
                   </div>
                   <p className="text-sm font-extrabold text-slate-800 mb-1">{title}</p>
                   <p className="text-xs text-slate-500 leading-relaxed break-keep">{desc}</p>
-                </div>
+                </Card>
               ))}
             </div>
           </motion.div>
@@ -130,7 +143,7 @@ export default function TeamApplyPage() {
             transition={{ duration: 0.6, delay: 0.25 }}
             className="bg-blue-50 border border-blue-100 rounded-2xl p-6 lg:p-8"
           >
-            <p className="text-[10px] font-black text-blue-600 uppercase tracking-widest mb-3">모집 안내</p>
+            <Kicker className="text-[10px] font-black text-blue-600 uppercase tracking-widest mb-3">모집 안내</Kicker>
             <ul className="flex flex-col gap-2">
               <li className="flex items-start gap-2 text-sm text-slate-600 leading-relaxed">
                 <span className="text-blue-400 font-black mt-0.5 shrink-0">·</span>
@@ -159,7 +172,7 @@ export default function TeamApplyPage() {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, delay: 0.3 }}
               >
-                <p className="text-[10px] font-black text-blue-600 uppercase tracking-widest mb-4">현재 공석</p>
+                <Kicker className="text-[10px] font-black text-blue-600 uppercase tracking-widest mb-4">현재 공석</Kicker>
                 <div className="flex flex-col gap-2">
                   {teams.map(g => {
                     const open = g.vacancies ?? 0
@@ -192,12 +205,12 @@ export default function TeamApplyPage() {
             )
           })()}
 
-        </div>
+                </Container>
       </section>
 
       {/* CTA */}
       <section className="bg-blue-950 py-20">
-        <div className="container mx-auto px-6 lg:px-12 max-w-3xl flex flex-col items-center text-center gap-6">
+                <Container maxWidth="3xl" className="flex flex-col items-center text-center gap-6">
           <h2 className="text-2xl md:text-3xl font-extrabold text-white leading-snug">
             지금 바로 싸피니티의<br />일원이 되어보세요.
           </h2>
@@ -214,7 +227,7 @@ export default function TeamApplyPage() {
             <ExternalLink className="w-4 h-4" />
           </a>
           <p className="text-xs text-blue-300">새 탭에서 지원폼이 열립니다</p>
-        </div>
+                </Container>
       </section>
 
     </div>

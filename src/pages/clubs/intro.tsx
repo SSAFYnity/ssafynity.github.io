@@ -1,6 +1,9 @@
 import { motion } from 'framer-motion'
 import { BadgeCheck, Megaphone, CalendarDays, Users, UserRound, ShieldCheck, AlertTriangle } from 'lucide-react'
+import { Container } from '@/components/Container'
 
+import { Card } from '@/components/Card'
+import { HeroLabel } from '@/components/HeroLabel'
 const BENEFITS = [
   {
     icon:  BadgeCheck,
@@ -30,15 +33,13 @@ export default function ClubsBenefitsPage() {
 
       {/* Hero */}
       <section className="bg-white pt-24 pb-10 lg:pt-28 lg:pb-14 border-b border-slate-100">
-        <div className="container mx-auto px-6 lg:px-12 max-w-3xl">
+                <Container maxWidth="3xl">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.75, ease: [0.22, 1, 0.36, 1] }}
           >
-            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 border border-slate-200 text-slate-500 rounded-full mb-8 bg-slate-50">
-              <span className="text-[10px] font-black uppercase tracking-widest">✦ Clubs</span>
-            </div>
+            <HeroLabel>Clubs</HeroLabel>
             <h1 className="text-2xl md:text-3xl font-extrabold tracking-tight leading-[1.2] text-slate-900 mb-2">
               관심사로 이어지는
             </h1>
@@ -50,12 +51,12 @@ export default function ClubsBenefitsPage() {
               등록 자격, 유지 조건, 소속 동아리 혜택을 확인해보세요.
             </p>
           </motion.div>
-        </div>
+                </Container>
       </section>
 
       {/* 등록 자격 */}
       <section className="bg-slate-50 pt-8 pb-14 lg:pt-10 lg:pb-16 border-b border-slate-100">
-        <div className="container mx-auto px-6 lg:px-12 max-w-3xl flex flex-col gap-6">
+                <Container maxWidth="3xl" className="flex flex-col gap-6">
           <motion.div
             initial={{ opacity: 0, y: 16 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -70,7 +71,7 @@ export default function ClubsBenefitsPage() {
               { icon: ShieldCheck, title: '동문회원 전용', desc: <>모든 구성원이<br className="sm:hidden" /> SSAFYnity 동문회원이어야 합니다.</>, delay: 0 },
               { icon: UserRound,   title: '최소 인원',    desc: '5명 이상',  delay: 0.06 },
             ].map(({ icon: Icon, title, desc, delay }) => (
-              <motion.div
+              <Card as={motion.div}
                 key={title}
                 initial={{ opacity: 0, y: 12 }}
                 whileInView={{ opacity: 1, y: 0 }}
@@ -85,18 +86,18 @@ export default function ClubsBenefitsPage() {
                   <p className="text-sm font-extrabold text-slate-800 mb-0.5">{title}</p>
                   <p className="text-sm text-slate-500 leading-relaxed">{desc}</p>
                 </div>
-              </motion.div>
+              </Card>
             ))}
           </div>
           <p className="text-xs text-slate-400 leading-relaxed text-right">
             동아리는 자율적으로 운영되며,<br className="sm:hidden" /> SSAFYnity는 내부 활동·운영 방식에 관여하지 않습니다.
           </p>
-        </div>
+                </Container>
       </section>
 
       {/* 유지 조건 */}
       <section className="bg-white pt-8 pb-14 lg:pt-10 lg:pb-16 border-b border-slate-100">
-        <div className="container mx-auto px-6 lg:px-12 max-w-3xl flex flex-col gap-6">
+                <Container maxWidth="3xl" className="flex flex-col gap-6">
           <motion.div
             initial={{ opacity: 0, y: 16 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -154,12 +155,12 @@ export default function ClubsBenefitsPage() {
               </div>
             ))}
           </motion.div>
-        </div>
+                </Container>
       </section>
 
       {/* 혜택 */}
       <section className="bg-slate-50 pt-8 pb-14 lg:pt-10 lg:pb-16 border-b border-slate-100">
-        <div className="container mx-auto px-6 lg:px-12 max-w-3xl flex flex-col gap-6">
+                <Container maxWidth="3xl" className="flex flex-col gap-6">
           <motion.div
             initial={{ opacity: 0, y: 16 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -171,7 +172,7 @@ export default function ClubsBenefitsPage() {
           </motion.div>
           <div className="grid sm:grid-cols-2 gap-4">
             {BENEFITS.map(({ icon: Icon, title, desc }, i) => (
-              <motion.div
+              <Card as={motion.div}
                 key={title}
                 initial={{ opacity: 0, y: 16 }}
                 whileInView={{ opacity: 1, y: 0 }}
@@ -186,10 +187,10 @@ export default function ClubsBenefitsPage() {
                   <p className="text-base font-extrabold text-slate-900 mb-2">{title}</p>
                   <p className="text-sm text-slate-500 leading-relaxed break-keep">{desc}</p>
                 </div>
-              </motion.div>
+              </Card>
             ))}
           </div>
-        </div>
+                </Container>
       </section>
 
 

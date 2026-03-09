@@ -2,49 +2,34 @@
 // 여러 데이터 파일을 조합해 자동으로 계산되는 값들.
 // 컴포넌트에서는 이 파일만 import해서 사용하세요.
 //
-// 새 연도 행사 파일 추가 시:
+// 새 연도 행사 파일 추가 시 (권장):
 //   1. events/{year}.ts 생성
-//   2. 아래 import 추가
-//   3. allEvents spread에 추가
+//   2. src/data/events/index.ts에 import 추가
+//   3. src/data/events/index.ts의 allEvents spread에 추가
 //
-// 새 운영진 연도 파일 추가 시:
+// 새 운영진 연도 파일 추가 시 (권장):
 //   1. operator/{year}.ts 생성
-//   2. 아래 import 추가
-//   3. allOperators 배열에 추가
+//   2. src/data/operator/index.ts에 import 추가
+//   3. src/data/operator/index.ts의 operatorData 배열에 추가
 
 import { siteData } from './siteData'
 import { preClubs } from './preClubs'
+import { allEvents } from './events'
+import { operatorData } from './operator'
 export type { PreClub } from './preClubs'
 export { PRE_CLUB_MIN_MEMBERS } from './preClubs'
 // 새 정식 동아리 추가 시: clubs/{slug}.ts 생성 후 import + allClubs에 추가
-import { events2022 } from './events/2022'
-import type { PartnerType, Status, Event, EventDateRange, RecruitDateRange } from './constants'
+import type { PartnerType, Status } from './constants'
 import { partnerSamsung } from './partners/samsung'
 import { partnerMulticampus } from './partners/multicampus'
 import { partnerSsafy } from './partners/ssafy'
 // 새 협력사 추가 시: partners/{slug}.ts 생성 후 import + allPartners에 추가
-import { events2023 } from './events/2023'
-import { events2024 } from './events/2024'
-import { events2025 } from './events/2025'
-import { events2026 } from './events/2026'
 // 새 연도 추가 시: events/{year}.ts 생성 후 import + allEvents에 추가
-import { operator2022 } from './operator/2022'
-import { operator2023 } from './operator/2023'
-import { operator2024 } from './operator/2024'
-import { operator2025 } from './operator/2025'
-import { operator2026 } from './operator/2026'
 // 새 운영진 추가 시: operator/{year}.ts 생성 후 import + allOperators에 추가
 
 // ─── 행사 전체 목록 ───────────────────────────────────────────
-export type { Event, EventDateRange, RecruitDateRange }  // constants.ts에서 re-export
-
-export const allEvents: Event[] = [
-  ...events2022,
-  ...events2023,
-  ...events2024,
-  ...events2025,
-  ...events2026,
-]
+export type { Event, EventDateRange, RecruitDateRange } from './constants'
+export { allEvents }
 
 // ─── 운영진 전체 목록 ─────────────────────────────────────────
 export type OperatorMember = {
@@ -80,14 +65,8 @@ export type Operator = {
   groups:        readonly OperatorGroup[]
 }
 
-export const allOperators: Operator[] = [
-  operator2022,
-  operator2023,
-  operator2024,
-  operator2025,
-  operator2026,
-]
-// 새 운영진 추가 시 여기에도 추가
+export const allOperators: Operator[] = operatorData as unknown as Operator[]
+// 새 운영진 추가 시: src/data/operator/index.ts에 추가
 
 export const currentOperator: Operator = allOperators[allOperators.length - 1]
 
@@ -107,7 +86,7 @@ export const allPartners: Partner[] = [partnerSamsung, partnerMulticampus, partn
 // 새 협력사 추가 시 여기에도 추가
 
 // ─── 정식 동아리 타입 ─────────────────────────────────────────
-import { type ClubCategoryKey } from '@/data/constants'
+import { type ClubCategoryKey, type ModeKey } from '@/data/constants'
 
 // 연락처 아이콘 종류
 // apply: 가입 신청 | direct: 대표자 연락 | kakao: 카카오톡 | discord: 디스코드
@@ -126,7 +105,7 @@ export type Club = {
   since:       string
   images:      string[]
   keywords?:   string[]
-  modes?:       readonly ('online' | 'offline')[]   // 활동 형태 (복수 선택 가능)
+  modes?:       readonly ModeKey[]                  // 활동 형태 (복수 선택 가능)
   fee?:         string                           // 회비 (예: '없음', '월 5,000원')
   target?:      string | string[]               // 모집 대상 (예: 'SSAFY 수료생 누구나')
   schedule?:    string | string[]               // 정기 일정 (예: '매주 토요일 오전 10시')

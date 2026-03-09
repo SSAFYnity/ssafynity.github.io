@@ -3,17 +3,14 @@ import { motion } from 'framer-motion'
 import { Link } from 'react-router-dom'
 import { Users, Search, ChevronDown, Check, X, ArrowUpDown } from 'lucide-react'
 import { allClubs } from '@/data/computed'
-import { CLUB_CATEGORIES, CLUB_CATEGORY_KEYS, type ClubCategoryKey } from '@/data/constants'
+import { CLUB_CATEGORIES, CLUB_CATEGORY_KEYS, MODE_CONFIG, type ClubCategoryKey, type ModeKey } from '@/data/constants'
 import type { Club } from '@/data/computed'
+import { Container } from '@/components/Container'
 
+import { Card } from '@/components/Card'
+import { HeroLabel } from '@/components/HeroLabel'
 const ALL = '전체'
 
-const MODE_CONFIG = {
-  online:  { label: '온라인',   className: 'bg-slate-100 text-slate-500' },
-  offline: { label: '오프라인', className: 'bg-slate-100 text-slate-500' },
-} as const
-
-type ModeKey = 'online' | 'offline'
 
 const MODE_OPTIONS: Array<{ key: ModeKey; label: string }> = [
   { key: 'online',  label: MODE_CONFIG.online.label },
@@ -273,15 +270,13 @@ export default function ClubsPage() {
 
       {/* Hero */}
       <section className="bg-white pt-24 pb-10 lg:pt-28 lg:pb-14 border-b border-slate-100">
-        <div className="container mx-auto px-6 lg:px-12 max-w-5xl">
+                <Container maxWidth="5xl">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.75, ease: [0.22, 1, 0.36, 1] }}
           >
-            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 border border-slate-200 text-slate-500 rounded-full mb-8 bg-slate-50">
-              <span className="text-[10px] font-black uppercase tracking-widest">✦ Clubs</span>
-            </div>
+            <HeroLabel>Clubs</HeroLabel>
             <h1 className="text-2xl md:text-3xl font-extrabold tracking-tight leading-[1.2] text-slate-900 mb-2">
               동문들이 만든
             </h1>
@@ -293,12 +288,12 @@ export default function ClubsPage() {
               관심 있는 동아리에 직접 연락해 가입해보세요.
             </p>
           </motion.div>
-        </div>
+                </Container>
       </section>
 
       {/* 목록 */}
       <section className="bg-slate-50 pt-6 pb-20 lg:pt-8 lg:pb-24">
-        <div className="container mx-auto px-6 lg:px-12 max-w-5xl">
+                <Container maxWidth="5xl">
 
           {allClubs.length === 0 ? (
             <motion.div
@@ -434,7 +429,8 @@ export default function ClubsPage() {
                         visible: { opacity: 1, y: 0, transition: { duration: 0.5, ease: [0.22, 1, 0.36, 1] } },
                       }}
                     >
-                      <Link
+                      <Card
+                        as={Link}
                         to={`/clubs/${club.slug}`}
                         className="flex flex-col gap-4 bg-white rounded-2xl border border-slate-100 p-6 h-full hover:border-blue-200 hover:shadow-sm transition-all"
                       >
@@ -457,14 +453,14 @@ export default function ClubsPage() {
                           <span>·</span>
                           <span>{club.memberCount}명</span>
                         </div>
-                      </Link>
+                      </Card>
                     </motion.div>
                   ))}
                 </motion.div>
               )}
             </>
           )}
-        </div>
+                </Container>
       </section>
 
     </div>

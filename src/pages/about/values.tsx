@@ -1,7 +1,9 @@
 import { Globe, Heart, TrendingUp } from 'lucide-react'
 import { motion } from 'framer-motion'
 import { siteData } from '@/data/siteData'
+import { Container } from '@/components/Container'
 
+import { HeroLabel } from '@/components/HeroLabel'
 const ICON_MAP = {
   globe:         Globe,
   'trending-up': TrendingUp,
@@ -25,7 +27,7 @@ export default function AboutValuesPage() {
     <div className="flex flex-col">
 
       <section className="bg-white pt-28 pb-24 lg:pt-36 lg:pb-32">
-        <div className="container mx-auto px-6 lg:px-12 max-w-5xl">
+                <Container maxWidth="5xl">
 
           {/* 제목 */}
           <motion.div
@@ -34,9 +36,7 @@ export default function AboutValuesPage() {
             transition={{ duration: 0.75, ease: [0.22, 1, 0.36, 1] }}
             className="mb-16 lg:mb-20"
           >
-            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 border border-slate-200 text-slate-500 rounded-full mb-8 bg-slate-50">
-              <span className="text-[10px] font-black uppercase tracking-widest">✦ 가치관</span>
-            </div>
+            <HeroLabel>가치관</HeroLabel>
             <h1 className="text-2xl md:text-3xl font-extrabold tracking-tight leading-[1.2] text-slate-900 mb-2">
               싸피니티가 추구하는 것
             </h1>
@@ -143,8 +143,7 @@ export default function AboutValuesPage() {
               )
             })}
           </motion.div>
-
-        </div>
+        </Container>
       </section>
 
     </div>

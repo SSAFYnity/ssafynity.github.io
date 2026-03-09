@@ -1,8 +1,14 @@
-import { useState, useEffect } from 'react'
+﻿import { useState, useEffect } from 'react'
 import { Link, useLocation } from 'react-router-dom'
 import { Menu, ChevronDown, ExternalLink } from 'lucide-react'
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet'
 import { siteData } from '@/data/siteData'
+import { Container } from '@/components/Container'
+
+function getFirstFocusableMenuItem(menuEl: HTMLElement | null): HTMLElement | null {
+  if (!menuEl) return null
+  return menuEl.querySelector<HTMLElement>('[data-nav-menuitem]')
+}
 
 export default function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false)
@@ -24,7 +30,7 @@ export default function Navbar() {
           : 'bg-transparent py-8'
       }`}
     >
-      <div className="container mx-auto px-6 lg:px-12 max-w-7xl">
+      <Container maxWidth="7xl">
         <div className="flex items-center">
 
           {/* 로고 */}
@@ -39,78 +45,136 @@ export default function Navbar() {
           {/* 데스크탑 메뉴 */}
           <div className="hidden lg:flex items-center gap-1 ml-auto">
             {(() => {
-            const hasExactMatch = siteData.menu.some(cat =>
-              cat.items.some(item => !('external' in item && item.external) && location.pathname === item.path)
-            )
-            return siteData.menu.map((category) => {
-              const isActive = category.items.some((item) => {
-                if ('external' in item && item.external) return false
-                if (location.pathname === item.path) return true
-                if (hasExactMatch) return false
-                return location.pathname.startsWith(item.path + '/')
-              })
-              return (
-                <div
-                  key={category.label}
-                  className="relative"
-                  onMouseEnter={() => setActiveMenu(category.label)}
-                  onMouseLeave={() => setActiveMenu(null)}
-                >
-                  <button
-                    className={`flex items-center gap-1.5 px-3 py-2 rounded-md font-bold text-sm transition-all ${
-                      isActive
-                        ? 'text-blue-900 bg-blue-50/70'
-                        : 'text-slate-600 hover:text-blue-900 hover:bg-slate-50'
-                    }`}
-                  >
-                    {category.label}
-                    <ChevronDown
-                      size={14}
-                      className={`opacity-40 transition-transform duration-300 ${
-                        activeMenu === category.label ? 'rotate-180 opacity-100 text-blue-900' : ''
-                      }`}
-                    />
-                  </button>
+              const hasExactMatch = siteData.menu.some(cat =>
+                cat.items.some(item => !('external' in item && item.external) && location.pathname === item.path)
+              )
 
-                  {/* 드롭다운 */}
-                  {activeMenu === category.label && (
-                    <div className="absolute top-full left-0 pt-2 w-48 animate-in fade-in slide-in-from-top-1 duration-200">
-                      <div className="bg-white rounded-xl shadow-xl border border-slate-100 p-1.5">
-                        {category.items.map((item) => {
-                          const isExternal = 'external' in item && item.external
-                          const isItemActive = !isExternal && location.pathname === item.path
-                          const baseClass = `flex items-center gap-1.5 px-4 py-2.5 text-xs font-bold rounded-lg transition-colors ${
-                            isItemActive
-                              ? 'text-blue-900 bg-blue-50'
-                              : 'text-slate-500 hover:text-blue-900 hover:bg-slate-50'
-                          }`
-                          if (isExternal) {
+              return siteData.menu.map((category, idx) => {
+                const buttonId = `nav-button-${idx}`
+                const menuId = `nav-menu-${idx}`
+
+                const isActive = category.items.some((item) => {
+                  if ('external' in item && item.external) return false
+                  if (location.pathname === item.path) return true
+                  if (hasExactMatch) return false
+                  return location.pathname.startsWith(item.path + '/')
+                })
+
+                const isOpen = activeMenu === category.label
+
+                return (
+                  <div
+                    key={category.label}
+                    className="relative"
+                    onMouseEnter={() => setActiveMenu(category.label)}
+                    onMouseLeave={(e) => {
+                      if (!e.currentTarget.contains(document.activeElement)) setActiveMenu(null)
+                    }}
+                    onBlur={(e) => {
+                      const next = e.relatedTarget as Node | null
+                      if (!next || !e.currentTarget.contains(next)) setActiveMenu(null)
+                    }}
+                    onKeyDown={(e) => {
+                      if (e.key === 'Escape') {
+                        setActiveMenu(null)
+                        ;(document.getElementById(buttonId) as HTMLButtonElement | null)?.focus()
+                        return
+                      }
+
+                      if (e.key === 'Enter' || e.key === ' ') {
+                        e.preventDefault()
+                        setActiveMenu(prev => (prev === category.label ? null : category.label))
+                        return
+                      }
+
+                      if (e.key === 'ArrowDown') {
+                        e.preventDefault()
+                        setActiveMenu(category.label)
+                        requestAnimationFrame(() => {
+                          const first = getFirstFocusableMenuItem(document.getElementById(menuId))
+                          first?.focus()
+                        })
+                      }
+                    }}
+                  >
+                    <button
+                      id={buttonId}
+                      type="button"
+                      aria-haspopup="menu"
+                      aria-expanded={isOpen}
+                      aria-controls={menuId}
+                      onClick={() => setActiveMenu(prev => (prev === category.label ? null : category.label))}
+                      className={`flex items-center gap-1.5 px-3 py-2 rounded-md font-bold text-sm transition-all ${
+                        isActive
+                          ? 'text-blue-900 bg-blue-50/70'
+                          : 'text-slate-600 hover:text-blue-900 hover:bg-slate-50'
+                      }`}
+                    >
+                      {category.label}
+                      <ChevronDown
+                        size={14}
+                        className={`opacity-40 transition-transform duration-300 ${
+                          isOpen ? 'rotate-180 opacity-100 text-blue-900' : ''
+                        }`}
+                      />
+                    </button>
+
+                    {/* 드롭다운 */}
+                    {isOpen === true && (
+                      <div className="absolute top-full left-0 pt-2 w-48 animate-in fade-in slide-in-from-top-1 duration-200">
+                        <div
+                          id={menuId}
+                          role="menu"
+                          aria-labelledby={buttonId}
+                          className="bg-white rounded-xl shadow-xl border border-slate-100 p-1.5"
+                        >
+                          {category.items.map((item) => {
+                            const isExternal = 'external' in item && item.external
+                            const isItemActive = !isExternal && location.pathname === item.path
+                            const baseClass = `flex items-center gap-1.5 px-4 py-2.5 text-xs font-bold rounded-lg transition-colors w-full text-left ${
+                              isItemActive
+                                ? 'text-blue-900 bg-blue-50'
+                                : 'text-slate-500 hover:text-blue-900 hover:bg-slate-50'
+                            }`
+
+                            if (isExternal) {
+                              return (
+                                <a
+                                  key={item.label}
+                                  href={item.path}
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                  role="menuitem"
+                                  data-nav-menuitem
+                                  className={baseClass}
+                                  onClick={() => setActiveMenu(null)}
+                                >
+                                  {item.label}
+                                  <ExternalLink size={10} className="opacity-50" />
+                                </a>
+                              )
+                            }
+
                             return (
-                              <a
+                              <Link
                                 key={item.label}
-                                href={item.path}
-                                target="_blank"
-                                rel="noopener noreferrer"
+                                to={item.path}
+                                role="menuitem"
+                                data-nav-menuitem
                                 className={baseClass}
+                                onClick={() => setActiveMenu(null)}
                               >
                                 {item.label}
-                                <ExternalLink size={10} className="opacity-50" />
-                              </a>
+                              </Link>
                             )
-                          }
-                          return (
-                            <Link key={item.label} to={item.path} className={baseClass}>
-                              {item.label}
-                            </Link>
-                          )
-                        })}
+                          })}
+                        </div>
                       </div>
-                    </div>
-                  )}
-                </div>
-              )
-            })
-          })()}
+                    )}
+                  </div>
+                )
+              })
+            })()}
           </div>
 
           {/* 모바일 햄버거 */}
@@ -118,7 +182,12 @@ export default function Navbar() {
             {/* 모바일 Sheet 드로어 */}
             <Sheet open={mobileOpen} onOpenChange={setMobileOpen}>
               <SheetTrigger asChild>
-                <button className="lg:hidden p-2 text-slate-900 bg-slate-50 rounded-lg">
+                <button
+                  type="button"
+                  aria-label="메뉴 열기"
+                  aria-expanded={mobileOpen}
+                  className="lg:hidden p-2 text-slate-900 bg-slate-50 rounded-lg"
+                >
                   <Menu size={20} />
                 </button>
               </SheetTrigger>
@@ -135,6 +204,7 @@ export default function Navbar() {
                               ? 'text-blue-900'
                               : 'text-slate-500 hover:text-blue-900'
                           }`
+
                           if (isExternal) {
                             return (
                               <a
@@ -150,8 +220,14 @@ export default function Navbar() {
                               </a>
                             )
                           }
+
                           return (
-                            <Link key={item.label} to={item.path} className={baseClass} onClick={() => setMobileOpen(false)}>
+                            <Link
+                              key={item.label}
+                              to={item.path}
+                              className={baseClass}
+                              onClick={() => setMobileOpen(false)}
+                            >
                               {item.label}
                             </Link>
                           )
@@ -166,7 +242,7 @@ export default function Navbar() {
           </div>
 
         </div>
-      </div>
+      </Container>
     </nav>
   )
 }

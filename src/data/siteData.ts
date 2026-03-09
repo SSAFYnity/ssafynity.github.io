@@ -1,3 +1,5 @@
+import { ROUTES } from '@/lib/routes'
+
 // src/data/siteData.ts
 // 이 파일만 수정하면 전체 사이트에 반영됩니다.
 // 매년 운영진이 교체되므로 [업데이트 필요] 항목을 확인하세요.
@@ -82,38 +84,38 @@ export const siteData = {
   // ─── 네비게이션 메뉴 ───────────────────────────────────────────
   menu: [
     { label: '싸피니티', items: [
-      { label: '동문회 소개', path: '/about/story' },
-      { label: '가치관',      path: '/about/values' },
-      { label: '후원·협력사', path: '/about/partners' },
+      { label: '동문회 소개', path: ROUTES.aboutStory },
+      { label: '가치관',      path: ROUTES.aboutValues },
+      { label: '후원·협력사', path: ROUTES.aboutPartners },
     ]},
     { label: '운영진', items: [
-      { label: '운영진 소개', path: '/operator/introduce' },
-      { label: '조직 안내',   path: '/operator/organization' },
-      { label: '역대 운영진', path: '/operator/history' },
+      { label: '운영진 소개', path: ROUTES.operatorIntroduce },
+      { label: '조직 안내',   path: ROUTES.operatorOrganization },
+      { label: '역대 운영진', path: ROUTES.operatorHistory },
     ]},
     { label: '행사', items: [
-      { label: '동문회 행사 안내', path: '/events/introduce' },
-      { label: '올해 행사 일정',   path: '/events/upcoming' },
-      { label: '역대 모든 행사',   path: '/events/archive' },
+      { label: '동문회 행사 안내', path: ROUTES.eventsIntroduce },
+      { label: '올해 행사 일정',   path: ROUTES.eventsUpcoming },
+      { label: '역대 모든 행사',   path: ROUTES.eventsArchive },
     ]},
     { label: '동아리', items: [
-      { label: '동아리 안내', path: '/clubs/intro' },
-      { label: '정식 동아리', path: '/clubs' },
-      { label: '예비 동아리', path: '/clubs/pre' },
+      { label: '동아리 안내', path: ROUTES.clubsIntro },
+      { label: '정식 동아리', path: ROUTES.clubs },
+      { label: '예비 동아리', path: ROUTES.clubsPre },
     ]},
     { label: '참여하기', items: [
-      { label: '동문회 가입',    path: '/join/membership' },
-      { label: '정회원 혜택',    path: '/join/benefits' },
-      { label: '동아리 신청',    path: '/clubs/apply' },
-      { label: '운영진 모집',    path: '/operator/apply' },
-      { label: '후원·제휴 문의', path: '/join/inquiry' },
+      { label: '동문회 가입',    path: ROUTES.joinMembership },
+      { label: '정회원 혜택',    path: ROUTES.joinBenefits },
+      { label: '동아리 신청',    path: ROUTES.clubsApply },
+      { label: '운영진 모집',    path: ROUTES.operatorApply },
+      { label: '후원·제휴 문의', path: ROUTES.joinInquiry },
       // { label: '소식 수신', path: '', external: true }, // [업데이트 필요] forms.newsletter URL 생성 후 입력
     ]},
     { label: '커뮤니티', items: [
       { label: '공지사항', path: 'https://ssafynity.github.io/blog/공지', external: true },
       { label: '블로그',   path: 'https://ssafynity.github.io/blog', external: true },
-      { label: 'SNS',      path: '/community/sns' },
-      { label: 'FAQ',      path: '/community/faq' },
+      { label: 'SNS',      path: ROUTES.communitySns },
+      { label: 'FAQ',      path: ROUTES.communityFaq },
     ]},
   ],
 

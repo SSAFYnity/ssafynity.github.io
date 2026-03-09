@@ -3,6 +3,10 @@ import { Link } from 'react-router-dom'
 import { Code2, Dumbbell, Palette, Gamepad2, Globe, Heart, X, ShieldCheck, Users } from 'lucide-react'
 import { CLUB_CATEGORIES, CLUB_CATEGORY_KEYS, type ClubCategoryKey } from '@/data/constants'
 import type { LucideIcon } from 'lucide-react'
+import { Container } from '@/components/Container'
+import { HeroLabel } from '@/components/HeroLabel'
+import { Card } from '@/components/Card'
+import { Kicker } from '@/components/Kicker'
 
 const CATEGORY_UI: Record<ClubCategoryKey, { icon: LucideIcon; examples: string[] }> = {
   tech:      { icon: Code2,    examples: ['사이드 프로젝트', 'CS 스터디'] },
@@ -48,15 +52,13 @@ export default function ClubsApplyPage() {
 
       {/* Hero */}
       <section className="bg-white pt-24 pb-10 lg:pt-28 lg:pb-14 border-b border-slate-100">
-        <div className="container mx-auto px-6 lg:px-12 max-w-3xl">
+        <Container maxWidth="3xl">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.75, ease: [0.22, 1, 0.36, 1] }}
           >
-            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 border border-slate-200 text-slate-500 rounded-full mb-8 bg-slate-50">
-              <span className="text-[10px] font-black uppercase tracking-widest">✦ Clubs</span>
-            </div>
+            <HeroLabel>Clubs</HeroLabel>
             <h1 className="text-2xl md:text-3xl font-extrabold tracking-tight leading-[1.2] text-slate-900 mb-2">
               동아리를 만들고 싶다면
             </h1>
@@ -68,19 +70,19 @@ export default function ClubsApplyPage() {
               신청 전 아래 카테고리와 유의사항을 먼저 확인해주세요.
             </p>
           </motion.div>
-        </div>
+        </Container>
       </section>
 
       {/* 카테고리 */}
       <section className="bg-slate-50 pt-8 pb-14 lg:pt-10 lg:pb-16 border-b border-slate-100">
-        <div className="container mx-auto px-6 lg:px-12 max-w-3xl flex flex-col gap-6">
+        <Container maxWidth="3xl" className="flex flex-col gap-6">
           <motion.div
             initial={{ opacity: 0, y: 16 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6 }}
           >
-            <p className="text-[10px] font-black text-blue-600 uppercase tracking-widest mb-2">Categories</p>
+            <Kicker className="text-blue-600 mb-2">Categories</Kicker>
             <h2 className="text-lg font-extrabold text-slate-900 mb-1">동아리 카테고리</h2>
             <p className="text-sm text-slate-500 break-keep">신청서 카테고리란에 아래 분류 중 하나를 기재해주세요. 모호한 경우 신청 시 별도로 남겨주세요.</p>
           </motion.div>
@@ -89,38 +91,39 @@ export default function ClubsApplyPage() {
               const { label } = CLUB_CATEGORIES[key]
               const { icon: Icon, examples } = CATEGORY_UI[key]
               return (
-              <motion.div
-                key={key}
-                initial={{ opacity: 0, y: 12 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.5, delay: i * 0.06 }}
-                className="bg-white rounded-2xl border border-slate-100 p-4 flex flex-col gap-2"
-              >
-                <div className="w-8 h-8 rounded-lg bg-blue-50 flex items-center justify-center shrink-0">
-                  <Icon className="w-4 h-4 text-blue-600" />
-                </div>
-                <p className="text-sm font-extrabold text-slate-900">{label}</p>
-                {examples.length > 0 && (
-                  <p className="text-xs text-slate-400 leading-relaxed break-keep">{examples.join(', ')} 등</p>
-                )}
-              </motion.div>
+                <Card
+                  key={key}
+                  as={motion.div}
+                  initial={{ opacity: 0, y: 12 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.5, delay: i * 0.06 }}
+                  className="p-4 flex flex-col gap-2"
+                >
+                  <div className="w-8 h-8 rounded-lg bg-blue-50 flex items-center justify-center shrink-0">
+                    <Icon className="w-4 h-4 text-blue-600" />
+                  </div>
+                  <p className="text-sm font-extrabold text-slate-900">{label}</p>
+                  {examples.length > 0 && (
+                    <p className="text-xs text-slate-400 leading-relaxed break-keep">{examples.join(', ')} 등</p>
+                  )}
+                </Card>
               )
             })}
           </div>
-        </div>
+        </Container>
       </section>
 
       {/* 등록 불가 유형 */}
       <section className="bg-white pt-8 pb-14 lg:pt-10 lg:pb-16 border-b border-slate-100">
-        <div className="container mx-auto px-6 lg:px-12 max-w-3xl flex flex-col gap-4">
+        <Container maxWidth="3xl" className="flex flex-col gap-4">
           <motion.div
             initial={{ opacity: 0, y: 16 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6 }}
           >
-            <p className="text-[10px] font-black text-red-400 uppercase tracking-widest mb-2">Not Eligible</p>
+            <Kicker className="text-red-400 mb-2">Not Eligible</Kicker>
             <h2 className="text-lg font-extrabold text-slate-900">등록 불가 유형</h2>
           </motion.div>
           <div className="flex flex-col gap-2">
@@ -141,31 +144,32 @@ export default function ClubsApplyPage() {
             ))}
           </div>
           <p className="text-xs text-slate-400 text-right break-keep">※ 세부 기준은 추후 공지될 예정입니다.</p>
-        </div>
+        </Container>
       </section>
 
       {/* 신청 경로 */}
       <section className="bg-slate-50 pt-8 pb-14 lg:pt-10 lg:pb-20">
-        <div className="container mx-auto px-6 lg:px-12 max-w-3xl flex flex-col gap-4">
+        <Container maxWidth="3xl" className="flex flex-col gap-4">
           <motion.div
             initial={{ opacity: 0, y: 16 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6 }}
           >
-            <p className="text-[10px] font-black text-blue-600 uppercase tracking-widest mb-2">How to Apply</p>
+            <Kicker className="text-blue-600 mb-2">How to Apply</Kicker>
             <h2 className="text-lg font-extrabold text-slate-900">신청 경로</h2>
             <p className="text-sm text-slate-500 mt-1 break-keep">상황에 맞는 신청 경로를 선택해주세요.</p>
           </motion.div>
           <div className="grid sm:grid-cols-2 gap-4">
             {APPLY_TYPES.map(({ icon: Icon, type, desc, note, path, pathLabel, applyLabel }, i) => (
-              <motion.div
+              <Card
                 key={type}
+                as={motion.div}
                 initial={{ opacity: 0, y: 12 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.5, delay: i * 0.08 }}
-                className="bg-white rounded-2xl border border-slate-100 p-6 flex flex-col gap-4"
+                className="p-6 flex flex-col gap-4"
               >
                 <div className="flex items-center gap-3">
                   <div className="w-9 h-9 rounded-xl bg-blue-50 flex items-center justify-center shrink-0">
@@ -191,11 +195,11 @@ export default function ClubsApplyPage() {
                     {applyLabel} (준비 중)
                   </button>
                 </div>
-              </motion.div>
+              </Card>
             ))}
           </div>
           <p className="text-xs text-slate-400 break-keep text-right">신청 후 별도 안내가 없다면 SSAFYnity 이메일로 문의해주세요.</p>
-        </div>
+        </Container>
       </section>
 
     </div>

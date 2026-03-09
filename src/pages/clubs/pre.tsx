@@ -4,7 +4,9 @@ import { Link } from 'react-router-dom'
 import { Users, ArrowUpDown, ChevronDown, Check, Search } from 'lucide-react'
 import { allPreClubs, PRE_CLUB_MIN_MEMBERS } from '@/data/computed'
 import type { PreClub } from '@/data/computed'
+import { Container } from '@/components/Container'
 
+import { HeroLabel } from '@/components/HeroLabel'
 const FILTERS = ['전체', '모집 중', '최소 인원 달성'] as const
 type Filter = typeof FILTERS[number]
 
@@ -300,15 +302,13 @@ export default function ClubsPrePage() {
 
       {/* Hero */}
       <section className="bg-white pt-24 pb-10 lg:pt-28 lg:pb-14 border-b border-slate-100">
-        <div className="container mx-auto px-6 lg:px-12 max-w-5xl">
+                <Container maxWidth="5xl">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.75, ease: [0.22, 1, 0.36, 1] }}
           >
-            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 border border-slate-200 text-slate-500 rounded-full mb-8 bg-slate-50">
-              <span className="text-[10px] font-black uppercase tracking-widest">✦ Clubs</span>
-            </div>
+            <HeroLabel>Clubs</HeroLabel>
             <h1 className="text-2xl md:text-3xl font-extrabold tracking-tight leading-[1.2] text-slate-900 mb-2">
               함께할 사람을 찾고 있어요
             </h1>
@@ -328,12 +328,12 @@ export default function ClubsPrePage() {
               </Link>
             </div>
           </motion.div>
-        </div>
+                </Container>
       </section>
 
       {/* 목록 */}
       <section className="bg-slate-50 pt-8 pb-20 lg:pt-10">
-        <div className="container mx-auto px-6 lg:px-12 max-w-5xl flex flex-col gap-6">
+                <Container maxWidth="5xl" className="flex flex-col gap-6">
           {allPreClubs.length === 0 ? (
             <motion.div
               initial={{ opacity: 0, y: 16 }}
@@ -392,7 +392,7 @@ export default function ClubsPrePage() {
               </div>
             </>
           )}
-        </div>
+                </Container>
       </section>
 
     </div>

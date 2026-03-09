@@ -4,7 +4,9 @@ import { ExternalLink, Search } from 'lucide-react'
 import { allPartners } from '@/data/computed'
 import { PARTNER_TYPE_LABEL } from '@/data/constants'
 import type { PartnerType } from '@/data/constants'
+import { Container } from '@/components/Container'
 
+import { HeroLabel } from '@/components/HeroLabel'
 const TYPE_FILTERS: Array<{ key: PartnerType | 'all'; label: string }> = [
   { key: 'all',        label: '전체' },
   { key: 'founding',   label: PARTNER_TYPE_LABEL.founding   },
@@ -111,15 +113,13 @@ export default function AboutPartnersPage() {
 
       {/* Hero */}
       <section className="bg-white pt-24 pb-10 lg:pt-28 lg:pb-14">
-        <div className="container mx-auto px-6 lg:px-12 max-w-5xl">
+                <Container maxWidth="5xl">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.75, ease: [0.22, 1, 0.36, 1] }}
           >
-            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 border border-slate-200 text-slate-500 rounded-full mb-8 bg-slate-50">
-              <span className="text-[10px] font-black uppercase tracking-widest">✦ 후원·협력사</span>
-            </div>
+            <HeroLabel>후원·협력사</HeroLabel>
             <h1 className="text-2xl md:text-3xl font-extrabold tracking-tight leading-[1.2] text-slate-900 mb-2">
               함께 만들어가는 공동체
             </h1>
@@ -130,12 +130,12 @@ export default function AboutPartnersPage() {
               비영리 동문회인 싸피니티는 후원·협력사의 지원 덕분에 더 풍성한 행사와 혜택을 동문들에게 제공할 수 있습니다.
             </p>
           </motion.div>
-        </div>
+                </Container>
       </section>
 
       {/* 협력사 그리드 */}
       <section className="bg-slate-50 pt-10 pb-20 lg:pt-14 lg:pb-28 border-t border-slate-100">
-        <div className="container mx-auto px-6 lg:px-12 max-w-5xl">
+                <Container maxWidth="5xl">
 
           {/* 유형 필터 + 검색 */}
           <div className="flex flex-col sm:flex-row sm:items-center gap-3 mb-8">
@@ -196,7 +196,7 @@ export default function AboutPartnersPage() {
             </div>
           )}
 
-        </div>
+                </Container>
       </section>
 
     </div>

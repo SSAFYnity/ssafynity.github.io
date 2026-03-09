@@ -1,7 +1,9 @@
 import { motion } from 'framer-motion'
 import { Crown, Users, CalendarDays, MessageSquare, Megaphone, MessageCircle, CalendarPlus, Target } from 'lucide-react'
 import { currentOperator } from '@/data/computed'
+import { Container } from '@/components/Container'
 
+import { HeroLabel } from '@/components/HeroLabel'
 const COMMON_TASKS = [
   {
     icon:  CalendarDays,
@@ -46,15 +48,13 @@ export default function TeamOrganizationPage() {
 
       {/* Hero */}
       <section className="bg-white pt-24 pb-16 lg:pt-28 lg:pb-20 border-b border-slate-100">
-        <div className="container mx-auto px-6 lg:px-12 max-w-5xl">
+                <Container maxWidth="5xl">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.75, ease: [0.22, 1, 0.36, 1] }}
           >
-            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 border border-slate-200 text-slate-500 rounded-full mb-8 bg-slate-50">
-              <span className="text-[10px] font-black uppercase tracking-widest">✦ Operator Organization</span>
-            </div>
+            <HeroLabel>Operator Organization</HeroLabel>
             <h1 className="text-3xl md:text-4xl font-extrabold tracking-tight leading-[1.2] text-slate-900 mb-5">
               함께 만드는<br />
               <span className="text-blue-600">조직 구조</span>
@@ -63,12 +63,12 @@ export default function TeamOrganizationPage() {
               SSAFYnity는 역할에 따라 나뉜 팀들이 유기적으로 협력해 동문회를 운영합니다.
             </p>
           </motion.div>
-        </div>
+                </Container>
       </section>
 
       {/* 리더십 */}
       <section className="bg-slate-50 py-16 lg:py-20">
-        <div className="container mx-auto px-6 lg:px-12 max-w-5xl">
+                <Container maxWidth="5xl">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -106,12 +106,12 @@ export default function TeamOrganizationPage() {
               </div>
             </div>
           </motion.div>
-        </div>
+                </Container>
       </section>
 
       {/* 전담 팀 */}
       <section className="bg-white py-16 lg:py-20 border-t border-slate-100">
-        <div className="container mx-auto px-6 lg:px-12 max-w-5xl">
+                <Container maxWidth="5xl">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -131,12 +131,12 @@ export default function TeamOrganizationPage() {
               ))}
             </div>
           </motion.div>
-        </div>
+                </Container>
       </section>
 
       {/* 공통 업무 + 개인희망 업무 */}
       <section className="bg-slate-50 py-16 lg:py-20 border-t border-slate-100">
-        <div className="container mx-auto px-6 lg:px-12 max-w-5xl">
+                <Container maxWidth="5xl">
           <div className="grid lg:grid-cols-2 gap-12">
 
             {/* 공통 업무 */}
@@ -194,7 +194,7 @@ export default function TeamOrganizationPage() {
             </motion.div>
 
           </div>
-        </div>
+                </Container>
       </section>
 
     </div>

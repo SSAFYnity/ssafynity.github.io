@@ -3,14 +3,12 @@ import { useParams, Link } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import { ArrowLeft, Calendar, Users, Activity, Clock, UserCheck, UserPlus, MessageCircle, ExternalLink, Github, FileText, Link as LinkIcon } from 'lucide-react'
 import { allClubs, type ContactIconKey } from '@/data/computed'
-import { CLUB_CATEGORIES } from '@/data/constants'
+import { CLUB_CATEGORIES, MODE_CONFIG, type ModeKey } from '@/data/constants'
+import { Pill } from '@/components/Pill'
+import { Container } from '@/components/Container'
+import { Kicker } from '@/components/Kicker'
+import { Card } from '@/components/Card'
 
-const MODE_CONFIG = {
-  online:  { label: '온라인',   className: 'bg-slate-100 text-slate-500' },
-  offline: { label: '오프라인', className: 'bg-slate-100 text-slate-500' },
-} as const
-
-type ModeKey = 'online' | 'offline'
 
 const CONTACT_ICON_CONFIG: Record<ContactIconKey, React.ElementType> = {
   apply:   UserPlus,
@@ -64,7 +62,7 @@ export default function ClubDetailPage() {
 
       {/* Hero */}
       <section className="bg-white pt-24 pb-10 lg:pt-28 lg:pb-14 border-b border-slate-100">
-        <div className="container mx-auto px-6 lg:px-12 max-w-5xl">
+                <Container maxWidth="5xl">
           <Link
             to="/clubs"
             className="inline-flex items-center gap-1.5 text-xs text-slate-400 hover:text-blue-500 transition-colors mb-8"
@@ -78,9 +76,7 @@ export default function ClubDetailPage() {
             transition={{ duration: 0.75, ease: [0.22, 1, 0.36, 1] }}
             className="flex flex-col gap-4"
           >
-            <span className="text-[10px] font-black px-2.5 py-1 rounded-full bg-blue-50 text-blue-600 w-fit">
-              {categoryLabel}
-            </span>
+            <Pill className="bg-blue-50 text-blue-600 w-fit">{categoryLabel}</Pill>
             <h1 className="text-2xl md:text-3xl font-extrabold tracking-tight text-slate-900 leading-snug">
               {club.name}
             </h1>
@@ -103,12 +99,12 @@ export default function ClubDetailPage() {
               ))}
             </div>
           </motion.div>
-        </div>
+                </Container>
       </section>
 
       {/* 메인 콘텐츠 */}
       <section className="bg-slate-50 pt-8 pb-14 lg:pt-10 lg:pb-16 border-b border-slate-100">
-        <div className="container mx-auto px-6 lg:px-12 max-w-5xl">
+                <Container maxWidth="5xl">
           <div className="grid lg:grid-cols-[1fr_280px] gap-8 items-start">
 
             {/* 좌측 */}
@@ -120,7 +116,7 @@ export default function ClubDetailPage() {
             >
               {/* About */}
               <div className="flex flex-col gap-3">
-                <p className="text-[10px] font-black text-blue-600 uppercase tracking-widest">About</p>
+                <Kicker className="text-[10px] font-black text-blue-600 uppercase tracking-widest">About</Kicker>
                 <p className="text-sm text-slate-600 leading-relaxed break-keep whitespace-pre-line">
                   {club.desc}
                 </p>
@@ -138,7 +134,7 @@ export default function ClubDetailPage() {
               {/* Highlights — About 바로 아래 (선택) */}
               {club.achievements && club.achievements.length > 0 && (
                 <div className="flex flex-col gap-3">
-                  <p className="text-[10px] font-black text-blue-600 uppercase tracking-widest">Highlights</p>
+                  <Kicker className="text-[10px] font-black text-blue-600 uppercase tracking-widest">Highlights</Kicker>
                   <div className="flex flex-col gap-2">
                     {club.achievements.map((item, i) => (
                       <div key={i} className="flex items-start gap-3">
@@ -152,7 +148,7 @@ export default function ClubDetailPage() {
 
               {/* 활동 방식 / 정기 일정 / 모집 대상 */}
               <div className="flex flex-col gap-2">
-                <div className="bg-white rounded-2xl border border-slate-100 px-5 py-4 flex items-start gap-4">
+                                <Card className="bg-white rounded-2xl border border-slate-100 px-5 py-4 flex items-start gap-4">
                   <div className="w-8 h-8 rounded-lg bg-blue-50 flex items-center justify-center shrink-0 mt-0.5">
                     <Activity size={14} className="text-blue-600" />
                   </div>
@@ -160,9 +156,9 @@ export default function ClubDetailPage() {
                     <p className="text-xs font-black text-slate-700">활동 방식</p>
                     <FieldText value={club.activities} />
                   </div>
-                </div>
+                                </Card>
                 {club.schedule && (
-                  <div className="bg-white rounded-2xl border border-slate-100 px-5 py-4 flex items-start gap-4">
+                                    <Card className="bg-white rounded-2xl border border-slate-100 px-5 py-4 flex items-start gap-4">
                     <div className="w-8 h-8 rounded-lg bg-blue-50 flex items-center justify-center shrink-0 mt-0.5">
                       <Clock size={14} className="text-blue-600" />
                     </div>
@@ -170,10 +166,10 @@ export default function ClubDetailPage() {
                       <p className="text-xs font-black text-slate-700">정기 일정</p>
                       <FieldText value={club.schedule} />
                     </div>
-                  </div>
+                                    </Card>
                 )}
                 {club.target && (
-                  <div className="bg-white rounded-2xl border border-slate-100 px-5 py-4 flex items-start gap-4">
+                                    <Card className="bg-white rounded-2xl border border-slate-100 px-5 py-4 flex items-start gap-4">
                     <div className="w-8 h-8 rounded-lg bg-blue-50 flex items-center justify-center shrink-0 mt-0.5">
                       <UserCheck size={14} className="text-blue-600" />
                     </div>
@@ -181,22 +177,22 @@ export default function ClubDetailPage() {
                       <p className="text-xs font-black text-slate-700">모집 대상</p>
                       <FieldText value={club.target} />
                     </div>
-                  </div>
+                                    </Card>
                 )}
               </div>
 
               {/* 가입 절차 (선택) */}
               {club.joinProcess && club.joinProcess.length > 0 && (
                 <div className="flex flex-col gap-3">
-                  <p className="text-[10px] font-black text-blue-600 uppercase tracking-widest">How to Join</p>
+                  <Kicker className="text-[10px] font-black text-blue-600 uppercase tracking-widest">How to Join</Kicker>
                   <div className="flex flex-col gap-2">
                     {club.joinProcess.map((step, i) => (
-                      <div key={i} className="flex items-start gap-3 bg-white rounded-2xl border border-slate-100 px-5 py-4">
+                      <Card key={i} className="flex items-start gap-3 px-5 py-4">
                         <span className="w-5 h-5 rounded-full bg-blue-600 text-white text-[10px] font-black flex items-center justify-center shrink-0 mt-0.5">
                           {i + 1}
                         </span>
                         <p className="text-sm text-slate-500 leading-relaxed break-keep">{step}</p>
-                      </div>
+                      </Card>
                     ))}
                   </div>
                 </div>
@@ -205,13 +201,13 @@ export default function ClubDetailPage() {
               {/* 유의사항 (선택) */}
               {club.notes && club.notes.length > 0 && (
                 <div className="flex flex-col gap-3">
-                  <p className="text-[10px] font-black text-blue-600 uppercase tracking-widest">Notice</p>
+                  <Kicker className="text-[10px] font-black text-blue-600 uppercase tracking-widest">Notice</Kicker>
                   <div className="flex flex-col gap-2">
                     {club.notes.map((note, i) => (
-                      <div key={i} className="flex items-start gap-3 bg-white rounded-2xl border border-slate-100 px-5 py-4">
+                      <Card key={i} className="flex items-start gap-3 px-5 py-4">
                         <span className="w-1.5 h-1.5 rounded-full bg-slate-400 shrink-0 mt-2" />
                         <p className="text-sm text-slate-600 leading-relaxed break-keep">{note}</p>
-                      </div>
+                      </Card>
                     ))}
                   </div>
                 </div>
@@ -225,7 +221,7 @@ export default function ClubDetailPage() {
               transition={{ duration: 0.6, delay: 0.2 }}
               className="lg:sticky lg:top-24 flex flex-col gap-3"
             >
-              <div className="bg-white rounded-2xl border border-slate-100 p-6 flex flex-col gap-5">
+                            <Card className="bg-white rounded-2xl border border-slate-100 p-6 flex flex-col gap-5">
                 {/* Stats */}
                 <div className="flex flex-col gap-3">
                   <div className="flex items-center justify-between text-xs">
@@ -303,18 +299,18 @@ export default function ClubDetailPage() {
                     )
                   })}
                 </div>
-              </div>
+                            </Card>
             </motion.div>
 
           </div>
-        </div>
+                </Container>
       </section>
 
       {/* 활동 사진 갤러리 */}
       {club.images.length > 0 && (
         <section className="bg-white pt-8 pb-14 lg:pt-10 lg:pb-16 border-b border-slate-100">
-          <div className="container mx-auto px-6 lg:px-12 max-w-5xl flex flex-col gap-5">
-            <p className="text-[10px] font-black text-blue-600 uppercase tracking-widest">Gallery</p>
+                    <Container maxWidth="5xl" className="flex flex-col gap-5">
+            <Kicker className="text-[10px] font-black text-blue-600 uppercase tracking-widest">Gallery</Kicker>
             <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3">
               {club.images.map((src, i) => (
                 <motion.div
@@ -333,7 +329,7 @@ export default function ClubDetailPage() {
                 </motion.div>
               ))}
             </div>
-          </div>
+                    </Container>
         </section>
       )}
 

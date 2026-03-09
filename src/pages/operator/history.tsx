@@ -3,8 +3,11 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { Link } from 'react-router-dom'
 import { Users, Globe, ClipboardList, Megaphone, Wrench, MessageCircle, UserPlus, Receipt, Wallet, FileText, Palette, ExternalLink, ChevronUp, ChevronDown, type LucideIcon } from 'lucide-react'
 import { allOperators } from '@/data/computed'
+import { Container } from '@/components/Container'
 
 
+import { Card } from '@/components/Card'
+import { HeroLabel } from '@/components/HeroLabel'
 const TEAM_ICONS: Record<string, LucideIcon> = {
   '기획국': ClipboardList, '기획팀': ClipboardList,
   '홍보국': Megaphone,    '홍보팀': Megaphone,
@@ -36,15 +39,13 @@ export default function TeamHistoryPage() {
 
       {/* Hero */}
       <section className="bg-white pt-24 pb-16 lg:pt-28 lg:pb-20 border-b border-slate-100">
-        <div className="container mx-auto px-6 lg:px-12 max-w-5xl">
+                <Container maxWidth="5xl">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.75, ease: [0.22, 1, 0.36, 1] }}
           >
-            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 border border-slate-200 text-slate-500 rounded-full mb-8 bg-slate-50">
-              <span className="text-[10px] font-black uppercase tracking-widest">✦ Operator History</span>
-            </div>
+            <HeroLabel>Operator History</HeroLabel>
             <h1 className="text-3xl md:text-4xl font-extrabold tracking-tight leading-[1.2] text-slate-900 mb-5">
               싸피니티를 지켜온<br />
               <span className="text-blue-600">소중한 발자취</span>
@@ -53,12 +54,12 @@ export default function TeamHistoryPage() {
               1기부터 현재까지, 열정으로 커뮤니티의 기반을 닦아온 역대 운영진을 소개합니다.
             </p>
           </motion.div>
-        </div>
+                </Container>
       </section>
 
       {/* 탭 + 콘텐츠 */}
       <section className="bg-slate-50 py-16 lg:py-20 min-h-[800px]">
-        <div className="container mx-auto px-6 lg:px-12 max-w-5xl">
+                <Container maxWidth="5xl">
           <div className="flex flex-col lg:flex-row gap-8 lg:gap-12">
 
             {/* 탭 네비게이션 */}
@@ -126,7 +127,7 @@ export default function TeamHistoryPage() {
             {/* 콘텐츠 */}
             <div className="flex-1 min-w-0">
               <AnimatePresence mode="wait">
-                <motion.div
+                <Card as={motion.div}
                   key={activeTab}
                   initial={{ opacity: 0, x: 16 }}
                   animate={{ opacity: 1, x: 0 }}
@@ -279,17 +280,17 @@ export default function TeamHistoryPage() {
                       </div>
                     )
                   })()}
-                </motion.div>
+                </Card>
               </AnimatePresence>
             </div>
 
           </div>
-        </div>
+                </Container>
       </section>
 
       {/* CTA */}
       <section className="bg-blue-950 py-16">
-        <div className="container mx-auto px-6 lg:px-12 max-w-5xl text-center">
+                <Container maxWidth="5xl" className="text-center">
           <h2 className="text-xl font-extrabold text-white mb-3">함께 역사를 만들어갈 다음 주인공을 기다립니다.</h2>
           <p className="text-sm text-blue-200 mb-8">여러분의 기여가 SSAFYnity 동문회의 내일을 바꿉니다.</p>
           <Link
@@ -300,7 +301,7 @@ export default function TeamHistoryPage() {
           >
             운영진 지원하기
           </Link>
-        </div>
+                </Container>
       </section>
 
     </div>
