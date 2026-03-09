@@ -16,9 +16,6 @@ import { siteData } from './siteData'
 import { preClubs } from './preClubs'
 export type { PreClub } from './preClubs'
 export { PRE_CLUB_MIN_MEMBERS } from './preClubs'
-import { club as futsalClub } from './clubs/futsal-club'
-import { club as sideProjectClub } from './clubs/side-project'
-import { club as bookClub } from './clubs/book-club'
 // 새 정식 동아리 추가 시: clubs/{slug}.ts 생성 후 import + allClubs에 추가
 import { events2022 } from './events/2022'
 import type { PartnerType, Status, Event, EventDateRange, RecruitDateRange } from './constants'
@@ -110,24 +107,37 @@ export const allPartners: Partner[] = [partnerSamsung, partnerMulticampus, partn
 // 새 협력사 추가 시 여기에도 추가
 
 // ─── 정식 동아리 타입 ─────────────────────────────────────────
+import { type ClubCategoryKey } from '@/data/constants'
+
+// 연락처 아이콘 종류
+// apply: 가입 신청 | direct: 대표자 연락 | kakao: 카카오톡 | discord: 디스코드
+// github: GitHub | notion: 노션 | link: 일반 링크
+export type ContactIconKey = 'apply' | 'direct' | 'kakao' | 'discord' | 'github' | 'notion' | 'link'
+
 export type Club = {
   slug:        string
   name:        string
-  category:    string   // 기술·개발 | 스포츠·운동 | 창작·예술 | 게임·취미 | 친목·여행 | 봉사
+  category:    ClubCategoryKey   // categories.ts 참조
   shortDesc:   string
   desc:        string
-  activities:  string
+  activities:  string | string[]
   memberCount: number
-  recruiting:  boolean
-  contact:     string
+  contacts:    { label: string; url: string; icon?: ContactIconKey }[]  // CTA 버튼 목록 (첫 번째가 primary)
   since:       string
   images:      string[]
+  keywords?:   string[]
+  modes?:       readonly ('online' | 'offline')[]   // 활동 형태 (복수 선택 가능)
+  fee?:         string                           // 회비 (예: '없음', '월 5,000원')
+  target?:      string | string[]               // 모집 대상 (예: 'SSAFY 수료생 누구나')
+  schedule?:    string | string[]               // 정기 일정 (예: '매주 토요일 오전 10시')
+  region?:      string                           // 활동 지역 (예: '서울·경기', '전국 (온라인)')
+  joinProcess?: string[]                         // 가입 절차 단계 (예: ['오픈카톡 참여', '자기소개', '승인'])
+  notes?:         string[]                        // 유의사항 (예: ['3회 미참석 시 탈퇴', '비용 개인 부담'])
+  achievements?:  string[]                        // 주요 성과 (예: ['서비스 3개 배포', '누적 참여자 30명+'])
+  links?:         { label: string; url: string }[]  // 추가 링크 (예: [{ label: 'GitHub', url: '...' }])
 }
 
 export const allClubs: Club[] = [
-  futsalClub,
-  sideProjectClub,
-  bookClub,
 ]
 // 새 정식 동아리 추가 시: clubs/{slug}.ts 생성 후 import + 여기에 추가
 

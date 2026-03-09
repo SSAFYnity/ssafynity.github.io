@@ -1,12 +1,143 @@
 import { useState, useMemo, useRef, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import { Link } from 'react-router-dom'
-import { Users } from 'lucide-react'
+import { Users, ArrowUpDown, ChevronDown, Check, Search } from 'lucide-react'
 import { allPreClubs, PRE_CLUB_MIN_MEMBERS } from '@/data/computed'
 import type { PreClub } from '@/data/computed'
 
 const FILTERS = ['전체', '모집 중', '최소 인원 달성'] as const
 type Filter = typeof FILTERS[number]
+
+// ─── 정렬 ────────────────────────────────────────────────────────────
+type SortKey = 'id-asc' | 'member-desc' | 'member-asc' | 'since-desc' | 'since-asc'
+const SORT_DEFAULT: SortKey = 'id-asc'
+const SORT_OPTIONS: Array<{ key: SortKey; label: string }> = [
+  { key: 'id-asc',      label: '번호순' },
+  { key: 'member-desc', label: '인원 많은 순' },
+  { key: 'member-asc',  label: '인원 적은 순' },
+  { key: 'since-desc',  label: '등록 최신순' },
+  { key: 'since-asc',   label: '등록 오래된 순' },
+]
+
+function applySortKey(clubs: PreClub[], sort: SortKey): PreClub[] {
+  return [...clubs].sort((a, b) => {
+    // 1순위: 모집 중 항상 앞, 최소 인원 달성 항상 뒤
+    const aFull = a.memberCount >= PRE_CLUB_MIN_MEMBERS
+    const bFull = b.memberCount >= PRE_CLUB_MIN_MEMBERS
+    if (aFull !== bFull) return aFull ? 1 : -1
+
+    // 2순위: 사용자 선택 정렬 (같은 그룹 내)
+    switch (sort) {
+      case 'id-asc':      return a.id - b.id
+      case 'member-desc': return b.memberCount - a.memberCount
+      case 'member-asc':  return a.memberCount - b.memberCount
+      case 'since-desc':  return b.since.localeCompare(a.since)
+      case 'since-asc':   return a.since.localeCompare(b.since)
+    }
+  })
+}
+
+function FilterDropdown({ filter, onChange }: { filter: Filter; onChange: (v: Filter) => void }) {
+  const [open, setOpen] = useState(false)
+  const ref = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    const handler = (e: MouseEvent) => {
+      if (ref.current && !ref.current.contains(e.target as Node)) setOpen(false)
+    }
+    document.addEventListener('mousedown', handler)
+    return () => document.removeEventListener('mousedown', handler)
+  }, [])
+
+  const active = filter !== '전체'
+
+  return (
+    <div ref={ref} className="relative shrink-0">
+      <button
+        onClick={() => setOpen(o => !o)}
+        className={`w-36 flex items-center justify-between gap-1.5 pl-3.5 pr-2.5 py-1.5 rounded-full text-xs font-black border transition-colors ${
+          active
+            ? 'bg-blue-600 text-white border-blue-600'
+            : 'bg-white border-slate-200 text-slate-600 hover:border-blue-300 hover:text-blue-600'
+        }`}
+      >
+        {filter}
+        <ChevronDown size={11} className={active ? 'text-blue-200' : 'text-slate-400'} />
+      </button>
+
+      {open && (
+        <div className="absolute top-full left-0 mt-1.5 bg-white border border-slate-200 rounded-xl shadow-lg z-20 w-max py-1">
+          {FILTERS.map(f => (
+            <button
+              key={f}
+              onClick={() => { onChange(f); setOpen(false) }}
+              className={`flex items-center gap-2 w-full px-3.5 py-2 text-xs hover:bg-slate-50 transition-colors whitespace-nowrap ${
+                filter === f ? 'font-black text-blue-600' : 'font-medium text-slate-600'
+              }`}
+            >
+              <span className="w-3 flex items-center justify-center shrink-0">
+                {filter === f && <Check size={9} />}
+              </span>
+              {f}
+            </button>
+          ))}
+        </div>
+      )}
+    </div>
+  )
+}
+
+function SortDropdown({ sort, onChange }: { sort: SortKey; onChange: (v: SortKey) => void }) {
+  const [open, setOpen] = useState(false)
+  const ref = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    const handler = (e: MouseEvent) => {
+      if (ref.current && !ref.current.contains(e.target as Node)) setOpen(false)
+    }
+    document.addEventListener('mousedown', handler)
+    return () => document.removeEventListener('mousedown', handler)
+  }, [])
+
+  const active = sort !== SORT_DEFAULT
+  const label  = SORT_OPTIONS.find(o => o.key === sort)?.label ?? '정렬'
+
+  return (
+    <div ref={ref} className="relative shrink-0">
+      <button
+        onClick={() => setOpen(o => !o)}
+        className={`w-36 flex items-center justify-between gap-1.5 pl-3 pr-2.5 py-1.5 rounded-full text-xs font-black border transition-colors ${
+          active
+            ? 'bg-blue-600 text-white border-blue-600'
+            : 'bg-white border-slate-200 text-slate-600 hover:border-blue-300 hover:text-blue-600'
+        }`}
+      >
+        <ArrowUpDown size={11} className={active ? 'text-blue-200' : 'text-slate-400'} />
+        {label}
+        <ChevronDown size={11} className={active ? 'text-blue-200' : 'text-slate-400'} />
+      </button>
+
+      {open && (
+        <div className="absolute top-full right-0 mt-1.5 bg-white border border-slate-200 rounded-xl shadow-lg z-20 w-max py-1">
+          {SORT_OPTIONS.map(o => (
+            <button
+              key={o.key}
+              onClick={() => { onChange(o.key); setOpen(false) }}
+              className={`flex items-center gap-2 w-full px-3.5 py-2 text-xs hover:bg-slate-50 transition-colors whitespace-nowrap ${
+                sort === o.key ? 'font-black text-blue-600' : 'font-medium text-slate-600'
+              }`}
+            >
+              <span className="w-3 flex items-center justify-center shrink-0">
+                {sort === o.key && <Check size={9} />}
+              </span>
+              {o.label}
+            </button>
+          ))}
+        </div>
+      )}
+    </div>
+  )
+}
 
 // text-sm(14px) * leading-relaxed(1.625) * 3줄 = 68.25px
 const DESC_3LINE_HEIGHT = '4.265625rem'
@@ -144,22 +275,25 @@ function PreClubCard({ club, index }: { club: PreClub; index: number }) {
 }
 
 export default function ClubsPrePage() {
-  const [filter, setFilter] = useState<Filter>('모집 중')
+  const [filter,         setFilter]         = useState<Filter>('모집 중')
+  const [sort,           setSort]           = useState<SortKey>(SORT_DEFAULT)
+  const [query,          setQuery]          = useState('')
+  const [submittedQuery, setSubmittedQuery] = useState('')
 
-  const sorted = useMemo(() => (
-    [...allPreClubs].sort((a, b) => {
-      const aFull = a.memberCount >= PRE_CLUB_MIN_MEMBERS
-      const bFull = b.memberCount >= PRE_CLUB_MIN_MEMBERS
-      if (aFull === bFull) return a.id - b.id
-      return aFull ? 1 : -1
-    })
-  ), [])
+  const submitSearch = () => setSubmittedQuery(query.trim())
 
   const filtered = useMemo(() => {
-    if (filter === '모집 중')   return sorted.filter(c => c.memberCount < PRE_CLUB_MIN_MEMBERS)
-    if (filter === '최소 인원 달성') return sorted.filter(c => c.memberCount >= PRE_CLUB_MIN_MEMBERS)
-    return sorted
-  }, [sorted, filter])
+    const q = submittedQuery.toLowerCase()
+    const base = filter === '모집 중'
+      ? allPreClubs.filter(c => c.memberCount < PRE_CLUB_MIN_MEMBERS)
+      : filter === '최소 인원 달성'
+        ? allPreClubs.filter(c => c.memberCount >= PRE_CLUB_MIN_MEMBERS)
+        : [...allPreClubs]
+    const searched = q
+      ? base.filter(c => c.shortDesc.toLowerCase().includes(q))
+      : base
+    return applySortKey(searched, sort)
+  }, [filter, sort, submittedQuery])
 
   return (
     <div className="flex flex-col">
@@ -221,21 +355,33 @@ export default function ClubsPrePage() {
             </motion.div>
           ) : (
             <>
-              {/* 필터 탭 */}
-              <div className="flex gap-2">
-                {FILTERS.map(f => (
+              {/* 필터 + 검색 + 정렬 */}
+              <div className="flex items-center gap-2">
+                <FilterDropdown filter={filter} onChange={setFilter} />
+
+                <div className="flex items-center gap-1.5 flex-1 min-w-[120px]">
+                  <div className="relative flex-1">
+                    <Search size={13} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
+                    <input
+                      type="text"
+                      value={query}
+                      onChange={e => setQuery(e.target.value)}
+                      onKeyDown={e => e.key === 'Enter' && submitSearch()}
+                      placeholder="소개 검색"
+                      className="pl-7 pr-4 py-1.5 rounded-full text-xs font-medium bg-white border border-slate-200
+                                 text-slate-700 placeholder:text-slate-400 outline-none
+                                 focus:border-blue-300 transition-colors w-full"
+                    />
+                  </div>
                   <button
-                    key={f}
-                    onClick={() => setFilter(f)}
-                    className={`px-3.5 py-1.5 rounded-full text-xs font-black transition-colors ${
-                      filter === f
-                        ? 'bg-blue-600 text-white'
-                        : 'bg-white border border-slate-200 text-slate-500 hover:border-blue-200 hover:text-blue-600'
-                    }`}
+                    onClick={submitSearch}
+                    className="flex items-center gap-1 pl-3 pr-3.5 py-1.5 rounded-full text-xs font-black bg-blue-600 text-white hover:bg-blue-700 transition-colors shrink-0"
                   >
-                    {f}
+                    <Search size={11} /> 검색
                   </button>
-                ))}
+                </div>
+
+                <SortDropdown sort={sort} onChange={setSort} />
               </div>
 
               {/* 카드 그리드 */}

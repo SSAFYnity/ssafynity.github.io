@@ -164,3 +164,18 @@ export const PARTNER_TYPE_LABEL: { [K in PartnerType]: string } = {
   talent:     PARTNER_TYPES.talent.label,
   operations: PARTNER_TYPES.operations.label,
 }
+
+// ─── 동아리 카테고리 ─────────────────────────────────────────────────
+export const CLUB_CATEGORIES = {
+  tech:      { label: '기술·개발',  desc: '개발, 스터디, 사이드 프로젝트 등 기술 중심 활동' },
+  sports:    { label: '스포츠·운동', desc: '풋살, 야구, 클라이밍 등 신체 활동 중심 모임' },
+  art:       { label: '창작·예술',  desc: '음악, 미술, 글쓰기 등 창작 활동 중심 모임' },
+  hobby:     { label: '게임·취미',  desc: 'E-sport, 보드게임 등 취미 기반 모임' },
+  social:    { label: '친목·여행',  desc: '여행, 맛집 탐방 등 친목 위주 모임' },
+  volunteer: { label: '봉사',       desc: '재능 기부, 지역사회 봉사 등 나눔 활동' },
+} as const
+
+export type ClubCategoryKey = keyof typeof CLUB_CATEGORIES
+
+// 순서가 필요한 곳에서 사용 (FORMAT_ORDER 패턴과 동일)
+export const CLUB_CATEGORY_KEYS: ClubCategoryKey[] = ['tech', 'sports', 'art', 'hobby', 'social', 'volunteer']

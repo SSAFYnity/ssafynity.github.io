@@ -1,15 +1,17 @@
 import { motion } from 'framer-motion'
 import { Link } from 'react-router-dom'
-import { Code2, Dumbbell, Palette, Gamepad2, Heart, Globe, X, ShieldCheck, Users } from 'lucide-react'
+import { Code2, Dumbbell, Palette, Gamepad2, Globe, Heart, X, ShieldCheck, Users } from 'lucide-react'
+import { CLUB_CATEGORIES, CLUB_CATEGORY_KEYS, type ClubCategoryKey } from '@/data/constants'
+import type { LucideIcon } from 'lucide-react'
 
-const CATEGORIES = [
-  { icon: Code2,    label: '기술·개발', examples: ['사이드 프로젝트', 'CS 스터디'] },
-  { icon: Dumbbell, label: '스포츠·운동', examples: ['풋살', '야구', '클라이밍', '등산'] },
-  { icon: Palette,  label: '창작·예술', examples: ['음악', '미술', '사진', '글쓰기', '춤'] },
-  { icon: Gamepad2, label: '게임·취미', examples: ['E-sport', '보드게임', '방탈출'] },
-  { icon: Globe,    label: '친목·여행', examples: ['여행', '맛집', '지역 모임'] },
-  { icon: Heart,    label: '봉사',      examples: [] },
-]
+const CATEGORY_UI: Record<ClubCategoryKey, { icon: LucideIcon; examples: string[] }> = {
+  tech:      { icon: Code2,    examples: ['사이드 프로젝트', 'CS 스터디'] },
+  sports:    { icon: Dumbbell, examples: ['풋살', '야구', '클라이밍', '등산'] },
+  art:       { icon: Palette,  examples: ['음악', '미술', '사진', '글쓰기', '춤'] },
+  hobby:     { icon: Gamepad2, examples: ['E-sport', '보드게임', '방탈출'] },
+  social:    { icon: Globe,    examples: ['여행', '맛집', '지역 모임'] },
+  volunteer: { icon: Heart,    examples: [] },
+}
 
 const REJECTIONS = [
   '특정 종교·정치적 성향을 목적으로 하는 모임',
@@ -83,9 +85,12 @@ export default function ClubsApplyPage() {
             <p className="text-sm text-slate-500 break-keep">신청서 카테고리란에 아래 분류 중 하나를 기재해주세요. 모호한 경우 신청 시 별도로 남겨주세요.</p>
           </motion.div>
           <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
-            {CATEGORIES.map(({ icon: Icon, label, examples }, i) => (
+            {CLUB_CATEGORY_KEYS.map((key, i) => {
+              const { label } = CLUB_CATEGORIES[key]
+              const { icon: Icon, examples } = CATEGORY_UI[key]
+              return (
               <motion.div
-                key={label}
+                key={key}
                 initial={{ opacity: 0, y: 12 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
@@ -100,7 +105,8 @@ export default function ClubsApplyPage() {
                   <p className="text-xs text-slate-400 leading-relaxed break-keep">{examples.join(', ')} 등</p>
                 )}
               </motion.div>
-            ))}
+              )
+            })}
           </div>
         </div>
       </section>
