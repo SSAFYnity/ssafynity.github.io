@@ -22,8 +22,9 @@ export const ROUTES = {
   clubsSlug: '/clubs/:slug',
 
   joinMembership: '/join/membership',
-  joinBenefits: '/join/benefits',
-  joinInquiry: '/join/inquiry',
+  joinPremium: '/join/premium',
+  joinBenefitsLegacy: '/join/benefits',
+  joinPartnership: '/join/partnership',
 
   community: '/community',
   communityFaq: '/community/faq',

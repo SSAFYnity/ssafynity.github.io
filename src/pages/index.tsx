@@ -54,7 +54,7 @@ const FEATURES = [
     iconBg: 'bg-sky-500',
     title: '정회원 혜택',
     desc: '연회비를 납부한 정회원에게는 모든 행사 무료 입장, 최우선 공지, 전용 굿즈 등 특별한 혜택이 주어집니다.',
-    to: '/join/benefits',
+    to: '/join/premium',
   },
 ]
 

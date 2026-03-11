@@ -1,4 +1,4 @@
-import { useState, useMemo, useRef, useEffect } from 'react'
+﻿import { useState, useMemo, useEffect, useRef } from 'react'
 import { motion } from 'framer-motion'
 import { Link } from 'react-router-dom'
 import { Users, ArrowUpDown, ChevronDown, Check, Search } from 'lucide-react'
@@ -7,6 +7,7 @@ import type { PreClub } from '@/data/computed'
 import { Container } from '@/components/Container'
 
 import { HeroLabel } from '@/components/HeroLabel'
+import { useExpandableCard } from '@/hooks/useExpandableCard'
 const FILTERS = ['전체', '모집 중', '최소 인원 달성'] as const
 type Filter = typeof FILTERS[number]
 
@@ -146,31 +147,11 @@ const DESC_3LINE_HEIGHT = '4.265625rem'
 
 function PreClubCard({ club, index }: { club: PreClub; index: number }) {
   const isFull = club.memberCount >= PRE_CLUB_MIN_MEMBERS
-  const descRef = useRef<HTMLParagraphElement>(null)
-  const measureRef = useRef<HTMLParagraphElement>(null)
-  const cardRef = useRef<HTMLDivElement>(null)
-  const [isOverflow, setIsOverflow] = useState(false)
-  const [expanded, setExpanded] = useState(false)
-  const [collapsedHeight, setCollapsedHeight] = useState<number | null>(null)
-
-  useEffect(() => {
-    const visible = descRef.current
-    const measure = measureRef.current
-    if (!visible || !measure) return
-    setIsOverflow(measure.scrollHeight > visible.clientHeight)
-  }, [])
-
-  useEffect(() => {
-    if (cardRef.current && collapsedHeight === null) {
-      setCollapsedHeight(cardRef.current.offsetHeight)
-    }
-  }, [collapsedHeight])
+  const { expanded, isOverflow, wrapperStyle, descRef, measureRef, cardRef, toggle } = useExpandableCard<HTMLDivElement>()
 
   const toggleClass = isFull
     ? 'text-slate-500 hover:text-slate-600'
     : 'text-blue-500 hover:text-blue-600'
-
-  const toggle = () => setExpanded(e => !e)
 
   const renderBottom = () => (
     <>
@@ -219,7 +200,7 @@ function PreClubCard({ club, index }: { club: PreClub; index: number }) {
 
   return (
     // 그리드 셀: 확장 시 collapsed 높이로 고정해 레이아웃 유지
-    <div className="relative" style={expanded && collapsedHeight ? { height: collapsedHeight } : undefined}>
+    <div className="relative" style={wrapperStyle}>
       <motion.div
         ref={cardRef}
         initial={{ opacity: 0, y: 16 }}
@@ -398,3 +379,4 @@ export default function ClubsPrePage() {
     </div>
   )
 }
+

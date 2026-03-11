@@ -27,8 +27,8 @@ import ClubsBenefitsPage from '@/pages/clubs/intro'
 import ClubsApplyPage from '@/pages/clubs/apply'
 
 import JoinMembershipPage from '@/pages/join/membership'
-import JoinBenefitsPage from '@/pages/join/benefits'
-import JoinInquiryPage from '@/pages/join/inquiry'
+import JoinPremiumPage from '@/pages/join/premium'
+import JoinPartnershipPage from '@/pages/join/partnership'
 
 import CommunityPage from '@/pages/community'
 import CommunityFaqPage from '@/pages/community/faq'
@@ -80,8 +80,9 @@ export default function App() {
             <Route path={ROUTES.clubsSlug} element={<ClubDetailPage />} />
 
             <Route path={ROUTES.joinMembership} element={<JoinMembershipPage />} />
-            <Route path={ROUTES.joinBenefits} element={<JoinBenefitsPage />} />
-            <Route path={ROUTES.joinInquiry} element={<JoinInquiryPage />} />
+            <Route path={ROUTES.joinPremium} element={<JoinPremiumPage />} />
+            <Route path={ROUTES.joinBenefitsLegacy} element={<JoinPremiumPage />} />
+            <Route path={ROUTES.joinPartnership} element={<JoinPartnershipPage />} />
 
             <Route path={ROUTES.community} element={<CommunityPage />} />
             <Route path={ROUTES.communityFaq} element={<CommunityFaqPage />} />

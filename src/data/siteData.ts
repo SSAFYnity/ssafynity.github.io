@@ -103,19 +103,19 @@ export const siteData = {
       { label: '정식 동아리', path: ROUTES.clubs },
       { label: '예비 동아리', path: ROUTES.clubsPre },
     ]},
-    { label: '참여하기', items: [
-      { label: '동문회 가입',    path: ROUTES.joinMembership },
-      { label: '정회원 혜택',    path: ROUTES.joinBenefits },
-      { label: '동아리 신청',    path: ROUTES.clubsApply },
-      { label: '운영진 모집',    path: ROUTES.operatorApply },
-      { label: '후원·제휴 문의', path: ROUTES.joinInquiry },
-      // { label: '소식 수신', path: '', external: true }, // [업데이트 필요] forms.newsletter URL 생성 후 입력
-    ]},
     { label: '커뮤니티', items: [
       { label: '공지사항', path: 'https://ssafynity.github.io/blog/공지', external: true },
       { label: '블로그',   path: 'https://ssafynity.github.io/blog', external: true },
       { label: 'SNS',      path: ROUTES.communitySns },
       { label: 'FAQ',      path: ROUTES.communityFaq },
+    ]},
+    { label: '신청·문의', items: [
+      { label: '동문회 가입',    path: ROUTES.joinMembership },
+      { label: '정회원 안내',    path: ROUTES.joinPremium },
+      { label: '동아리 신청',    path: ROUTES.clubsApply },
+      { label: '운영진 모집',    path: ROUTES.operatorApply },
+      { label: '후원·제휴 문의', path: ROUTES.joinPartnership },
+      // { label: '소식 수신', path: '', external: true }, // [업데이트 필요] forms.newsletter URL 생성 후 입력
     ]},
   ],
 
@@ -150,7 +150,7 @@ export const siteData = {
     regular: {
       title: '일반 회원',
       fee: '무료',
-      desc: 'SSAFY 수료생이라면 누구나 가입 가능',
+      desc: '가입 대상 조건 2개 중 1개에 해당하면 가입 가능',
     },
     premium: {
       title: '정회원',

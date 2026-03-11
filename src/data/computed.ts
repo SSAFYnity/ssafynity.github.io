@@ -19,7 +19,7 @@ import { operatorData } from './operator'
 export type { PreClub } from './preClubs'
 export { PRE_CLUB_MIN_MEMBERS } from './preClubs'
 // 새 정식 동아리 추가 시: clubs/{slug}.ts 생성 후 import + allClubs에 추가
-import type { PartnerType, Status } from './constants'
+import type { PartnerType, PartnerCategory, Status } from './constants'
 import { partnerSamsung } from './partners/samsung'
 import { partnerMulticampus } from './partners/multicampus'
 import { partnerSsafy } from './partners/ssafy'
@@ -74,8 +74,10 @@ export const currentOperator: Operator = allOperators[allOperators.length - 1]
 export type Partner = {
   slug:      string
   name:      string
-  types:     readonly PartnerType[]
+  category:  PartnerCategory          // 파트너 본질 — 후원사 / 제휴사 / 창립 파트너
+  types:     readonly PartnerType[]   // 세부 지원 방식 (복수 선택 가능)
   status:    Status
+  period?:   { start: string; end?: string }  // YYYY.MM — founding은 생략, end 없으면 현재 진행 중
   desc:      string
   keywords?: string[]
   logo:      string

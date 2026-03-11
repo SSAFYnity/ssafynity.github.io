@@ -1,4 +1,4 @@
-// 사이트 전반에서 공유하는 상수 및 레이블 매핑
+﻿// 사이트 전반에서 공유하는 상수 및 레이블 매핑
 
 // ─── 행사 종류 / 참여 대상 ───────────────────────────────────────────
 export type EventKind = 'regular' | 'ongoing' | 'special'
@@ -143,7 +143,22 @@ export const STATUS_LABEL = {
 
 export type Status = keyof typeof STATUS_LABEL
 
-// ─── 협력사 유형 ────────────────────────────────────────────────────
+// ─── 협력사 카테고리 (파트너 본질) ─────────────────────────────────
+// 후원사: SSAFYnity에 일방적으로 지원 (재정·물품 등)
+// 제휴사: 상호 협력 (홍보·인재·운영 등)
+// 창립 파트너: SSAFYnity의 출발점이 된 특수 기관
+export const PARTNER_CATEGORY = {
+  sponsor:  { label: '후원사',      style: 'bg-blue-100 text-blue-700'    },
+  alliance: { label: '제휴사',      style: 'bg-emerald-100 text-emerald-700' },
+  founding: { label: '창립 파트너', style: 'bg-amber-100 text-amber-700'  },
+} as const
+
+export type PartnerCategory = keyof typeof PARTNER_CATEGORY
+
+// ─── 협력사 세부 유형 (지원 범위) ───────────────────────────────────
+// 지원 범위(type)는 파트너 카테고리(후원사/제휴사)와 독립이며, 복수 선택이 가능합니다.
+// 예: 후원사(goods + promotion), 제휴사(operations + promotion) 등
+// founding은 '창립 파트너' 전용입니다.
 export const PARTNER_TYPES = {
   founding:   { label: '창립 파트너', desc: '싸피니티의 모체로, SSAFY 프로그램을 주관하며 동문회의 출발점이 된 기관입니다.' },
   financial:  { label: '재정 후원',   desc: '동문회 운영에 필요한 재정을 직접 지원하는 파트너입니다.' },
@@ -155,7 +170,7 @@ export const PARTNER_TYPES = {
 
 export type PartnerType = keyof typeof PARTNER_TYPES
 
-// 하위 호환 — label만 필요한 곳에서 사용
+// label만 필요한 곳에서 사용
 export const PARTNER_TYPE_LABEL: { [K in PartnerType]: string } = {
   founding:   PARTNER_TYPES.founding.label,
   financial:  PARTNER_TYPES.financial.label,
@@ -188,3 +203,4 @@ export const MODE_CONFIG = {
 } as const
 
 export type ModeKey = keyof typeof MODE_CONFIG
+

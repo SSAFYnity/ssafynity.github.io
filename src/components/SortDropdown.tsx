@@ -25,7 +25,7 @@ export function SortDropdown<T extends string>({
     <div ref={ref} className="relative shrink-0">
       <button
         onClick={() => setOpen(o => !o)}
-        className={`w-36 flex items-center justify-between gap-1.5 pl-3 pr-2.5 py-1.5 rounded-full text-xs font-black border transition-colors ${
+        className={`min-w-36 whitespace-nowrap flex items-center justify-between gap-1.5 pl-3 pr-2.5 py-1.5 rounded-full text-xs font-black border transition-colors ${
           active
             ? 'bg-blue-600 text-white border-blue-600'
             : 'bg-white border-slate-200 text-slate-600 hover:border-blue-300 hover:text-blue-600'
