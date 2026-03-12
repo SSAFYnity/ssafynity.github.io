@@ -1,4 +1,4 @@
-// src/data/operator/2023.ts
+﻿// src/data/operator/2023.ts
 // 2대 SSAFYnity 집행부 (2023년)
 
 export const operator2023 = {
@@ -20,7 +20,7 @@ export const operator2023 = {
         { role: '부회장', name: '이00', council: true },
         { role: '기획국장',    name: '당현아', cohort: 5, campus: '서울', url: 'https://github.com/hadevyi' },
         { role: '소통국장',    name: '권경민', cohort: 7, campus: '서울', url: 'https://rudalsd.tistory.com' },
-        { role: '홍보국장',    name: '신00' },
+        { role: '홍보국장',    name: '신해민', cohort: 5, campus: '서울', url: 'https://www.instagram.com/me.nnie.x?igsh=bG5jcTQwdm5xenNy' },
         { role: '인사관리국장', name: '이00' },
         { role: '경영지원국장', name: '윤일준', cohort: 7, campus: '대전' },
       ],
@@ -47,7 +47,7 @@ export const operator2023 = {
       name: '홍보국',
       desc: 'SNS 채널 운영과 온·오프라인 홍보·디자인 물품을 담당합니다.',
       members: [
-        { role: '국장', name: '신00' },
+        { role: '국장', name: '신해민', cohort: 5, campus: '서울', url: 'https://www.instagram.com/me.nnie.x?igsh=bG5jcTQwdm5xenNy' },
         { role: '국원', name: '박00' },
         { role: '국원', name: '조00' },
       ],

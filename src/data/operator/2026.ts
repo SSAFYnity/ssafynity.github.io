@@ -1,4 +1,4 @@
-// src/data/operator/2026.ts
+﻿// src/data/operator/2026.ts
 // 5대 SSAFYnity 운영진 (2026년)
 
 export const operator2026 = {
@@ -46,7 +46,7 @@ export const operator2026 = {
       vacancies: 0,
       members: [
         { role: '팀장', name: '박00' },
-        { role: '팀원', name: '이00' },
+        { role: '팀원', name: '이수련', cohort: 8, campus: '서울' },
         { role: '팀원', name: '박00' },
       ],
     },

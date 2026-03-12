@@ -1,4 +1,4 @@
-// src/data/operator/2022.ts
+﻿// src/data/operator/2022.ts
 // 1대 SSAFYnity 집행부 (2022년)
 
 export const operator2022 = {
@@ -36,7 +36,7 @@ export const operator2022 = {
         { role: '국원',  name: '공00' },
         { role: '국원',  name: '김병완', cohort: 6, campus: '광주', url: 'https://www.linkedin.com/in/lactea94' },
         { role: '국원',  name: '문00' },
-        { role: '국원',  name: '박00' },
+        { role: '국원',  name: '박유정', cohort: 6, campus: '구미' },
         { role: '국원',  name: '박00' },
         { role: '국원',  name: '박00' },
         { role: '국원',  name: '송00' },
