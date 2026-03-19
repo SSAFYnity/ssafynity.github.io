@@ -1,4 +1,4 @@
-﻿// src/data/operator/2026.ts
+// src/data/operator/2026.ts
 // 5대 SSAFYnity 운영진 (2026년)
 
 export const operator2026 = {
@@ -14,7 +14,7 @@ export const operator2026 = {
         { role: '회장', name: '당현아', cohort: 5, campus: '서울', url: 'https://github.com/hadevyi', council: true },
         { role: '기획팀장',    name: '김병완', cohort: 6, campus: '광주', url: 'https://www.linkedin.com/in/lactea94' },
         { role: '홍보팀장',    name: '고준수', cohort: 8, campus: '광주', url: 'https://www.instagram.com/kojunsu1004' },
-        { role: '대외협력팀장', name: '박00' },
+        { role: '대외협력팀장', name: '박진우', cohort: 11, campus: '광주', url: 'https://github.com/jjinwo0' },
       ],
     },
     {
@@ -25,7 +25,7 @@ export const operator2026 = {
       members: [
         { role: '팀장', name: '김병완', cohort: 6, campus: '광주', url: 'https://www.linkedin.com/in/lactea94' },
         { role: '팀원', name: '이준호', cohort: 8, campus: '대전', url: 'https://github.com/LJH5' },
-        { role: '팀원', name: '이00' },
+        { role: '팀원', name: '이도훈', cohort: 10, campus: '광주' },
       ],
     },
     {
@@ -36,7 +36,7 @@ export const operator2026 = {
       members: [
         { role: '팀장', name: '고준수', cohort: 8, campus: '광주', url: 'https://www.instagram.com/kojunsu1004' },
         { role: '팀원', name: '안00' },
-        { role: '팀원', name: '박00' },
+        { role: '팀원', name: '박동준', cohort: 6, campus: '부울경' },
       ],
     },
     {
@@ -45,8 +45,8 @@ export const operator2026 = {
       desc: '외부 기관·기업과의 협력 및 파트너십 구축을 담당합니다.',
       vacancies: 0,
       members: [
-        { role: '팀장', name: '박00' },
-        { role: '팀원', name: '이수련', cohort: 8, campus: '서울' },
+        { role: '팀장', name: '박진우', cohort: 11, campus: '광주', url: 'https://github.com/jjinwo0' },
+        { role: '팀원', name: '이수련', cohort: 8, campus: '서울', url: 'https://www.linkedin.com/in/suryeon-lee-538242228' },
         { role: '팀원', name: '박00' },
       ],
     },
