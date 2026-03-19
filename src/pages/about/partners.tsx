@@ -1,10 +1,12 @@
-﻿import { useState } from 'react'
+import { useState } from 'react'
 import { motion } from 'framer-motion'
 import { ExternalLink, Search, ChevronDown, Check, X } from 'lucide-react'
 import { allPartners } from '@/data/computed'
 import { PARTNER_TYPE_LABEL, PARTNER_CATEGORY } from '@/data/constants'
 import type { PartnerCategory, PartnerType } from '@/data/constants'
 import { Container } from '@/components/Container'
+import { ResponsiveText } from '@/components/ResponsiveText'
+import { collapseNewlines } from '@/lib/text'
 import { HeroLabel } from '@/components/HeroLabel'
 import { MultiSelectDropdown } from '@/components/MultiSelectDropdown'
 import { SortDropdown } from '@/components/SortDropdown'
@@ -237,10 +239,10 @@ function PartnerCard({ p }: { p: typeof allPartners[number] }) {
           <p
             ref={descRef}
             className={`text-sm leading-relaxed break-keep
-              ${expanded ? 'whitespace-pre-line' : 'line-clamp-2'}
+              ${expanded ? '' : 'line-clamp-2'}
               ${inactive ? 'text-slate-400' : 'text-slate-500'}`}
           >
-            {p.desc}
+            {expanded ? <ResponsiveText text={p.desc} /> : collapseNewlines(p.desc)}
           </p>
 
           {/* 기간(왼쪽) + 더보기·접기 + 링크 아이콘(오른쪽) */}
@@ -333,10 +335,17 @@ export default function AboutPartnersPage() {
             <p className="text-xl md:text-2xl font-black text-blue-600 mb-4">
               Our Partners
             </p>
-            <p className="text-sm text-slate-500 leading-relaxed break-keep">
-              SSAFYnity와 함께해주신 파트너를 소개합니다.
-              분류와 지원 범위를 선택해 협력 형태를 확인할 수 있습니다.
-            </p>
+            <div className="flex items-end justify-between gap-4">
+              <p className="text-sm text-slate-500 leading-relaxed break-keep text-pretty max-w-xl">
+                <ResponsiveText text={'SSAFYnity와 함께해주신 파트너를 소개합니다.\n분류와 지원 범위를 선택해 협력 형태를 확인할 수 있습니다.'} />
+              </p>
+              <a
+                href="/join/partnership"
+                className="text-xs font-black text-blue-600 hover:text-blue-700 transition-colors shrink-0 pb-0.5"
+              >
+                후원 · 협력사 문의 →
+              </a>
+            </div>
           </motion.div>
         </Container>
       </section>
