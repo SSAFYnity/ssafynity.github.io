@@ -1,4 +1,4 @@
-﻿import { motion } from 'framer-motion'
+import { motion } from 'framer-motion'
 import { Link } from 'react-router-dom'
 import { CalendarDays, MapPin } from 'lucide-react'
 import { allEvents } from '@/data/computed'
@@ -9,6 +9,7 @@ import type { Event } from '@/data/computed'
 import { siteData } from '@/data/siteData'
 import { HeroSection } from '@/components/HeroSection'
 import { HeroLabel } from '@/components/HeroLabel'
+import { ResponsiveText } from '@/components/ResponsiveText'
 
 const YEAR = siteData.upcomingEventYear
 const MONTH_KO = ['1월','2월','3월','4월','5월','6월','7월','8월','9월','10월','11월','12월']
@@ -55,8 +56,8 @@ export default function EventsUpcomingPage() {
 
       {/* Hero */}
 <HeroSection
-  sectionClassName="bg-white pt-24 pb-10 lg:pt-28 lg:pb-14 border-b border-slate-100"
-  containerClassName="container mx-auto px-6 lg:px-12 max-w-5xl"
+  sectionClassName="bg-white pt-20 sm:pt-24 pb-10 lg:pt-28 lg:pb-14 border-b border-slate-100"
+  containerClassName="container mx-auto px-4 sm:px-6 lg:px-12 max-w-5xl"
 >
 <HeroLabel>{YEAR} Annual Events</HeroLabel>
             <h1 className="text-2xl md:text-3xl font-extrabold tracking-tight leading-[1.2] text-slate-900 mb-2">
@@ -65,18 +66,21 @@ export default function EventsUpcomingPage() {
             <p className="text-xl md:text-2xl font-black text-blue-600 mb-4">
               {YEAR} 행사 일정
             </p>
-            <p className="text-sm text-slate-500 leading-relaxed break-keep">
-              {YEAR}년 싸피니티가 준비한 행사 라인업을 미리 확인하고, 원하는 행사에 참여해보세요.
+            <p className="text-sm text-slate-500 leading-relaxed break-keep text-pretty">
+              <ResponsiveText
+                newline="mobile"
+                text={`${YEAR}년 싸피니티가 준비한 행사 라인업을 미리 확인하고,\n원하는 행사에 참여해보세요.`}
+              />
             </p>
 </HeroSection>
 
       {/* 목록 */}
       <section className="bg-slate-50 pt-6 pb-14 lg:pt-8 lg:pb-20">
-        <div className="container mx-auto px-6 lg:px-12 max-w-5xl">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-12 max-w-5xl">
 
           {/* 계획중 행사 안내 — 계획중 행사가 있을 때만 노출 */}
           {hasPlanningEvents && (
-            <div className="flex items-start gap-3 bg-blue-50 border border-blue-100 rounded-2xl px-5 py-4 mb-3">
+            <div className="flex items-start gap-3 bg-blue-50 border border-blue-100 rounded-2xl px-4 sm:px-5 py-4 mb-3">
               <span className="text-blue-400 text-base leading-none mt-0.5 shrink-0">ℹ</span>
               <p className="text-xs text-blue-600 leading-relaxed break-keep">
                 운영진이 동문회 운영을 감안하여 계획한 행사 후보 중, <span className="font-bold">최종 일정은 정회원 투표로 확정</span>됩니다.
@@ -251,3 +255,4 @@ export default function EventsUpcomingPage() {
     </div>
   )
 }
+
