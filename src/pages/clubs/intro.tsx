@@ -46,9 +46,8 @@ export default function ClubsBenefitsPage() {
             <p className="text-xl md:text-2xl font-black text-blue-600 mb-4">
               SSAFYnity 동아리 안내
             </p>
-            <p className="text-sm text-slate-500 leading-relaxed break-keep">
-              SSAFYnity 동아리는 SSAFY 동문들이 관심사를 기반으로 자율적으로 모인 소모임입니다.<br />
-              등록 자격, 유지 조건, 소속 동아리 혜택을 확인해보세요.
+            <p className="text-sm text-slate-500 leading-relaxed break-keep text-pretty max-w-xl">
+              SSAFYnity 동아리는 SSAFY 동문들이 관심사를 기반으로 자율적으로 모인 소모임입니다. 등록 자격, 유지 조건, 소속 동아리 혜택을 확인해보세요.
             </p>
           </motion.div>
                 </Container>
@@ -185,7 +184,7 @@ export default function ClubsBenefitsPage() {
                 </div>
                 <div>
                   <p className="text-base font-extrabold text-slate-900 mb-2">{title}</p>
-                  <p className="text-sm text-slate-500 leading-relaxed break-keep">{desc}</p>
+                  <p className="text-sm text-slate-500 leading-relaxed break-keep text-pretty max-w-xl">{desc}</p>
                 </div>
               </Card>
             ))}
