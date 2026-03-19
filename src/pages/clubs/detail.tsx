@@ -6,6 +6,7 @@ import { allClubs, type ContactIconKey } from '@/data/computed'
 import { CLUB_CATEGORIES, MODE_CONFIG, type ModeKey } from '@/data/constants'
 import { Pill } from '@/components/Pill'
 import { Container } from '@/components/Container'
+import { ResponsiveText } from '@/components/ResponsiveText'
 import { Kicker } from '@/components/Kicker'
 import { Card } from '@/components/Card'
 
@@ -117,9 +118,7 @@ export default function ClubDetailPage() {
               {/* About */}
               <div className="flex flex-col gap-3">
                 <Kicker className="text-[10px] font-black text-blue-600 uppercase tracking-widest">About</Kicker>
-                <p className="text-sm text-slate-600 leading-relaxed break-keep whitespace-pre-line">
-                  {club.desc}
-                </p>
+                <p className="text-sm text-slate-600 leading-relaxed break-keep text-pretty"><ResponsiveText text={club.desc} /></p>
                 {club.keywords && club.keywords.length > 0 && (
                   <div className="flex flex-wrap gap-1.5 pt-1">
                     {club.keywords.map(k => (
