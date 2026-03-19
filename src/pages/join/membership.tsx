@@ -35,7 +35,7 @@ export default function JoinMembershipPage() {
   return (
     <div className="flex flex-col">
       {/* Hero */}
-      <section className="bg-white pt-24 pb-14 lg:pt-28 lg:pb-20 border-b border-slate-100">
+      <section className="bg-white pt-20 sm:pt-24 pb-12 sm:pb-14 lg:pt-28 lg:pb-20 border-b border-slate-100">
         <Container maxWidth="3xl">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -47,17 +47,16 @@ export default function JoinMembershipPage() {
               함께 만들어가는 동문 네트워크
             </h1>
             <p className="text-xl md:text-2xl font-black text-blue-600 mb-4">SSAFYnity Membership</p>
-            <p className="text-sm text-slate-500 leading-relaxed break-keep max-w-xl">
-              SSAFYnity는 SSAFY 수료생들이 직접 운영하는 비영리 동문 커뮤니티입니다.<br />
-              가입을 완료하면 행사 신청, 커뮤니티 참여 등 다양한 활동을 함께할 수 있습니다.
+            <p className="text-sm text-slate-500 leading-relaxed break-keep text-pretty max-w-xl">
+              SSAFYnity는 SSAFY 수료생들이 직접 운영하는 비영리 동문 커뮤니티입니다. 가입을 완료하면 행사 신청, 커뮤니티 참여 등 다양한 활동을 함께할 수 있습니다.
             </p>
           </motion.div>
         </Container>
       </section>
 
       {/* Content */}
-      <section className="bg-slate-50 py-14 lg:py-20">
-        <Container maxWidth="3xl" className="flex flex-col gap-12">
+      <section className="bg-slate-50 py-12 sm:py-14 lg:py-20">
+        <Container maxWidth="3xl" className="flex flex-col gap-10 sm:gap-12">
           {/* Eligibility */}
           <motion.div
             initial={{ opacity: 0, y: 16 }}
@@ -130,8 +129,7 @@ export default function JoinMembershipPage() {
                 <div>
                   <p className="text-sm font-extrabold text-slate-800 mb-1">처리 기간</p>
                   <p className="text-sm text-slate-600 leading-relaxed break-keep">
-                    가입 처리는 <strong className="text-slate-800">늦어도 1주일 이내</strong>로 완료됩니다.<br />
-                    행사 신청에 영향을 줄 수 있으니, 참여를 계획하고 있다면 <strong className="text-slate-800">미리 가입</strong>을 권장합니다.
+                    가입 처리는 <strong className="text-slate-800">늦어도 1주일 이내</strong>로 완료됩니다. 행사 신청에 영향을 줄 수 있으니, 참여를 계획하고 있다면 <strong className="text-slate-800">미리 가입</strong>을 권장합니다.
                   </p>
                 </div>
               </div>
@@ -187,7 +185,7 @@ export default function JoinMembershipPage() {
         </Container>
       </section>
       {/* CTA */}
-      <section className="bg-blue-950 py-16">
+      <section className="bg-blue-950 py-14 sm:py-16">
         <Container maxWidth="3xl" className="flex flex-col items-center text-center gap-6">
           <h2 className="text-xl md:text-2xl font-extrabold text-white leading-snug">
             지금 바로 SSAFYnity에 합류해보세요.
