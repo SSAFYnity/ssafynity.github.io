@@ -56,7 +56,7 @@ export default function JoinPremiumPage() {
     <div className="flex flex-col">
 
       {/* Hero */}
-      <section className="bg-white pt-24 pb-14 lg:pt-28 lg:pb-20 border-b border-slate-100">
+      <section className="bg-white pt-20 sm:pt-24 pb-12 sm:pb-14 lg:pt-28 lg:pb-20 border-b border-slate-100">
         <Container maxWidth="3xl">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -76,8 +76,8 @@ export default function JoinPremiumPage() {
       </section>
 
       {/* Content */}
-      <section className="bg-slate-50 py-14 lg:py-20">
-        <Container maxWidth="3xl" className="flex flex-col gap-16">
+      <section className="bg-slate-50 py-12 sm:py-14 lg:py-20">
+        <Container maxWidth="3xl" className="flex flex-col gap-12 sm:gap-16">
 
           {/* ① 정회원이 있는 이유 */}
           <motion.div {...fadeUp(0)}>
@@ -93,9 +93,7 @@ export default function JoinPremiumPage() {
                   </div>
                   <div className="flex flex-col gap-2 sm:gap-0">
                     <p className="text-sm font-extrabold text-slate-900 leading-snug">
-                      <span className="text-slate-400 font-semibold">{title[0]}</span>
-                      <br />
-                      {title[1]}
+                      <span className="text-slate-400 font-semibold">{title[0]}</span><span className="block">{title[1]}</span>
                     </p>
                     <p className="text-xs text-slate-500 leading-relaxed break-keep sm:mt-2">{desc}</p>
                   </div>
@@ -165,7 +163,7 @@ export default function JoinPremiumPage() {
                   <div>
                     <p className="text-sm font-extrabold text-slate-900 mb-1">{title}</p>
                     <p className="text-xs text-slate-500 leading-snug break-keep">
-                      {desc[0]}<br />{desc[1]}
+                      <span className="block">{desc[0]}</span><span className="block">{desc[1]}</span>
                     </p>
                   </div>
                 </Card>
@@ -215,7 +213,7 @@ export default function JoinPremiumPage() {
       </section>
 
       {/* CTA */}
-      <section className="bg-blue-950 py-16">
+      <section className="bg-blue-950 py-14 sm:py-16">
         <Container maxWidth="3xl" className="flex flex-col items-center text-center gap-6">
           <h2 className="text-xl md:text-2xl font-extrabold text-white leading-snug">정회원으로 SSAFYnity를<br className="sm:hidden" /> 함께 만들어주세요.</h2>
           <a
