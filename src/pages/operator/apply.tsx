@@ -60,13 +60,12 @@ export default function TeamApplyPage() {
             transition={{ duration: 0.75, ease: [0.22, 1, 0.36, 1] }}
           >
             <HeroLabel>Operator Recruitment</HeroLabel>
-            <h1 className="text-3xl md:text-4xl font-extrabold tracking-tight leading-[1.2] text-slate-900 mb-5">
-              싸피니티를 함께<br />
+            <h1 className="text-3xl md:text-4xl font-extrabold tracking-tight leading-[1.2] text-slate-900 mb-5 text-balance">
+              싸피니티를 함께<br className="hidden sm:block" />
               <span className="text-blue-600">만들어갈 분을 찾습니다</span>
             </h1>
             <p className="text-sm text-slate-500 leading-relaxed break-keep max-w-lg">
-              싸피니티 운영진은 SSAFYnity 회원 중 자원하여 동문회를 이끌어가는 사람들입니다.<br />
-              보수 없이 재능과 시간을 나누는 자리이지만, 그만큼 값진 경험과 연결을 얻을 수 있습니다.
+              싸피니티 운영진은 SSAFYnity 회원 중 자원하여 동문회를 이끌어가는 사람들입니다. 보수 없이 재능과 시간을 나누는 자리이지만, 그만큼 값진 경험과 연결을 얻을 수 있습니다.
             </p>
           </motion.div>
                 </Container>
@@ -212,7 +211,7 @@ export default function TeamApplyPage() {
       <section className="bg-blue-950 py-20">
                 <Container maxWidth="3xl" className="flex flex-col items-center text-center gap-6">
           <h2 className="text-2xl md:text-3xl font-extrabold text-white leading-snug">
-            싸피니티 운영진에<br />합류할 분을 모집합니다.
+            싸피니티 운영진에<br className="hidden sm:block" />합류할 분을 모집합니다.
           </h2>
           <p className="text-sm text-blue-200 break-keep max-w-sm">
             여러분의 열정이 {computed.totalMembers.toLocaleString()}명 동문 커뮤니티를 더 풍성하게 만듭니다.
