@@ -1,7 +1,8 @@
-﻿import { motion } from 'framer-motion'
+import { motion } from 'framer-motion'
 import { Users, Globe, CalendarX, RefreshCw, Lock, Check, Minus } from 'lucide-react'
 import { EVENT_KIND } from '@/data/constants'
 import { HeroSection } from '@/components/HeroSection'
+import { ResponsiveText } from '@/components/ResponsiveText'
 import { HeroLabel } from '@/components/HeroLabel'
 
 const REGULAR_EVENTS = [
@@ -72,23 +73,22 @@ export default function EventsIntroducePage() {
 
       {/* Hero */}
 <HeroSection
-  sectionClassName="bg-white pt-24 pb-16 lg:pt-28 lg:pb-20 border-b border-slate-100"
-  containerClassName="container mx-auto px-6 lg:px-12 max-w-3xl"
+  sectionClassName="bg-white pt-20 sm:pt-24 pb-16 lg:pt-28 lg:pb-20 border-b border-slate-100"
+  containerClassName="container mx-auto px-4 sm:px-6 lg:px-12 max-w-3xl"
 >
 <HeroLabel>Events</HeroLabel>
-            <h1 className="text-3xl md:text-4xl font-extrabold tracking-tight leading-[1.2] text-slate-900 mb-5">
-              동문과 함께하는<br />
+            <h1 className="text-3xl md:text-4xl font-extrabold tracking-tight leading-[1.2] text-slate-900 mb-5 text-balance">
+              동문과 함께하는<br className="hidden sm:block" />
               <span className="text-blue-600">싸피니티의 행사</span>
             </h1>
-            <p className="text-sm text-slate-500 leading-relaxed break-keep max-w-lg">
-              싸피니티는 동문 간의 교류와 성장을 위해 정기적으로 행사를 운영합니다.<br />
-              행사의 종류와 참여 자격을 미리 확인해보세요.
+            <p className="text-sm text-slate-500 leading-relaxed break-keep text-pretty max-w-lg md:max-w-xl">
+              싸피니티는 동문 간의 교류와 성장을 위해 정기적으로 행사를 운영합니다. 행사의 종류와 참여 자격을 미리 확인해보세요.
             </p>
 </HeroSection>
 
       {/* 정기 행사 */}
       <section className="bg-slate-50 py-16 lg:py-20">
-        <div className="container mx-auto px-6 lg:px-12 max-w-3xl flex flex-col gap-8">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-12 max-w-3xl flex flex-col gap-8">
           <motion.div
             initial={{ opacity: 0, y: 16 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -97,9 +97,7 @@ export default function EventsIntroducePage() {
           >
             <p className="text-[10px] font-black text-blue-600 uppercase tracking-widest mb-2">Regular Events</p>
             <h2 className="text-lg font-extrabold text-slate-900 mb-2">정기 행사</h2>
-            <p className="text-sm text-slate-500 leading-relaxed break-keep whitespace-pre-line">
-              {EVENT_KIND.regular.desc}
-            </p>
+            <p className="text-sm text-slate-500 leading-relaxed break-keep text-pretty"><ResponsiveText text={EVENT_KIND.regular.desc} /></p>
           </motion.div>
 
           <div className="grid sm:grid-cols-2 gap-4">
@@ -135,7 +133,7 @@ export default function EventsIntroducePage() {
 
       {/* 상시 행사 */}
       <section className="bg-white py-16 lg:py-20 border-t border-slate-100">
-        <div className="container mx-auto px-6 lg:px-12 max-w-3xl flex flex-col gap-8">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-12 max-w-3xl flex flex-col gap-8">
           <motion.div
             initial={{ opacity: 0, y: 16 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -144,9 +142,7 @@ export default function EventsIntroducePage() {
           >
             <p className="text-[10px] font-black text-blue-600 uppercase tracking-widest mb-2">Ongoing Events</p>
             <h2 className="text-lg font-extrabold text-slate-900 mb-2">상시 행사</h2>
-            <p className="text-sm text-slate-500 leading-relaxed break-keep whitespace-pre-line">
-              {EVENT_KIND.ongoing.desc}
-            </p>
+            <p className="text-sm text-slate-500 leading-relaxed break-keep text-pretty"><ResponsiveText text={EVENT_KIND.ongoing.desc} /></p>
           </motion.div>
 
           <div className="flex flex-col gap-3">
@@ -172,7 +168,7 @@ export default function EventsIntroducePage() {
 
       {/* 참여 자격 */}
       <section className="bg-slate-50 py-16 lg:py-20 border-t border-slate-100">
-        <div className="container mx-auto px-6 lg:px-12 max-w-3xl">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-12 max-w-3xl">
           <motion.div
             initial={{ opacity: 0, y: 16 }}
             whileInView={{ opacity: 1, y: 0 }}
