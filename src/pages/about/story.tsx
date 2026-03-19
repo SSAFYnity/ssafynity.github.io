@@ -1,6 +1,7 @@
 import { motion } from 'framer-motion'
 import { siteData } from '@/data/siteData'
 import { Container } from '@/components/Container'
+import { ResponsiveText } from '@/components/ResponsiveText'
 
 import { HeroLabel } from '@/components/HeroLabel'
 import { BlueSectionBadge } from '@/components/BlueSectionBadge'
@@ -117,7 +118,7 @@ export default function AboutStoryPage() {
                           </span>
                         )}
                         <h3 className="text-base font-extrabold text-slate-900 mt-0.5 mb-1">{m.label}</h3>
-                        <p className="text-sm text-slate-500 leading-relaxed whitespace-pre-line">{m.desc}</p>
+                        <p className="text-sm text-slate-500 leading-relaxed break-keep text-pretty"><ResponsiveText text={m.desc} /></p>
                       </div>
                     </div>
                   ))}
