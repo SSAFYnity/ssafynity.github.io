@@ -1,4 +1,4 @@
-﻿import type { ReactNode } from 'react'
+import type { ReactNode } from 'react'
 
 type ContainerMaxWidth = '3xl' | '5xl' | '7xl'
 
@@ -15,8 +15,9 @@ const MAX_WIDTH_CLASS: Record<ContainerMaxWidth, string> = {
 }
 
 export function Container({ maxWidth, className, children }: ContainerProps) {
-  const base = `container mx-auto px-6 lg:px-12 ${MAX_WIDTH_CLASS[maxWidth]}`
+  const base = `container mx-auto px-4 sm:px-6 lg:px-12 ${MAX_WIDTH_CLASS[maxWidth]}`
   const merged = className ? `${base} ${className}` : base
 
   return <div className={merged}>{children}</div>
 }
+
