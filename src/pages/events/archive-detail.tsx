@@ -5,6 +5,7 @@ import { ChevronLeft, MapPin, CalendarDays, Users, Globe, Monitor, ExternalLink,
 import { allEvents } from '@/data/computed'
 import { EVENT_KIND, EVENT_KIND_LABEL, EVENT_AUDIENCE, EVENT_AUDIENCE_LABEL, EVENT_FORMAT, EVENT_FORMAT_LABEL, FORMAT_ORDER } from '@/data/constants'
 import { formatEventDate, formatRecruitDate, FORMAT_ICON, getEventStatus } from '@/lib/utils'
+import { ResponsiveText } from '@/components/ResponsiveText'
 
 export default function EventsArchiveDetailPage() {
   const { slug } = useParams<{ slug: string }>()
@@ -222,7 +223,7 @@ export default function EventsArchiveDetailPage() {
                         이번 행사는 <span className="text-blue-600">{EVENT_KIND_LABEL[event.kind]}</span> 행사예요.
                       </p>
                       <ul className="pl-4 list-disc marker:text-slate-300">
-                        <li className="text-sm text-slate-500 leading-relaxed break-keep whitespace-pre-line">{EVENT_KIND[event.kind].desc}</li>
+                        <li className="text-sm text-slate-500 leading-relaxed break-keep text-pretty"><ResponsiveText text={EVENT_KIND[event.kind].desc} /></li>
                       </ul>
                     </div>
                   )}
@@ -233,7 +234,7 @@ export default function EventsArchiveDetailPage() {
                         참여 대상은 <span className="text-blue-600">{EVENT_AUDIENCE_LABEL[event.audience]}</span>이에요.
                       </p>
                       <ul className="pl-4 list-disc marker:text-slate-300">
-                        <li className="text-sm text-slate-500 leading-relaxed break-keep whitespace-pre-line">{EVENT_AUDIENCE[event.audience].desc}</li>
+                        <li className="text-sm text-slate-500 leading-relaxed break-keep text-pretty"><ResponsiveText text={EVENT_AUDIENCE[event.audience].desc} /></li>
                       </ul>
                     </div>
                   )}
@@ -248,7 +249,7 @@ export default function EventsArchiveDetailPage() {
                         </p>
                         <ul className="flex flex-col gap-0.5 pl-4 list-disc marker:text-slate-300">
                           {sorted.map(f => (
-                            <li key={f} className="text-sm text-slate-500 leading-relaxed break-keep whitespace-pre-line">{EVENT_FORMAT[f].desc}</li>
+                            <li key={f} className="text-sm text-slate-500 leading-relaxed break-keep text-pretty"><ResponsiveText text={EVENT_FORMAT[f].desc} /></li>
                           ))}
                         </ul>
                       </div>
@@ -357,18 +358,26 @@ export default function EventsArchiveDetailPage() {
 
           if (checklist?.length) cards.push({ icon: ClipboardCheck, title: '필수 확인 사항', content: (
             <ul className="pl-4 list-disc marker:text-slate-300 flex flex-col gap-1">
-              {checklist.map((c, i) => <li key={i} className="text-sm text-slate-500 leading-relaxed break-keep whitespace-pre-line">{c}</li>)}
+              {checklist.map((c, i) => (
+                <li key={i} className="text-sm text-slate-500 leading-relaxed break-keep text-pretty">
+                  <ResponsiveText text={c} />
+                </li>
+              ))}
             </ul>
           )})
 
           if (items?.length) cards.push({ icon: Package, title: '준비물', content: (
             <ul className="pl-4 list-disc marker:text-slate-300 flex flex-col gap-1">
-              {items.map((item, i) => <li key={i} className="text-sm text-slate-500 leading-relaxed break-keep whitespace-pre-line">{item}</li>)}
+              {items.map((item, i) => (
+                <li key={i} className="text-sm text-slate-500 leading-relaxed break-keep text-pretty">
+                  <ResponsiveText text={item} />
+                </li>
+              ))}
             </ul>
           )})
 
           custom?.forEach(c => cards.push({ icon: Info, title: c.title,
-            content: <p className="text-sm text-slate-500 leading-relaxed break-keep whitespace-pre-line">{c.body}</p>,
+            content: <p className="text-sm text-slate-500 leading-relaxed break-keep text-pretty"><ResponsiveText text={c.body} /></p>,
           }))
 
           if (fee) feeCards.push({ icon: CircleDollarSign, title: '참여비', content: (
@@ -383,13 +392,21 @@ export default function EventsArchiveDetailPage() {
                     </li>
                   ))}
               </ul>
-              {fee.note && <p className="text-xs text-slate-400 whitespace-pre-line pt-1 border-t border-slate-100 text-right">{fee.note}</p>}
+              {fee.note && (
+                <p className="text-xs text-slate-400 pt-1 border-t border-slate-100 text-right">
+                  <ResponsiveText text={fee.note} />
+                </p>
+              )}
             </div>
           )})
 
           if (refund?.length) feeCards.push({ icon: RotateCcw, title: '환불 기준', content: (
             <ul className="pl-4 list-disc marker:text-slate-300 flex flex-col gap-1">
-              {refund.map((r, i) => <li key={i} className="text-sm text-slate-500 leading-relaxed break-keep whitespace-pre-line">{r}</li>)}
+              {refund.map((r, i) => (
+                <li key={i} className="text-sm text-slate-500 leading-relaxed break-keep text-pretty">
+                  <ResponsiveText text={r} />
+                </li>
+              ))}
             </ul>
           )})
         }
