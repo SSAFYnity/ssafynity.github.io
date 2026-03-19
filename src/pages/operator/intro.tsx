@@ -2,6 +2,7 @@ import { motion } from 'framer-motion'
 import { Heart, Zap, Users, Clock, Layers, Wifi, Scale } from 'lucide-react'
 import { currentOperator } from '@/data/computed'
 import { Container } from '@/components/Container'
+import { ResponsiveText } from '@/components/ResponsiveText'
 
 import { HeroLabel } from '@/components/HeroLabel'
 const PRINCIPLES = [
@@ -69,9 +70,10 @@ export default function TeamIntroPage() {
               className="flex-1"
             >
               <HeroLabel>Operator Introduction</HeroLabel>
-              <h1 className="text-3xl md:text-4xl font-extrabold tracking-tight leading-[1.2] text-slate-900 mb-5">
-                자율로 완성하는<br />
-                <span className="text-blue-600">성장의 선순환</span>
+              <h1 className="text-3xl md:text-4xl font-extrabold tracking-tight leading-[1.2] text-slate-900 mb-5 text-balance">
+                자율로 완성하는
+                <span className="hidden sm:inline"> </span>
+                <span className="block sm:inline text-blue-600 whitespace-nowrap">성장의 선순환</span>
               </h1>
               <p className="text-sm text-slate-500 leading-relaxed break-keep max-w-lg">
                 소중한 IT 네트워크를 함께 만들어가고자 하는 동문들이
@@ -146,7 +148,7 @@ export default function TeamIntroPage() {
                   </div>
                   <div>
                     <p className="text-sm font-extrabold text-slate-900 mb-1">{item.label}</p>
-                    <p className="text-sm text-slate-500 leading-relaxed break-keep whitespace-pre-line">{item.desc}</p>
+                    <p className="text-sm text-slate-500 leading-relaxed break-keep text-pretty"><ResponsiveText text={item.desc} /></p>
                   </div>
                 </div>
               ))}
