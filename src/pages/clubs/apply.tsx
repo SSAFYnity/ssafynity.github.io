@@ -63,9 +63,8 @@ export default function ClubsApplyPage() {
               동아리를 만들고 싶다면
             </h1>
             <p className="text-xl md:text-2xl font-black text-blue-600 mb-4">Club Application</p>
-            <p className="text-sm text-slate-500 leading-relaxed break-keep max-w-xl">
-              SSAFYnity에 동아리를 등록하면 공식 지원을 받으며 동문들과 함께 활동할 수 있습니다.<br />
-              신청 전 아래 카테고리와 유의사항을 먼저 확인해주세요.
+            <p className="text-sm text-slate-500 leading-relaxed break-keep text-pretty max-w-xl">
+              SSAFYnity에 동아리를 등록하면 공식 지원을 받으며 동문들과 함께 활동할 수 있습니다. 신청 전 아래 카테고리와 유의사항을 먼저 확인해주세요.
             </p>
           </motion.div>
         </Container>
