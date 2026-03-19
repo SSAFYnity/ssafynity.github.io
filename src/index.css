@@ -37,6 +37,13 @@
     font-family: 'Pretendard', sans-serif;
     @apply bg-surface text-text;
   }
+  :is(h1, h2, h3, h4, h5, h6) {
+    text-wrap: balance;
+  }
+
+  :is(p, li) {
+    text-wrap: pretty;
+  }
 
   .dark {
     --background: 0 0% 3.9%;
