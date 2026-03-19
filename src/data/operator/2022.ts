@@ -19,7 +19,7 @@ export const operator2022 = {
         { role: '재학생 회장',   name: '권경민', cohort: 7, campus: '서울', url: 'https://rudalsd.tistory.com', council: true },
         { role: '재학생 부회장', name: '이00', council: true },
         { role: '기획국장',   name: '당현아', cohort: 5, campus: '서울', url: 'https://github.com/hadevyi' },
-        { role: '기획부국장', name: '박00' },
+        { role: '기획부국장', name: '박동준', cohort: 6, campus: '부울경' },
         { role: '홍보국장',   name: '심00' },
         { role: '홍보부국장', name: '안00' },
         { role: '운영국장',   name: '김00' },
@@ -31,7 +31,7 @@ export const operator2022 = {
       desc: '동문회 행사의 기획·준비·예산 전반을 담당합니다.',
       members: [
         { role: '국장',  name: '당현아', cohort: 5, campus: '서울', url: 'https://github.com/hadevyi' },
-        { role: '부국장', name: '박00' },
+        { role: '부국장', name: '박동준', cohort: 6, campus: '부울경' },
         { role: '국원',  name: '강00' },
         { role: '국원',  name: '공00' },
         { role: '국원',  name: '김병완', cohort: 6, campus: '광주', url: 'https://www.linkedin.com/in/lactea94' },
