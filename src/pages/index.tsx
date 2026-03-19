@@ -60,14 +60,14 @@ const FEATURES = [
 
 function PartnerCard({ p }: { p: typeof allPartners[number] }) {
   return (
-    <div className="flex flex-col items-center gap-3 w-40 shrink-0">
-      <div className="w-full h-20 bg-white border border-slate-200 rounded-xl flex items-center justify-center shadow-sm">
+    <div className="flex flex-col items-center gap-2.5 w-36 sm:w-40 shrink-0">
+      <div className="w-full h-16 sm:h-20 bg-white border border-slate-200 rounded-xl flex items-center justify-center shadow-sm">
         {p.logo
-          ? <img src={p.logo} alt={p.name} className="max-h-10 max-w-[120px] object-contain" />
+          ? <img src={p.logo} alt={p.name} className="max-h-8 sm:max-h-10 max-w-[110px] sm:max-w-[120px] object-contain" />
           : <span className="text-xs text-slate-400 font-bold">LOGO</span>
         }
       </div>
-      <span className="text-[11px] text-slate-500 font-bold text-center leading-tight">{p.name}</span>
+      <span className="text-[11px] text-slate-500 font-bold text-center leading-tight break-keep">{p.name}</span>
     </div>
   )
 }
@@ -88,7 +88,7 @@ export default function HomePage() {
       {/* Hero */}
       <section className="relative overflow-hidden min-h-[80vh] flex items-center" style={{ backgroundColor: '#edf1f8' }}>
 
-                <Container maxWidth="7xl" className="relative z-10 py-28 lg:py-36">
+                <Container maxWidth="7xl" className="relative z-10 py-20 sm:py-28 lg:py-36">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
 
             {/* 왼쪽: 텍스트 */}
@@ -107,19 +107,18 @@ export default function HomePage() {
               {/* 타이틀 */}
               <motion.h1
                 variants={itemVariants}
-                className="text-5xl md:text-6xl lg:text-[4.5rem] font-extrabold tracking-tight leading-[1.06] mb-8"
+                className="text-4xl sm:text-5xl md:text-6xl lg:text-[4.5rem] font-extrabold tracking-tight leading-[1.06] mb-8 text-balance"
               >
-                <span className="text-slate-900">우리의 이야기가</span><br />
+                <span className="text-slate-900">우리의 이야기가</span><br className="hidden sm:block" />
                 <span className="text-blue-600">계속되는 공간</span>
               </motion.h1>
 
               {/* 서브카피 */}
               <motion.p
                 variants={itemVariants}
-                className="text-base text-slate-600 leading-relaxed max-w-md mb-10"
+                className="text-base text-slate-600 leading-relaxed break-keep text-pretty max-w-md mb-10"
               >
-                {siteData.brand.slogan}.<br />
-                서로의 성장을 돕는 가장{' '}
+                {siteData.brand.slogan}. 서로의 성장을 돕는 가장{' '}
                 <strong className="text-slate-800 font-semibold">안정적이고 전문적인</strong> 커뮤니티입니다.
               </motion.p>
 
@@ -214,7 +213,7 @@ export default function HomePage() {
       </section>
 
       {/* Stats */}
-      <section className="bg-white py-20 lg:py-28 border-t border-slate-100">
+      <section className="bg-white py-16 sm:py-20 lg:py-28 border-t border-slate-100">
                 <Container maxWidth="7xl">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -232,7 +231,7 @@ export default function HomePage() {
                   {stat.label}
                 </span>
                 <div className="flex items-baseline gap-1.5">
-                  <span className="text-5xl font-black text-slate-900">{stat.value}</span>
+                  <span className="text-4xl sm:text-5xl font-black text-slate-900">{stat.value}</span>
                   <span className="text-xl font-bold text-slate-400">{stat.suffix}</span>
                 </div>
               </div>
@@ -242,7 +241,7 @@ export default function HomePage() {
       </section>
 
       {/* Ecosystem */}
-      <section className="bg-white py-20 lg:py-28 border-t border-slate-100">
+      <section className="bg-white py-16 sm:py-20 lg:py-28 border-t border-slate-100">
                 <Container maxWidth="7xl">
 
           {/* 섹션 헤더 */}
@@ -254,9 +253,10 @@ export default function HomePage() {
             className="mb-16"
           >
             <BlueSectionBadge className="mb-6">Our Ecosystem</BlueSectionBadge>
-            <h2 className="text-3xl md:text-4xl lg:text-5xl font-extrabold text-slate-900 tracking-tight leading-tight">
-              동료들과 함께 만드는<br />
-              <span className="text-blue-600">성장 생태계</span>
+            <h2 className="text-3xl md:text-4xl lg:text-5xl font-extrabold text-slate-900 tracking-tight leading-tight text-balance">
+              동료들과 함께 만드는
+              <span className="hidden sm:inline"> </span>
+              <span className="block sm:inline text-blue-600 whitespace-nowrap">성장 생태계</span>
             </h2>
           </motion.div>
 
@@ -294,7 +294,7 @@ export default function HomePage() {
       </section>
 
       {/* Partners */}
-      <section className="bg-slate-50 py-20 lg:py-28 border-t border-slate-100">
+      <section className="bg-slate-50 py-16 sm:py-20 lg:py-28 border-t border-slate-100">
 
         {/* 섹션 헤더 — 중앙 정렬 */}
         <motion.div
@@ -305,9 +305,10 @@ export default function HomePage() {
           className="text-center mb-12 px-6"
         >
           <BlueSectionBadge className="mb-5">후원 · 협력사</BlueSectionBadge>
-          <h2 className="text-3xl md:text-4xl font-extrabold text-slate-900 tracking-tight leading-tight">
-            우리의 비전에 공감하는<br />
-            <span className="text-blue-600">후원·협력사</span>
+          <h2 className="text-3xl md:text-4xl font-extrabold text-slate-900 tracking-tight leading-tight text-balance">
+            우리의 비전에 공감하는
+            <span className="hidden sm:inline"> </span>
+            <span className="block sm:inline text-blue-600 whitespace-nowrap">후원·협력사</span>
           </h2>
         </motion.div>
 
@@ -335,7 +336,7 @@ export default function HomePage() {
               </motion.div>
             </>
           ) : (
-            <div className="flex flex-wrap justify-center gap-6 py-4">
+            <div className="flex gap-4 py-4 overflow-x-auto sm:overflow-visible sm:flex-wrap sm:justify-center [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
               {allPartners.map((p, i) => (
                 <PartnerCard key={i} p={p} />
               ))}
@@ -358,3 +359,4 @@ export default function HomePage() {
     </div>
   )
 }
+
