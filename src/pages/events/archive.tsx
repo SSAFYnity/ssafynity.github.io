@@ -1,4 +1,4 @@
-﻿import { useState, useMemo } from 'react'
+import { useState, useMemo } from 'react'
 import { motion } from 'framer-motion'
 import { Link } from 'react-router-dom'
 import { MapPin, CalendarDays, ChevronRight, ChevronLeft, X } from 'lucide-react'
@@ -187,8 +187,8 @@ export default function EventsArchivePage() {
     <div className="flex flex-col">
 
       {/* Hero */}
-      <section className="bg-white pt-24 pb-10 lg:pt-28 lg:pb-14 border-b border-slate-100">
-        <div className="container mx-auto px-6 lg:px-12 max-w-5xl">
+      <section className="bg-white pt-20 sm:pt-24 pb-10 lg:pt-28 lg:pb-14 border-b border-slate-100">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-12 max-w-5xl">
           <motion.div {...HERO_FADE_UP} className="flex items-end justify-between gap-8">
             <div>
               <HeroLabel>Event Archive</HeroLabel>
@@ -219,45 +219,45 @@ export default function EventsArchivePage() {
 
       {/* 목록 */}
       <section className="bg-slate-50 pt-6 pb-14 lg:pt-8 lg:pb-20">
-        <div className="container mx-auto px-6 lg:px-12 max-w-5xl">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-12 max-w-5xl">
 
           {/* 필터 */}
-          <div className="bg-white border border-slate-200 rounded-2xl px-4 py-3 flex flex-col mb-5">
+          <div className="sticky sm:static top-[calc(4.5rem+env(safe-area-inset-top))] z-40 bg-white border border-slate-200 rounded-2xl px-4 py-3 flex flex-col mb-5 shadow-sm sm:shadow-none">
 
-            {/* 컨트롤 행 */}
-            <div className="flex flex-wrap items-center gap-2">
+            {/* 컨트롤 */}
+            <div className="flex flex-col gap-2">
+              <div className="flex items-center gap-2 overflow-x-auto pb-1 -mx-1 px-1 sm:overflow-visible sm:flex-wrap sm:pb-0 sm:mx-0 sm:px-0">
+                <MultiSelectDropdown
+                  label="연도 및 기수"
+                  options={ALL_YEARS.map(y => ({ key: String(y), label: `${y}년 ${y - 2021}대` }))}
+                  selected={years}
+                  onChange={(v) => { setYears(v); setPage(0) }}
+                />
 
-              {/* 멀티 셀렉트 */}
-              <MultiSelectDropdown
-                label="연도 및 기수"
-                options={ALL_YEARS.map(y => ({ key: String(y), label: `${y}년 ${y - 2021}대` }))}
-                selected={years}
-                onChange={(v) => { setYears(v); setPage(0) }}
-              />
+                <MultiSelectDropdown label="종류"   options={KIND_OPTIONS}     selected={kinds}     onChange={(v) => { setKinds(v); setPage(0) }}     />
+                <MultiSelectDropdown label="대상"   options={AUDIENCE_OPTIONS} selected={audiences} onChange={(v) => { setAudiences(v); setPage(0) }} />
+                <MultiSelectDropdown label="방식"   options={FORMAT_OPTIONS}   selected={formats}   onChange={(v) => { setFormats(v); setPage(0) }}   />
+              </div>
 
-              <MultiSelectDropdown label="종류"   options={KIND_OPTIONS}     selected={kinds}     onChange={(v) => { setKinds(v); setPage(0) }}     />
-              <MultiSelectDropdown label="대상"   options={AUDIENCE_OPTIONS} selected={audiences} onChange={(v) => { setAudiences(v); setPage(0) }} />
-              <MultiSelectDropdown label="방식"   options={FORMAT_OPTIONS}   selected={formats}   onChange={(v) => { setFormats(v); setPage(0) }}   />
+              <div className="flex flex-wrap items-center gap-2">
+                <div className="w-full sm:flex-1">
+                  <SearchBar
+                    value={inputValue}
+                    onChange={setInputValue}
+                    onSubmit={applySearch}
+                    placeholder="행사 검색"
+                  />
+                </div>
 
-              <div className="hidden sm:block w-px h-5 bg-slate-200 mx-1" />
-
-              {/* 검색 */}
-              <SearchBar
-                value={inputValue}
-                onChange={setInputValue}
-                onSubmit={applySearch}
-                placeholder="행사 검색"
-              />
-
-              {/* 초기화 */}
-              {(years.length > 0 || kinds.length > 0 || audiences.length > 0 || formats.length > 0 || query) && (
-                <button
-                  onClick={resetAll}
-                  className="text-[10px] font-black text-slate-400 hover:text-blue-500 transition-colors shrink-0"
-                >
-                  초기화
-                </button>
-              )}
+                {(years.length > 0 || kinds.length > 0 || audiences.length > 0 || formats.length > 0 || query) && (
+                  <button
+                    onClick={resetAll}
+                    className="text-[10px] font-black text-slate-400 hover:text-blue-500 transition-colors shrink-0"
+                  >
+                    초기화
+                  </button>
+                )}
+              </div>
             </div>
 
             {/* 활성 필터 뱃지 행 */}
@@ -326,7 +326,7 @@ export default function EventsArchivePage() {
                   <button
                     onClick={() => { setPage(p => p - 1); window.scrollTo({ top: 0, behavior: 'smooth' }) }}
                     disabled={page === 0}
-                    className="w-8 h-8 flex items-center justify-center rounded-full border border-slate-200
+                    className="w-10 h-10 sm:w-8 sm:h-8 flex items-center justify-center rounded-full border border-slate-200
                                text-slate-400 hover:border-blue-300 hover:text-blue-500 transition-colors
                                disabled:opacity-30 disabled:cursor-not-allowed disabled:hover:border-slate-200 disabled:hover:text-slate-400"
                   >
@@ -337,7 +337,7 @@ export default function EventsArchivePage() {
                     <button
                       key={i}
                       onClick={() => { setPage(i); window.scrollTo({ top: 0, behavior: 'smooth' }) }}
-                      className={`w-8 h-8 flex items-center justify-center rounded-full text-xs font-black transition-colors
+                      className={`w-10 h-10 sm:w-8 sm:h-8 flex items-center justify-center rounded-full text-xs font-black transition-colors
                         ${page === i
                           ? 'bg-blue-600 text-white'
                           : 'border border-slate-200 text-slate-500 hover:border-blue-300 hover:text-blue-500'
@@ -350,7 +350,7 @@ export default function EventsArchivePage() {
                   <button
                     onClick={() => { setPage(p => p + 1); window.scrollTo({ top: 0, behavior: 'smooth' }) }}
                     disabled={page === totalPages - 1}
-                    className="w-8 h-8 flex items-center justify-center rounded-full border border-slate-200
+                    className="w-10 h-10 sm:w-8 sm:h-8 flex items-center justify-center rounded-full border border-slate-200
                                text-slate-400 hover:border-blue-300 hover:text-blue-500 transition-colors
                                disabled:opacity-30 disabled:cursor-not-allowed disabled:hover:border-slate-200 disabled:hover:text-slate-400"
                   >
@@ -377,3 +377,4 @@ export default function EventsArchivePage() {
     </div>
   )
 }
+
