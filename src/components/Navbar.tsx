@@ -1,7 +1,7 @@
-﻿import { useState, useEffect } from 'react'
+import { useState, useEffect } from 'react'
 import { Link, useLocation } from 'react-router-dom'
 import { Menu, ChevronDown, ExternalLink } from 'lucide-react'
-import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet'
+import { Sheet, SheetContent, SheetDescription, SheetTitle, SheetTrigger } from '@/components/ui/sheet'
 import { siteData } from '@/data/siteData'
 import { Container } from '@/components/Container'
 
@@ -24,10 +24,10 @@ export default function Navbar() {
 
   return (
     <nav
-      className={`fixed top-0 left-0 w-full z-50 transition-all duration-500 ${
+      className={`fixed top-0 left-0 w-full z-50 pt-[env(safe-area-inset-top)] transition-all duration-500 ${
         isScrolled
-          ? 'bg-white/95 backdrop-blur-md border-b border-slate-100 py-4 shadow-sm'
-          : 'bg-transparent py-8'
+          ? 'bg-white/95 backdrop-blur-md border-b border-slate-100 py-3 lg:py-4 shadow-sm'
+          : 'bg-transparent py-4 lg:py-8'
       }`}
     >
       <Container maxWidth="7xl">
@@ -186,23 +186,25 @@ export default function Navbar() {
                   type="button"
                   aria-label="메뉴 열기"
                   aria-expanded={mobileOpen}
-                  className="lg:hidden p-2 text-slate-900 bg-slate-50 rounded-lg"
+                  className="lg:hidden p-2.5 min-h-11 min-w-11 text-slate-900 bg-slate-50 rounded-lg"
                 >
                   <Menu size={20} />
                 </button>
               </SheetTrigger>
-              <SheetContent side="right" className="w-full sm:w-80 p-0 overflow-y-auto">
-                <div className="p-8 flex flex-col gap-8 pt-14">
+              <SheetContent side="right" className="w-full sm:w-80 p-0 overflow-y-auto pb-[env(safe-area-inset-bottom)]">
+                <SheetTitle className="sr-only">메뉴</SheetTitle>
+                <SheetDescription className="sr-only">사이트 내비게이션</SheetDescription>
+                <div className="p-6 sm:p-8 flex flex-col gap-6 sm:gap-8 pt-[calc(3.5rem+env(safe-area-inset-top))]">
                   {siteData.menu.map((category) => (
                     <div key={category.label} className="space-y-3">
                       <p className="text-base font-bold text-slate-900">{category.label}</p>
                       <div className="flex flex-col gap-1 pl-4 border-l-2 border-blue-900/10">
                         {category.items.map((item) => {
                           const isExternal = 'external' in item && item.external
-                          const baseClass = `flex items-center gap-1.5 text-sm font-bold py-1 transition-colors ${
+                          const baseClass = `flex items-center gap-1.5 text-sm font-bold py-2.5 px-2 min-h-11 rounded-lg transition-colors ${
                             !isExternal && location.pathname === item.path
-                              ? 'text-blue-900'
-                              : 'text-slate-500 hover:text-blue-900'
+                              ? 'text-blue-900 bg-blue-50'
+                              : 'text-slate-500 hover:text-blue-900 hover:bg-slate-50'
                           }`
 
                           if (isExternal) {
@@ -246,3 +248,6 @@ export default function Navbar() {
     </nav>
   )
 }
+
+
+
