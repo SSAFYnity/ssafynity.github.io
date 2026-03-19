@@ -1,32 +1,83 @@
 import { Link } from 'react-router-dom'
 import { ExternalLink } from 'lucide-react'
-import { SiKakaotalk, SiInstagram, SiLinkedin, SiGithub, SiGmail, SiDiscord } from 'react-icons/si'
-import { siteData } from '@/data/siteData'
+import { SiDiscord, SiGmail, SiGithub, SiInstagram, SiKakaotalk, SiLinkedin } from 'react-icons/si'
+
 import { Container } from '@/components/Container'
+import { siteData } from '@/data/siteData'
 
 const iconMap: Record<string, React.ReactNode> = {
-  kakao:     <SiKakaotalk size={20} />,
-  instagram: <SiInstagram size={20} />,
-  linkedin:  <SiLinkedin size={20} />,
-  github:    <SiGithub size={20} />,
-  gmail:     <SiGmail size={20} />,
-  discord:   <SiDiscord size={20} />,
+  kakao: <SiKakaotalk size="1em" />,
+  instagram: <SiInstagram size="1em" />,
+  linkedin: <SiLinkedin size="1em" />,
+  github: <SiGithub size="1em" />,
+  gmail: <SiGmail size="1em" />,
+  discord: <SiDiscord size="1em" />,
 }
 
-export default function Footer() {
+function FooterMobile() {
   return (
-    <footer className="bg-white border-t border-slate-100 pt-24 pb-16">
+    <footer className="sm:hidden bg-white border-t border-slate-100 py-8">
+      <Container maxWidth="7xl">
+        <div className="flex items-center justify-between gap-4">
+          <Link to="/" className="inline-flex items-center">
+            <img src="/logo.svg" alt="SSAFYnity" className="h-8 w-auto" />
+          </Link>
+
+          <div className="flex gap-1.5 flex-nowrap justify-end overflow-x-auto [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+            {siteData.sns.map((channel) => (
+              <a
+                key={channel.name}
+                href={channel.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label={channel.name}
+                className="shrink-0 w-8 h-8 rounded-lg bg-slate-50 border border-slate-100 flex items-center justify-center text-slate-400 text-[15px] hover:text-white hover:bg-blue-900 transition-all duration-300"
+              >
+                {iconMap[channel.icon]}
+              </a>
+            ))}
+          </div>
+        </div>
+
+        <div className="mt-6 pt-6 border-t border-slate-100 flex flex-col items-center gap-3">
+          <div className="flex items-center gap-6">
+            <Link
+              to="/privacy"
+              className="text-[10px] font-black text-slate-400 hover:text-blue-900 transition-colors uppercase tracking-widest"
+            >
+              {'\uAC1C\uC778\uC815\uBCF4\uCC98\uB9AC\uBC29\uCE68'}
+            </Link>
+            <Link
+              to="/terms"
+              className="text-[10px] font-black text-slate-400 hover:text-blue-900 transition-colors uppercase tracking-widest"
+            >
+              {'\uC774\uC6A9\uC57D\uAD00'}
+            </Link>
+          </div>
+
+          <p className="text-[10px] font-black text-slate-300 uppercase tracking-widest text-center">
+            {`\u00A9 ${new Date().getFullYear()} SSAFYnity`}
+          </p>
+        </div>
+      </Container>
+    </footer>
+  )
+}
+
+function FooterDesktop() {
+  return (
+    <footer className="hidden sm:block bg-white border-t border-slate-100 pt-24 pb-16">
       <Container maxWidth="7xl">
         <div className="grid lg:grid-cols-12 gap-16 mb-24">
-
-          {/* 브랜드 */}
           <div className="lg:col-span-5">
             <Link to="/" className="inline-block mb-10">
               <img src="/logo.svg" alt="SSAFYnity" className="h-12 w-auto" />
             </Link>
-            <p className="text-base text-slate-400 font-bold leading-relaxed max-w-sm mb-12">
+
+            <p className="text-base text-slate-400 font-bold leading-relaxed max-w-sm mb-12 break-keep text-pretty">
               {siteData.brand.slogan}
             </p>
+
             <div className="flex gap-4 flex-wrap">
               {siteData.sns.map((channel) => (
                 <div key={channel.name} className="relative group/sns">
@@ -35,7 +86,7 @@ export default function Footer() {
                     target="_blank"
                     rel="noopener noreferrer"
                     aria-label={channel.name}
-                    className="w-12 h-12 rounded-xl bg-slate-50 border border-slate-100 flex items-center justify-center text-slate-400 hover:text-white hover:bg-blue-900 transition-all duration-300 shadow-sm"
+                    className="w-12 h-12 rounded-xl bg-slate-50 border border-slate-100 flex items-center justify-center text-slate-400 text-[20px] hover:text-white hover:bg-blue-900 transition-all duration-300 shadow-sm"
                   >
                     {iconMap[channel.icon]}
                   </a>
@@ -47,8 +98,7 @@ export default function Footer() {
             </div>
           </div>
 
-          {/* 네비게이션 링크 */}
-          <div className="lg:col-span-7 grid grid-cols-2 md:grid-cols-3 gap-12">
+          <div className="lg:col-span-7 grid grid-cols-3 gap-12">
             {siteData.menu.map((category) => (
               <div key={category.label}>
                 <h5 className="text-[10px] font-black text-blue-900/30 uppercase tracking-[0.3em] mb-6">
@@ -57,22 +107,34 @@ export default function Footer() {
                 <ul className="space-y-4">
                   {category.items.map((item) => {
                     const isExternal = 'external' in item && item.external
-                    const baseClass = 'text-[14px] font-bold text-slate-400 hover:text-blue-900 transition-colors flex items-center gap-2 group'
-                    const dot = <span className="w-1 h-1 bg-blue-900 rounded-full scale-0 group-hover:scale-100 transition-transform" />
+                    const baseClass =
+                      'text-[14px] font-bold text-slate-400 hover:text-blue-900 transition-colors flex items-center gap-2 group leading-snug break-keep'
+                    const dot = (
+                      <span className="w-1 h-1 bg-blue-900 rounded-full scale-0 group-hover:scale-100 transition-transform" />
+                    )
+
                     if (isExternal) {
                       return (
                         <li key={item.label}>
-                          <a href={item.path} target="_blank" rel="noopener noreferrer" className={baseClass}>
-                            {dot}{item.label}
+                          <a
+                            href={item.path}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className={baseClass}
+                          >
+                            {dot}
+                            {item.label}
                             <ExternalLink size={10} className="opacity-40" />
                           </a>
                         </li>
                       )
                     }
+
                     return (
                       <li key={item.label}>
                         <Link to={item.path} className={baseClass}>
-                          {dot}{item.label}
+                          {dot}
+                          {item.label}
                         </Link>
                       </li>
                     )
@@ -81,24 +143,37 @@ export default function Footer() {
               </div>
             ))}
           </div>
-
         </div>
 
-        {/* 하단 바 */}
-        <div className="pt-12 border-t border-slate-100 flex flex-col md:flex-row justify-between items-center gap-6">
+        <div className="pt-12 border-t border-slate-100 flex flex-row justify-between items-center">
           <p className="text-[10px] font-black text-slate-300 uppercase tracking-widest">
-            © {new Date().getFullYear()} SSAFYnity · 비영리 동문 커뮤니티
+            {`\u00A9 ${new Date().getFullYear()} SSAFYnity. All rights reserved.`}
           </p>
           <div className="flex items-center gap-8">
-            <Link to="/privacy" className="text-[10px] font-black text-slate-400 hover:text-blue-900 transition-colors uppercase tracking-widest">
-              개인정보처리방침
+            <Link
+              to="/privacy"
+              className="text-[10px] font-black text-slate-400 hover:text-blue-900 transition-colors uppercase tracking-widest"
+            >
+              {'\uAC1C\uC778\uC815\uBCF4\uCC98\uB9AC\uBC29\uCE68'}
             </Link>
-            <Link to="/terms" className="text-[10px] font-black text-slate-400 hover:text-blue-900 transition-colors uppercase tracking-widest">
-              이용약관
+            <Link
+              to="/terms"
+              className="text-[10px] font-black text-slate-400 hover:text-blue-900 transition-colors uppercase tracking-widest"
+            >
+              {'\uC774\uC6A9\uC57D\uAD00'}
             </Link>
           </div>
         </div>
       </Container>
     </footer>
+  )
+}
+
+export default function Footer() {
+  return (
+    <>
+      <FooterMobile />
+      <FooterDesktop />
+    </>
   )
 }
