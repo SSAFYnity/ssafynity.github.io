@@ -56,7 +56,7 @@ export default function TeamOrganizationPage() {
           >
             <HeroLabel>Operator Organization</HeroLabel>
             <h1 className="text-3xl md:text-4xl font-extrabold tracking-tight leading-[1.2] text-slate-900 mb-5">
-              함께 만드는<br />
+              함께 만드는<br className="hidden sm:block" />
               <span className="text-blue-600">조직 구조</span>
             </h1>
             <p className="text-sm text-slate-500 leading-relaxed break-keep max-w-lg">
