@@ -4,7 +4,6 @@
 // - 1개: 선택 항목 label
 // - 2개+: "label N개"
 // 사용처: clubs/index.tsx, events/archive.tsx
-
 import { ChevronDown, Check } from 'lucide-react'
 import { useDropdown } from '@/hooks/useDropdown'
 
@@ -36,7 +35,7 @@ export function MultiSelectDropdown<T extends string>({
     <div ref={ref} className="relative">
       <button
         onClick={() => setOpen(o => !o)}
-        className={`flex items-center gap-1.5 pl-3.5 pr-2.5 py-1.5 rounded-full text-xs font-black border transition-colors ${
+        className={`flex items-center gap-1.5 pl-3.5 pr-2.5 py-2 sm:py-1.5 rounded-full text-sm sm:text-xs font-black border transition-colors ${
           active
             ? 'bg-blue-600 text-white border-blue-600'
             : 'bg-white border-slate-200 text-slate-600 hover:border-blue-300 hover:text-blue-600'
@@ -47,12 +46,12 @@ export function MultiSelectDropdown<T extends string>({
       </button>
 
       {open && (
-        <div className="absolute top-full left-0 mt-1.5 bg-white border border-slate-200 rounded-xl shadow-lg z-20 w-max py-1">
+        <div className="absolute top-full left-0 mt-1.5 bg-white border border-slate-200 rounded-xl shadow-lg z-20 w-[min(20rem,calc(100vw-2rem))] sm:w-max py-1">
           {options.map(o => (
             <button
               key={o.key}
               onClick={() => toggle(o.key)}
-              className="flex items-center gap-2.5 w-full px-3.5 py-2 text-xs font-medium text-slate-600 hover:bg-slate-50 transition-colors whitespace-nowrap"
+              className="flex items-center gap-2.5 w-full px-3.5 py-2 text-xs font-medium text-slate-600 hover:bg-slate-50 transition-colors whitespace-normal sm:whitespace-nowrap"
             >
               <span className={`w-3.5 h-3.5 rounded flex items-center justify-center border transition-colors shrink-0 ${
                 selected.includes(o.key) ? 'bg-blue-600 border-blue-600' : 'border-slate-300'
