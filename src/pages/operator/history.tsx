@@ -47,7 +47,7 @@ export default function TeamHistoryPage() {
           >
             <HeroLabel>Operator History</HeroLabel>
             <h1 className="text-3xl md:text-4xl font-extrabold tracking-tight leading-[1.2] text-slate-900 mb-5">
-              싸피니티를 지켜온<br />
+              싸피니티를 지켜온<br className="hidden sm:block" />
               <span className="text-blue-600">소중한 발자취</span>
             </h1>
             <p className="text-sm text-slate-500 leading-relaxed break-keep max-w-lg">
@@ -114,7 +114,13 @@ export default function TeamHistoryPage() {
                     <p className="text-xs text-slate-400 leading-relaxed">익명은 공개 거절 또는 미확인 인원</p>
                   </div>
                   <div className="absolute top-full left-0 mt-2 w-60 bg-slate-800 text-white text-xs rounded-xl p-3 leading-relaxed opacity-0 group-hover/anon:opacity-100 transition-opacity z-50 pointer-events-none shadow-lg">
-                    <p>공개를 하고 싶은 경우,<br />(필수) 본인 기수/캠퍼스/성명,<br />(선택) 대표 URL 1개<br /> 위 내용을 ssafynity 메일로 보내주세요.</p>
+                    <div className="flex flex-col gap-1">
+  <p>공개를 하고 싶은 경우, 아래 내용을 ssafynity 메일로 보내주세요.</p>
+  <ul className="list-disc pl-4">
+    <li><span className="font-semibold">(필수)</span> 본인 기수/캠퍼스/성명</li>
+    <li><span className="font-semibold">(선택)</span> 대표 URL 1개</li>
+  </ul>
+</div>
                     <ul className="mt-2 text-slate-300 flex flex-col gap-0.5">
                       <li>· 공개 후엔 비공개처리할 수 없습니다.</li>
                       <li>· URL은 변경할 수 있습니다.</li>
