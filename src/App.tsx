@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom'
+import { BrowserRouter, Routes, Route, Navigate, useLocation } from 'react-router-dom'
 import { useEffect } from 'react'
 import { ROUTES } from '@/lib/routes'
 import Navbar from '@/components/Navbar'
@@ -30,7 +30,6 @@ import JoinMembershipPage from '@/pages/join/membership'
 import JoinPremiumPage from '@/pages/join/premium'
 import JoinPartnershipPage from '@/pages/join/partnership'
 
-import CommunityPage from '@/pages/community'
 import CommunityFaqPage from '@/pages/community/faq'
 import CommunitySnsPage from '@/pages/community/sns'
 
@@ -84,7 +83,7 @@ export default function App() {
             <Route path={ROUTES.joinBenefitsLegacy} element={<JoinPremiumPage />} />
             <Route path={ROUTES.joinPartnership} element={<JoinPartnershipPage />} />
 
-            <Route path={ROUTES.community} element={<CommunityPage />} />
+            <Route path={ROUTES.community} element={<Navigate to={ROUTES.communitySns} replace />} />
             <Route path={ROUTES.communityFaq} element={<CommunityFaqPage />} />
             <Route path={ROUTES.communitySns} element={<CommunitySnsPage />} />
 
