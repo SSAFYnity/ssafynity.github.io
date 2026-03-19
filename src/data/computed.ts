@@ -112,7 +112,7 @@ export type Club = {
   target?:      string | string[]               // 모집 대상 (예: 'SSAFY 수료생 누구나')
   schedule?:    string | string[]               // 정기 일정 (예: '매주 토요일 오전 10시')
   region?:      string                           // 활동 지역 (예: '서울·경기', '전국 (온라인)')
-  joinProcess?: string[]                         // 가입 절차 단계 (예: ['오픈카톡 참여', '자기소개', '승인'])
+  joinProcess?: string[]                         // 가입 절차 단계 (예: ['오픈채팅 참여', '자기소개', '승인'])
   notes?:         string[]                        // 유의사항 (예: ['3회 미참석 시 탈퇴', '비용 개인 부담'])
   achievements?:  string[]                        // 주요 성과 (예: ['서비스 3개 배포', '누적 참여자 30명+'])
   links?:         { label: string; url: string }[]  // 추가 링크 (예: [{ label: 'GitHub', url: '...' }])
