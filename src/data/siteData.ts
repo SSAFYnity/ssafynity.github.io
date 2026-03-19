@@ -64,12 +64,14 @@ export const siteData = {
 
 // ─── SNS 채널 ──────────────────────────────────────────────────
   sns: [
-    { name: 'Gmail',     url: 'mailto:ssafynity@gmail.com',                            desc: '공식 이메일',     color: '#EA4335', icon: 'gmail'     },
-    { name: 'GitHub',    url: 'https://github.com/SSAFYnity',                          desc: '오픈소스 기여',   color: '#181717', icon: 'github'    },
-    { name: 'KakaoTalk', url: 'http://pf.kakao.com/_GdeRX',                            desc: '공식 오픈카톡',    color: '#FEE500', icon: 'kakao'     },
+    { name: 'Gmail',     url: 'mailto:ssafynity@gmail.com',                            desc: '공지·행사 확정·일반 문의',     color: '#EA4335', icon: 'gmail'     },
+    { name: 'Gmail(대외협력)', url: 'mailto:ssafynity.ext@gmail.com',                  desc: '대외협력(제휴·후원 문의)', color: '#EA4335', icon: 'gmail'     },
+    { name: 'KakaoTalk', url: 'https://pf.kakao.com/_GdeRX',                           desc: '공식 계정',       color: '#FEE500', icon: 'kakao'     },
+    { name: 'KakaoTalk(오픈채팅)', url: '',                                         desc: '정회원 전용 오픈채팅', color: '#FEE500', icon: 'kakao'     },
+    { name: 'Discord',   url: 'https://discord.gg/BzSF9xMfX6',                         desc: '실시간 소통',     color: '#5865F2', icon: 'discord'   },
     { name: 'Instagram', url: 'https://www.instagram.com/ssafynity/',                  desc: '활동 사진 공유',   color: '#E1306C', icon: 'instagram' },
     { name: 'LinkedIn',  url: 'https://www.linkedin.com/company/ssafynity',            desc: '커리어 네트워킹', color: '#0077B5', icon: 'linkedin'  },
-    { name: 'Discord',   url: '[업데이트 필요]',                                        desc: '실시간 소통',     color: '#5865F2', icon: 'discord'   },
+    { name: 'GitHub',    url: 'https://github.com/SSAFYnity',                          desc: '오픈소스 기여',   color: '#181717', icon: 'github'    },
   ],
 
   // ─── Google Forms 링크 ─────────────────────────────────────────
@@ -104,8 +106,8 @@ export const siteData = {
       { label: '예비 동아리', path: ROUTES.clubsPre },
     ]},
     { label: '커뮤니티', items: [
-      { label: '공지사항', path: 'https://ssafynity.github.io/blog/공지', external: true },
-      { label: '블로그',   path: 'https://ssafynity.github.io/blog', external: true },
+      // { label: '공지사항', path: 'https://ssafynity.github.io/blog/공지', external: true }, // [업데이트 필요] 블로그 오픈 후 노출
+      // { label: '블로그',   path: 'https://ssafynity.github.io/blog', external: true },       // [업데이트 필요] 블로그 오픈 후 노출
       { label: 'SNS',      path: ROUTES.communitySns },
       { label: 'FAQ',      path: ROUTES.communityFaq },
     ]},
