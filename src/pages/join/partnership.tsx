@@ -158,9 +158,8 @@ export default function JoinPartnershipPage() {
               SSAFYnity와 함께해요
             </h1>
             <p className="text-xl md:text-2xl font-black text-blue-600 mb-4">SSAFYnity Partnership</p>
-            <p className="text-sm text-slate-500 leading-relaxed break-keep max-w-xl">
-              SSAFYnity와 함께할 파트너를 기다립니다.<br />
-              후원·제휴 관련 문의를 남겨주시면 운영진이 확인 후 회신드립니다.
+            <p className="text-sm text-slate-500 leading-relaxed break-keep text-pretty max-w-xl">
+              SSAFYnity와 함께할 파트너를 기다립니다. 후원·제휴 관련 문의를 남겨주시면 운영진이 확인 후 회신드립니다.
             </p>
           </motion.div>
         </Container>
