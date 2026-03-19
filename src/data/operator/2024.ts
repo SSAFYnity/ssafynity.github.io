@@ -43,7 +43,7 @@ export const operator2024 = {
       members: [
         { role: '팀장', name: '당현아', cohort: 5, campus: '서울', url: 'https://github.com/hadevyi' },
         { role: '팀원', name: '권경민', cohort: 7, campus: '서울', url: 'https://rudalsd.tistory.com' },
-        { role: '팀원', name: '박00' },
+        { role: '팀원', name: '박동준', cohort: 6, campus: '부울경' },
         { role: '팀원', name: '최소희', cohort: 6, campus: '부울경', url: 'https://www.linkedin.com/in/huisso' },
       ],
     },
@@ -75,7 +75,7 @@ export const operator2024 = {
         { role: '팀원', name: '고준수', cohort: 8, campus: '광주', url: 'https://www.instagram.com/kojunsu1004' },
         { role: '팀원', name: '김00', concurrent: true },
         { role: '팀원', name: '당현아', cohort: 5, campus: '서울', url: 'https://github.com/hadevyi', concurrent: true },
-        { role: '팀원', name: '박00', concurrent: true },
+        { role: '팀원', name: '박동준', cohort: 6, campus: '부울경', concurrent: true },
       ],
     },
     {
@@ -85,7 +85,7 @@ export const operator2024 = {
         { role: '팀원', name: '김병완', cohort: 6, campus: '광주', url: 'https://www.linkedin.com/in/lactea94', concurrent: true },
         { role: '팀원', name: '김00', concurrent: true },
         { role: '팀원', name: '당현아', cohort: 5, campus: '서울', url: 'https://github.com/hadevyi', concurrent: true },
-        { role: '팀원', name: '박00', concurrent: true },
+        { role: '팀원', name: '박동준', cohort: 6, campus: '부울경', concurrent: true },
         { role: '팀원', name: '채00', concurrent: true },
       ],
     },
