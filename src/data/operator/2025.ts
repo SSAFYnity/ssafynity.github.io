@@ -19,7 +19,7 @@ export const operator2025 = {
         { role: '기획팀장',    name: '김병완', cohort: 6, campus: '광주', url: 'https://www.linkedin.com/in/lactea94' },
         { role: '재무팀장',    name: '이준호', cohort: 8, campus: '대전', url: 'https://github.com/LJH5' },
         { role: '홍보팀장',    name: '고준수', cohort: 8, campus: '광주', url: 'https://www.instagram.com/kojunsu1004' },
-        { role: '대외협력팀장', name: '박00' },
+        { role: '대외협력팀장', name: '박진우', cohort: 11, campus: '광주', url: 'https://github.com/jjinwo0' },
       ],
     },
     {
@@ -28,8 +28,7 @@ export const operator2025 = {
       members: [
         { role: '팀장', name: '김병완', cohort: 6, campus: '광주', url: 'https://www.linkedin.com/in/lactea94' },
         { role: '팀원', name: '김00' },
-        { role: '팀원', name: '김00' },
-        { role: '팀원', name: '박00' },
+        { role: '팀원', name: '박동준', cohort: 6, campus: '부울경' },
       ],
     },
     {
@@ -40,7 +39,7 @@ export const operator2025 = {
         { role: '팀원', name: '권경민', cohort: 7, campus: '서울', url: 'https://rudalsd.tistory.com' },
         { role: '팀원', name: '손승운', cohort: 7, campus: '구미', url: 'https://www.linkedin.com/in/승운-손-2384652ba' },
         { role: '팀원', name: '안00' },
-        { role: '팀원', name: '이00' },
+        { role: '팀원', name: '이도훈', cohort: 10, campus: '광주' },
       ],
     },
     {
@@ -55,7 +54,7 @@ export const operator2025 = {
       name: '대외협력팀',
       desc: '외부 기관·기업과의 협력 및 파트너십 구축을 담당합니다.',
       members: [
-        { role: '팀장', name: '박00' },
+        { role: '팀장', name: '박진우', cohort: 11, campus: '광주', url: 'https://github.com/jjinwo0' },
         { role: '팀원', name: '박00' },
         { role: '팀원', name: '윤일준', cohort: 7, campus: '대전' },
       ],
