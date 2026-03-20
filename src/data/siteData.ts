@@ -66,12 +66,12 @@ export const siteData = {
   sns: [
     { name: 'Gmail',     url: 'mailto:ssafynity@gmail.com',                            desc: '공지·행사 확정·일반 문의',     color: '#EA4335', icon: 'gmail'     },
     { name: 'Gmail(대외협력)', url: 'mailto:ssafynity.ext@gmail.com',                  desc: '대외협력(제휴·후원 문의)', color: '#EA4335', icon: 'gmail'     },
-    { name: 'KakaoTalk', url: 'https://pf.kakao.com/_GdeRX',                           desc: '공식 계정',       color: '#FEE500', icon: 'kakao'     },
-    { name: 'KakaoTalk(오픈채팅)', url: '',                                         desc: '정회원 전용 오픈채팅', color: '#FEE500', icon: 'kakao'     },
-    { name: 'Discord',   url: 'https://discord.gg/BzSF9xMfX6',                         desc: '실시간 소통',     color: '#5865F2', icon: 'discord'   },
-    { name: 'Instagram', url: 'https://www.instagram.com/ssafynity/',                  desc: '활동 사진 공유',   color: '#E1306C', icon: 'instagram' },
-    { name: 'LinkedIn',  url: 'https://www.linkedin.com/company/ssafynity',            desc: '커리어 네트워킹', color: '#0077B5', icon: 'linkedin'  },
-    { name: 'GitHub',    url: 'https://github.com/SSAFYnity',                          desc: '오픈소스 기여',   color: '#181717', icon: 'github'    },
+    { name: '카카오톡 채널', url: 'https://pf.kakao.com/_GdeRX',                           desc: '공식 계정',       color: '#FEE500', icon: 'kakao'     },
+    { name: '카카오톡 오픈카톡', url: '',                                         desc: '정회원 전용', color: '#FEE500', icon: 'kakao'     },
+    { name: '디스코드',   url: 'https://discord.gg/BzSF9xMfX6',                         desc: '실시간 소통',     color: '#5865F2', icon: 'discord'   },
+    { name: '인스타그램', url: 'https://www.instagram.com/ssafynity/',                  desc: '활동 사진 공유',   color: '#E1306C', icon: 'instagram' },
+    { name: '링크드인',  url: 'https://www.linkedin.com/company/ssafynity',            desc: '커리어 네트워킹', color: '#0077B5', icon: 'linkedin'  },
+    { name: '깃허브',    url: 'https://github.com/SSAFYnity',                          desc: '오픈소스 기여',   color: '#181717', icon: 'github'    },
   ],
 
   // ─── Google Forms 링크 ─────────────────────────────────────────
@@ -191,3 +191,4 @@ export const siteData = {
   // 상세 데이터는 src/data/faqs.ts 참조
 
 } as const
+
