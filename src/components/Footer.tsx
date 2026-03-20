@@ -14,6 +14,15 @@ const iconMap: Record<string, React.ReactNode> = {
   discord: <SiDiscord size="1em" />,
 }
 
+function isUsableSnsUrl(url: string): boolean {
+  return url.trim().length > 0 && !url.includes('[업데이트 필요]')
+}
+
+function getSnsDisabledHint(name: string): string {
+  if (name === '카카오톡 오픈카톡') return '정회원 확인 후 메일로 링크를 안내합니다.'
+  return '준비 중입니다.'
+}
+
 function FooterMobile() {
   return (
     <footer className="sm:hidden bg-white border-t border-slate-100 py-8">
@@ -24,18 +33,36 @@ function FooterMobile() {
           </Link>
 
           <div className="flex gap-1.5 flex-nowrap justify-end overflow-x-auto [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
-            {siteData.sns.map((channel) => (
-              <a
-                key={channel.name}
-                href={channel.url}
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label={channel.name}
-                className="shrink-0 w-8 h-8 rounded-lg bg-slate-50 border border-slate-100 flex items-center justify-center text-slate-400 text-[15px] hover:text-white hover:bg-blue-900 transition-all duration-300"
-              >
-                {iconMap[channel.icon]}
-              </a>
-            ))}
+            {siteData.sns.map((channel) => {
+              const usable = isUsableSnsUrl(channel.url)
+
+              if (!usable) {
+                return (
+                  <div
+                    key={channel.name}
+                    aria-label={channel.name}
+                    aria-disabled="true"
+                    title={getSnsDisabledHint(channel.name)}
+                    className="shrink-0 w-8 h-8 rounded-lg bg-slate-50 border border-slate-100 flex items-center justify-center text-slate-300 text-[15px] cursor-not-allowed opacity-70"
+                  >
+                    {iconMap[channel.icon]}
+                  </div>
+                )
+              }
+
+              return (
+                <a
+                  key={channel.name}
+                  href={channel.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label={channel.name}
+                  className="shrink-0 w-8 h-8 rounded-lg bg-slate-50 border border-slate-100 flex items-center justify-center text-slate-400 text-[15px] hover:text-white hover:bg-blue-900 transition-all duration-300"
+                >
+                  {iconMap[channel.icon]}
+                </a>
+              )
+            })}
           </div>
         </div>
 
@@ -79,22 +106,37 @@ function FooterDesktop() {
             </p>
 
             <div className="flex gap-4 flex-wrap">
-              {siteData.sns.map((channel) => (
-                <div key={channel.name} className="relative group/sns">
-                  <a
-                    href={channel.url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    aria-label={channel.name}
-                    className="w-12 h-12 rounded-xl bg-slate-50 border border-slate-100 flex items-center justify-center text-slate-400 text-[20px] hover:text-white hover:bg-blue-900 transition-all duration-300 shadow-sm"
-                  >
-                    {iconMap[channel.icon]}
-                  </a>
-                  <span className="absolute -top-9 left-1/2 -translate-x-1/2 text-[10px] font-bold bg-slate-900 text-white px-2 py-1 rounded whitespace-nowrap opacity-0 group-hover/sns:opacity-100 transition-opacity pointer-events-none">
-                    {channel.name}
-                  </span>
-                </div>
-              ))}
+              {siteData.sns.map((channel) => {
+                const usable = isUsableSnsUrl(channel.url)
+
+                return (
+                  <div key={channel.name} className="relative group/sns">
+                    {usable ? (
+                      <a
+                        href={channel.url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        aria-label={channel.name}
+                        className="w-12 h-12 rounded-xl bg-slate-50 border border-slate-100 flex items-center justify-center text-slate-400 text-[20px] hover:text-white hover:bg-blue-900 transition-all duration-300 shadow-sm"
+                      >
+                        {iconMap[channel.icon]}
+                      </a>
+                    ) : (
+                      <div
+                        aria-label={channel.name}
+                        aria-disabled="true"
+                        title={getSnsDisabledHint(channel.name)}
+                        className="w-12 h-12 rounded-xl bg-slate-50 border border-slate-100 flex items-center justify-center text-slate-300 text-[20px] cursor-not-allowed opacity-70 shadow-sm"
+                      >
+                        {iconMap[channel.icon]}
+                      </div>
+                    )}
+                    <span className="absolute -top-9 left-1/2 -translate-x-1/2 text-[10px] font-bold bg-slate-900 text-white px-2 py-1 rounded whitespace-nowrap opacity-0 group-hover/sns:opacity-100 transition-opacity pointer-events-none">
+                      {channel.name}
+                    </span>
+                  </div>
+                )
+              })}
             </div>
           </div>
 
