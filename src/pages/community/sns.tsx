@@ -22,61 +22,45 @@ const ICON_MAP = {
 
 type Channel = (typeof siteData.sns)[number] & { ready: boolean }
 
-type CommonTabKey = 'summary' | 'audience' | 'usage' | 'howto'
-
-const COMMON_TABS: ReadonlyArray<{ key: CommonTabKey; label: string }> = [
-  { key: 'summary',  label: '요약' },
-  { key: 'audience', label: '참여대상' },
-  { key: 'usage',    label: '주 사용처' },
-  { key: 'howto',    label: '참여 방법' },
-]
-
-type ChannelTab = {
-  key: CommonTabKey
-  label: string
-  bullets: readonly string[]
+type ChannelDetails = {
+  summary: readonly string[]
+  audience: readonly string[]
+  howto: readonly string[]
 }
-
-type ChannelDetails = Partial<Record<CommonTabKey, readonly string[]>>
 
 const DETAILS_BY_NAME: Record<string, ChannelDetails> = {
-  KakaoTalk: {
-    summary:  ['공식 공지/행사 알림을 가장 빠르게 받는 채널입니다.', '놓치면 안 되는 소식 수신용으로 권장합니다.'],
-    audience: ['모든 동문(구독 중심)에게 권장합니다.', '실시간 대화/모임 참여는 Discord가 더 적합합니다.'],
-    usage:    ['행사 오픈/모집/일정 변경 등 공지를 확인합니다.', '간단한 질문/안내 확인에 적합합니다.'],
-    howto:    ['채널 추가 후 알림을 켜 주세요.', '첨부/긴 문의는 메일을 권장합니다.'],
+  '카카오톡 채널': {
+    summary:  ['행사·가입 안내 등 공지를 가장 빠르게 확인하는 채널입니다.', '간단한 문의/확인에 적합합니다.'],
+    audience: ['동문회에 관심이 있는 누구든', '예비 동문회원 및 외부 참여자 모두'],
+    howto:    ['채널 추가 후 알림을 켜 주세요.', '중요한 문의나 긴 내용은 메일로 보내 주세요.'],
   },
-  'KakaoTalk(오픈채팅)': {
-    summary:  ['정회원 전용 카카오톡 오픈채팅입니다.', '정회원 간 네트워킹/소통을 위한 전용 채널입니다.'],
-    audience: ['정회원 전용입니다.', '정회원이 아닌 경우 링크가 공개되지 않습니다.'],
-    usage:    ['정회원 전용 공지/소통 채널로 사용됩니다.', '정회원 커뮤니티 참여가 필요한 경우 이용합니다.'],
-    howto:    ['오픈채팅 링크는 공개되지 않습니다.', '정회원 등록 완료 시에만 별도로 안내됩니다.'],
+  '카카오톡 오픈카톡': {
+    summary:  ['정회원을 위한 실시간 소통 채널입니다.', '정회원 공지·소통·선공개 및 투표에 활용됩니다.'],
+    audience: ['동문회 운영진', '동문회 정회원'],
+    howto:    ['정회원 전환 후 안내 메일이 발송됩니다.', '필수 참여는 아니며, 유효기간 중에는 언제든 입장/퇴장할 수 있습니다.'],
   },
-  Discord: {
-    summary:  ['동문 커뮤니티의 실시간 소통 채널입니다.', '대화/질문/소모임 참여에 적합합니다.'],
-    audience: ['커뮤니티 대화·네트워킹을 원하는 동문에게 권장합니다.', '공지 수신만 목적이면 KakaoTalk만으로도 충분합니다.'],
-    usage:    ['주제별 채널에서 질문/대화를 나눕니다.', '실시간 공지/모임 안내를 확인합니다.'],
-    howto:    ['초대 링크로 입장 후 안내 채널을 먼저 확인해 주세요.', '닉네임/규칙 안내에 따라 참여해 주세요.'],
+  디스코드: {
+    summary:  ['관심사·주제별로 자유롭게 소통할 수 있는 커뮤니티 채널입니다.', '음성 채팅도 가능하며, 온라인 행사도 여기서 진행됩니다.'],
+    audience: ['소통하고 싶은 누구나', '동문회원 및 외부 참여자 모두'],
+    howto:    ['외부 참여자가 이용할 수 있는 채널은 일부로 제한됩니다.', '역할(권한)에 따라 접근 가능한 채널이 달라집니다.'],
   },
-  Instagram: {
-    summary:  ['활동 사진/후기/하이라이트 중심의 소식 채널입니다.', '분위기·현장 스냅을 가볍게 보기 좋아요.'],
-    audience: ['SSAFYnity 활동을 팔로우하고 싶은 분에게 권장합니다.', '문의/대화 목적이면 메일 또는 Discord가 더 적합합니다.'],
-    usage:    ['행사 스냅/후기 콘텐츠를 확인합니다.', '하이라이트/프로필 링크로 주요 정보를 확인합니다.'],
-    howto:    ['팔로우 후 최신 게시물/스토리 하이라이트를 확인해 주세요.', '공식 링크는 이 페이지에 안내된 링크만 사용해 주세요.'],
+  인스타그램: {
+    summary:  ['사진 중심으로 소식을 전하는 공식 SNS입니다.', '이벤트 안내와 공유에 적합합니다.'],
+    audience: ['인스타그램을 이용하는 동문회 관심자', '동문회원 및 외부 참여자 모두'],
+    howto:    ['공식 채널을 팔로우해 주세요.', '게시글 및 스토리로 올라오는 여러 소식을 확인해 주세요.'],
   },
-  LinkedIn: {
-    summary:  ['대외 소식/성과/협력 중심의 공식 채널입니다.', '커리어 네트워킹 관점에서 보기 좋습니다.'],
-    audience: ['커리어/대외 협력 소식에 관심 있는 분에게 권장합니다.', '캐주얼 소통은 Discord가 더 적합합니다.'],
-    usage:    ['대외 행사/성과/협력 소식을 확인합니다.', '공식 톤의 업데이트를 모아볼 수 있습니다.'],
-    howto:    ['회사 페이지를 팔로우해 업데이트를 받아보세요.', '필요 시 게시물의 링크로 추가 정보를 확인해 주세요.'],
+  링크드인: {
+    summary:  ['커리어 플랫폼 특성에 맞춰 동문회 성과를 중심으로 공유합니다.', '시니어 연사 모집 등 대외 모집 공지가 주로 올라옵니다.'],
+    audience: ['링크드인을 이용하는 동문회 관심자', '동문회원 및 외부 참여자 모두'],
+    howto:    ['공식 채널을 팔로우해 주세요.', '게시글로 올라오는 소식을 확인해 주세요.'],
   },
-  GitHub: {
-    summary:  ['공홈/프로젝트 등 오픈소스 기여를 위한 채널입니다.', '개선 제안은 Issue, 수정 기여는 PR로 진행합니다.'],
-    audience: ['개발/문서 개선에 기여할 동문에게 권장합니다.', '단순 소식 확인 목적이면 다른 채널이 더 편합니다.'],
-    usage:    ['버그/개선 제안을 Issue로 남깁니다.', '코드/문서 변경은 PR로 기여합니다.'],
-    howto:    ['관련 저장소에서 Issue 템플릿을 선택해 작성해 주세요.', '기여 전 가이드를 확인해 주세요.'],
+  깃허브: {
+    summary:  ['동문회 공식 홈페이지 및 블로그를 운영하는 공간입니다.', '일부 이벤트/스터디 운영에 한정해 사용합니다.'],
+    audience: ['(공식 사이트 및 블로그) 운영진만 가능', '(일부 이벤트/스터디 한정) 동문회원 JOIN 가능'],
+    howto:    ['운영 원칙에 따라 오픈소스 기여(이슈/PR)는 받지 않습니다.', '이벤트/스터디 대상자에 한해 Member로 직접 초대해 드립니다.'],
   },
 }
+
 function isReadyUrl(url: string): boolean {
   return url.trim().length > 0 && !url.includes('[업데이트 필요]')
 }
@@ -84,7 +68,6 @@ function isReadyUrl(url: string): boolean {
 function displayUrl(url: string): string {
   return url.startsWith('mailto:') ? url.replace('mailto:', '') : url
 }
-
 
 function mailAddress(url: string): string {
   const displayed = displayUrl(url)
@@ -108,49 +91,25 @@ function getAnchorProps(url: string): { target?: string; rel?: string } {
   return {}
 }
 
-function Tabs({
-  tabs,
-  value,
-  onValueChange,
-}: {
-  tabs: readonly ChannelTab[]
-  value: CommonTabKey
-  onValueChange: (next: CommonTabKey) => void
-}) {
-  const active = tabs.find(t => t.key === value) ?? tabs[0]
-
+function BulletList({ items, bulletColorClass }: { items: readonly string[]; bulletColorClass?: string }) {
   return (
-    <div className="flex flex-col gap-4">
-      <div className="inline-flex flex-wrap gap-1 rounded-2xl bg-slate-50 border border-slate-100 p-1">
-        {tabs.map(t => {
-          const isActive = t.key === value
-          return (
-            <button
-              key={t.key}
-              type="button"
-              onClick={() => onValueChange(t.key)}
-              className={
-                'px-3 py-2 rounded-xl text-xs font-black whitespace-nowrap transition-colors outline-none focus-visible:ring-2 focus-visible:ring-blue-400 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-50 ' +
-                (isActive
-                  ? 'bg-white text-slate-900 shadow-sm'
-                  : 'text-slate-600 hover:bg-white/70 hover:text-slate-900')
-              }
-            >
-              {t.label}
-            </button>
-          )
-        })}
-      </div>
-
-      <div className="flex flex-col gap-2">
-        {(active?.bullets ?? []).map(b => (
-          <div key={b} className="flex items-start gap-2 text-sm text-slate-600 leading-relaxed break-keep">
-            <span className="text-blue-600 font-black mt-0.5">·</span>
-            <span>{b}</span>
-          </div>
-        ))}
-      </div>
+    <div className="flex flex-col gap-2">
+      {items.map(item => (
+        <div key={item} className="flex items-start gap-2 text-sm text-slate-600 leading-relaxed break-keep">
+          <span className={(bulletColorClass ?? 'text-blue-600') + ' font-black mt-0.5'}>·</span>
+          <span>{item}</span>
+        </div>
+      ))}
     </div>
+  )
+}
+
+function InfoCard({ title, items }: { title: string; items: readonly string[] }) {
+  return (
+    <Card className="p-5">
+      <p className="text-xs font-black text-slate-900 mb-3">{title}</p>
+      <BulletList items={items} />
+    </Card>
   )
 }
 
@@ -168,48 +127,35 @@ export default function CommunitySnsPage() {
   const extEmail = allChannels.find(c => c.name === 'Gmail(대외협력)')
 
   const snsChannels = allChannels.filter(c => c.icon !== 'gmail')
+
   const [selectedName, setSelectedName] = useState<string>(() => {
-    const firstReady = snsChannels.find(c => c.ready)?.name
-    return firstReady ?? (snsChannels[0]?.name ?? 'KakaoTalk')
+    const firstReady = snsChannels.find(c => c.ready || c.name === '카카오톡 오픈카톡')?.name
+    return firstReady ?? (snsChannels[0]?.name ?? '')
   })
 
   const selected = snsChannels.find(c => c.name === selectedName) ?? snsChannels[0]
-  const SelectedIcon = selected ? ICON_MAP[selected.icon] : null
-  const selectedRestricted = selected?.name === 'KakaoTalk(오픈채팅)'
-  const details = useMemo<ChannelDetails>(() => {
-    return DETAILS_BY_NAME[selected?.name ?? ''] ?? {}
-  }, [selected?.name])
-  const tabs = useMemo<readonly ChannelTab[]>(() => {
-    return COMMON_TABS.map(t => ({
-      key: t.key,
-      label: t.label,
-      bullets: details[t.key] ?? ['내용 준비 중입니다.'],
-    }))
-  }, [details])
-
-  const defaultTabKey = tabs[0]?.key ?? 'summary'
-  const [activeTab, setActiveTab] = useState<CommonTabKey | null>(null)
-  const tabValue = activeTab && tabs.some(t => t.key === activeTab) ? activeTab : defaultTabKey
-  const [copied, setCopied] = useState(false)
-  const [copiedMail, setCopiedMail] = useState<'main' | 'ext' | null>(null)
-
-  const selectChannel = (name: string) => {
-    setSelectedName(name)
-    setCopied(false)
-    setCopiedMail(null)
+  const selectedDetails = DETAILS_BY_NAME[selected?.name ?? ''] ?? {
+    summary:  ['내용 준비 중입니다.'],
+    audience: ['내용 준비 중입니다.'],
+    howto:    ['내용 준비 중입니다.'],
   }
 
+  const [copiedLink, setCopiedLink] = useState(false)
+  const [copiedMail, setCopiedMail] = useState<'main' | 'ext' | null>(null)
 
   useEffect(() => {
-    if (!copied && copiedMail == null) return
+    if (!copiedLink && copiedMail == null) return
     const t = setTimeout(() => {
-      setCopied(false)
+      setCopiedLink(false)
       setCopiedMail(null)
     }, 1200)
     return () => clearTimeout(t)
-  }, [copied, copiedMail])
+  }, [copiedLink, copiedMail])
 
-
+  const selectChannel = (name: string) => {
+    setSelectedName(name)
+    setCopiedLink(false)
+  }
 
   return (
     <div className="flex flex-col">
@@ -234,6 +180,7 @@ export default function CommunitySnsPage() {
         <Container maxWidth="5xl" className="flex flex-col gap-10 sm:gap-12">
           {/* Mail */}
           <motion.div
+            id="mail-section"
             initial={{ opacity: 0, y: 16 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
@@ -241,13 +188,11 @@ export default function CommunitySnsPage() {
           >
             <Kicker className="text-blue-600 mb-4">Mail</Kicker>
             <p className="text-sm text-slate-500 leading-relaxed break-keep mb-5">
-              공식 메일과 대외협력(제휴·후원) 메일은 용도가 다릅니다. 아래에서 목적에 맞는 메일로 문의해 주세요.
+              공식 메일과 대외협력(제휴·후원) 메일은 용도가 다릅니다. 목적에 맞는 메일로 문의해 주세요.
             </p>
             <div className="grid sm:grid-cols-2 gap-4">
               {mainEmail?.ready && (
-                <Card
-                  className="p-6 flex flex-col gap-4 hover:border-blue-200 hover:shadow-sm transition-all"
-                >
+                <Card className="p-6 flex flex-col gap-4 hover:border-blue-200 hover:shadow-sm transition-all">
                   <div className="flex items-start gap-4">
                     <div className="w-10 h-10 rounded-xl bg-blue-50 flex items-center justify-center shrink-0">
                       <Mail className="w-5 h-5 text-blue-600" />
@@ -260,62 +205,58 @@ export default function CommunitySnsPage() {
                       <p className="text-xs text-slate-500 break-all">{mailAddress(mainEmail.url)}</p>
                     </div>
                   </div>
-                  <div className="flex flex-col gap-2">
-                    <div className="flex items-start gap-2 text-sm text-slate-600 leading-relaxed break-keep">
-                      <span className="text-blue-600 font-black mt-0.5">·</span>
-                      <span>공지 및 행사 확정 관련 메일을 발송/수신합니다.</span>
-                    </div>
-                    <div className="flex items-start gap-2 text-sm text-slate-600 leading-relaxed break-keep">
-                      <span className="text-blue-600 font-black mt-0.5">·</span>
-                      <span>문의가 애매하면 공식 메일로 보내주세요. 담당이 연결해드립니다.</span>
-                    </div>
-                  </div>
-                  <div className="mt-auto pt-4 border-t border-slate-100 flex flex-col items-end gap-2 text-right">
-                    <div className="flex flex-wrap items-center justify-end gap-2 w-full">
-                    <a
-                      href={mailtoWithTemplate(mainEmail.url, '[SSAFYnity 공식 문의]', [
-                        '문의 목적: ',
-                        '이름/기수: ',
-                        '연락처: ',
-                        '내용: ',
-                        '첨부/링크: ',
-                      ])}
-                      className="inline-flex items-center gap-2 text-xs font-black px-3.5 py-2 rounded-xl bg-blue-600 text-white hover:bg-blue-700 transition-colors"
-                    >
-                      메일 작성 <ExternalLink size={14} />
-                    </a>
-                    <button
-                      type="button"
-                      onClick={async () => {
-                        try {
-                          await navigator.clipboard.writeText(mailAddress(mainEmail.url))
-                          setCopiedMail('main')
-                        } catch {
-                          setCopiedMail(null)
+
+                  <BulletList
+                    items={[
+                      '공지 및 행사 확정 관련 메일을 발송/수신합니다.',
+                      '문의가 애매하면 공식 메일로 보내 주세요. 담당에게 연결해 드립니다.',
+                    ]}
+                  />
+
+                  <div className="mt-auto pt-4 border-t border-slate-100 flex flex-col gap-2">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                      <a
+                        href={mailtoWithTemplate(mainEmail.url, '[SSAFYnity 공식 문의]', [
+                          '문의 목적: ',
+                          '이름/기수: ',
+                          '연락처: ',
+                          '내용: ',
+                          '첨부/링크: ',
+                        ])}
+                        className="w-full inline-flex items-center justify-center gap-2 text-xs font-black px-3.5 py-2 rounded-xl bg-blue-600 text-white hover:bg-blue-700 transition-colors"
+                      >
+                        메일 작성 <ExternalLink size={14} />
+                      </a>
+                      <button
+                        type="button"
+                        onClick={async () => {
+                          try {
+                            await navigator.clipboard.writeText(mailAddress(mainEmail.url))
+                            setCopiedMail('main')
+                          } catch {
+                            setCopiedMail(null)
+                          }
+                        }}
+                        className={
+                          'w-full inline-flex items-center justify-center gap-2 text-xs font-black px-3 py-2 rounded-xl border transition-colors ' +
+                          (copiedMail === 'main'
+                            ? 'border-blue-200 bg-blue-50 text-blue-700'
+                            : 'border-slate-200 bg-white text-slate-700 hover:bg-slate-50')
                         }
-                      }}
-                      className={
-                        'inline-flex items-center gap-2 text-xs font-black px-3 py-2 rounded-xl border transition-colors ' +
-                        (copiedMail === 'main'
-                          ? 'border-emerald-200 bg-emerald-50 text-emerald-700'
-                          : 'border-slate-200 bg-white text-slate-700 hover:bg-slate-50')
-                      }
-                    >
-                      {copiedMail === 'main' ? <Check size={14} /> : <Copy size={14} />}
-                      {copiedMail === 'main' ? '복사됨' : '주소 복사'}
-                    </button>
+                      >
+                        {copiedMail === 'main' ? <Check size={14} /> : <Copy size={14} />}
+                        {copiedMail === 'main' ? '복사됨' : '주소 복사'}
+                      </button>
                     </div>
                     <p className="text-[11px] text-slate-400 leading-relaxed break-keep">
-                      메일 앱이 열리지 않으면 주소를 복사해 웹메일에서 보내주세요.
+                      메일 앱이 열리지 않으면 주소 복사로 웹메일에서 보내 주세요.
                     </p>
                   </div>
                 </Card>
               )}
 
               {extEmail?.ready && (
-                <Card
-                  className="p-6 flex flex-col gap-4 hover:border-emerald-200 hover:shadow-sm transition-all"
-                >
+                <Card className="p-6 flex flex-col gap-4 hover:border-emerald-200 hover:shadow-sm transition-all">
                   <div className="flex items-start gap-4">
                     <div className="w-10 h-10 rounded-xl bg-emerald-50 flex items-center justify-center shrink-0">
                       <Mail className="w-5 h-5 text-emerald-600" />
@@ -328,54 +269,53 @@ export default function CommunitySnsPage() {
                       <p className="text-xs text-slate-500 break-all">{mailAddress(extEmail.url)}</p>
                     </div>
                   </div>
-                  <div className="flex flex-col gap-2">
-                    <div className="flex items-start gap-2 text-sm text-slate-600 leading-relaxed break-keep">
-                      <span className="text-emerald-600 font-black mt-0.5">·</span>
-                      <span>제휴·후원 관련 문의 전용 메일입니다.</span>
-                    </div>
-                    <div className="flex items-start gap-2 text-sm text-slate-600 leading-relaxed break-keep">
-                      <span className="text-emerald-600 font-black mt-0.5">·</span>
-                      <span>제안서/자료 첨부가 필요한 문의에 적합합니다.</span>
-                    </div>
-                  </div>
-                  <div className="mt-auto pt-4 border-t border-slate-100 flex flex-col items-end gap-2 text-right">
-                    <div className="flex flex-wrap items-center justify-end gap-2 w-full">
-                    <a
-                      href={mailtoWithTemplate(extEmail.url, '[SSAFYnity 제휴/후원 문의]', [
-                        '회사/기관명: ',
-                        '담당자/직함: ',
-                        '연락처: ',
-                        '제안 요약: ',
-                        '첨부/링크: ',
-                        '희망 일정: ',
-                      ])}
-                      className="inline-flex items-center gap-2 text-xs font-black px-3.5 py-2 rounded-xl bg-emerald-600 text-white hover:bg-emerald-700 transition-colors"
-                    >
-                      메일 작성 <ExternalLink size={14} />
-                    </a>
-                    <button
-                      type="button"
-                      onClick={async () => {
-                        try {
-                          await navigator.clipboard.writeText(mailAddress(extEmail.url))
-                          setCopiedMail('ext')
-                        } catch {
-                          setCopiedMail(null)
+
+                  <BulletList
+                    bulletColorClass="text-emerald-600"
+                    items={[
+                      '대외협력(제휴·후원) 문의 전용 메일입니다.',
+                      '제안서/자료 첨부가 필요한 문의에 적합합니다.',
+                    ]}
+                  />
+
+                  <div className="mt-auto pt-4 border-t border-slate-100 flex flex-col gap-2">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                      <a
+                        href={mailtoWithTemplate(extEmail.url, '[SSAFYnity 제휴/후원 문의]', [
+                          '회사/기관명: ',
+                          '담당자/직함: ',
+                          '연락처: ',
+                          '제안 요약: ',
+                          '첨부/링크: ',
+                          '희망 일정: ',
+                        ])}
+                        className="w-full inline-flex items-center justify-center gap-2 text-xs font-black px-3.5 py-2 rounded-xl bg-emerald-600 text-white hover:bg-emerald-700 transition-colors"
+                      >
+                        메일 작성 <ExternalLink size={14} />
+                      </a>
+                      <button
+                        type="button"
+                        onClick={async () => {
+                          try {
+                            await navigator.clipboard.writeText(mailAddress(extEmail.url))
+                            setCopiedMail('ext')
+                          } catch {
+                            setCopiedMail(null)
+                          }
+                        }}
+                        className={
+                          'w-full inline-flex items-center justify-center gap-2 text-xs font-black px-3 py-2 rounded-xl border transition-colors ' +
+                          (copiedMail === 'ext'
+                            ? 'border-emerald-200 bg-emerald-50 text-emerald-700'
+                            : 'border-slate-200 bg-white text-slate-700 hover:bg-slate-50')
                         }
-                      }}
-                      className={
-                        'inline-flex items-center gap-2 text-xs font-black px-3 py-2 rounded-xl border transition-colors ' +
-                        (copiedMail === 'ext'
-                          ? 'border-emerald-200 bg-emerald-50 text-emerald-700'
-                          : 'border-slate-200 bg-white text-slate-700 hover:bg-slate-50')
-                      }
-                    >
-                      {copiedMail === 'ext' ? <Check size={14} /> : <Copy size={14} />}
-                      {copiedMail === 'ext' ? '복사됨' : '주소 복사'}
-                    </button>
+                      >
+                        {copiedMail === 'ext' ? <Check size={14} /> : <Copy size={14} />}
+                        {copiedMail === 'ext' ? '복사됨' : '주소 복사'}
+                      </button>
                     </div>
                     <p className="text-[11px] text-slate-400 leading-relaxed break-keep">
-                      제안서/자료가 있다면 첨부해 주세요. (메일이 열리지 않으면 주소 복사를 이용하세요.)
+                      메일 앱이 열리지 않으면 주소 복사로 웹메일에서 보내 주세요.
                     </p>
                   </div>
                 </Card>
@@ -391,179 +331,169 @@ export default function CommunitySnsPage() {
             transition={{ duration: 0.6, delay: 0.05 }}
           >
             <Kicker className="text-blue-600 mb-4">SNS</Kicker>
-            <p className="text-sm text-slate-500 leading-relaxed break-keep mb-5">
-              모든 행사 소식 및 공지는 각 공식 채널에 동일하게 업로드됩니다. 편한 채널을 이용해 주세요.
-            </p>
 
-            <Card className="p-6">
-              <div className="flex flex-col gap-4">
+            <Card className="p-0 overflow-hidden border-slate-200 shadow-sm">
+              <div
+                role="tablist"
+                aria-label="SNS 채널"
+                onKeyDown={e => {
+                  const key = e.key
+                  if (!['ArrowLeft', 'ArrowRight', 'Home', 'End'].includes(key)) return
+                  e.preventDefault()
+                  if (snsChannels.length === 0) return
 
-                <div
-                  role="tablist"
-                  aria-label="SNS 채널"
-                  onKeyDown={e => {
-                    const key = e.key
-                    if (!['ArrowLeft', 'ArrowRight', 'Home', 'End'].includes(key)) return
-                    e.preventDefault()
-                    if (snsChannels.length === 0) return
+                  const currentIndex = snsChannels.findIndex(c => c.name === selected?.name)
+                  const safeIndex = currentIndex < 0 ? 0 : currentIndex
+                  const lastIndex = snsChannels.length - 1
 
-                    const currentIndex = snsChannels.findIndex(c => c.name === selected?.name)
-                    const safeIndex = currentIndex < 0 ? 0 : currentIndex
-                    const lastIndex = snsChannels.length - 1
+                  const nextIndex =
+                    key === 'Home'
+                      ? 0
+                      : key === 'End'
+                        ? lastIndex
+                        : key === 'ArrowLeft'
+                          ? (safeIndex - 1 + snsChannels.length) % snsChannels.length
+                          : (safeIndex + 1) % snsChannels.length
 
-                    const nextIndex =
-                      key === 'Home'
-                        ? 0
-                        : key === 'End'
-                          ? lastIndex
-                          : key === 'ArrowLeft'
-                            ? (safeIndex - 1 + snsChannels.length) % snsChannels.length
-                            : (safeIndex + 1) % snsChannels.length
+                  const next = snsChannels[nextIndex]
+                  if (!next) return
 
-                    const next = snsChannels[nextIndex]
-                    if (!next) return
+                  selectChannel(next.name)
+                  const idSafe = encodeURIComponent(next.name)
+                  requestAnimationFrame(() => {
+                    document.getElementById(`sns-tab-${idSafe}`)?.focus()
+                  })
+                }}
+                className="flex items-end gap-1 overflow-x-auto no-scrollbar bg-slate-50/70 px-2 pt-2 shadow-[inset_0_-1px_0_0_rgba(148,163,184,0.35)]"
+              >
+                {snsChannels.map(channel => {
+                  const Icon = ICON_MAP[channel.icon]
+                  const isSelected = channel.name === selected?.name
+                  const isRestricted = channel.name === '카카오톡 오픈카톡'
+                  const isAccessible = channel.ready || isRestricted
+                  const idSafe = encodeURIComponent(channel.name)
 
-                    selectChannel(next.name)
-                    requestAnimationFrame(() => {
-                      document.getElementById(`sns-tab-${next.name}`)?.focus()
-                    })
-                  }}
-                  className="flex items-center gap-1 overflow-x-auto rounded-2xl bg-slate-50 border border-slate-100 p-1"
-                >
-                  {snsChannels.map(channel => {
-                    const Icon = ICON_MAP[channel.icon]
-                    const isSelected = channel.name === selected?.name
-                    const isReady = channel.ready
-                    const isRestricted = channel.name === 'KakaoTalk(오픈채팅)'
-                    const isAccessible = isReady || isRestricted
-
-                    return (
-                      <button
-                        key={channel.name}
-                        id={`sns-tab-${channel.name}`}
-                        type="button"
-                        role="tab"
-                        aria-selected={isSelected}
-                        aria-controls={`sns-panel-${channel.name}`}
-                        tabIndex={isSelected ? 0 : -1}
-                        onClick={() => selectChannel(channel.name)}
+                  return (
+                    <button
+                      key={channel.name}
+                      id={`sns-tab-${idSafe}`}
+                      type="button"
+                      role="tab"
+                      aria-selected={isSelected}
+                      aria-controls={`sns-panel-${idSafe}`}
+                      tabIndex={isSelected ? 0 : -1}
+                      onClick={() => selectChannel(channel.name)}
+                      className={
+                        'relative -mb-px inline-flex items-center gap-2 px-3 py-2 text-xs font-black whitespace-nowrap border transition-colors outline-none focus-visible:ring-2 focus-visible:ring-blue-400 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-50 ' +
+                        (isSelected
+                          ? 'z-10 bg-white text-slate-900 border-slate-200 border-b-white shadow-sm rounded-t-xl rounded-b-none'
+                          : isAccessible
+                            ? 'bg-transparent text-slate-600 border-transparent hover:bg-white/70 hover:text-slate-900 rounded-xl'
+                            : 'bg-transparent text-slate-400 border-transparent opacity-70 hover:bg-white/50 hover:text-slate-500 rounded-xl')
+                      }
+                    >
+                      <span
                         className={
-                          'relative inline-flex items-center gap-2 rounded-xl px-3 py-2 text-xs font-black whitespace-nowrap transition-colors outline-none focus-visible:ring-2 focus-visible:ring-blue-400 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-50 ' +
-                          (isSelected
-                            ? 'text-slate-900'
-                            : isAccessible ? 'text-slate-600 hover:text-slate-900'
-                              : 'text-slate-400 opacity-70 hover:text-slate-500')
+                          'w-6 h-6 rounded-lg flex items-center justify-center text-white shrink-0 ' +
+                          (isSelected ? 'shadow-sm' : 'opacity-90')
                         }
+                        style={{ backgroundColor: channel.color }}
                       >
-                        {isSelected && (
-                          <motion.span
-                            layoutId="sns-active-pill"
-                            transition={{ type: 'spring', stiffness: 500, damping: 40 }}
-                            className="absolute inset-0 rounded-xl bg-white shadow-sm"
-                          />
-                        )}
-
-                        <span
-                          className={
-                            'relative w-6 h-6 rounded-lg flex items-center justify-center text-white shrink-0 ' +
-                            (isSelected ? 'shadow-sm' : 'opacity-90')
-                          }
-                          style={{ backgroundColor: channel.color }}
-                        >
-                          {Icon ? <Icon size={14} /> : null}
-                        </span>
-                        <span className="relative">{channel.name}</span>
-                      </button>
-                    )
-                  })}
-                </div>
-
-                {selected && (
-                  <motion.div
-                    key={selected.name}
-                    initial={{ opacity: 0, y: 8 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.22 }}
-                    role="tabpanel"
-                    id={`sns-panel-${selected.name}`}
-                    aria-labelledby={`sns-tab-${selected.name}`}
-                    className="rounded-2xl border border-slate-100 bg-white p-5 shadow-sm"
-                  >
-                    <div className="flex items-start justify-between gap-6">
-                      <div className="min-w-0">
-                        <div className="flex items-start gap-3">
-                          <div
-                            className="w-10 h-10 rounded-xl flex items-center justify-center text-white shrink-0"
-                            style={{ backgroundColor: selected.color }}
-                          >
-                            {SelectedIcon ? <SelectedIcon size={18} /> : null}
-                          </div>
-
-                          <div className="min-w-0">
-                            {selectedRestricted ? (
-                              <div className="mb-2">
-                                <span className="text-[10px] font-black px-2 py-1 rounded-full bg-amber-50 text-amber-700">
-                                  정회원 전용
-                                </span>
-                              </div>
-                            ) : !selected.ready ? (
-                              <div className="mb-2">
-                                <span className="text-[10px] font-black px-2 py-1 rounded-full bg-amber-50 text-amber-700">
-                                  준비 중
-                                </span>
-                              </div>
-                            ) : null}
-
-                            <h2 className="text-lg font-extrabold text-slate-900 leading-tight">{selected.name}</h2>
-                            <p className="mt-1 text-sm text-slate-500 leading-relaxed break-keep">{selected.desc}</p>
-                          </div>
-                        </div>
-                      </div>
-
-                      {selected.ready && (
-                        <div className="shrink-0 flex items-center gap-2">
-                          <button
-                            type="button"
-                            onClick={async () => {
-                              try {
-                                await navigator.clipboard.writeText(selected.url)
-                                setCopied(true)
-                              } catch {
-                                setCopied(false)
-                              }
-                            }}
-                            className={
-                              'inline-flex items-center gap-2 text-xs font-black px-3 py-2 rounded-xl border transition-colors ' +
-                              (copied
-                                ? 'border-emerald-200 bg-emerald-50 text-emerald-700'
-                                : 'border-slate-200 bg-white text-slate-700 hover:bg-slate-50')
-                            }
-                          >
-                            {copied ? <Check size={14} /> : <Copy size={14} />}
-                            {copied ? '복사됨' : '링크 복사'}
-                          </button>
-
-                          <a
-                            href={selected.url}
-                            {...getAnchorProps(selected.url)}
-                            className="inline-flex items-center gap-2 text-xs font-black px-3.5 py-2 rounded-xl bg-blue-600 text-white hover:bg-blue-700 transition-colors"
-                          >
-                            바로가기 <ExternalLink size={14} />
-                          </a>
-                        </div>
-                      )}
-                    </div>
-
-                    <div className="mt-5">
-                      <Tabs tabs={tabs} value={tabValue} onValueChange={(next) => setActiveTab(next)} />
-                    </div>
-
-                                        {displayUrl(selected.url).trim().length > 0 && (
-                      <p className="mt-6 text-[11px] text-slate-400 break-all">{displayUrl(selected.url)}</p>
-                    )}
-                  </motion.div>
-                )}
+                        {Icon ? <Icon size={14} /> : null}
+                      </span>
+                      <span>{channel.name}</span>
+                    </button>
+                  )
+                })}
               </div>
+
+              {selected && (
+                <motion.div
+                  key={selected.name}
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ duration: 0.18 }}
+                  role="tabpanel"
+                  id={`sns-panel-${encodeURIComponent(selected.name)}`}
+                  aria-labelledby={`sns-tab-${encodeURIComponent(selected.name)}`}
+                  className="p-5"
+                >
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <InfoCard title="요약" items={selectedDetails.summary} />
+                    <InfoCard title="대상" items={selectedDetails.audience} />
+                    <InfoCard title="방법" items={selectedDetails.howto} />
+
+                    <Card className="p-5">
+                      <p className="text-xs font-black text-slate-900 mb-3">링크</p>
+
+                      {selected.name === '카카오톡 오픈카톡' ? (
+                        <div className="flex flex-col gap-3">
+                          <p className="text-sm text-slate-600 leading-relaxed break-keep">
+                            오픈카톡 링크는 공개하지 않으며, 정회원에게만 별도로 안내됩니다.
+                          </p>
+                          {mainEmail?.ready ? (
+                            <a
+                              href={mailtoWithTemplate(mainEmail.url, '[SSAFYnity 오픈카톡 안내 요청]', [
+                                '이름/기수: ',
+                                '정회원 여부(예/아니오): ',
+                                '문의 내용: ',
+                              ])}
+                              className="w-full inline-flex items-center justify-center gap-2 text-xs font-black px-3.5 py-2 rounded-xl bg-blue-600 text-white hover:bg-blue-700 transition-colors"
+                            >
+                              공식 메일로 문의 <ExternalLink size={14} />
+                            </a>
+                          ) : (
+                            <a
+                              href="#mail-section"
+                              className="w-full inline-flex items-center justify-center gap-2 text-xs font-black px-3.5 py-2 rounded-xl bg-blue-600 text-white hover:bg-blue-700 transition-colors"
+                            >
+                              메일 섹션으로 이동 <ExternalLink size={14} />
+                            </a>
+                          )}
+                        </div>
+                      ) : selected.ready ? (
+                        <div className="flex flex-col gap-3">
+                          <div className="grid gap-2">
+                            <a
+                              href={selected.url}
+                              {...getAnchorProps(selected.url)}
+                              className="w-full inline-flex items-center justify-center gap-2 text-xs font-black px-3.5 py-2 rounded-xl bg-blue-600 text-white hover:bg-blue-700 transition-colors"
+                            >
+                              바로가기 <ExternalLink size={14} />
+                            </a>
+                            <button
+                              type="button"
+                              onClick={async () => {
+                                try {
+                                  await navigator.clipboard.writeText(selected.url)
+                                  setCopiedLink(true)
+                                } catch {
+                                  setCopiedLink(false)
+                                }
+                              }}
+                              className={
+                                'w-full inline-flex items-center justify-center gap-2 text-xs font-black px-3 py-2 rounded-xl border transition-colors ' +
+                                (copiedLink
+                                  ? 'border-emerald-200 bg-emerald-50 text-emerald-700'
+                                  : 'border-slate-200 bg-white text-slate-700 hover:bg-slate-50')
+                              }
+                            >
+                              {copiedLink ? <Check size={14} /> : <Copy size={14} />}
+                              {copiedLink ? '복사됨' : '링크 복사'}
+                            </button>
+                          </div>
+
+                          {displayUrl(selected.url).trim().length > 0 && (
+                            <p className="text-[11px] text-slate-400 break-all">{displayUrl(selected.url)}</p>
+                          )}
+                        </div>
+                      ) : (
+                        <p className="text-sm text-slate-500 leading-relaxed break-keep">링크 정보를 준비 중입니다.</p>
+                      )}
+                    </Card>
+                  </div>
+                </motion.div>
+              )}
             </Card>
           </motion.div>
 
@@ -580,6 +510,11 @@ export default function CommunitySnsPage() {
               <p className="text-sm text-slate-500 leading-relaxed break-keep">
                 공식 채널은 이 페이지에 안내된 링크만 사용해 주세요. 행사 참가비·후원 요청 등 금전 안내는 반드시 공식 문의 채널로 재확인해 주세요.
               </p>
+              <div className="my-4 h-px bg-slate-200/70" />
+              <p className="text-sm font-extrabold text-slate-900 mb-2">커뮤니티 신고</p>
+              <p className="text-sm text-slate-500 leading-relaxed break-keep">
+                커뮤니티 내 금전 요구, 욕설·비방, 음란물 등 부적절한 행위는 신고해 주세요. 내용이 확인된 경우 사전 통보 없이 강제 탈퇴 처리될 예정입니다.
+              </p>
             </Card>
           </motion.div>
         </Container>
@@ -587,6 +522,12 @@ export default function CommunitySnsPage() {
     </div>
   )
 }
+
+
+
+
+
+
 
 
 
