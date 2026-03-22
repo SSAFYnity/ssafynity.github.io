@@ -477,7 +477,7 @@ export default function CommunitySnsPage() {
                               className={
                                 'w-full inline-flex items-center justify-center gap-2 text-xs font-black px-3 py-2 rounded-xl border transition-colors ' +
                                 (copiedLink
-                                  ? 'border-emerald-200 bg-emerald-50 text-emerald-700'
+                                  ? 'border-blue-200 bg-blue-50 text-blue-700'
                                   : 'border-slate-200 bg-white text-slate-700 hover:bg-slate-50')
                               }
                             >
