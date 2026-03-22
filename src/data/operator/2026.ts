@@ -35,7 +35,7 @@ export const operator2026 = {
       vacancies: 3,
       members: [
         { role: '팀장', name: '고준수', cohort: 8, campus: '광주', url: 'https://www.instagram.com/kojunsu1004' },
-        { role: '팀원', name: '안00' },
+        { role: '팀원', name: '안재영', cohort: 6, campus: '서울' },
         { role: '팀원', name: '박동준', cohort: 6, campus: '부울경' },
       ],
     },
