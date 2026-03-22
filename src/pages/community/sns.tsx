@@ -332,6 +332,9 @@ export default function CommunitySnsPage() {
             transition={{ duration: 0.6, delay: 0.05 }}
           >
             <Kicker className="text-blue-600 mb-4">SNS</Kicker>
+            <p className="text-sm text-slate-500 leading-relaxed break-keep mb-5">
+              모든 행사 및 공지사항은 각 공식 채널에 동일하게 업로드됩니다. 편한 SNS를 활용해 주세요.
+            </p>
 
             <Card className="p-0 overflow-hidden border-slate-200 shadow-sm">
               <div
