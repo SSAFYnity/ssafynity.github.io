@@ -192,9 +192,9 @@ export default function CommunitySnsPage() {
             </p>
             <div className="grid sm:grid-cols-2 gap-4">
               {mainEmail?.ready && (
-                <Card className="p-6 flex flex-col gap-4 hover:border-blue-200 hover:shadow-sm transition-all">
+                <Card className="p-6 flex flex-col gap-4 hover:border-slate-200 hover:shadow-sm transition-all">
                   <div className="flex items-start gap-4">
-                    <div className="w-10 h-10 rounded-xl bg-blue-50 flex items-center justify-center shrink-0">
+                    <div className="w-10 h-10 rounded-xl bg-slate-100 flex items-center justify-center shrink-0">
                       <Mail className="w-5 h-5 text-blue-600" />
                     </div>
                     <div className="flex-1 min-w-0">
@@ -207,6 +207,7 @@ export default function CommunitySnsPage() {
                   </div>
 
                   <BulletList
+                    bulletColorClass="text-slate-500"
                     items={[
                       '공지 및 행사 확정 관련 메일을 발송/수신합니다.',
                       '문의가 애매하면 공식 메일로 보내 주세요. 담당에게 연결해 드립니다.',
@@ -256,14 +257,14 @@ export default function CommunitySnsPage() {
               )}
 
               {extEmail?.ready && (
-                <Card className="p-6 flex flex-col gap-4 hover:border-emerald-200 hover:shadow-sm transition-all">
+                <Card className="p-6 flex flex-col gap-4 hover:border-slate-200 hover:shadow-sm transition-all">
                   <div className="flex items-start gap-4">
-                    <div className="w-10 h-10 rounded-xl bg-emerald-50 flex items-center justify-center shrink-0">
-                      <Mail className="w-5 h-5 text-emerald-600" />
+                    <div className="w-10 h-10 rounded-xl bg-slate-100 flex items-center justify-center shrink-0">
+                      <Mail className="w-5 h-5 text-blue-600" />
                     </div>
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center gap-2 mb-1">
-                        <span className="text-[10px] font-black px-2 py-1 rounded-full bg-emerald-50 text-emerald-600">대외협력</span>
+                        <span className="text-[10px] font-black px-2 py-1 rounded-full bg-slate-100 text-slate-700">대외협력</span>
                         <p className="text-sm font-extrabold text-slate-900">제휴/후원 문의</p>
                       </div>
                       <p className="text-xs text-slate-500 break-all">{mailAddress(extEmail.url)}</p>
@@ -271,7 +272,7 @@ export default function CommunitySnsPage() {
                   </div>
 
                   <BulletList
-                    bulletColorClass="text-emerald-600"
+                    bulletColorClass="text-slate-500"
                     items={[
                       '대외협력(제휴·후원) 문의 전용 메일입니다.',
                       '제안서/자료 첨부가 필요한 문의에 적합합니다.',
@@ -289,7 +290,7 @@ export default function CommunitySnsPage() {
                           '첨부/링크: ',
                           '희망 일정: ',
                         ])}
-                        className="w-full inline-flex items-center justify-center gap-2 text-xs font-black px-3.5 py-2 rounded-xl bg-emerald-600 text-white hover:bg-emerald-700 transition-colors"
+                        className="w-full inline-flex items-center justify-center gap-2 text-xs font-black px-3.5 py-2 rounded-xl bg-blue-600 text-white hover:bg-blue-700 transition-colors"
                       >
                         메일 작성 <ExternalLink size={14} />
                       </a>
