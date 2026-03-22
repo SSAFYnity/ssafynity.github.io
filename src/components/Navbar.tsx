@@ -24,14 +24,14 @@ export default function Navbar() {
 
   return (
     <nav
-      className={`fixed top-0 left-0 w-full z-50 pt-[env(safe-area-inset-top)] transition-all duration-500 ${
+      className={`fixed top-0 left-0 w-full z-50 pt-[max(env(safe-area-inset-top),0.5rem)] sm:pt-[env(safe-area-inset-top)] transition-all duration-500 ${
         isScrolled
-          ? 'bg-white/95 backdrop-blur-md border-b border-slate-100 py-3 lg:py-4 shadow-sm'
-          : 'bg-transparent py-4 lg:py-8'
+          ? 'bg-white/95 backdrop-blur-md border-b border-slate-100 shadow-sm'
+          : 'bg-transparent'
       }`}
     >
       <Container maxWidth="7xl">
-        <div className="flex items-center">
+        <div className={`flex items-center ${isScrolled ? 'py-3 lg:py-4' : 'py-4 lg:py-8'}`}>
 
           {/* 로고 */}
           <Link to="/" className="flex items-center gap-3 group">
