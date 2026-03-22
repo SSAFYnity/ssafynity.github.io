@@ -398,12 +398,11 @@ export default function CommunitySnsPage() {
                     >
                       <span
                         className={
-                          'w-6 h-6 rounded-lg flex items-center justify-center text-white shrink-0 ' +
+                          'w-6 h-6 rounded-lg flex items-center justify-center shrink-0 border border-slate-200 bg-white ' +
                           (isSelected ? 'shadow-sm' : 'opacity-90')
                         }
-                        style={{ backgroundColor: channel.color }}
                       >
-                        {Icon ? <Icon size={14} /> : null}
+                        {Icon ? <Icon size={14} style={{ color: channel.color }} /> : null}
                       </span>
                       <span>{channel.name}</span>
                     </button>
