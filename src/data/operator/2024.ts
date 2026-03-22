@@ -22,7 +22,7 @@ export const operator2024 = {
         { role: '기획팀장',   name: '김병완', cohort: 6, campus: '광주', url: 'https://www.linkedin.com/in/lactea94' },
         { role: '인사팀장',   name: '당현아', cohort: 5, campus: '서울', url: 'https://github.com/hadevyi' },
         { role: '소통팀장',   name: '백정훈', cohort: 3, campus: '구미', url: 'https://open.kakao.com/o/s6XqPBPb' },
-        { role: '재무팀장',   name: '안00' },
+        { role: '재무팀장',   name: '안재영', cohort: 6, campus: '서울' },
         { role: '컨텐츠팀장', name: '박지은', cohort: 3, campus: '구미', url: 'https://www.instagram.com/jjiiiiinie' },
       ],
     },
@@ -61,7 +61,7 @@ export const operator2024 = {
       name: '재무팀',
       desc: '동문회 예산 편성과 회계 관리를 담당합니다.',
       members: [
-        { role: '팀장', name: '안00' },
+        { role: '팀장', name: '안재영', cohort: 6, campus: '서울' },
         { role: '팀원', name: '손승운', cohort: 7, campus: '구미', url: 'https://www.linkedin.com/in/승운-손-2384652ba' },
         { role: '팀원', name: '신00' },
         { role: '팀원', name: '김00' },
