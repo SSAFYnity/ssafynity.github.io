@@ -38,7 +38,7 @@ export const operator2025 = {
         { role: '팀장', name: '이준호', cohort: 8, campus: '대전', url: 'https://github.com/LJH5' },
         { role: '팀원', name: '권경민', cohort: 7, campus: '서울', url: 'https://rudalsd.tistory.com' },
         { role: '팀원', name: '손승운', cohort: 7, campus: '구미', url: 'https://www.linkedin.com/in/승운-손-2384652ba' },
-        { role: '팀원', name: '안00' },
+        { role: '팀원', name: '안재영', cohort: 6, campus: '서울' },
         { role: '팀원', name: '이도훈', cohort: 10, campus: '광주' },
       ],
     },
