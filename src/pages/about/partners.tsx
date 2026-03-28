@@ -158,16 +158,13 @@ function PartnerCard({ p }: { p: typeof allPartners[number] }) {
   const badgeVisible = isFounding ? [] : displayTypes.slice(0, 2)
   const badgeHidden  = isFounding ? displayTypes : displayTypes.slice(2)
 
-  const { expanded, isOverflow, wrapperStyle, descRef, cardRef, toggle } = useExpandableCard<HTMLAnchorElement>()
+  const { expanded, isOverflow, wrapperStyle, descRef, cardRef, toggle } = useExpandableCard<HTMLDivElement>()
 
   // 그리드 셀: 확장 시 collapsed 높이로 고정해 레이아웃 유지
   return (
     <div className="relative" style={wrapperStyle}>
-      <motion.a
+      <motion.div
         ref={cardRef}
-        href={p.url}
-        target="_blank"
-        rel="noopener noreferrer"
         variants={{
           hidden:  { opacity: 0, y: 20 },
           visible: { opacity: 1, y: 0, transition: { duration: 0.55, ease: [0.22, 1, 0.36, 1] } },
@@ -217,7 +214,7 @@ function PartnerCard({ p }: { p: typeof allPartners[number] }) {
             ? <img
                 src={p.logo}
                 alt={p.name}
-                className={`h-10 w-auto object-contain max-w-[60%] ${inactive ? 'grayscale opacity-40' : ''}`}
+                className={`h-20 sm:h-24 w-auto object-contain max-w-[90%] ${inactive ? 'grayscale opacity-40' : ''}`}
               />
             : <span className={`text-base font-black px-10 text-center leading-snug
                 ${inactive ? 'text-slate-400' : 'text-slate-700'}`}>
@@ -262,15 +259,24 @@ function PartnerCard({ p }: { p: typeof allPartners[number] }) {
                   {expanded ? '접기' : '더보기'}
                 </button>
               )}
-              <ExternalLink
-                size={12}
-                className={`transition-colors
-                  ${inactive ? 'text-slate-300' : 'text-slate-300 group-hover:text-blue-400'}`}
-              />
+              <a
+                href={p.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                onClick={e => e.stopPropagation()}
+                aria-label="사이트 열기"
+                className="inline-flex"
+              >
+                <ExternalLink
+                  size={12}
+                  className={`transition-colors
+                    ${inactive ? 'text-slate-300' : 'text-slate-300 group-hover:text-blue-400'}`}
+                />
+              </a>
             </div>
           </div>
         </div>
-      </motion.a>
+      </motion.div>
     </div>
   )
 }
