@@ -439,20 +439,20 @@ export const FAQ_SECTIONS: readonly FaqSectionData[] = [
         keywords: ['수정', '정보', '업데이트'],
       },
       {
-        q: '홈페이지 오류/오타/개선 제안은 어디로 알려야 하나요?',
-        a: {
-          paragraphs: ['공식 메일로 제보해 주시면 확인 후 반영 여부를 안내해 드립니다.'],
-          ctas: [{ kind: 'mailtoMain', label: '공식 메일', variant: 'primary', subject: '[SSAFYnity 개선 제안]', body: ['페이지 주소: ', '제안 내용: '] }],
-        },
-        keywords: ['오류', '오타', '버그', '개선', '제안'],
-      },
-      {
         q: '모바일에서 화면이 깨지거나 동작이 이상해요',
         a: {
           paragraphs: ['기기/브라우저 정보를 함께 적어 공식 메일로 제보해 주세요.'],
           ctas: [{ kind: 'mailtoMain', label: '공식 메일', variant: 'primary', subject: '[SSAFYnity 모바일 이슈 제보]', body: ['기기: ', '브라우저: ', '페이지 주소: ', '내용: '] }],
         },
         keywords: ['모바일', '반응형', '레이아웃', '버그'],
+      },
+      {
+        q: '오타나 개선 제안도 보낼 수 있나요?',
+        a: {
+          paragraphs: ['가능합니다. 페이지 주소와 함께 제안 내용을 공식 메일로 보내 주시면 확인 후 반영 여부를 검토합니다.'],
+          ctas: [{ kind: 'mailtoMain', label: '공식 메일', variant: 'primary', subject: '[SSAFYnity 개선 제안]', body: ['페이지 주소: ', '제안 내용: '] }],
+        },
+        keywords: ['오류', '오타', '버그', '개선', '제안'],
       },
     ],
   },
@@ -471,12 +471,12 @@ export const FAQ_SECTIONS: readonly FaqSectionData[] = [
         keywords: ['운영진', '조직', '역할'],
       },
       {
-        q: '운영진에 지원하려면 어떻게 하나요?',
+        q: '운영진은 누가 지원할 수 있나요?',
         a: {
-          paragraphs: ['운영진 모집이 열렸을 때 아래 페이지에서 지원할 수 있습니다.'],
+          paragraphs: ['SSAFYnity 동문회원이라면 기수와 캠퍼스에 관계없이 지원할 수 있습니다. 운영진 모집은 상시로 진행됩니다.'],
           ctas: [{ kind: 'internal', to: 'operatorApply', label: '운영진 모집', variant: 'primary' }],
         },
-        keywords: ['운영진', '지원', '모집'],
+        keywords: ['운영진', '지원', '모집', '상시', '동문회원'],
       },
       {
         q: '현재/역대 운영진은 어디서 확인하나요?',
@@ -492,7 +492,7 @@ export const FAQ_SECTIONS: readonly FaqSectionData[] = [
       {
         q: '운영진에게 직접 문의하고 싶어요',
         a: {
-          paragraphs: ['공식 메일로 문의해 주시면 확인 후 적절한 담당으로 연결해 드립니다.'],
+          paragraphs: ['운영진 관련 문의는 공식 메일로 보내 주세요. 확인 후 적절한 담당으로 연결해 드립니다.'],
           ctas: [{ kind: 'mailtoMain', label: '공식 메일', variant: 'primary', subject: '[SSAFYnity 운영진 문의]', body: ['문의 내용: '] }],
         },
         keywords: ['운영진', '문의', '연락'],
@@ -510,14 +510,6 @@ export const FAQ_SECTIONS: readonly FaqSectionData[] = [
           ctas: [{ kind: 'mailtoMain', label: '공식 메일', variant: 'primary', subject: '[SSAFYnity 문의]', body: ['문의 내용: '] }],
         },
         keywords: ['문의', '분류', '애매', '공식 메일', '담당'],
-      },
-      {
-        q: '외부 행사 제안/연사 제안은 어디로 문의하나요?',
-        a: {
-          paragraphs: ['제안 내용이 구체화되어 있다면 후원·제휴 문의 페이지를 통해 먼저 전달해 주세요.'],
-          ctas: [{ kind: 'internal', to: 'joinPartnership', label: '후원·제휴 문의', variant: 'primary' }],
-        },
-        keywords: ['연사', '제안', '협업', '행사'],
       },
       {
         q: '답을 찾지 못했어요. 어떻게 문의하나요?',
