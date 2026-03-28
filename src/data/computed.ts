@@ -20,8 +20,6 @@ export type { PreClub } from './preClubs'
 export { PRE_CLUB_MIN_MEMBERS } from './preClubs'
 // 새 정식 동아리 추가 시: clubs/{slug}.ts 생성 후 import + allClubs에 추가
 import type { PartnerType, PartnerCategory, Status } from './constants'
-import { partnerSamsung } from './partners/samsung'
-import { partnerMulticampus } from './partners/multicampus'
 import { partnerSsafy } from './partners/ssafy'
 // 새 협력사 추가 시: partners/{slug}.ts 생성 후 import + allPartners에 추가
 // 새 연도 추가 시: events/{year}.ts 생성 후 import + allEvents에 추가
@@ -84,7 +82,7 @@ export type Partner = {
   url:       string
 }
 
-export const allPartners: Partner[] = [partnerSamsung, partnerMulticampus, partnerSsafy]
+export const allPartners: Partner[] = [partnerSsafy]
 // 새 협력사 추가 시 여기에도 추가
 
 // ─── 정식 동아리 타입 ─────────────────────────────────────────
