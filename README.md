@@ -14,10 +14,18 @@
 
 ## 시작하기
 
+권장 실행 환경
+
+- Node.js `22.12.0` 이상
+- npm `10` 이상
+
 ```bash
+nvm use
 npm install
 npm run dev
 ```
+
+`nvm`을 쓰지 않는 경우에도 Node 버전을 먼저 `22.12.0` 이상으로 맞춰주세요.
 
 ## 배포
 
