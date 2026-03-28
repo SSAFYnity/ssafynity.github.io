@@ -1,4 +1,4 @@
-﻿// src/hooks/useExpandableCard.ts
+// src/hooks/useExpandableCard.ts
 // 그리드 카드 펼치기/접기 로직.
 // 사용처: PartnerCard (about/partners.tsx), PreClubCard (clubs/pre.tsx)
 
@@ -51,9 +51,9 @@ export function useExpandableCard<T extends HTMLElement = HTMLDivElement>() {
   const toggle = (e: React.MouseEvent) => {
     e.preventDefault()
     e.stopPropagation()
+    if (!expanded) setCollapsedHeight(h => h ?? cardRef.current?.offsetHeight ?? null)
     setExpanded(v => !v)
   }
-
   // 확장 시 그리드 셀에 적용할 고정 높이 style
   const wrapperStyle: React.CSSProperties | undefined =
     expanded && collapsedHeight ? { height: collapsedHeight } : undefined
