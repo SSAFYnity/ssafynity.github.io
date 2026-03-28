@@ -184,11 +184,10 @@ export const siteData = {
   // 상세 데이터는 src/data/clubs/{slug}.ts 참조
   // 새 동아리 추가 시: 파일 생성 후 아래 배열에 slug 추가
   clubSlugs: [
-    '[업데이트 필요]', // 예: 'algorithm-study'
+    'doljabi-climbing',
   ],
 
   // ─── FAQ ───────────────────────────────────────────────────────
   // 상세 데이터는 src/data/faqs.ts 참조
 
 } as const
-

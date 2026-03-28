@@ -16,12 +16,12 @@ export const club = {
     // icon 종류: apply | direct | kakao | discord | github | notion | link
     // 첫 번째 항목이 primary(파란 채움) 버튼, 이후는 outline 버튼
   ],
-  since:       '[업데이트 필요]', // 예: '2024'
+  since:       '[업데이트 필요]', // 예: '2024-06'
   images:      [] as string[],
   // ── 선택 필드 ──────────────────────────────────────────────
   // keywords:  ['키워드1', '키워드2'],          // 검색 보조 + 상세 페이지 태그 표시
   // modes:     ['offline'] as const,            // 활동 형태: 'online' | 'offline' (복수 가능, 예: ['online', 'offline'])
-  // fee:       '없음',                          // 회비 (예: '없음', '월 5,000원')
+  // fee:       { summary: '없음', detail: '참여 비용은 개인 부담' }, // 회비 요약 + 상세 안내
   // target:    'SSAFY 수료생 누구나',           // 모집 대상 (string 또는 string[])
   // schedule:    '매주 토요일 오전 10시',                  // 정기 일정 (string 또는 string[])
   // region:      '서울·경기',                            // 활동 지역 (예: '서울·경기', '전국 (온라인)')

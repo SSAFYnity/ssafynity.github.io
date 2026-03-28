@@ -16,6 +16,7 @@ import { siteData } from './siteData'
 import { preClubs } from './preClubs'
 import { allEvents } from './events'
 import { operatorData } from './operator'
+import { clubDoljabiClimbing } from './clubs/doljabi-climbing'
 export type { PreClub } from './preClubs'
 export { PRE_CLUB_MIN_MEMBERS } from './preClubs'
 // 새 정식 동아리 추가 시: clubs/{slug}.ts 생성 후 import + allClubs에 추가
@@ -93,6 +94,11 @@ import { type ClubCategoryKey, type ModeKey } from '@/data/constants'
 // github: GitHub | notion: 노션 | link: 일반 링크
 export type ContactIconKey = 'apply' | 'direct' | 'kakao' | 'discord' | 'github' | 'notion' | 'link'
 
+export type ClubFee = {
+  summary: string
+  detail?: string | string[]
+}
+
 export type Club = {
   slug:        string
   name:        string
@@ -102,11 +108,11 @@ export type Club = {
   activities:  string | string[]
   memberCount: number
   contacts:    { label: string; url: string; icon?: ContactIconKey }[]  // CTA 버튼 목록 (첫 번째가 primary)
-  since:       string
+  since:       string                              // 권장 형식: YYYY-MM (예: '2023-06')
   images:      string[]
   keywords?:   string[]
   modes?:       readonly ModeKey[]                  // 활동 형태 (복수 선택 가능)
-  fee?:         string                           // 회비 (예: '없음', '월 5,000원')
+  fee?:         ClubFee                          // 회비 요약 + 상세 안내
   target?:      string | string[]               // 모집 대상 (예: 'SSAFY 수료생 누구나')
   schedule?:    string | string[]               // 정기 일정 (예: '매주 토요일 오전 10시')
   region?:      string                           // 활동 지역 (예: '서울·경기', '전국 (온라인)')
@@ -117,6 +123,7 @@ export type Club = {
 }
 
 export const allClubs: Club[] = [
+  clubDoljabiClimbing,
 ]
 // 새 정식 동아리 추가 시: clubs/{slug}.ts 생성 후 import + 여기에 추가
 
@@ -124,7 +131,7 @@ export const allClubs: Club[] = [
 export const allPreClubs = preClubs
 
 // ─── 플레이스홀더 필터 ─────────────────────────────────────────
-const validClubs = siteData.clubSlugs.filter(s => s !== '[업데이트 필요]')
+const validClubs = (siteData.clubSlugs as readonly string[]).filter(s => s !== '[업데이트 필요]')
 
 // ─── 계산값 ───────────────────────────────────────────────────
 export const computed = {
