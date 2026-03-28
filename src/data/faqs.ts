@@ -339,7 +339,7 @@ export const FAQ_SECTIONS: readonly FaqSectionData[] = [
       {
         q: '후원/제휴 문의는 어디로 하나요?',
         a: {
-          paragraphs: ['후원/제휴 관련 문의는 아래 페이지에서 안내하는 절차에 따라 진행해 주세요.'],
+          paragraphs: ['후원·제휴 관련 문의는 전용 안내 페이지에서 진행해 주세요. 운영진이 확인 후 회신드립니다.'],
           ctas: [{ kind: 'internal', to: 'joinPartnership', label: '후원·제휴 문의', variant: 'primary' }],
         },
         keywords: ['후원', '제휴', '대외협력'],
@@ -390,7 +390,8 @@ export const FAQ_SECTIONS: readonly FaqSectionData[] = [
       {
         q: '사칭/피싱 또는 금전 요구를 받았어요. 어떻게 하나요?',
         a: {
-          paragraphs: ['공식 채널은 이 페이지에 안내된 링크만 사용해 주세요. 금전 관련 안내는 반드시 공식 문의 채널로 재확인해 주세요.'],
+          paragraphs: ['공식 채널은 홈페이지에 안내된 링크만 사용해 주세요. 참가비, 후원, 송금 요청처럼 금전이 관련된 안내는 반드시 공식 문의 채널로 다시 확인해 주세요.'],
+          ctas: [{ kind: 'internal', to: 'communitySns', label: '공식 채널 보기', variant: 'primary' }],
         },
         keywords: ['사칭', '피싱', '금전', '후원', '참가비'],
       },
@@ -405,7 +406,7 @@ export const FAQ_SECTIONS: readonly FaqSectionData[] = [
       {
         q: '운영진 공지를 사칭하는 메시지를 받았어요',
         a: {
-          paragraphs: ['사칭이 의심된다면 링크를 열기 전에 공식 채널/공식 메일로 사실 여부를 확인해 주세요.'],
+          paragraphs: ['사칭이 의심된다면 링크를 열기 전에 공식 채널이나 공식 메일로 사실 여부를 확인해 주세요.'],
           ctas: [
             { kind: 'internal', to: 'communitySns', label: '공식 채널', variant: 'secondary' },
             { kind: 'mailtoMain', label: '공식 메일', variant: 'primary', subject: '[SSAFYnity 사칭 의심 제보]', body: ['내용: '] },
