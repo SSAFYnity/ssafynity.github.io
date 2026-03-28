@@ -10,6 +10,7 @@ import { MultiSelectDropdown } from '@/components/MultiSelectDropdown'
 import { SortDropdown } from '@/components/SortDropdown'
 import { SearchBar } from '@/components/SearchBar'
 import { useDropdown } from '@/hooks/useDropdown'
+import { formatClubSince } from '@/lib/utils'
 
 import { Card } from '@/components/Card'
 import { HeroLabel } from '@/components/HeroLabel'
@@ -188,32 +189,26 @@ export default function ClubsPage() {
               <div className="sticky sm:static top-[calc(4.5rem+env(safe-area-inset-top))] z-40 bg-white border border-slate-200 rounded-2xl px-4 py-3 flex flex-col mb-5 shadow-sm sm:shadow-none">
 
                 {/* 而⑦듃濡???*/}
-                <div className="flex flex-col gap-2">
-                  <div className="flex items-center gap-2 overflow-x-auto pb-1 -mx-1 px-1 sm:overflow-visible sm:flex-wrap sm:pb-0 sm:mx-0 sm:px-0">
-                    <CategoryDropdown category={category} onChange={setCategory} />
-                    <MultiSelectDropdown
-                      label="활동 형태"
-                      options={MODE_OPTIONS}
-                      selected={modes}
-                      onChange={setModes}
-                    />
-                    <SortDropdown options={SORT_OPTIONS} value={sort} defaultKey={SORT_DEFAULT} onChange={setSort} />
+                <div className="flex items-center gap-2 overflow-x-auto pb-1 -mx-1 px-1 sm:overflow-visible sm:flex-nowrap sm:pb-0 sm:mx-0 sm:px-0">
+                  <CategoryDropdown category={category} onChange={setCategory} />
+                  <MultiSelectDropdown
+                    label="활동 형태"
+                    options={MODE_OPTIONS}
+                    selected={modes}
+                    onChange={setModes}
+                  />
+                  <SortDropdown options={SORT_OPTIONS} value={sort} defaultKey={SORT_DEFAULT} onChange={setSort} />
+                  <div className="min-w-[14rem] flex-1">
+                    <SearchBar value={query} onChange={setQuery} onSubmit={submitSearch} placeholder="동아리 검색" />
                   </div>
-
-                  <div className="flex flex-wrap items-center gap-2">
-                    <div className="w-full sm:flex-1">
-                      <SearchBar value={query} onChange={setQuery} onSubmit={submitSearch} placeholder="동아리 검색" />
-                    </div>
-
-                    {hasFilter && (
-                      <button
-                        onClick={resetAll}
-                        className="text-[10px] font-black text-slate-400 hover:text-blue-500 transition-colors shrink-0"
-                      >
-                        초기화
-                      </button>
-                    )}
-                  </div>
+                  {hasFilter && (
+                    <button
+                      onClick={resetAll}
+                      className="text-[10px] font-black text-slate-400 hover:text-blue-500 transition-colors shrink-0"
+                    >
+                      초기화
+                    </button>
+                  )}
                 </div>
                 {hasFilter && (
                   <div className="flex flex-wrap gap-1.5 pt-2.5 mt-2.5 border-t border-slate-100">
@@ -292,7 +287,7 @@ export default function ClubsPage() {
                           <p className="text-sm text-slate-500 leading-relaxed break-keep text-pretty max-w-xl">{club.shortDesc}</p>
                         </div>
                         <div className="flex items-center gap-3 text-xs text-slate-400">
-                          <span>{club.since} 개설</span>
+                          <span>{formatClubSince(club.since)} 개설</span>
                           <span>·</span>
                           <span>{club.memberCount}명</span>
                         </div>

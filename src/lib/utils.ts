@@ -160,3 +160,14 @@ export function formatRecruitDate(range: RecruitDateRange): string {
   const day = DAY_KO[e.getDay()]
   return `${s} ${startTime} – ${mm}.${dd} (${day}) ${endTime}`
 }
+
+/**
+ * 동아리 개설 시점 포매팅
+ * "2023-06" → "2023년 6월"
+ * "2023"    → "2023년"
+ */
+export function formatClubSince(since: string): string {
+  const [year, month] = since.split('-')
+  if (!month) return `${year}년`
+  return `${year}년 ${Number(month)}월`
+}

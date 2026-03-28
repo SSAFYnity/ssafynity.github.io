@@ -1,7 +1,7 @@
 import React from 'react'
 import { useParams, Link } from 'react-router-dom'
 import { motion } from 'framer-motion'
-import { ArrowLeft, Calendar, Users, Activity, Clock, UserCheck, UserPlus, MessageCircle, ExternalLink, Github, FileText, Link as LinkIcon } from 'lucide-react'
+import { ArrowLeft, Calendar, Users, Activity, Clock, UserCheck, CreditCard, UserPlus, MessageCircle, ExternalLink, Github, FileText, Link as LinkIcon } from 'lucide-react'
 import { allClubs, type ContactIconKey } from '@/data/computed'
 import { CLUB_CATEGORIES, MODE_CONFIG, type ModeKey } from '@/data/constants'
 import { Pill } from '@/components/Pill'
@@ -9,6 +9,7 @@ import { Container } from '@/components/Container'
 import { ResponsiveText } from '@/components/ResponsiveText'
 import { Kicker } from '@/components/Kicker'
 import { Card } from '@/components/Card'
+import { formatClubSince } from '@/lib/utils'
 
 
 const CONTACT_ICON_CONFIG: Record<ContactIconKey, React.ElementType> = {
@@ -87,7 +88,7 @@ export default function ClubDetailPage() {
             <div className="flex flex-wrap gap-2 pt-1">
               <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-slate-100 text-xs text-slate-500">
                 <Calendar size={11} className="shrink-0" />
-                {club.since}년 개설
+                {formatClubSince(club.since)} 개설
               </span>
               <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-slate-100 text-xs text-slate-500">
                 <Users size={11} className="shrink-0" />
@@ -118,7 +119,7 @@ export default function ClubDetailPage() {
               {/* About */}
               <div className="flex flex-col gap-3">
                 <Kicker className="text-[10px] font-black text-blue-600 uppercase tracking-widest">About</Kicker>
-                <p className="text-sm text-slate-600 leading-relaxed break-keep text-pretty"><ResponsiveText text={club.desc} /></p>
+                <p className="text-sm text-slate-600 leading-relaxed break-keep text-pretty"><ResponsiveText text={club.desc} newline="always" /></p>
                 {club.keywords && club.keywords.length > 0 && (
                   <div className="flex flex-wrap gap-1.5 pt-1">
                     {club.keywords.map(k => (
@@ -178,6 +179,17 @@ export default function ClubDetailPage() {
                     </div>
                                     </Card>
                 )}
+                {club.fee?.detail && (
+                                    <Card className="bg-white rounded-2xl border border-slate-100 px-5 py-4 flex items-start gap-4">
+                    <div className="w-8 h-8 rounded-lg bg-blue-50 flex items-center justify-center shrink-0 mt-0.5">
+                      <CreditCard size={14} className="text-blue-600" />
+                    </div>
+                    <div className="flex flex-col gap-1">
+                      <p className="text-xs font-black text-slate-700">회비 안내</p>
+                      <FieldText value={club.fee.detail} />
+                    </div>
+                                    </Card>
+                )}
               </div>
 
               {/* 가입 절차 (선택) */}
@@ -225,7 +237,7 @@ export default function ClubDetailPage() {
                 <div className="flex flex-col gap-3">
                   <div className="flex items-center justify-between text-xs">
                     <span className="text-slate-400">개설 연도</span>
-                    <span className="font-black text-slate-700">{club.since}년</span>
+                    <span className="font-black text-slate-700">{formatClubSince(club.since)}</span>
                   </div>
                   <div className="flex items-center justify-between text-xs">
                     <span className="text-slate-400">멤버 수</span>
@@ -234,7 +246,7 @@ export default function ClubDetailPage() {
                   {club.fee !== undefined && (
                     <div className="flex items-center justify-between text-xs">
                       <span className="text-slate-400">회비</span>
-                      <span className="font-black text-slate-700">{club.fee}</span>
+                      <span className="font-black text-slate-700">{club.fee.summary}</span>
                     </div>
                   )}
                   {club.modes && club.modes.length > 0 && (
@@ -256,25 +268,6 @@ export default function ClubDetailPage() {
                     </div>
                   )}
                 </div>
-
-                {/* Links (선택) */}
-                {club.links && club.links.length > 0 && (
-                  <div className="flex flex-col gap-2 border-t border-slate-100 pt-4">
-                    <p className="text-[10px] font-black text-slate-400 tracking-widest mb-0.5">Links</p>
-                    {club.links.map(link => (
-                      <a
-                        key={link.label}
-                        href={link.url}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="flex items-center justify-between text-xs px-3 py-2 rounded-xl border border-slate-100 text-slate-500 hover:border-blue-200 hover:text-blue-600 transition-colors"
-                      >
-                        {link.label}
-                        <ExternalLink size={10} className="shrink-0 text-slate-300" />
-                      </a>
-                    ))}
-                  </div>
-                )}
 
                 {/* CTA */}
                 <div className="flex flex-col gap-2">
@@ -298,6 +291,25 @@ export default function ClubDetailPage() {
                     )
                   })}
                 </div>
+
+                {/* Links (선택) */}
+                {club.links && club.links.length > 0 && (
+                  <div className="flex flex-col gap-2 border-t border-slate-100 pt-4">
+                    <p className="text-[10px] font-black text-slate-400 tracking-widest mb-0.5">Links</p>
+                    {club.links.map(link => (
+                      <a
+                        key={link.label}
+                        href={link.url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="flex items-center justify-between text-xs px-3 py-2 rounded-xl border border-slate-100 text-slate-500 hover:border-blue-200 hover:text-blue-600 transition-colors"
+                      >
+                        {link.label}
+                        <ExternalLink size={10} className="shrink-0 text-slate-300" />
+                      </a>
+                    ))}
+                  </div>
+                )}
                             </Card>
             </motion.div>
 
