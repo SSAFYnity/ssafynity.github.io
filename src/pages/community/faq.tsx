@@ -1,5 +1,5 @@
 import type { ReactNode } from 'react'
-import { useEffect, useMemo, useState } from 'react'
+import { useMemo, useState } from 'react'
 import { motion } from 'framer-motion'
 import { Link } from 'react-router-dom'
 import { ChevronDown, ExternalLink, Mail, X } from 'lucide-react'
@@ -153,13 +153,12 @@ export default function CommunityFaqPage() {
   const [query, setQuery] = useState('')
   const [page, setPage] = useState(1)
 
-  const applySearch = () => setQuery(inputValue.trim())
+  const applySearch = () => {
+    setPage(1)
+    setQuery(inputValue.trim())
+  }
 
   const hasFilter = category !== null || query.trim().length > 0
-
-  useEffect(() => {
-    setPage(1)
-  }, [category, query])
 
   const orderedSections = useMemo(() => {
     return FAQ_CATEGORY_ORDER
@@ -219,6 +218,7 @@ export default function CommunityFaqPage() {
   const isAllCategories = category === null
 
   const toggleCategory = (key: FaqCategoryKey) => {
+    setPage(1)
     setCategory(prev => (prev === key ? null : key))
   }
 
@@ -255,7 +255,10 @@ export default function CommunityFaqPage() {
                   <div className="flex flex-wrap gap-2">
                     <button
                       type="button"
-                      onClick={() => setCategory(null)}
+                      onClick={() => {
+                        setPage(1)
+                        setCategory(null)
+                      }}
                       className={`flex items-center gap-1.5 pl-3.5 pr-3.5 py-2 sm:py-1.5 rounded-full text-sm sm:text-xs font-black border transition-colors ${
                         isAllCategories
                           ? 'bg-blue-600 text-white border-blue-600'
@@ -310,7 +313,11 @@ export default function CommunityFaqPage() {
                   <span className="inline-flex items-center gap-1 pl-2.5 pr-1.5 py-1 rounded-full text-[10px] font-black bg-blue-50 text-blue-600">
                     {query}
                     <button
-                      onClick={() => { setQuery(''); setInputValue('') }}
+                      onClick={() => {
+                        setPage(1)
+                        setQuery('')
+                        setInputValue('')
+                      }}
                       className="flex items-center hover:text-blue-800 transition-colors"
                     >
                       <X size={9} />
