@@ -59,7 +59,7 @@ export const FAQ_SECTIONS: readonly FaqSectionData[] = [
         q: 'SSAFYnity는 어떤 단체인가요?',
         a: {
           paragraphs: [
-            'SSAFYnity는 SSAFY 수료생들이 함께 만드는 동문 커뮤니티입니다. 동문회 소개와 운영 방향은 아래 페이지에서 확인할 수 있습니다.',
+            'SSAFYnity는 SSAFY 수료생들이 직접 운영하는 동문 커뮤니티입니다. 수료 이후에도 기수와 지역을 넘어 연결되고, 행사·동아리·커뮤니티 활동을 이어가기 위해 운영됩니다.',
           ],
           ctas: [{ kind: 'internal', to: 'aboutStory', label: '동문회 소개', variant: 'primary' }],
         },
@@ -74,10 +74,10 @@ export const FAQ_SECTIONS: readonly FaqSectionData[] = [
         keywords: ['가치관', '미션', '비전'],
       },
       {
-        q: '동문회 활동은 어떤 방식으로 진행되나요?',
+        q: '동문회에서는 어떤 활동을 하나요?',
         a: {
           paragraphs: [
-            '행사, 동아리, 온라인 커뮤니티 등 여러 방식으로 활동이 진행됩니다. 가장 빠른 소식은 공식 채널에서 확인해 주세요.',
+            '주요 활동은 행사, 동아리, 온라인 커뮤니티 참여로 나뉩니다. 처음이라면 행사 안내와 공식 채널을 함께 보면 전체 흐름을 빠르게 이해할 수 있습니다.',
           ],
           ctas: [
             { kind: 'internal', to: 'eventsIntroduce', label: '행사 안내', variant: 'secondary' },
@@ -94,46 +94,63 @@ export const FAQ_SECTIONS: readonly FaqSectionData[] = [
     title: '가입/정회원',
     items: [
       {
-        q: '동문회 가입 대상은 누구인가요?',
+        q: '동문회에는 누가 가입할 수 있나요?',
         a: {
           paragraphs: [
-            'SSAFYnity는 SSAFY 수료생들이 직접 운영하는 동문 커뮤니티입니다. 가입 대상/절차는 아래 페이지에서 가장 정확하게 확인할 수 있습니다.',
+            'SSAFY 수료생과 취업 조기 퇴소자는 가입할 수 있습니다. 가입 대상과 절차는 아래 페이지에서 확인할 수 있습니다.',
           ],
           ctas: [{ kind: 'internal', to: 'joinMembership', label: '동문회 가입 안내', variant: 'primary' }],
         },
         keywords: ['가입', '대상', '조건', '절차'],
       },
       {
-        q: '정회원은 무엇인가요?',
+        q: '가입할 수 없는 경우도 있나요?',
         a: {
-          paragraphs: ['정회원은 동문회 활동을 더 깊게 참여할 수 있는 멤버십 체계입니다. 혜택/절차는 아래에서 확인해 주세요.'],
-          ctas: [{ kind: 'internal', to: 'joinPremium', label: '정회원 안내', variant: 'primary' }],
-        },
-        keywords: ['정회원', '멤버십', '혜택'],
-      },
-      {
-        q: '정회원 전환은 어떻게 하나요?',
-        a: {
-          paragraphs: ['정회원 전환 절차와 안내 사항은 아래 페이지에서 확인할 수 있습니다.'],
-          ctas: [{ kind: 'internal', to: 'joinPremium', label: '정회원 안내', variant: 'primary' }],
-        },
-        keywords: ['정회원', '전환', '절차'],
-      },
-      {
-        q: '가입/정회원 관련 문의는 어디로 하면 되나요?',
-        a: {
-          paragraphs: ['문의 내용이 애매하다면 공식 메일로 보내 주세요. 확인 후 적절한 담당으로 연결해 드립니다.'],
+          paragraphs: ['네. 취업 외 퇴소 또는 강제 퇴소의 경우에는 가입이 불가합니다. 애매한 사례라면 공식 메일로 문의해 주세요.'],
           ctas: [
+            { kind: 'internal', to: 'joinMembership', label: '가입 안내', variant: 'secondary' },
             {
               kind: 'mailtoMain',
               label: '공식 메일',
               variant: 'primary',
-              subject: '[SSAFYnity 가입/정회원 문의]',
-              body: ['이름/기수: ', '문의 내용: '],
+              subject: '[SSAFYnity 가입 가능 여부 문의]',
+              body: ['이름/기수: ', '상황 설명: '],
             },
           ],
         },
-        keywords: ['문의', '정회원', '가입', '담당'],
+        keywords: ['가입 불가', '퇴소', '강제 퇴소', '조건'],
+      },
+      {
+        q: '가입 신청 후 승인까지 얼마나 걸리나요?',
+        a: {
+          paragraphs: ['가입 처리는 늦어도 1주일 이내에 완료됩니다. 행사 참여를 계획하고 있다면 미리 가입해 두는 것을 권장합니다.'],
+          ctas: [{ kind: 'internal', to: 'joinMembership', label: '가입 안내', variant: 'primary' }],
+        },
+        keywords: ['승인', '처리 기간', '가입 완료', '1주일'],
+      },
+      {
+        q: '가입하면 바로 정회원이 되나요?',
+        a: {
+          paragraphs: ['아니요. 가입이 승인되면 먼저 일반회원으로 등록됩니다. 정회원은 일반회원이 된 뒤 별도로 신청해야 합니다.'],
+          ctas: [
+            { kind: 'internal', to: 'joinMembership', label: '가입 안내', variant: 'secondary' },
+            { kind: 'internal', to: 'joinPremium', label: '정회원 안내', variant: 'primary' },
+          ],
+        },
+        keywords: ['일반회원', '정회원', '가입 후', '회원 유형'],
+      },
+      {
+        q: '정회원은 무엇이고, 어떻게 신청하나요?',
+        a: {
+          paragraphs: [
+            '정회원은 연회비 30,000원을 납부한 공식 멤버십입니다. 동문회 가입이 승인된 일반회원이라면 언제든 상시 신청할 수 있습니다.',
+          ],
+          ctas: [
+            { kind: 'internal', to: 'joinPremium', label: '정회원 안내', variant: 'secondary' },
+            { kind: 'internal', to: 'joinMembership', label: '동문회 가입 안내', variant: 'primary' },
+          ],
+        },
+        keywords: ['정회원', '연회비', '30,000원', '상시 신청', '혜택'],
       },
     ],
   },
