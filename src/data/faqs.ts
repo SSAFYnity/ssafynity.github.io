@@ -167,6 +167,16 @@ export const FAQ_SECTIONS: readonly FaqSectionData[] = [
         keywords: ['일정', '행사', '캘린더'],
       },
       {
+        q: '행사는 누구나 참여할 수 있나요?',
+        a: {
+          paragraphs: [
+            '행사 유형에 따라 다릅니다. 동문친목 행사는 동문회원만, 공개 IT 행사는 외부인도 참여할 수 있으며, 상시 행사는 기본적으로 정회원 대상입니다.',
+          ],
+          ctas: [{ kind: 'internal', to: 'eventsIntroduce', label: '행사 참여 자격', variant: 'primary' }],
+        },
+        keywords: ['참여 자격', '외부인', '정회원', '일반회원', '상시 행사'],
+      },
+      {
         q: '행사 참여 신청은 어디서 하나요?',
         a: {
           paragraphs: [
@@ -180,16 +190,17 @@ export const FAQ_SECTIONS: readonly FaqSectionData[] = [
         keywords: ['신청', '참여', '모집', '등록'],
       },
       {
-        q: '행사 공지는 모든 채널에 똑같이 올라오나요?',
+        q: '행사 공지는 어디서 가장 빨리 확인할 수 있나요?',
         a: {
-          paragraphs: ['네. 행사 및 주요 공지사항은 공식 채널에 동일하게 업로드됩니다. 본인에게 편한 채널을 이용해 주세요.'],
+          paragraphs: ['행사 및 주요 공지는 공식 채널에 동일하게 업로드됩니다. 가장 빠르게 놓치지 않고 확인하려면 카카오톡 채널을 추천합니다.'],
+          ctas: [{ kind: 'internal', to: 'communitySns', label: '공식 채널', variant: 'primary' }],
         },
-        keywords: ['공지', '채널', 'SNS'],
+        keywords: ['공지', '채널', 'SNS', '카카오톡', '알림'],
       },
       {
         q: '행사 관련 문의는 어디로 하면 되나요?',
         a: {
-          paragraphs: ['행사 관련 문의는 공식 채널 또는 공식 메일로 보내 주세요.'],
+          paragraphs: ['행사명이나 링크를 함께 적어 공식 메일 또는 공식 채널로 문의해 주세요. 확인 후 안내해 드립니다.'],
           ctas: [
             { kind: 'internal', to: 'communitySns', label: '공식 채널', variant: 'secondary' },
             {
@@ -223,23 +234,39 @@ export const FAQ_SECTIONS: readonly FaqSectionData[] = [
       {
         q: '정식 동아리와 예비 동아리는 무엇이 다른가요?',
         a: {
-          paragraphs: ['운영 기준과 현재 등록된 동아리는 ‘동아리’ 메뉴에서 확인할 수 있습니다.'],
-          ctas: [{ kind: 'internal', to: 'clubs', label: '정식 동아리', variant: 'secondary' }],
+          paragraphs: [
+            '정식 동아리는 기준을 충족해 공식 등록된 동아리이고, 예비 동아리는 아직 인원이 부족하지만 함께 만들 사람을 모으는 단계입니다.',
+          ],
+          ctas: [
+            { kind: 'internal', to: 'clubs', label: '정식 동아리', variant: 'secondary' },
+            { kind: 'internal', to: 'clubsPre', label: '예비 동아리', variant: 'primary' },
+          ],
         },
         keywords: ['정식', '예비', '동아리'],
       },
       {
+        q: '동아리를 만들려면 어떤 조건이 필요한가요?',
+        a: {
+          paragraphs: ['기본적으로 SSAFYnity 동문회원 중심으로 운영되며, 정식 동아리는 5인 이상 등 운영 기준을 충족해야 합니다. 자세한 기준은 동아리 안내에서 확인할 수 있습니다.'],
+          ctas: [{ kind: 'internal', to: 'clubsIntro', label: '동아리 안내', variant: 'primary' }],
+        },
+        keywords: ['동아리 개설', '등록 조건', '5명', '동문회원'],
+      },
+      {
         q: '동아리 모집/공지 소식은 어디서 확인하나요?',
         a: {
-          paragraphs: ['동아리 관련 공지와 소식은 공식 채널을 통해 안내됩니다.'],
-          ctas: [{ kind: 'internal', to: 'communitySns', label: '공식 채널', variant: 'primary' }],
+          paragraphs: ['동아리 관련 공지와 모집 소식은 공식 채널을 통해 안내됩니다. 이미 등록된 동아리는 목록 페이지에서 직접 확인할 수도 있습니다.'],
+          ctas: [
+            { kind: 'internal', to: 'communitySns', label: '공식 채널', variant: 'secondary' },
+            { kind: 'internal', to: 'clubs', label: '정식 동아리', variant: 'primary' },
+          ],
         },
         keywords: ['모집', '공지', '동아리', '채널'],
       },
       {
-        q: '동아리 운영 관련 문의는 어디로 하면 되나요?',
+        q: '동아리 관련 문의는 어디로 하면 되나요?',
         a: {
-          paragraphs: ['동아리 관련 문의는 공식 메일로 보내 주세요.'],
+          paragraphs: ['동아리명이나 관련 링크를 함께 적어 공식 메일로 문의해 주세요. 필요한 경우 담당에게 연결해 드립니다.'],
           ctas: [
             {
               kind: 'mailtoMain',
@@ -267,30 +294,33 @@ export const FAQ_SECTIONS: readonly FaqSectionData[] = [
         keywords: ['공식 채널', 'SNS', '메일'],
       },
       {
-        q: '카카오톡 채널은 어떤 용도로 쓰이나요?',
+        q: '처음이라면 어떤 채널부터 보면 좋나요?',
         a: {
-          paragraphs: ['카카오톡 채널은 행사 및 가입 등 안내를 가장 빠르게 확인할 수 있는 공지 채널입니다.'],
+          paragraphs: ['가장 빠르게 공지를 확인하려면 카카오톡 채널을 추천합니다. 자세한 문의나 자료 첨부가 필요한 경우에는 공식 메일이 더 적합합니다.'],
           ctas: [{ kind: 'internal', to: 'communitySns', label: '공식 채널 보기', variant: 'primary' }],
         },
-        keywords: ['카카오톡', '공지', '알림'],
+        keywords: ['카카오톡', '공지', '알림', '처음', '추천 채널'],
       },
       {
-        q: '디스코드나 오픈카톡 참여 조건은 어디서 확인하나요?',
+        q: '디스코드는 누구나 참여할 수 있나요?',
         a: {
-          paragraphs: ['디스코드/오픈카톡의 참여 조건과 이용 방식은 공식 채널 페이지에서 안내합니다.'],
+          paragraphs: ['디스코드는 동문회원뿐 아니라 외부 참여자도 일부 채널을 이용할 수 있습니다. 다만 역할에 따라 접근 가능한 채널은 달라집니다.'],
           ctas: [{ kind: 'internal', to: 'communitySns', label: '공식 채널 보기', variant: 'primary' }],
         },
-        keywords: ['디스코드', '오픈카톡', '참여', '조건'],
+        keywords: ['디스코드', '참여', '조건', '외부인'],
       },
       {
-        q: '공지/행사 소식을 놓치지 않으려면 어떤 채널이 좋나요?',
+        q: '정회원 오픈카톡은 어떻게 들어가나요?',
         a: {
           paragraphs: [
-            '모든 행사 및 공지사항은 각 공식 채널에 동일하게 업로드됩니다. 자주 확인하는 채널을 선택해 주세요.',
+            '카카오톡 오픈카톡은 정회원 전용 채널입니다. 정회원 전환 후 안내 메일로 별도 안내되며, 공개 링크로 운영하지 않습니다.',
           ],
-          ctas: [{ kind: 'internal', to: 'communitySns', label: '공식 채널', variant: 'primary' }],
+          ctas: [
+            { kind: 'internal', to: 'communitySns', label: '공식 채널', variant: 'secondary' },
+            { kind: 'internal', to: 'joinPremium', label: '정회원 안내', variant: 'primary' },
+          ],
         },
-        keywords: ['공지', '행사', '알림', '채널'],
+        keywords: ['오픈카톡', '정회원', '카카오톡', '안내 메일'],
       },
     ],
   },
