@@ -23,6 +23,8 @@ function getSnsDisabledHint(name: string): string {
   return '준비 중입니다.'
 }
 
+const footerSns = siteData.sns.filter(channel => channel.showInFooter)
+
 function FooterMobile() {
   return (
     <footer className="sm:hidden bg-white border-t border-slate-100 py-8">
@@ -33,7 +35,7 @@ function FooterMobile() {
           </Link>
 
           <div className="flex gap-1.5 flex-nowrap justify-end overflow-x-auto [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
-            {siteData.sns.map((channel) => {
+            {footerSns.map((channel) => {
               const usable = isUsableSnsUrl(channel.url)
 
               if (!usable) {
@@ -106,7 +108,7 @@ function FooterDesktop() {
             </p>
 
             <div className="flex gap-4 flex-wrap">
-              {siteData.sns.map((channel) => {
+              {footerSns.map((channel) => {
                 const usable = isUsableSnsUrl(channel.url)
 
                 return (
