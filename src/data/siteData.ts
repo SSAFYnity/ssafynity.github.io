@@ -1,5 +1,38 @@
 import { ROUTES } from '@/lib/routes'
 
+const memberStatsByCohort = [
+  { cohort: 1, total: 166 },
+  { cohort: 2, total: 178 },
+  { cohort: 3, total: 239 },
+  { cohort: 4, total: 177 },
+  { cohort: 5, total: 305 },
+  { cohort: 6, total: 512 },
+  { cohort: 7, total: 566 },
+  { cohort: 8, total: 561 },
+  { cohort: 9, total: 497 },
+  { cohort: 10, total: 379 },
+  { cohort: 11, total: 218 },
+  { cohort: 12, total: 358 },
+  { cohort: 13, total: 251 },
+  { cohort: 14, total: 35 },
+  { cohort: 15, total: 17 },
+] as const
+
+const memberStatsByCampus = [
+  { campus: '서울', total: 2060 },
+  { campus: '대전', total: 792 },
+  { campus: '광주', total: 612 },
+  { campus: '구미', total: 667 },
+  { campus: '부울경', total: 328 },
+] as const
+
+const memberStatsSummary = {
+  operator: 10,
+  general: 4414,
+  regular: 35,
+  total: 4459,
+} as const
+
 // src/data/siteData.ts
 // 이 파일만 수정하면 전체 사이트에 반영됩니다.
 // 매년 운영진이 교체되므로 [업데이트 필요] 항목을 확인하세요.
@@ -39,28 +72,24 @@ export const siteData = {
   // 함께하는 동문 수 / 참여 기수 수는 cohortStats 기반으로 computed.ts에서 자동 계산
   // 누적 행사 횟수 / 누적 참가자 수 / 운영 연수 / 동아리 수 / 파트너사 수도 computed.ts에서 자동 계산
   stats: [
-    { label: '정회원', value: '43', suffix: '명' }, // [업데이트 필요] 매 기수 시작 시 수동 수정
+    { label: '정회원', value: `${memberStatsSummary.regular}`, suffix: '명' }, // [업데이트 필요] 공식 집계 갱신 시 memberStats도 함께 수정
   ],
 
-  // ─── SSAFY 기수별 동문 수 ───────────────────────────────────
-  // [업데이트 필요] 새 기수 합류 시 항목 추가
-  // cohort: SSAFY 기수 번호, count: 해당 기수 동문회 가입 인원
-  cohortStats: [
-    { cohort:  1, count: 166 },
-    { cohort:  2, count: 178 },
-    { cohort:  3, count: 237 },
-    { cohort:  4, count: 177 },
-    { cohort:  5, count: 305 },
-    { cohort:  6, count: 512 },
-    { cohort:  7, count: 566 },
-    { cohort:  8, count: 559 },
-    { cohort:  9, count: 497 },
-    { cohort: 10, count: 379 },
-    { cohort: 11, count: 215 },
-    { cohort: 12, count: 354 },
-    { cohort: 13, count: 243 },
-    { cohort: 14, count:  25 },
-  ],
+  // ─── 회원 분포 ────────────────────────────────────────────────
+  // [업데이트 필요] 공식 집계 갱신 시 아래 3개 블록만 수정
+  // byCohort: 기수별 총 가입자
+  // byCampus: 캠퍼스별 총 가입자
+  // summary: 전체 운영진 / 일반회원 / 정회원 / 총원
+  memberStats: {
+    byCohort: memberStatsByCohort,
+    byCampus: memberStatsByCampus,
+    summary: memberStatsSummary,
+  },
+
+  // ─── 레거시 합계 배열 ─────────────────────────────────────────
+  // 기존 계산/컴포넌트 호환을 위해 total만 별도로 노출
+  cohortStats: memberStatsByCohort.map(({ cohort, total }) => ({ cohort, count: total })),
+  campusStats: memberStatsByCampus.map(({ campus, total }) => ({ campus, count: total })),
 
 // ─── SNS 채널 ──────────────────────────────────────────────────
   sns: [
@@ -78,9 +107,7 @@ export const siteData = {
   forms: {
     membership: 'https://forms.gle/wudsF4nfsFYYXpLs6', // 동문회 가입 신청 Forms URL
     regular:    'https://forms.gle/QMXe2VxNk9pc7ZRaA', // 정회원 등록 Forms URL
-    // newsletter: '[업데이트 필요]', // 소식 수신 신청 Forms URL
     teamApply:  'https://forms.gle/mGXTcSgbzc3W4URk9', // 운영진 모집 Forms URL
-    // eventApply: '[업데이트 필요]', // 행사 신청 Forms URL
   },
 
   // ─── 네비게이션 메뉴 ───────────────────────────────────────────
