@@ -12,6 +12,7 @@ import { MultiSelectDropdown } from '@/components/MultiSelectDropdown'
 import { SortDropdown } from '@/components/SortDropdown'
 import { useDropdown } from '@/hooks/useDropdown'
 import { useExpandableCard } from '@/hooks/useExpandableCard'
+import { withBaseAsset } from '@/lib/asset'
 
 const ALL = '전체'
 
@@ -212,7 +213,7 @@ function PartnerCard({ p }: { p: typeof allPartners[number] }) {
           {/* 로고 */}
           {p.logo
             ? <img
-                src={p.logo}
+                src={withBaseAsset(p.logo)}
                 alt={p.name}
                 className={`h-20 sm:h-24 w-auto object-contain max-w-[90%] ${inactive ? 'grayscale opacity-40' : ''}`}
               />
@@ -487,5 +488,4 @@ export default function AboutPartnersPage() {
     </div>
   )
 }
-
 

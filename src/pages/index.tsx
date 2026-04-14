@@ -4,6 +4,7 @@ import { motion, type Variants } from 'framer-motion'
 import { siteData } from '@/data/siteData'
 import { computed, allPartners } from '@/data/computed'
 import { Container } from '@/components/Container'
+import { withBaseAsset } from '@/lib/asset'
 
 import { BlueSectionBadge } from '@/components/BlueSectionBadge'
 const STATS = [
@@ -63,7 +64,7 @@ function PartnerCard({ p }: { p: typeof allPartners[number] }) {
     <div className="flex flex-col items-center gap-2.5 w-36 sm:w-40 shrink-0">
       <div className="w-full h-16 sm:h-20 bg-white border border-slate-200 rounded-xl flex items-center justify-center shadow-sm">
         {p.logo
-          ? <img src={p.logo} alt={p.name} className="max-h-8 sm:max-h-10 max-w-[110px] sm:max-w-[120px] object-contain" />
+          ? <img src={withBaseAsset(p.logo)} alt={p.name} className="max-h-8 sm:max-h-10 max-w-[110px] sm:max-w-[120px] object-contain" />
           : <span className="text-xs text-slate-400 font-bold">LOGO</span>
         }
       </div>
@@ -359,4 +360,3 @@ export default function HomePage() {
     </div>
   )
 }
-

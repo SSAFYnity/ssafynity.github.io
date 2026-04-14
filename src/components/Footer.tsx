@@ -4,6 +4,7 @@ import { SiDiscord, SiGmail, SiGithub, SiInstagram, SiKakaotalk, SiLinkedin } fr
 
 import { Container } from '@/components/Container'
 import { siteData } from '@/data/siteData'
+import { withBaseAsset } from '@/lib/asset'
 
 const iconMap: Record<string, React.ReactNode> = {
   kakao: <SiKakaotalk size="1em" />,
@@ -31,7 +32,7 @@ function FooterMobile() {
       <Container maxWidth="7xl">
         <div className="flex items-center justify-between gap-4">
           <Link to="/" className="inline-flex items-center">
-            <img src="/logo.svg" alt="SSAFYnity" className="h-8 w-auto" />
+            <img src={withBaseAsset('/logo.svg')} alt="SSAFYnity" className="h-8 w-auto" />
           </Link>
 
           <div className="flex gap-1.5 flex-nowrap justify-end overflow-x-auto [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
@@ -100,7 +101,7 @@ function FooterDesktop() {
         <div className="grid lg:grid-cols-12 gap-16 mb-24">
           <div className="lg:col-span-5">
             <Link to="/" className="inline-block mb-10">
-              <img src="/logo.svg" alt="SSAFYnity" className="h-12 w-auto" />
+              <img src={withBaseAsset('/logo.svg')} alt="SSAFYnity" className="h-12 w-auto" />
             </Link>
 
             <p className="text-base text-slate-400 font-bold leading-relaxed max-w-sm mb-12 break-keep text-pretty">

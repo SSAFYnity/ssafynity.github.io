@@ -4,6 +4,7 @@ import { Menu, ChevronDown, ExternalLink } from 'lucide-react'
 import { Sheet, SheetContent, SheetDescription, SheetTitle, SheetTrigger } from '@/components/ui/sheet'
 import { siteData } from '@/data/siteData'
 import { Container } from '@/components/Container'
+import { withBaseAsset } from '@/lib/asset'
 
 function getFirstFocusableMenuItem(menuEl: HTMLElement | null): HTMLElement | null {
   if (!menuEl) return null
@@ -35,7 +36,7 @@ export default function Navbar() {
 
           {/* 로고 */}
           <Link to="/" className="flex items-center gap-3 group">
-            <img src="/logo-rect.png" alt="SSAFYnity" className="h-10 w-auto" />
+            <img src={withBaseAsset('/logo-rect.png')} alt="SSAFYnity" className="h-10 w-auto" />
             <div className="flex flex-col">
               <span className="text-lg font-bold tracking-tight text-slate-900 leading-none">SSAFYnity</span>
               <span className="text-[10px] font-bold tracking-widest text-blue-800 uppercase">Alumni Association</span>
@@ -248,6 +249,5 @@ export default function Navbar() {
     </nav>
   )
 }
-
 
 

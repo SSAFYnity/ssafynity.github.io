@@ -3,6 +3,7 @@ import { motion } from 'framer-motion'
 import { siteData } from '@/data/siteData'
 import { Container } from '@/components/Container'
 import { ResponsiveText } from '@/components/ResponsiveText'
+import { withBaseAsset } from '@/lib/asset'
 
 import { HeroLabel } from '@/components/HeroLabel'
 const ICON_MAP = {
@@ -91,7 +92,7 @@ export default function AboutValuesPage() {
             <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-10
                             px-4 py-3 rounded-2xl bg-white
                             shadow-md shadow-slate-200/60 border border-slate-100">
-              <img src="/logo-rect.png" alt="SSAFYnity" className="h-10 w-auto" />
+              <img src={withBaseAsset('/logo-rect.png')} alt="SSAFYnity" className="h-10 w-auto" />
             </div>
 
             {/* 가치관 노드 */}
