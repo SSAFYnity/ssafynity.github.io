@@ -1,0 +1,6 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://ssafynity.github.io/sitemap.xml
+Sitemap: https://ssafynity.github.io/official-sitemap.xml
+Sitemap: https://ssafynity.github.io/blog/sitemap.xml
