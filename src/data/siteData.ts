@@ -152,8 +152,8 @@ export const siteData = {
       { label: '예비 동아리', path: ROUTES.clubsPre },
     ]},
     { label: '커뮤니티', items: [
-      // { label: '공지사항', path: 'https://ssafynity.github.io/blog/공지', external: true }, // [업데이트 필요] 블로그 오픈 후 노출
-      // { label: '블로그',   path: 'https://ssafynity.github.io/blog', external: true },       // [업데이트 필요] 블로그 오픈 후 노출
+      { label: '공지',    path: 'https://ssafynity.github.io/blog/category/notice/', external: true },
+      { label: '블로그',  path: 'https://ssafynity.github.io/blog', external: true },
       { label: 'SNS',      path: ROUTES.communitySns },
       { label: 'FAQ',      path: ROUTES.communityFaq },
     ]},
