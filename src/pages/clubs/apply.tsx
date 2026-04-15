@@ -8,6 +8,7 @@ import { HeroLabel } from '@/components/HeroLabel'
 import { Card } from '@/components/Card'
 import { Kicker } from '@/components/Kicker'
 import { siteData } from '@/data/siteData'
+import { trackEvent } from '@/lib/analytics'
 
 const CATEGORY_UI: Record<ClubCategoryKey, { icon: LucideIcon; examples: string[] }> = {
   tech:      { icon: Code2,    examples: ['사이드 프로젝트', 'CS 스터디'] },
@@ -192,6 +193,13 @@ export default function ClubsApplyPage() {
                     href={applyUrl}
                     target="_blank"
                     rel="noopener noreferrer"
+                    onClick={() => {
+                      trackEvent('click_club_apply', {
+                        club_type: type === '정식 동아리' ? 'official' : 'pre',
+                        cta_label: applyLabel,
+                        destination_url: applyUrl,
+                      })
+                    }}
                     className="w-full py-2.5 rounded-xl bg-blue-600 text-white text-sm font-black text-center hover:bg-blue-700 transition-colors"
                   >
                     {applyLabel}

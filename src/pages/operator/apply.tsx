@@ -8,6 +8,7 @@ import { Container } from '@/components/Container'
 import { HeroLabel } from '@/components/HeroLabel'
 import { Kicker } from '@/components/Kicker'
 import { Card } from '@/components/Card'
+import { trackEvent } from '@/lib/analytics'
 
 const QUALIFICATIONS = [
   <><strong className="text-slate-800">SSAFYnity 동문회원</strong>이라면 기수·캠퍼스 무관하게 지원 가능합니다.</>,
@@ -220,6 +221,12 @@ export default function TeamApplyPage() {
             href={siteData.forms.teamApply}
             target="_blank"
             rel="noopener noreferrer"
+            onClick={() => {
+              trackEvent('click_operator_apply', {
+                cta_label: '운영진 지원하기',
+                destination_url: siteData.forms.teamApply,
+              })
+            }}
             className="inline-flex items-center gap-2 px-8 py-4 rounded-full bg-white text-blue-950 text-base font-black tracking-wide hover:bg-blue-100 transition-colors shadow-lg shadow-blue-950/30"
           >
             운영진 지원하기

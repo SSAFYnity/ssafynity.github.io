@@ -17,6 +17,7 @@ import { Container } from '@/components/Container'
 import { HeroLabel } from '@/components/HeroLabel'
 import { Kicker } from '@/components/Kicker'
 import { Card } from '@/components/Card'
+import { trackEvent } from '@/lib/analytics'
 
 // ─── 데이터 ─────────────────────────────────────────────────────────
 const PILLARS = [
@@ -476,6 +477,13 @@ export default function JoinPartnershipPage() {
                   <p className="text-xs font-extrabold text-slate-800">문의하기</p>
                   <a
                     href={`mailto:${EXTERNAL_PARTNERSHIP_EMAIL}`}
+                    onClick={() => {
+                      trackEvent('click_partnership_contact', {
+                        partnership_type: 'sponsor',
+                        cta_label: EXTERNAL_PARTNERSHIP_EMAIL,
+                        destination_url: `mailto:${EXTERNAL_PARTNERSHIP_EMAIL}`,
+                      })
+                    }}
                     className="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl bg-blue-600 text-white text-sm font-black hover:bg-blue-700 transition-colors"
                   >
                     <Mail className="w-4 h-4" />
@@ -516,6 +524,13 @@ export default function JoinPartnershipPage() {
                   <p className="text-xs font-extrabold text-slate-800">문의하기</p>
                   <a
                     href={`mailto:${EXTERNAL_PARTNERSHIP_EMAIL}`}
+                    onClick={() => {
+                      trackEvent('click_partnership_contact', {
+                        partnership_type: 'alliance',
+                        cta_label: EXTERNAL_PARTNERSHIP_EMAIL,
+                        destination_url: `mailto:${EXTERNAL_PARTNERSHIP_EMAIL}`,
+                      })
+                    }}
                     className="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl bg-emerald-600 text-white text-sm font-black hover:bg-emerald-700 transition-colors"
                   >
                     <Mail className="w-4 h-4" />

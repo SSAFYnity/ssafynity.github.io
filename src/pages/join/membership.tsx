@@ -7,6 +7,7 @@ import { Container } from '@/components/Container'
 import { HeroLabel } from '@/components/HeroLabel'
 import { Kicker } from '@/components/Kicker'
 import { Card } from '@/components/Card'
+import { trackEvent } from '@/lib/analytics'
 
 const PROCESS = [
   {
@@ -194,6 +195,12 @@ export default function JoinMembershipPage() {
             href={siteData.forms.membership}
             target="_blank"
             rel="noopener noreferrer"
+            onClick={() => {
+              trackEvent('click_membership_apply', {
+                cta_label: '가입 신청하기',
+                destination_url: siteData.forms.membership,
+              })
+            }}
             className="w-full inline-flex items-center justify-center gap-2 px-8 py-4 rounded-full bg-white text-blue-950 text-base font-black tracking-wide hover:bg-blue-100 transition-colors shadow-lg shadow-blue-950/30"
           >
             가입 신청하기
