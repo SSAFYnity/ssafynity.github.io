@@ -32,6 +32,7 @@ export { allEvents }
 
 // ─── 운영진 전체 목록 ─────────────────────────────────────────
 export type OperatorMember = {
+  operatorId?:  string
   role:        string
   name?:       string
   cohort?:     number

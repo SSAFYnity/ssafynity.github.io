@@ -48,6 +48,18 @@ export const siteData = {
     vision: '연결이 성장을 만들고, 성장이 다시 기여로 돌아오는 선순환\n싸피니티가 지향하는 공동체의 모습입니다.',
   },
 
+  // ─── 사이트 주소 ───────────────────────────────────────────────
+  sites: {
+    production: {
+      official: 'https://ssafynity.github.io',
+      blog: 'https://ssafynity.github.io/blog',
+    },
+    development: {
+      official: 'http://127.0.0.1:4321',
+      blog: 'http://127.0.0.1:4322/blog',
+    },
+  },
+
   // ─── 핵심 가치 (/about/values) ────────────────────────────────
   values: [
     {
