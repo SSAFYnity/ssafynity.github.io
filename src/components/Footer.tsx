@@ -72,13 +72,13 @@ function FooterMobile() {
         <div className="mt-6 pt-6 border-t border-slate-100 flex flex-col items-center gap-3">
           <div className="flex items-center gap-6">
             <Link
-              to="/privacy"
+              to={siteData.legal.privacyPath}
               className="text-[10px] font-black text-slate-400 hover:text-blue-900 transition-colors uppercase tracking-widest"
             >
               {'\uAC1C\uC778\uC815\uBCF4\uCC98\uB9AC\uBC29\uCE68'}
             </Link>
             <Link
-              to="/terms"
+              to={siteData.legal.termsPath}
               className="text-[10px] font-black text-slate-400 hover:text-blue-900 transition-colors uppercase tracking-widest"
             >
               {'\uC774\uC6A9\uC57D\uAD00'}
@@ -196,19 +196,23 @@ function FooterDesktop() {
           </p>
           <div className="flex items-center gap-8">
             <Link
-              to="/privacy"
+              to={siteData.legal.privacyPath}
               className="text-[10px] font-black text-slate-400 hover:text-blue-900 transition-colors uppercase tracking-widest"
             >
               {'\uAC1C\uC778\uC815\uBCF4\uCC98\uB9AC\uBC29\uCE68'}
             </Link>
             <Link
-              to="/terms"
+              to={siteData.legal.termsPath}
               className="text-[10px] font-black text-slate-400 hover:text-blue-900 transition-colors uppercase tracking-widest"
             >
               {'\uC774\uC6A9\uC57D\uAD00'}
             </Link>
           </div>
         </div>
+
+        <p className="mt-5 text-[11px] font-bold leading-relaxed text-slate-400 break-keep">
+          동문회의 사전 허락 없는 무단 크롤링, 스크래핑, 복제 및 재배포를 금합니다.
+        </p>
       </Container>
     </footer>
   )

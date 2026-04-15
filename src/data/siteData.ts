@@ -60,6 +60,11 @@ export const siteData = {
     },
   },
 
+  legal: {
+    privacyPath: ROUTES.privacy,
+    termsPath: ROUTES.terms,
+  },
+
   // ─── 핵심 가치 (/about/values) ────────────────────────────────
   values: [
     {
