@@ -37,7 +37,7 @@ const DETAILS_BY_NAME: Record<string, ChannelDetails> = {
   '카카오톡 오픈카톡': {
     summary:  ['정회원을 위한 실시간 소통 채널입니다.', '정회원 공지·소통·선공개 및 투표에 활용됩니다.'],
     audience: ['동문회 운영진', '동문회 정회원'],
-    howto:    ['정회원 전환 후 안내 메일이 발송됩니다.', '필수 참여는 아니며, 유효기간 중에는 언제든 입장/퇴장할 수 있습니다.'],
+    howto:    ['정회원 전환 후 안내 메일이 발송됩니다.', '공개 링크로 운영하지 않으며, 별도 안내를 통해서만 입장할 수 있습니다.'],
   },
   디스코드: {
     summary:  ['관심사·주제별로 자유롭게 소통할 수 있는 커뮤니티 채널입니다.', '음성 채팅도 가능하며, 온라인 행사도 여기서 진행됩니다.'],
@@ -374,7 +374,6 @@ export default function CommunitySnsPage() {
                   const Icon = ICON_MAP[channel.icon]
                   const isSelected = channel.name === selected?.name
                   const isRestricted = channel.name === '카카오톡 오픈카톡'
-                  const isAccessible = channel.ready || isRestricted
                   const idSafe = encodeURIComponent(channel.name)
 
                   return (
@@ -391,7 +390,7 @@ export default function CommunitySnsPage() {
                         'relative -mb-px inline-flex items-center gap-2 px-3 py-2 text-xs font-black whitespace-nowrap border transition-colors outline-none focus-visible:ring-2 focus-visible:ring-blue-400 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-50 ' +
                         (isSelected
                           ? 'z-10 bg-white text-slate-900 border-slate-200 border-b-white shadow-sm rounded-t-xl rounded-b-none'
-                          : isAccessible
+                          : channel.ready || isRestricted
                             ? 'bg-transparent text-slate-600 border-transparent hover:bg-white/70 hover:text-slate-900 rounded-xl'
                             : 'bg-transparent text-slate-400 border-transparent opacity-70 hover:bg-white/50 hover:text-slate-500 rounded-xl')
                       }

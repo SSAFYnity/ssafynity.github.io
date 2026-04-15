@@ -20,7 +20,7 @@ function isUsableSnsUrl(url: string): boolean {
 }
 
 function getSnsDisabledHint(name: string): string {
-  if (name === '카카오톡 오픈카톡') return '정회원 확인 후 메일로 링크를 안내합니다.'
+  if (name === '카카오톡 오픈카톡') return '링크는 공개하지 않으며, 정회원에게만 별도로 안내합니다.'
   return '준비 중입니다.'
 }
 
