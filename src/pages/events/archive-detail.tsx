@@ -1,9 +1,10 @@
 import { useState } from 'react'
 import { useParams, useLocation, Link } from 'react-router-dom'
 import { motion } from 'framer-motion'
-import { ChevronLeft, MapPin, CalendarDays, Users, Globe, Monitor, ExternalLink, CircleDollarSign, RotateCcw, ClipboardCheck, Package, Info, Clock, BarChart2 } from 'lucide-react'
+import { ChevronLeft, MapPin, CalendarDays, Users, Globe, Monitor, ExternalLink, CircleDollarSign, RotateCcw, ClipboardCheck, Package, Info, Clock, BarChart2, FileText, MessageSquare } from 'lucide-react'
 import { allEvents } from '@/data/computed'
 import { EVENT_KIND, EVENT_KIND_LABEL, EVENT_AUDIENCE, EVENT_AUDIENCE_LABEL, EVENT_FORMAT, EVENT_FORMAT_LABEL, FORMAT_ORDER } from '@/data/constants'
+import { getEventBlogRecord } from '@/data/eventBlogRecords'
 import { formatEventDate, formatRecruitDate, FORMAT_ICON, getEventStatus } from '@/lib/utils'
 import { ResponsiveText } from '@/components/ResponsiveText'
 
@@ -12,6 +13,7 @@ export default function EventsArchiveDetailPage() {
   const { state } = useLocation()
   const event  = allEvents.find(e => e.slug === slug)
   const status = event ? getEventStatus(event) : 'past' as const
+  const relatedRecord = slug ? getEventBlogRecord(slug) : {}
 
   const isRecruitSoon = status === 'before-recruit' && !!event?.recruitDate && (() => {
     const today = new Date(); today.setHours(0, 0, 0, 0)
@@ -24,9 +26,10 @@ export default function EventsArchiveDetailPage() {
     fee:         isRecruitSoon || ['recruiting', 'recruit-closed', 'today-upcoming', 'today-ongoing', 'past'].includes(status),
     registrants: ['recruiting', 'recruit-closed', 'today-upcoming', 'today-ongoing', 'past'].includes(status),
     results:     status === 'past',
+    related:     !!(relatedRecord.journalPath || relatedRecord.reviewPath),
   }
 
-  const [activeTab, setActiveTab] = useState<'notices' | 'fee' | 'registrants' | 'results'>('notices')
+  const [activeTab, setActiveTab] = useState<'notices' | 'fee' | 'registrants' | 'results' | 'related'>('notices')
 
   const backTo    = state?.from === 'upcoming' ? '/events/upcoming' : '/events/archive'
   const backLabel = state?.from === 'upcoming' ? '올해 행사 일정' : '역대 행사'
@@ -442,6 +445,7 @@ export default function EventsArchiveDetailPage() {
           { id: 'fee' as const,         label: '비용·환불', enabled: TAB_HAS_DATA.fee },
           { id: 'registrants' as const, label: '접수 현황', enabled: TAB_HAS_DATA.registrants },
           { id: 'results' as const,     label: '참여 결과', enabled: TAB_HAS_DATA.results },
+          { id: 'related' as const,     label: '관련 기록', enabled: TAB_HAS_DATA.related },
         ]
 
         return (
@@ -651,6 +655,48 @@ export default function EventsArchiveDetailPage() {
                   </div>
                 )
               })()}
+
+              {activeTab === 'related' && (
+                <div className="grid sm:grid-cols-2 gap-3">
+                  {relatedRecord.journalPath && (
+                    <a
+                      href={relatedRecord.journalPath}
+                      className="bg-white rounded-2xl border border-slate-100 p-5 flex flex-col gap-4 hover:border-blue-200 hover:bg-blue-50/30 transition-colors"
+                    >
+                      <div className="flex items-center gap-2">
+                        <FileText size={14} className="text-blue-400 shrink-0" />
+                        <p className="text-xs font-black text-slate-700">행사 일지</p>
+                      </div>
+                      <div className="flex flex-col gap-1">
+                        <p className="text-sm font-extrabold text-slate-700 break-keep">행사 현장과 운영 기록을 블로그에서 확인할 수 있어요.</p>
+                        <p className="text-sm text-slate-500 leading-relaxed break-keep">행사 스케치와 사진, 진행 흐름을 블로그 일지에서 이어서 볼 수 있습니다.</p>
+                      </div>
+                      <span className="inline-flex items-center gap-1.5 text-xs font-black text-blue-600">
+                        행사 일지 보러가기 <ExternalLink size={12} />
+                      </span>
+                    </a>
+                  )}
+
+                  {relatedRecord.reviewPath && (
+                    <a
+                      href={relatedRecord.reviewPath}
+                      className="bg-white rounded-2xl border border-slate-100 p-5 flex flex-col gap-4 hover:border-blue-200 hover:bg-blue-50/30 transition-colors"
+                    >
+                      <div className="flex items-center gap-2">
+                        <MessageSquare size={14} className="text-blue-400 shrink-0" />
+                        <p className="text-xs font-black text-slate-700">후기</p>
+                      </div>
+                      <div className="flex flex-col gap-1">
+                        <p className="text-sm font-extrabold text-slate-700 break-keep">참여자 후기가 공개된 경우 블로그에서 모아볼 수 있어요.</p>
+                        <p className="text-sm text-slate-500 leading-relaxed break-keep">실제 참여자가 남긴 경험과 소감을 후기 아카이브에서 확인할 수 있습니다.</p>
+                      </div>
+                      <span className="inline-flex items-center gap-1.5 text-xs font-black text-blue-600">
+                        후기 보러가기 <ExternalLink size={12} />
+                      </span>
+                    </a>
+                  )}
+                </div>
+              )}
 
             </div>
           </section>
