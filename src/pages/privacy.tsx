@@ -1,1 +1,202 @@
-export default function PrivacyPage() { return null }
+import { Container } from '@/components/Container'
+
+const sections = [
+  {
+    title: '1. 개인정보의 처리 목적',
+    body: [
+      'SSAFYnity(이하 "동문회")는 SSAFYnity 공식 홈페이지 및 공식 블로그 운영, 동문회원 가입 확인, 행사 신청 및 운영, 회비 및 행사별 참가비 확인, 문의 응대 등을 위하여 필요한 범위에서 최소한의 개인정보를 처리합니다.',
+      '동문회는 비영리 단체로서 회비와 행사별 참가비를 기반으로 운영되며, 후원 및 제휴 협력을 통해 활동을 이어가고 있습니다. 운영진은 재능기부 형태로 참여하고 있으며, 영리 목적의 개인정보 판매·대여·거래를 하지 않습니다.',
+    ],
+    items: [
+      '동문회원 가입 및 회원 관리',
+      '행사 신청 접수, 참가자 확인, 안내 및 운영',
+      '회비 및 행사별 참가비 확인과 관련 문의 응대',
+      '후원·제휴 문의 및 협업 진행',
+      '공식 홈페이지 및 블로그 운영',
+      '법적 의무 이행 및 분쟁 대응',
+    ],
+    note:
+      '동문회는 회원 가입, 행사 신청, 정회원 확인 및 참가 자격 검토를 위해 필요한 경우 SSAFY 사무국과의 협조를 통해 정보주체의 수료 여부, 기수, 캠퍼스 등 자격 관련 사항을 확인할 수 있습니다. 이 과정은 동문회원 여부 및 참가 자격 검토를 위한 최소한의 범위에서만 이루어집니다.',
+  },
+  {
+    title: '2. 처리하는 개인정보 항목',
+    body: ['동문회는 다음과 같은 개인정보를 처리할 수 있습니다.'],
+    groups: [
+      {
+        title: '회원 가입 및 회원 관리',
+        items: ['이름', '기수', '캠퍼스', '연락처', '이메일 주소'],
+      },
+      {
+        title: '행사 신청 및 운영',
+        items: ['이름', '연락처', '이메일 주소', '기수 및 캠퍼스', '참가 구분 확인에 필요한 정보', '행사 운영상 필요한 추가 정보'],
+      },
+      {
+        title: '문의 및 후원·제휴 응대',
+        items: ['이름', '연락처', '이메일 주소', '문의 내용'],
+      },
+    ],
+    note:
+      '동문회는 공식 홈페이지 자체 회원가입 기능을 운영하지 않으며, 개인정보는 주로 Google Forms 및 이메일을 통해 수집합니다. 다만 환불이 필요한 경우에는 환불 처리에 필요한 계좌정보, 은행명, 예금주명 등을 별도로 요청할 수 있습니다.',
+  },
+  {
+    title: '3. 개인정보의 처리 및 보유 기간',
+    body: ['동문회는 정보주체로부터 동의받은 기간 또는 아래에 안내한 기간 동안 개인정보를 처리 및 보유합니다.'],
+    groups: [
+      {
+        title: '회원 가입 및 회원 관리 정보',
+        items: ['회원 탈퇴 시까지'],
+      },
+      {
+        title: '행사 신청 및 운영 정보',
+        items: ['행사 종료일로부터 14일'],
+      },
+      {
+        title: '회비 정보',
+        items: ['회비 납부일로부터 5년'],
+      },
+      {
+        title: '참가비 정보',
+        items: ['행사 종료일로부터 6개월'],
+      },
+      {
+        title: '문의 정보',
+        items: ['문의 처리 완료일로부터 1년'],
+      },
+    ],
+    note:
+      '다만 행사 운영 통계는 개인을 식별할 수 없는 형태의 집계 자료로 변환하여 별도로 보관할 수 있습니다. 예를 들어 행사별 참여 분류 인원 수, 기수별 참가 인원 수, 캠퍼스별 참가 인원 수와 같은 통계는 개인 식별 정보 없이 운영 기록으로 남길 수 있습니다. 또한 문의 내용 중 일반 안내에 해당하는 사항은 개인정보를 제거한 뒤 FAQ 형태로 재구성하여 활용할 수 있습니다.',
+  },
+  {
+    title: '4. 개인정보의 제3자 제공',
+    body: ['동문회는 원칙적으로 정보주체의 개인정보를 외부에 제공하지 않습니다.'],
+    items: ['정보주체가 사전에 동의한 경우', '법률에 특별한 규정이 있는 경우', '수사기관 등의 적법한 요청이 있는 경우'],
+  },
+  {
+    title: '5. 개인정보 처리의 위탁 및 외부 서비스 이용',
+    body: ['동문회는 원활한 운영을 위하여 다음과 같은 외부 서비스를 이용할 수 있습니다.'],
+    items: ['Google Forms: 신청서 접수', 'Gmail 등 이메일 서비스: 문의 및 운영 연락', 'GitHub Pages: 공식 홈페이지 및 블로그 배포 운영'],
+    note:
+      '동문회는 위 서비스 이용 과정에서 개인정보 보호 관련 사항을 점검하며, 운영 방식이 변경되는 경우 본 방침을 통하여 안내합니다.',
+  },
+  {
+    title: '6. 정보주체의 권리·의무 및 행사방법',
+    body: ['정보주체는 언제든지 자신의 개인정보에 대해 다음 권리를 행사할 수 있습니다.'],
+    items: ['개인정보 열람 요구', '개인정보 정정·삭제 요구', '개인정보 처리정지 요구'],
+    note:
+      '권리 행사는 동문회 이메일을 통해 요청할 수 있으며, 동문회는 지체 없이 검토·조치하겠습니다.',
+  },
+  {
+    title: '7. 개인정보의 파기',
+    body: ['동문회는 개인정보 보유기간의 경과, 처리 목적 달성 등 개인정보가 불필요하게 되었을 때에는 지체 없이 해당 개인정보를 파기합니다.'],
+    items: ['전자적 파일 형태의 정보는 복구 또는 재생이 불가능한 방법으로 파기합니다.', '종이 문서 형태의 정보는 분쇄하거나 소각하는 방법으로 파기합니다.'],
+  },
+  {
+    title: '8. 개인정보의 안전성 확보 조치',
+    body: ['동문회는 개인정보의 안전성 확보를 위하여 다음과 같은 조치를 취합니다.'],
+    items: ['개인정보 접근 권한 최소화', '운영진 대상 접근 권한 관리', '개인정보가 포함된 자료의 안전한 보관', '외부 서비스 계정 및 권한 관리', '정기적인 점검 및 보호조치 검토'],
+  },
+  {
+    title: '9. 개인정보 보호 관련 문의처',
+    body: ['동문회는 개인정보 처리와 관련한 문의, 열람청구, 권리행사 요청을 아래 창구를 통해 접수합니다.'],
+    items: ['이메일: ssafynity@gmail.com', '문의 주체: SSAFYnity 운영진'],
+  },
+  {
+    title: '10. 권익침해 구제방법',
+    items: ['개인정보침해신고센터: 118', '개인정보 분쟁조정위원회: 1833-6972', '대검찰청: 1301', '경찰청: 182'],
+  },
+  {
+    title: '11. 개인정보처리방침의 변경',
+    body: ['이 개인정보처리방침은 시행일로부터 적용됩니다. 내용의 추가, 삭제 및 수정이 있을 경우 변경사항은 공식 홈페이지를 통해 공지하겠습니다.'],
+  },
+] as const
+
+export default function PrivacyPage() {
+  return (
+    <>
+      <section className="bg-white pt-20 sm:pt-24 pb-10 sm:pb-12 lg:pt-28 lg:pb-16 border-b border-slate-100">
+        <Container maxWidth="3xl">
+          <div className="flex flex-col gap-5">
+            <p className="text-[11px] font-black uppercase tracking-[0.28em] text-slate-400">
+              Privacy Policy
+            </p>
+            <div className="flex flex-col gap-4">
+              <h1 className="text-4xl sm:text-5xl lg:text-[4.2rem] font-black tracking-tight text-slate-950 leading-[0.96]">
+                개인정보처리방침
+              </h1>
+              <p className="text-base sm:text-lg text-slate-500 leading-relaxed break-keep">
+                SSAFYnity 동문회 운영 과정에서 적용되는 개인정보 처리 기준을 안내합니다.
+              </p>
+            </div>
+            <div className="pt-5 border-t border-slate-100 text-sm text-slate-400">
+              시행일: 2026년 4월 15일
+            </div>
+          </div>
+        </Container>
+      </section>
+
+      <section className="bg-white py-8 sm:py-10 lg:py-12">
+        <Container maxWidth="3xl">
+          <div className="flex flex-col gap-12 sm:gap-14">
+            {sections.map((section) => (
+              <section key={section.title} className="flex flex-col gap-5">
+                <h2 className="text-xl sm:text-2xl font-extrabold tracking-tight text-slate-950">
+                  {section.title}
+                </h2>
+
+                {'body' in section && section.body && (
+                  <div className="flex flex-col gap-3">
+                    {section.body.map((paragraph) => (
+                      <p key={paragraph} className="text-sm sm:text-base leading-8 text-slate-600 break-keep">
+                        {paragraph}
+                      </p>
+                    ))}
+                  </div>
+                )}
+
+                {'items' in section && section.items && (
+                  <ul className="flex flex-col gap-2.5 text-sm sm:text-base leading-8 text-slate-600">
+                    {section.items.map((item, index) => (
+                      <li key={item} className="flex items-start gap-3">
+                        <span className="shrink-0 text-sm font-bold text-slate-400 leading-8">
+                          {index + 1}.
+                        </span>
+                        <span className="break-keep">{item}</span>
+                      </li>
+                    ))}
+                  </ul>
+                )}
+
+                {'groups' in section && section.groups && (
+                  <div className="flex flex-col gap-5">
+                    {section.groups.map((group, groupIndex) => (
+                      <div key={group.title} className="flex flex-col gap-3">
+                        <h3 className="text-base sm:text-lg font-extrabold text-slate-900">
+                          <span className="mr-2 text-slate-400">{groupIndex + 1}.</span>
+                          {group.title}
+                        </h3>
+                        <ul className="flex flex-col gap-2.5 text-sm sm:text-base leading-8 text-slate-600">
+                          {group.items.map((item) => (
+                            <li key={item} className="flex items-start gap-3">
+                              <span className="shrink-0 text-sm font-bold text-slate-400 leading-8">•</span>
+                              <span className="break-keep">{item}</span>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    ))}
+                  </div>
+                )}
+
+                {'note' in section && section.note && (
+                  <p className="text-sm sm:text-base leading-8 text-slate-600 break-keep">
+                    {section.note}
+                  </p>
+                )}
+              </section>
+            ))}
+          </div>
+        </Container>
+      </section>
+    </>
+  )
+}
