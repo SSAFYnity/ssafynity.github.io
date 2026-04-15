@@ -7,6 +7,7 @@ import { Container } from '@/components/Container'
 import { HeroLabel } from '@/components/HeroLabel'
 import { Card } from '@/components/Card'
 import { Kicker } from '@/components/Kicker'
+import { siteData } from '@/data/siteData'
 
 const CATEGORY_UI: Record<ClubCategoryKey, { icon: LucideIcon; examples: string[] }> = {
   tech:      { icon: Code2,    examples: ['사이드 프로젝트', 'CS 스터디'] },
@@ -34,6 +35,7 @@ const APPLY_TYPES = [
     path: '/clubs',
     pathLabel: '정식 동아리 목록 보기',
     applyLabel: '정식 동아리 신청하기',
+    applyUrl: siteData.forms.clubOfficial,
   },
   {
     icon: Users,
@@ -43,6 +45,7 @@ const APPLY_TYPES = [
     path: '/clubs/pre',
     pathLabel: '예비 동아리 목록 보기',
     applyLabel: '예비 동아리 등록하기',
+    applyUrl: siteData.forms.clubPre,
   },
 ]
 
@@ -158,7 +161,7 @@ export default function ClubsApplyPage() {
             <p className="text-sm text-slate-500 mt-1 break-keep">상황에 맞는 신청 경로를 선택해주세요.</p>
           </motion.div>
           <div className="grid sm:grid-cols-2 gap-4">
-            {APPLY_TYPES.map(({ icon: Icon, type, desc, note, path, pathLabel, applyLabel }, i) => (
+            {APPLY_TYPES.map(({ icon: Icon, type, desc, note, path, pathLabel, applyLabel, applyUrl }, i) => (
               <Card
                 key={type}
                 as={motion.div}
@@ -185,12 +188,14 @@ export default function ClubsApplyPage() {
                   >
                     {pathLabel}
                   </Link>
-                  <button
-                    disabled
-                    className="w-full py-2.5 rounded-xl bg-slate-100 text-slate-400 text-sm font-black cursor-not-allowed"
+                  <a
+                    href={applyUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="w-full py-2.5 rounded-xl bg-blue-600 text-white text-sm font-black text-center hover:bg-blue-700 transition-colors"
                   >
-                    {applyLabel} (준비 중)
-                  </button>
+                    {applyLabel}
+                  </a>
                 </div>
               </Card>
             ))}

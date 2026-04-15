@@ -125,6 +125,8 @@ export const siteData = {
     membership: 'https://forms.gle/wudsF4nfsFYYXpLs6', // 동문회 가입 신청 Forms URL
     regular:    'https://forms.gle/QMXe2VxNk9pc7ZRaA', // 정회원 등록 Forms URL
     teamApply:  'https://forms.gle/mGXTcSgbzc3W4URk9', // 운영진 모집 Forms URL
+    clubOfficial: 'https://forms.gle/R4QuMCEdCW96H6bK8', // 정식 동아리 신청 Forms URL
+    clubPre: 'https://forms.gle/NA9jowhmzRR2qszS6', // 예비 동아리 신청 Forms URL
   },
 
   // ─── 네비게이션 메뉴 ───────────────────────────────────────────
@@ -161,7 +163,6 @@ export const siteData = {
       { label: '동아리 신청',    path: ROUTES.clubsApply },
       { label: '운영진 모집',    path: ROUTES.operatorApply },
       { label: '후원·제휴 문의', path: ROUTES.joinPartnership },
-      // { label: '소식 수신', path: '', external: true }, // [업데이트 필요] forms.newsletter URL 생성 후 입력
     ]},
   ],
 
