@@ -10,6 +10,7 @@ import { HeroLabel } from '@/components/HeroLabel'
 import { Kicker } from '@/components/Kicker'
 import { siteData } from '@/data/siteData'
 import { HERO_FADE_UP } from '@/lib/motion'
+import { trackEvent } from '@/lib/analytics'
 
 const ICON_MAP = {
   kakao: SiKakaotalk,
@@ -157,6 +158,15 @@ export default function CommunitySnsPage() {
     setCopiedLink(false)
   }
 
+  const trackSnsLinkClick = (channel: Channel, action: string, destinationUrl: string) => {
+    trackEvent('click_sns_link', {
+      channel_name: channel.name,
+      channel_type: channel.icon,
+      cta_label: action,
+      destination_url: destinationUrl,
+    })
+  }
+
   return (
     <div className="flex flex-col">
       {/* Hero */}
@@ -224,6 +234,14 @@ export default function CommunitySnsPage() {
                           '내용: ',
                           '첨부/링크: ',
                         ])}
+                        onClick={() => {
+                          trackEvent('click_sns_link', {
+                            channel_name: mainEmail.name,
+                            channel_type: 'email',
+                            cta_label: '메일 작성',
+                            destination_url: mailAddress(mainEmail.url),
+                          })
+                        }}
                         className="w-full inline-flex items-center justify-center gap-2 text-xs font-black px-3.5 py-2 rounded-xl bg-blue-600 text-white hover:bg-blue-700 transition-colors"
                       >
                         메일 작성 <ExternalLink size={14} />
@@ -290,6 +308,14 @@ export default function CommunitySnsPage() {
                           '첨부/링크: ',
                           '희망 일정: ',
                         ])}
+                        onClick={() => {
+                          trackEvent('click_sns_link', {
+                            channel_name: extEmail.name,
+                            channel_type: 'email',
+                            cta_label: '메일 작성',
+                            destination_url: mailAddress(extEmail.url),
+                          })
+                        }}
                         className="w-full inline-flex items-center justify-center gap-2 text-xs font-black px-3.5 py-2 rounded-xl bg-blue-600 text-white hover:bg-blue-700 transition-colors"
                       >
                         메일 작성 <ExternalLink size={14} />
@@ -440,6 +466,14 @@ export default function CommunitySnsPage() {
                                 '정회원 여부(예/아니오): ',
                                 '문의 내용: ',
                               ])}
+                              onClick={() => {
+                                trackEvent('click_sns_link', {
+                                  channel_name: selected.name,
+                                  channel_type: selected.icon,
+                                  cta_label: '공식 메일로 문의',
+                                  destination_url: mailAddress(mainEmail.url),
+                                })
+                              }}
                               className="w-full inline-flex items-center justify-center gap-2 text-xs font-black px-3.5 py-2 rounded-xl bg-blue-600 text-white hover:bg-blue-700 transition-colors"
                             >
                               공식 메일로 문의 <ExternalLink size={14} />
@@ -459,6 +493,7 @@ export default function CommunitySnsPage() {
                             <a
                               href={selected.url}
                               {...getAnchorProps(selected.url)}
+                              onClick={() => trackSnsLinkClick(selected, '바로가기', selected.url)}
                               className="w-full inline-flex items-center justify-center gap-2 text-xs font-black px-3.5 py-2 rounded-xl bg-blue-600 text-white hover:bg-blue-700 transition-colors"
                             >
                               바로가기 <ExternalLink size={14} />

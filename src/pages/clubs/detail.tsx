@@ -10,6 +10,7 @@ import { ResponsiveText } from '@/components/ResponsiveText'
 import { Kicker } from '@/components/Kicker'
 import { Card } from '@/components/Card'
 import { formatClubSince } from '@/lib/utils'
+import { trackEvent } from '@/lib/analytics'
 
 
 const CONTACT_ICON_CONFIG: Record<ContactIconKey, React.ElementType> = {
@@ -279,6 +280,16 @@ export default function ClubDetailPage() {
                         href={c.url}
                         target="_blank"
                         rel="noopener noreferrer"
+                        onClick={() => {
+                          trackEvent('click_club_contact_link', {
+                            club_slug: club.slug,
+                            club_name: club.name,
+                            club_category: club.category,
+                            contact_label: c.label,
+                            contact_type: c.icon ?? 'external',
+                            destination_url: c.url,
+                          })
+                        }}
                         className={`w-full flex items-center justify-center gap-2 py-3 rounded-xl text-sm font-black transition-colors ${
                           i === 0
                             ? 'bg-blue-600 text-white hover:bg-blue-700'
@@ -302,6 +313,15 @@ export default function ClubDetailPage() {
                         href={link.url}
                         target="_blank"
                         rel="noopener noreferrer"
+                        onClick={() => {
+                          trackEvent('click_club_external_link', {
+                            club_slug: club.slug,
+                            club_name: club.name,
+                            club_category: club.category,
+                            link_label: link.label,
+                            destination_url: link.url,
+                          })
+                        }}
                         className="flex items-center justify-between text-xs px-3 py-2 rounded-xl border border-slate-100 text-slate-500 hover:border-blue-200 hover:text-blue-600 transition-colors"
                       >
                         {link.label}
