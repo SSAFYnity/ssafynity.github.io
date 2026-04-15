@@ -28,8 +28,8 @@ export function initializeGoogleAnalytics() {
   window.dataLayer = window.dataLayer || []
   window.gtag =
     window.gtag ||
-    function gtag(...args: unknown[]) {
-      window.dataLayer.push(args)
+    function gtag() {
+      window.dataLayer.push(arguments)
     }
 
   if (window.__gaInitialized) {
