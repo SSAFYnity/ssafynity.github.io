@@ -130,6 +130,10 @@ const PARTNER_PERKS = [
 const SPONSOR_STEPS  = ['문의 접수', '회신'] as const
 const ALLIANCE_STEPS = ['문의 접수', '협의 진행', '협약 체결', '진행·홍보'] as const
 
+const EXTERNAL_PARTNERSHIP_EMAIL =
+  siteData.sns.find((channel) => channel.name === 'Gmail(대외협력)')?.url.replace(/^mailto:/, '') ??
+  siteData.brand.email
+
 // ─── 공통 애니메이션 ──────────────────────────────────────────────
 const fadeUp = (delay = 0) => ({
   initial:     { opacity: 0, y: 16 },
@@ -471,11 +475,11 @@ export default function JoinPartnershipPage() {
                 <div className="flex flex-col gap-2">
                   <p className="text-xs font-extrabold text-slate-800">문의하기</p>
                   <a
-                    href={`mailto:${siteData.brand.email}`}
+                    href={`mailto:${EXTERNAL_PARTNERSHIP_EMAIL}`}
                     className="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl bg-blue-600 text-white text-sm font-black hover:bg-blue-700 transition-colors"
                   >
                     <Mail className="w-4 h-4" />
-                    {siteData.brand.email}
+                    {EXTERNAL_PARTNERSHIP_EMAIL}
                   </a>
                   {/* [업데이트 필요] 접수 폼 URL 생성 후 이메일 버튼 대신 폼 버튼으로 교체 */}
                 </div>
@@ -511,11 +515,11 @@ export default function JoinPartnershipPage() {
                 <div className="flex flex-col gap-2">
                   <p className="text-xs font-extrabold text-slate-800">문의하기</p>
                   <a
-                    href={`mailto:${siteData.brand.email}`}
+                    href={`mailto:${EXTERNAL_PARTNERSHIP_EMAIL}`}
                     className="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl bg-emerald-600 text-white text-sm font-black hover:bg-emerald-700 transition-colors"
                   >
                     <Mail className="w-4 h-4" />
-                    {siteData.brand.email}
+                    {EXTERNAL_PARTNERSHIP_EMAIL}
                   </a>
                   {/* [업데이트 필요] 접수 폼 URL 생성 후 이메일 버튼 대신 폼 버튼으로 교체 */}
                 </div>
