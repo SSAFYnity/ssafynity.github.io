@@ -10,6 +10,7 @@ import { siteData } from '@/data/siteData'
 import { HeroSection } from '@/components/HeroSection'
 import { HeroLabel } from '@/components/HeroLabel'
 import { ResponsiveText } from '@/components/ResponsiveText'
+import { trackEvent } from '@/lib/analytics'
 
 const YEAR = siteData.upcomingEventYear
 const MONTH_KO = ['1월','2월','3월','4월','5월','6월','7월','8월','9월','10월','11월','12월']
@@ -129,6 +130,16 @@ export default function EventsUpcomingPage() {
                     <Link
                       to={`/events/archive/${event.slug}`}
                       state={{ from: 'upcoming' }}
+                      onClick={() => {
+                        trackEvent('select_event_card', {
+                          event_slug: event.slug,
+                          event_title: event.title,
+                          event_kind: event.kind ?? 'unknown',
+                          event_audience: event.audience ?? 'unknown',
+                          event_status: status,
+                          source_page: 'events_upcoming',
+                        })
+                      }}
                       className={`relative overflow-hidden group flex items-start gap-4 bg-white border rounded-2xl px-5 py-4 pr-14
                                   hover:border-blue-200 hover:shadow-md transition-all duration-200
                                   ${isPast ? 'border-slate-100' : 'border-slate-200'}`}
@@ -255,4 +266,3 @@ export default function EventsUpcomingPage() {
     </div>
   )
 }
-

@@ -7,6 +7,7 @@ import { EVENT_KIND, EVENT_KIND_LABEL, EVENT_AUDIENCE, EVENT_AUDIENCE_LABEL, EVE
 import { getEventBlogRecord } from '@/data/eventBlogRecords'
 import { formatEventDate, formatRecruitDate, FORMAT_ICON, getEventStatus } from '@/lib/utils'
 import { ResponsiveText } from '@/components/ResponsiveText'
+import { trackEvent } from '@/lib/analytics'
 
 export default function EventsArchiveDetailPage() {
   const { slug } = useParams<{ slug: string }>()
@@ -138,6 +139,16 @@ export default function EventsArchiveDetailPage() {
                           <div className="flex flex-wrap gap-1.5">
                             {event.locationUrl.naver && (
                               <a href={event.locationUrl.naver} target="_blank" rel="noopener noreferrer"
+                                 onClick={() => {
+                                   trackEvent('click_sns_link', {
+                                     channel_name: '네이버지도',
+                                     channel_type: 'map',
+                                     cta_label: '네이버지도',
+                                     destination_url: event.locationUrl!.naver,
+                                     event_slug: event.slug,
+                                     event_title: event.title,
+                                   })
+                                 }}
                                  className="inline-flex items-center gap-1 text-[10px] font-black px-2 py-1 rounded-full
                                             bg-green-50 text-green-600 hover:bg-green-100 transition-colors">
                                 네이버지도 <ExternalLink size={8} />
@@ -145,6 +156,16 @@ export default function EventsArchiveDetailPage() {
                             )}
                             {event.locationUrl.kakao && (
                               <a href={event.locationUrl.kakao} target="_blank" rel="noopener noreferrer"
+                                 onClick={() => {
+                                   trackEvent('click_sns_link', {
+                                     channel_name: '카카오맵',
+                                     channel_type: 'map',
+                                     cta_label: '카카오맵',
+                                     destination_url: event.locationUrl!.kakao,
+                                     event_slug: event.slug,
+                                     event_title: event.title,
+                                   })
+                                 }}
                                  className="inline-flex items-center gap-1 text-[10px] font-black px-2 py-1 rounded-full
                                             bg-yellow-50 text-yellow-600 hover:bg-yellow-100 transition-colors">
                                 카카오맵 <ExternalLink size={8} />
@@ -152,6 +173,16 @@ export default function EventsArchiveDetailPage() {
                             )}
                             {event.locationUrl.google && (
                               <a href={event.locationUrl.google} target="_blank" rel="noopener noreferrer"
+                                 onClick={() => {
+                                   trackEvent('click_sns_link', {
+                                     channel_name: '구글지도',
+                                     channel_type: 'map',
+                                     cta_label: '구글지도',
+                                     destination_url: event.locationUrl!.google,
+                                     event_slug: event.slug,
+                                     event_title: event.title,
+                                   })
+                                 }}
                                  className="inline-flex items-center gap-1 text-[10px] font-black px-2 py-1 rounded-full
                                             bg-blue-50 text-blue-500 hover:bg-blue-100 transition-colors">
                                 구글지도 <ExternalLink size={8} />
@@ -309,6 +340,16 @@ export default function EventsArchiveDetailPage() {
           status === 'recruiting'
             ? event.formUrl
               ? <a href={event.formUrl} target="_blank" rel="noopener noreferrer"
+                   onClick={() => {
+                     trackEvent('click_event_apply', {
+                       event_slug: event.slug,
+                       event_title: event.title,
+                       event_kind: event.kind ?? 'unknown',
+                       event_audience: event.audience ?? 'unknown',
+                       event_status: status,
+                       destination_url: event.formUrl,
+                     })
+                   }}
                    className="flex items-center justify-center gap-2 w-full py-3 rounded-xl bg-blue-600 text-white text-sm font-black hover:bg-blue-700 transition-colors">
                   접수하기 <ExternalLink size={14} />
                 </a>
@@ -457,7 +498,17 @@ export default function EventsArchiveDetailPage() {
                 {TABS.filter(tab => tab.enabled).map(tab => (
                   <button
                     key={tab.id}
-                    onClick={() => setActiveTab(tab.id)}
+                    onClick={() => {
+                      setActiveTab(tab.id)
+                      trackEvent('select_event_tab', {
+                        event_slug: event.slug,
+                        event_title: event.title,
+                        event_kind: event.kind ?? 'unknown',
+                        event_audience: event.audience ?? 'unknown',
+                        tab_id: tab.id,
+                        tab_label: tab.label,
+                      })
+                    }}
                     className={`px-4 py-2.5 text-xs font-black border-b-2 -mb-px transition-colors ${
                       activeTab === tab.id
                         ? 'text-blue-600 border-blue-500'
@@ -661,6 +712,14 @@ export default function EventsArchiveDetailPage() {
                   {relatedRecord.journalPath && (
                     <a
                       href={relatedRecord.journalPath}
+                      onClick={() => {
+                        trackEvent('click_blog_from_event', {
+                          event_slug: event.slug,
+                          event_title: event.title,
+                          link_type: 'journal',
+                          destination_url: relatedRecord.journalPath,
+                        })
+                      }}
                       className="bg-white rounded-2xl border border-slate-100 p-5 flex flex-col gap-4 hover:border-blue-200 hover:bg-blue-50/30 transition-colors"
                     >
                       <div className="flex items-center gap-2">
@@ -680,6 +739,14 @@ export default function EventsArchiveDetailPage() {
                   {relatedRecord.reviewPath && (
                     <a
                       href={relatedRecord.reviewPath}
+                      onClick={() => {
+                        trackEvent('click_blog_from_event', {
+                          event_slug: event.slug,
+                          event_title: event.title,
+                          link_type: 'review',
+                          destination_url: relatedRecord.reviewPath,
+                        })
+                      }}
                       className="bg-white rounded-2xl border border-slate-100 p-5 flex flex-col gap-4 hover:border-blue-200 hover:bg-blue-50/30 transition-colors"
                     >
                       <div className="flex items-center gap-2">
