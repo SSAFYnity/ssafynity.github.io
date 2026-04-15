@@ -1,6 +1,7 @@
 import { BrowserRouter, Routes, Route, Navigate, useLocation } from 'react-router-dom'
 import { useEffect } from 'react'
 import { ROUTES } from '@/lib/routes'
+import { initializeGoogleAnalytics, trackPageView } from '@/lib/analytics'
 import Navbar from '@/components/Navbar'
 import Footer from '@/components/Footer'
 
@@ -39,11 +40,16 @@ import TermsPage from '@/pages/terms'
 import NotFoundPage from '@/pages/not-found'
 
 function ScrollToTop() {
-  const { pathname } = useLocation()
+  const { pathname, search } = useLocation()
 
   useEffect(() => {
     window.scrollTo(0, 0)
   }, [pathname])
+
+  useEffect(() => {
+    initializeGoogleAnalytics()
+    trackPageView(`${pathname}${search}`, document.title)
+  }, [pathname, search])
 
   return null
 }
