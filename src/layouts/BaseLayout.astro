@@ -3,6 +3,7 @@ import '../site/index.css'
 
 interface Props {
   title?: string
+  documentTitle?: string
   description?: string
   canonical?: string
   noindex?: boolean
@@ -10,6 +11,7 @@ interface Props {
 
 const {
   title = 'SSAFYnity',
+  documentTitle = title,
   description = 'SSAFY 수료생들이 직접 운영하는 동문회 SSAFYnity 공식 홈페이지. 행사, 운영진, 동아리, 멤버십 정보를 확인하세요.',
   canonical = `https://ssafynity.github.io${Astro.url.pathname}`,
   noindex = false,
@@ -23,7 +25,7 @@ const enableAnalytics = import.meta.env.PROD
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>{title}</title>
+    <title>{documentTitle}</title>
     <meta name="description" content={description} />
     {noindex && <meta name="robots" content="noindex, follow" />}
     <meta name="theme-color" content="#1E3A8A" />

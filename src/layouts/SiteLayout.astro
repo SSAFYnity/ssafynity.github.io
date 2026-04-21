@@ -6,6 +6,7 @@ import Navbar from '~/components/Navbar.astro'
 interface Props {
   pathname: string
   title?: string
+  documentTitle?: string
   description?: string
   canonical?: string
   noindex?: boolean
@@ -105,6 +106,7 @@ const metaByPath: Record<string, { title: string; description: string }> = {
 const {
   pathname,
   title,
+  documentTitle = 'SSAFYnity',
   description,
   canonical = `https://ssafynity.github.io${pathname}`,
   noindex = false,
@@ -117,6 +119,7 @@ const resolvedDescription = description ?? defaultMeta?.description
 
 <BaseLayout
   title={resolvedTitle}
+  documentTitle={documentTitle}
   description={resolvedDescription}
   canonical={canonical}
   noindex={noindex}
