@@ -27,7 +27,7 @@ export const EVENT_KIND_LABEL: { [K in EventKind]: string } = {
 
 export const EVENT_AUDIENCE = {
   open:     { label: '공개',    desc: '동문 여부와 관계없이 누구나 참여할 수 있어요.' },
-  members:  { label: '동문회',  desc: '동문회원이라면 누구나 참여할 수 있어요.' },
+  members:  { label: '동문회원', desc: '동문회원이라면 누구나 참여할 수 있어요.' },
   regular:  { label: '정회원',  desc: '정회원만 참여할 수 있는 행사예요.' },
   operator: { label: '운영진',  desc: '운영진만 참여하는 내부 행사예요.' },
 } as const
@@ -203,4 +203,3 @@ export const MODE_CONFIG = {
 } as const
 
 export type ModeKey = keyof typeof MODE_CONFIG
-
