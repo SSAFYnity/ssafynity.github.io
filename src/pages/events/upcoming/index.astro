@@ -1,0 +1,219 @@
+---
+import Container from '~/components/Container.astro'
+import HeroLabel from '~/components/HeroLabel.astro'
+import LucideIcon from '~/components/LucideIcon.astro'
+import ResponsiveText from '~/components/ResponsiveText.astro'
+import SiteLayout from '~/layouts/SiteLayout.astro'
+import { allEvents, type Event } from '@/data/computed'
+import { EVENT_AUDIENCE_LABEL, EVENT_FORMAT_LABEL, EVENT_KIND_LABEL, FORMAT_ORDER } from '@/data/constants'
+import { EVENT_STATUS_CONFIG, formatEventDate, getEventStatus, type EventStatus } from '@/lib/utils'
+import { siteData } from '@/data/siteData'
+
+const pathname = '/events/upcoming'
+const year = siteData.upcomingEventYear
+const monthLabels = ['1월', '2월', '3월', '4월', '5월', '6월', '7월', '8월', '9월', '10월', '11월', '12월'] as const
+
+function shouldShowRibbon(event: Event, status: EventStatus): boolean {
+  if (status === 'past' || status === 'planning' || status === 'no-recruit') return false
+  if (status === 'before-recruit') {
+    const today = new Date()
+    today.setHours(0, 0, 0, 0)
+    const recruitStart = new Date(event.recruitDate!.start)
+    recruitStart.setHours(0, 0, 0, 0)
+    const daysUntil = (recruitStart.getTime() - today.getTime()) / 86400000
+    return daysUntil <= 14
+  }
+  return true
+}
+
+function isClickable(event: Event, status: EventStatus): boolean {
+  if (status === 'planning') return false
+  if (status === 'before-recruit') {
+    const today = new Date()
+    today.setHours(0, 0, 0, 0)
+    const recruitStart = new Date(event.recruitDate!.start)
+    recruitStart.setHours(0, 0, 0, 0)
+    const daysUntil = (recruitStart.getTime() - today.getTime()) / 86400000
+    return daysUntil <= 14
+  }
+  return true
+}
+
+const today = new Date()
+today.setHours(0, 0, 0, 0)
+
+const events = allEvents
+  .filter((event) => new Date(event.eventDate.start).getFullYear() === year)
+  .filter((event) => {
+    const eventEnd = new Date(event.eventDate.end ?? event.eventDate.start)
+    eventEnd.setHours(0, 0, 0, 0)
+    if (today > eventEnd) return true
+    if (!event.recruitDate) return true
+    return true
+  })
+  .sort((a, b) => a.eventDate.start.localeCompare(b.eventDate.start))
+
+const hasPlanningEvents = events.some((event) => getEventStatus(event) === 'planning')
+---
+
+<SiteLayout pathname={pathname}>
+  <div class="flex flex-col">
+    <section class="bg-white pt-20 sm:pt-24 pb-10 lg:pt-28 lg:pb-14 border-b border-slate-100">
+      <Container maxWidth="5xl">
+        <div class="astro-reveal">
+          <HeroLabel>{year} Annual Events</HeroLabel>
+          <h1 class="text-2xl md:text-3xl font-extrabold tracking-tight leading-[1.2] text-slate-900 mb-2">
+            올 한 해, 싸피니티와 함께
+          </h1>
+          <p class="text-xl md:text-2xl font-black text-blue-600 mb-4">
+            {year} 행사 일정
+          </p>
+          <p class="text-sm text-slate-500 leading-relaxed break-keep text-pretty">
+            <ResponsiveText
+              newline="mobile"
+              text={`${year}년 싸피니티가 준비한 행사 라인업을 미리 확인하고,\n원하는 행사에 참여해보세요.`}
+            />
+          </p>
+        </div>
+      </Container>
+    </section>
+
+    <section class="bg-slate-50 pt-6 pb-14 lg:pt-8 lg:pb-20">
+      <Container maxWidth="5xl">
+        {hasPlanningEvents && (
+          <div class="astro-reveal flex items-start gap-3 bg-blue-50 border border-blue-100 rounded-2xl px-4 sm:px-5 py-4 mb-3">
+            <span class="text-blue-400 text-base leading-none mt-0.5 shrink-0">ℹ</span>
+            <p class="text-xs text-blue-600 leading-relaxed break-keep">
+              운영진이 동문회 운영을 감안하여 계획한 행사 후보 중, <span class="font-bold">최종 일정은 정회원 투표로 확정</span>됩니다.
+            </p>
+          </div>
+        )}
+
+        {events.length === 0 ? (
+          <div class="astro-reveal flex flex-col items-center gap-5 py-24 text-center">
+            <div class="w-14 h-14 rounded-full bg-slate-100 flex items-center justify-center">
+              <LucideIcon name="calendar-days" size={24} className="w-6 h-6 text-slate-300" />
+            </div>
+            <div class="flex flex-col gap-1.5">
+              <p class="text-sm font-bold text-slate-500">{year}년 행사를 기획하고 있습니다.</p>
+              <p class="text-xs text-slate-400 break-keep">운영진이 올해 일정을 열심히 준비 중이에요. 확정되는 대로 이 페이지에서 바로 만나볼 수 있어요.</p>
+            </div>
+            <a
+              href="/events/archive"
+              class="text-xs font-black text-blue-500 hover:text-blue-700 transition-colors"
+            >
+              역대 모든 행사 보기 →
+            </a>
+          </div>
+        ) : (
+          <div class="flex flex-col gap-2.5">
+            {events.map((event, index) => {
+              const status = getEventStatus(event)
+              const config = EVENT_STATUS_CONFIG[status]
+              const past = status === 'past'
+              const eventDate = new Date(event.eventDate.start)
+              const clickable = isClickable(event, status)
+              const wrapperClass = `astro-reveal ${clickable ? '' : ''}`
+              const baseCardClass = `relative overflow-hidden flex items-start gap-4 bg-white border rounded-2xl px-5 py-4 pr-14 ${
+                clickable
+                  ? `hover:border-blue-200 hover:shadow-md transition-all duration-200 ${past ? 'border-slate-100' : 'border-slate-200'}`
+                  : `${past ? 'border-slate-100' : 'border-slate-200'} cursor-default`
+              }`
+
+              const content = (
+                <>
+                  <div class={`shrink-0 w-10 flex flex-col items-center pt-0.5 ${past ? 'opacity-40' : ''}`}>
+                    <span class="text-[10px] font-black text-blue-500">
+                      {monthLabels[eventDate.getMonth()]}
+                    </span>
+                    <span class={`text-2xl font-black leading-none ${past ? 'text-slate-400' : 'text-slate-800'}`}>
+                      {status === 'planning' ? '○' : String(eventDate.getDate()).padStart(2, '0')}
+                    </span>
+                  </div>
+
+                  <div class={`w-px self-stretch shrink-0 ${past ? 'bg-slate-100' : 'bg-slate-200'}`}></div>
+
+                  <div class="flex-1 min-w-0 flex flex-col gap-1.5">
+                    <div class="flex flex-wrap items-center gap-1">
+                      {event.kind && (
+                        <span class="text-[10px] font-black px-2 py-0.5 rounded-full bg-blue-50 text-blue-600">
+                          {EVENT_KIND_LABEL[event.kind]}
+                        </span>
+                      )}
+                      {event.audience && (
+                        <span class="text-[10px] font-black px-2 py-0.5 rounded-full bg-slate-100 text-slate-500">
+                          {EVENT_AUDIENCE_LABEL[event.audience]}
+                        </span>
+                      )}
+                      {[...event.format].sort((a, b) => FORMAT_ORDER.indexOf(a) - FORMAT_ORDER.indexOf(b)).map((format) => (
+                        <span class="text-[10px] font-black px-2 py-0.5 rounded-full bg-slate-100 text-slate-400">
+                          {EVENT_FORMAT_LABEL[format]}
+                        </span>
+                      ))}
+                    </div>
+
+                    <p class={`text-sm font-extrabold leading-snug transition-colors ${clickable ? 'group-hover:text-blue-600' : ''} ${past ? 'text-slate-400' : 'text-slate-900'}`}>
+                      {event.title}
+                    </p>
+
+                    <div class={`flex flex-wrap items-center gap-x-3 gap-y-0.5 text-xs ${past ? 'text-slate-300' : 'text-slate-400'}`}>
+                      <span class="flex items-center gap-1">
+                        <LucideIcon name="calendar-days" size={11} className="shrink-0" />
+                        {formatEventDate(event.eventDate)}
+                      </span>
+                      {event.location && (
+                        <span class="flex items-center gap-1">
+                          <LucideIcon name="map-pin" size={11} className="shrink-0" />
+                          {event.location}
+                        </span>
+                      )}
+                    </div>
+                  </div>
+
+                  {shouldShowRibbon(event, status) && (
+                    <div class={`absolute right-0 top-0 bottom-0 w-10 flex items-center justify-center ${config.className}`}>
+                      <span class="text-[10px] font-semibold tracking-wider [writing-mode:vertical-rl]">
+                        {config.label}
+                      </span>
+                    </div>
+                  )}
+                </>
+              )
+
+              if (clickable) {
+                return (
+                  <a
+                    href={`/events/archive/${event.slug}?from=upcoming`}
+                    data-track-event="select_event_card"
+                    data-track-params={JSON.stringify({
+                      event_slug: event.slug,
+                      event_title: event.title,
+                      event_kind: event.kind ?? 'unknown',
+                      event_audience: event.audience ?? 'unknown',
+                      event_status: status,
+                      source_page: 'events_upcoming',
+                    })}
+                    class={`${wrapperClass} group`}
+                    data-reveal-delay={String(index * 60)}
+                  >
+                    <div class={baseCardClass}>
+                      {content}
+                    </div>
+                  </a>
+                )
+              }
+
+              return (
+                <div class={wrapperClass} data-reveal-delay={String(index * 60)}>
+                  <div class={baseCardClass}>
+                    {content}
+                  </div>
+                </div>
+              )
+            })}
+          </div>
+        )}
+      </Container>
+    </section>
+  </div>
+</SiteLayout>

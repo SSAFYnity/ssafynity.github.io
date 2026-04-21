@@ -1,0 +1,24 @@
+---
+interface Props {
+  as?: keyof HTMLElementTagNameMap
+  className?: string
+  class?: string
+}
+
+const {
+  as = 'div',
+  className = '',
+  class: classProp = '',
+  ...attrs
+} = Astro.props as Props
+
+const Tag = as
+const baseClass = 'bg-white rounded-2xl border border-slate-100'
+---
+
+<Tag
+  {...attrs}
+  class={[baseClass, classProp, className].filter(Boolean).join(' ')}
+>
+  <slot />
+</Tag>

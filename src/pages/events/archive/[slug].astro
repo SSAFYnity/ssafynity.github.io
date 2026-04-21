@@ -1,0 +1,1224 @@
+---
+import Card from '~/components/Card.astro'
+import Container from '~/components/Container.astro'
+import LucideIcon from '~/components/LucideIcon.astro'
+import ResponsiveText from '~/components/ResponsiveText.astro'
+import SiteLayout from '~/layouts/SiteLayout.astro'
+import { allEvents } from '@/data/computed'
+import {
+  EVENT_AUDIENCE,
+  EVENT_AUDIENCE_LABEL,
+  EVENT_FORMAT,
+  EVENT_FORMAT_LABEL,
+  EVENT_KIND,
+  EVENT_KIND_LABEL,
+  FORMAT_ORDER,
+  type Event,
+} from '@/data/constants'
+import { getEventBlogRecord } from '@/data/eventBlogRecords'
+import { withBaseAsset } from '@/lib/asset'
+import { formatEventDate, formatRecruitDate, getEventStatus, type EventStatus } from '@/lib/utils'
+
+export function getStaticPaths() {
+  return allEvents.map((event) => ({
+    params: { slug: event.slug },
+  }))
+}
+
+const { slug } = Astro.params
+const event = allEvents.find((item) => item.slug === slug)
+const pathname = `/events/archive/${slug}`
+
+const participantOrder = ['regular', 'members', 'external', 'operator', 'partner', 'invited'] as const
+const registrantKeys = ['regular', 'members', 'external'] as const
+
+const participantLabel: Record<string, string> = {
+  members: '일반회원',
+  regular: '정회원',
+  external: '외부인',
+  operator: '운영진',
+  partner: '관계자',
+  invited: '초청인원',
+}
+
+const feeLabel: Record<string, string> = {
+  members: '일반회원',
+  regular: '정회원',
+  external: '외부인',
+  operator: '운영진',
+}
+
+const formatIconName = {
+  offline: 'map-pin',
+  online: 'monitor',
+  recorded: 'calendar-days',
+} as const
+
+const relatedRecord = event ? getEventBlogRecord(event.slug) : {}
+const year = event ? new Date(event.eventDate.start).getFullYear() : new Date().getFullYear()
+const sortedFormats = event ? [...event.format].sort((left, right) => FORMAT_ORDER.indexOf(left) - FORMAT_ORDER.indexOf(right)) : []
+
+function isRecruitSoon(targetEvent: Event, status: EventStatus) {
+  if (status !== 'before-recruit' || !targetEvent.recruitDate) return false
+
+  const today = new Date()
+  today.setHours(0, 0, 0, 0)
+
+  const recruitStart = new Date(targetEvent.recruitDate.start)
+  recruitStart.setHours(0, 0, 0, 0)
+
+  return (recruitStart.getTime() - today.getTime()) / 86400000 <= 14
+}
+
+function getTabHasData(targetEvent: Event, status: EventStatus) {
+  const recruitSoon = isRecruitSoon(targetEvent, status)
+
+  return {
+    notices: true,
+    fee: recruitSoon || ['recruiting', 'recruit-closed', 'today-upcoming', 'today-ongoing', 'past'].includes(status),
+    registrants: ['recruiting', 'recruit-closed', 'today-upcoming', 'today-ongoing', 'past'].includes(status),
+    results: status === 'past',
+    related: Boolean(relatedRecord.journalPath || relatedRecord.reviewPath),
+  }
+}
+
+function getActionState(targetEvent: Event, status: EventStatus) {
+  const toDate = (value: string) => {
+    const date = new Date(value)
+    date.setHours(0, 0, 0, 0)
+    return date
+  }
+
+  const today = new Date()
+  today.setHours(0, 0, 0, 0)
+  const diffDay = (value: string) => Math.ceil((toDate(value).getTime() - today.getTime()) / 86400000)
+
+  const dday =
+    status === 'before-recruit' && targetEvent.recruitDate
+      ? diffDay(targetEvent.recruitDate.start)
+      : status === 'recruiting' && targetEvent.recruitDate?.end
+        ? diffDay(targetEvent.recruitDate.end)
+        : null
+
+  const ddayClass = status === 'before-recruit' ? 'text-amber-500' : 'text-emerald-500'
+  const ddayLabel = status === 'before-recruit' ? '접수 시작까지' : '접수 마감까지'
+
+  if (status === 'recruiting') {
+    return {
+      visible: true,
+      dday,
+      ddayClass,
+      ddayLabel,
+      mode: targetEvent.formUrl ? 'link' : 'disabled',
+      label: targetEvent.formUrl ? '접수하기' : '접수 링크 준비 중',
+      buttonClass: targetEvent.formUrl
+        ? 'flex items-center justify-center gap-2 w-full py-3 rounded-xl bg-blue-600 text-white text-sm font-black hover:bg-blue-700 transition-colors'
+        : 'w-full py-3 rounded-xl bg-slate-100 text-slate-400 text-sm font-black cursor-not-allowed',
+    } as const
+  }
+
+  if (status === 'before-recruit') {
+    return {
+      visible: true,
+      dday,
+      ddayClass,
+      ddayLabel,
+      mode: 'disabled',
+      label: '접수 예정',
+      buttonClass: 'w-full py-3 rounded-xl bg-slate-100 text-slate-400 text-sm font-black cursor-not-allowed',
+    } as const
+  }
+
+  if (status === 'today-upcoming') {
+    return {
+      visible: true,
+      dday: null,
+      ddayClass: '',
+      ddayLabel: '',
+      mode: 'disabled',
+      label: `오늘 ${targetEvent.eventDate.startTime} 시작`,
+      buttonClass: 'w-full py-3 rounded-xl bg-slate-100 text-slate-400 text-sm font-black cursor-not-allowed',
+    } as const
+  }
+
+  if (status === 'today-ongoing') {
+    return {
+      visible: true,
+      dday: null,
+      ddayClass: '',
+      ddayLabel: '',
+      mode: 'disabled',
+      label: '행사 진행 중',
+      buttonClass: 'w-full py-3 rounded-xl bg-blue-50 text-blue-400 text-sm font-black cursor-not-allowed',
+    } as const
+  }
+
+  if (status === 'recruit-closed') {
+    return {
+      visible: true,
+      dday: null,
+      ddayClass: '',
+      ddayLabel: '',
+      mode: 'disabled',
+      label: '접수 마감',
+      buttonClass: 'w-full py-3 rounded-xl bg-slate-100 text-slate-400 text-sm font-black cursor-not-allowed',
+    } as const
+  }
+
+  return {
+    visible: false,
+    dday: null,
+    ddayClass: '',
+    ddayLabel: '',
+    mode: 'disabled',
+    label: '',
+    buttonClass: '',
+  } as const
+}
+
+type CardIcon = 'badge-check' | 'package' | 'message-circle' | 'credit-card' | 'refresh-cw'
+
+type ContentCard = {
+  icon: CardIcon
+  title: string
+  kind: 'list' | 'text' | 'fee'
+  items?: string[]
+  text?: string
+  entries?: Array<{ label: string; value: string }>
+  note?: string
+}
+
+const noticeCards: ContentCard[] = []
+const feeCards: ContentCard[] = []
+
+if (event?.notices?.checklist?.length) {
+  noticeCards.push({ icon: 'badge-check', title: '필수 확인 사항', kind: 'list', items: event.notices.checklist })
+}
+
+if (event?.notices?.items?.length) {
+  noticeCards.push({ icon: 'package', title: '준비물', kind: 'list', items: event.notices.items })
+}
+
+event?.notices?.custom?.forEach((item) => {
+  noticeCards.push({ icon: 'message-circle', title: item.title, kind: 'text', text: item.body })
+})
+
+if (event?.notices?.fee) {
+  const entries = Object.entries(event.notices.fee)
+    .filter(([key]) => key !== 'note')
+    .map(([key, value]) => ({
+      label: feeLabel[key] ?? key,
+      value: typeof value === 'number' ? `${value.toLocaleString()}원` : value,
+    }))
+
+  feeCards.push({
+    icon: 'credit-card',
+    title: '참여비',
+    kind: 'fee',
+    entries,
+    note: event.notices.fee.note,
+  })
+}
+
+if (event?.notices?.refund?.length) {
+  feeCards.push({ icon: 'refresh-cw', title: '환불 기준', kind: 'list', items: event.notices.refund })
+}
+
+const numericEntries = (value?: Record<string, number | undefined>) =>
+  Object.entries(value ?? {}).filter((entry): entry is [string, number] => typeof entry[1] === 'number')
+
+const registrantMap = Object.fromEntries(numericEntries(event?.registrants))
+const attendeeMap = Object.fromEntries(numericEntries(event?.attendees))
+const completionMap = Object.fromEntries(numericEntries(event?.completions))
+
+const registrantEntries = numericEntries(event?.registrants)
+  .filter(([key]) => registrantKeys.includes(key as (typeof registrantKeys)[number]))
+  .sort((left, right) => participantOrder.indexOf(left[0] as (typeof participantOrder)[number]) - participantOrder.indexOf(right[0] as (typeof participantOrder)[number]))
+
+const registrantTotal = registrantEntries.reduce((sum, [, value]) => sum + value, 0)
+const fillRate = typeof event?.capacity === 'number' ? registrantTotal / event.capacity : null
+const vacancy = typeof event?.capacity === 'number' ? Math.max(event.capacity - registrantTotal, 0) : 0
+
+function buildResultRows(dataMap: Record<string, number>) {
+  return [...new Set([...registrantKeys, ...Object.keys(dataMap)])]
+    .filter((key) => registrantMap[key] !== undefined || dataMap[key] !== undefined)
+    .sort((left, right) => participantOrder.indexOf(left as (typeof participantOrder)[number]) - participantOrder.indexOf(right as (typeof participantOrder)[number]))
+    .map((key) => {
+      const registrant = registrantMap[key] ?? 0
+      const value = dataMap[key] ?? 0
+      const percent =
+        registrantKeys.includes(key as (typeof registrantKeys)[number]) && registrant > 0
+          ? (value / registrant) * 100
+          : null
+
+      return {
+        key,
+        label: participantLabel[key] ?? key,
+        registrant,
+        value,
+        percent,
+      }
+    })
+}
+
+const attendeeRows = buildResultRows(attendeeMap)
+const completionRows = buildResultRows(completionMap)
+const attendeeTotal = Object.values(attendeeMap).reduce((sum, value) => sum + value, 0)
+const completionTotal = Object.values(completionMap).reduce((sum, value) => sum + value, 0)
+
+const initialStatus = event ? getEventStatus(event) : 'past'
+const initialActionState = event ? getActionState(event, initialStatus) : null
+const initialTabHasData = event ? getTabHasData(event, initialStatus) : null
+
+const tabs = [
+  { id: 'notices', label: '행사 안내', enabled: initialTabHasData?.notices ?? true },
+  { id: 'fee', label: '비용·환불', enabled: initialTabHasData?.fee ?? false },
+  { id: 'registrants', label: '접수 현황', enabled: initialTabHasData?.registrants ?? false },
+  { id: 'results', label: '참여 결과', enabled: initialTabHasData?.results ?? false },
+  { id: 'related', label: '관련 기록', enabled: initialTabHasData?.related ?? false },
+] as const
+---
+
+<SiteLayout
+  pathname={pathname}
+  title={event ? `${event.title} | SSAFYnity` : '행사를 찾을 수 없습니다 | SSAFYnity'}
+  description={event?.summary}
+  canonical={event ? `https://ssafynity.github.io/events/archive/${event.slug}` : undefined}
+>
+  {!event ? (
+    <div class="flex flex-col items-center justify-center min-h-[60vh] gap-4 px-6 text-center">
+      <p class="text-sm font-extrabold text-slate-700">행사를 찾을 수 없습니다.</p>
+      <p class="text-xs text-slate-400">주소를 확인하거나 역대 행사 목록으로 돌아가주세요.</p>
+      <a
+        href="/events/archive"
+        class="mt-2 px-5 py-2.5 rounded-xl bg-blue-600 text-white text-sm font-black hover:bg-blue-700 transition-colors"
+      >
+        역대 행사 보기
+      </a>
+    </div>
+  ) : (
+    <div class="flex flex-col">
+      <section class="bg-white pt-24 pb-16 lg:pt-28 lg:pb-20">
+        <Container maxWidth="5xl">
+          <div class="astro-reveal flex flex-col gap-8">
+            <a
+              id="event-back-link"
+              href="/events/archive"
+              class="inline-flex items-center gap-1.5 text-xs font-black text-slate-400 hover:text-blue-500 transition-colors w-fit"
+            >
+              <LucideIcon name="arrow-left" size={14} />
+              <span id="event-back-label">역대 행사</span>
+            </a>
+
+            <div class="lg:hidden flex flex-col gap-3">
+              <div class="flex flex-wrap gap-2">
+                {event.kind && (
+                  <span class="text-[10px] font-black px-2.5 py-1 rounded-full bg-blue-50 text-blue-600">
+                    {EVENT_KIND_LABEL[event.kind]}
+                  </span>
+                )}
+                {event.audience && (
+                  <span class="text-[10px] font-black px-2.5 py-1 rounded-full bg-slate-100 text-slate-500">
+                    {EVENT_AUDIENCE_LABEL[event.audience]}
+                  </span>
+                )}
+              </div>
+              <h1 class="text-2xl font-extrabold text-slate-900 leading-snug tracking-tight">{event.title}</h1>
+              <p class="text-sm text-slate-500 leading-relaxed break-keep">{event.summary}</p>
+            </div>
+
+            <div class="flex flex-col lg:flex-row gap-8 lg:gap-12 lg:items-start">
+              <div class="flex flex-col gap-6 lg:w-64 shrink-0">
+                <div class="w-full aspect-square rounded-2xl overflow-hidden bg-slate-100 border border-slate-100">
+                  {event.img ? (
+                    <img src={withBaseAsset(event.img)} alt={event.title} class="w-full h-full object-cover" />
+                  ) : (
+                    <div class="w-full h-full bg-gradient-to-br from-blue-50 to-slate-100 flex items-center justify-center">
+                      <span class="text-5xl font-black text-slate-200">{year}</span>
+                    </div>
+                  )}
+                </div>
+
+                <div class="flex flex-col gap-4">
+                  <div class="flex gap-3">
+                    <LucideIcon name="calendar-days" size={14} className="text-blue-400 shrink-0 mt-0.5" />
+                    <div class="flex flex-col gap-0.5">
+                      <p class="text-[10px] font-black text-slate-400">일시</p>
+                      <p class="text-xs font-medium text-slate-700 leading-relaxed">{formatEventDate(event.eventDate)}</p>
+                    </div>
+                  </div>
+
+                  {event.recruitDate && (
+                    <div class="flex gap-3">
+                      <LucideIcon name="calendar-days" size={14} className="text-blue-400 shrink-0 mt-0.5" />
+                      <div class="flex flex-col gap-0.5">
+                        <p class="text-[10px] font-black text-slate-400">접수 기간</p>
+                        <p class="text-xs font-medium text-slate-700 leading-relaxed">{formatRecruitDate(event.recruitDate)}</p>
+                      </div>
+                    </div>
+                  )}
+
+                  {(event.location || event.locationUrl) && (
+                    <div class="flex gap-3">
+                      <LucideIcon name="map-pin" size={14} className="text-blue-400 shrink-0 mt-0.5" />
+                      <div class="flex flex-col gap-1.5">
+                        <p class="text-[10px] font-black text-slate-400">장소</p>
+                        {event.location && <p class="text-xs font-medium text-slate-700">{event.location}</p>}
+                        {event.locationUrl && (
+                          <div class="flex flex-wrap gap-1.5">
+                            {event.locationUrl.naver && (
+                              <a
+                                href={event.locationUrl.naver}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                data-track-event="click_sns_link"
+                                data-track-params={JSON.stringify({
+                                  channel_name: '네이버지도',
+                                  channel_type: 'map',
+                                  cta_label: '네이버지도',
+                                  destination_url: event.locationUrl.naver,
+                                  event_slug: event.slug,
+                                  event_title: event.title,
+                                })}
+                                class="inline-flex items-center gap-1 text-[10px] font-black px-2 py-1 rounded-full bg-green-50 text-green-600 hover:bg-green-100 transition-colors"
+                              >
+                                네이버지도
+                                <LucideIcon name="external-link" size={8} />
+                              </a>
+                            )}
+                            {event.locationUrl.kakao && (
+                              <a
+                                href={event.locationUrl.kakao}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                data-track-event="click_sns_link"
+                                data-track-params={JSON.stringify({
+                                  channel_name: '카카오맵',
+                                  channel_type: 'map',
+                                  cta_label: '카카오맵',
+                                  destination_url: event.locationUrl.kakao,
+                                  event_slug: event.slug,
+                                  event_title: event.title,
+                                })}
+                                class="inline-flex items-center gap-1 text-[10px] font-black px-2 py-1 rounded-full bg-yellow-50 text-yellow-600 hover:bg-yellow-100 transition-colors"
+                              >
+                                카카오맵
+                                <LucideIcon name="external-link" size={8} />
+                              </a>
+                            )}
+                            {event.locationUrl.google && (
+                              <a
+                                href={event.locationUrl.google}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                data-track-event="click_sns_link"
+                                data-track-params={JSON.stringify({
+                                  channel_name: '구글지도',
+                                  channel_type: 'map',
+                                  cta_label: '구글지도',
+                                  destination_url: event.locationUrl.google,
+                                  event_slug: event.slug,
+                                  event_title: event.title,
+                                })}
+                                class="inline-flex items-center gap-1 text-[10px] font-black px-2 py-1 rounded-full bg-blue-50 text-blue-500 hover:bg-blue-100 transition-colors"
+                              >
+                                구글지도
+                                <LucideIcon name="external-link" size={8} />
+                              </a>
+                            )}
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  )}
+
+                  {sortedFormats.length > 0 && (
+                    <div class="flex gap-3">
+                      <LucideIcon name="monitor" size={14} className="text-blue-400 shrink-0 mt-0.5" />
+                      <div class="flex flex-col gap-1.5">
+                        <p class="text-[10px] font-black text-slate-400">진행 방식</p>
+                        <div class="flex flex-wrap gap-1.5">
+                          {sortedFormats.map((format) => (
+                            <span class="inline-flex items-center gap-1 text-[10px] font-medium text-slate-600 px-2 py-1 rounded-full bg-slate-50 border border-slate-200">
+                              <LucideIcon name={formatIconName[format]} size={10} className="text-blue-400" />
+                              {EVENT_FORMAT_LABEL[format]}
+                            </span>
+                          ))}
+                        </div>
+                      </div>
+                    </div>
+                  )}
+                </div>
+              </div>
+
+              <div class="flex-1 min-w-0 flex flex-col gap-6">
+                <div class="hidden lg:flex flex-col gap-3">
+                  <div class="flex flex-wrap gap-2">
+                    {event.kind && (
+                      <span class="text-[10px] font-black px-2.5 py-1 rounded-full bg-blue-50 text-blue-600">
+                        {EVENT_KIND_LABEL[event.kind]}
+                      </span>
+                    )}
+                    {event.audience && (
+                      <span class="text-[10px] font-black px-2.5 py-1 rounded-full bg-slate-100 text-slate-500">
+                        {EVENT_AUDIENCE_LABEL[event.audience]}
+                      </span>
+                    )}
+                  </div>
+                  <h1 class="text-2xl md:text-3xl font-extrabold text-slate-900 leading-snug tracking-tight">{event.title}</h1>
+                  <p class="text-sm text-slate-500 leading-relaxed break-keep">{event.summary}</p>
+                </div>
+
+                <hr class="hidden lg:block border-slate-100" />
+
+                <div class="flex flex-col gap-5">
+                  {event.kind && (
+                    <div class="flex flex-col gap-1">
+                      <p class="text-sm font-extrabold text-slate-700">
+                        이번 행사는 <span class="text-blue-600">{EVENT_KIND_LABEL[event.kind]}</span> 행사예요.
+                      </p>
+                      <ul class="pl-4 list-disc marker:text-slate-300">
+                        <li class="text-sm text-slate-500 leading-relaxed break-keep text-pretty">
+                          <ResponsiveText text={EVENT_KIND[event.kind].desc} />
+                        </li>
+                      </ul>
+                    </div>
+                  )}
+
+                  {event.audience && (
+                    <div class="flex flex-col gap-1">
+                      <p class="text-sm font-extrabold text-slate-700">
+                        참여 대상은 <span class="text-blue-600">{EVENT_AUDIENCE_LABEL[event.audience]}</span>이에요.
+                      </p>
+                      <ul class="pl-4 list-disc marker:text-slate-300">
+                        <li class="text-sm text-slate-500 leading-relaxed break-keep text-pretty">
+                          <ResponsiveText text={EVENT_AUDIENCE[event.audience].desc} />
+                        </li>
+                      </ul>
+                    </div>
+                  )}
+
+                  {sortedFormats.length > 0 && (
+                    <div class="flex flex-col gap-1">
+                      <p class="text-sm font-extrabold text-slate-700">
+                        <span class="text-blue-600">
+                          {sortedFormats.map((format) => EVENT_FORMAT_LABEL[format]).join(' · ')}
+                        </span>
+                        으로 진행돼요.
+                      </p>
+                      <ul class="flex flex-col gap-0.5 pl-4 list-disc marker:text-slate-300">
+                        {sortedFormats.map((format) => (
+                          <li class="text-sm text-slate-500 leading-relaxed break-keep text-pretty">
+                            <ResponsiveText text={EVENT_FORMAT[format].desc} />
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  )}
+
+                  {event.capacity !== undefined && (
+                    <div class="flex flex-col gap-1">
+                      <p class="text-sm font-extrabold text-slate-700">
+                        {event.capacity === 'unlimited' ? (
+                          <>
+                            정원 <span class="text-blue-600">제한이 없어요</span>.
+                          </>
+                        ) : (
+                          <>
+                            정원은 <span class="text-blue-600">{event.capacity.toLocaleString()}명</span>이에요.
+                          </>
+                        )}
+                      </p>
+                      <ul class="pl-4 list-disc marker:text-slate-300">
+                        <li class="text-sm text-slate-500 leading-relaxed break-keep">
+                          {event.capacity === 'unlimited'
+                            ? '신청자 모두 참여할 수 있어요.'
+                            : '정원 초과 시 선착순 또는 별도 기준으로 마감될 수 있어요.'}
+                        </li>
+                        {event.capacity !== 'unlimited' && (
+                          <li class="text-sm text-slate-500 leading-relaxed break-keep">
+                            장소 수용 인원 및 당일 참석하는 운영진이 통솔 가능한 범위를 고려해 정원을 제한하였습니다.
+                          </li>
+                        )}
+                      </ul>
+                    </div>
+                  )}
+                </div>
+              </div>
+            </div>
+          </div>
+        </Container>
+      </section>
+
+      <section id="event-action-section" class={`${initialActionState?.visible ? '' : 'hidden '}bg-white border-t border-b border-slate-100`}>
+        <Container maxWidth="5xl" className="py-4">
+          <div class="flex flex-col gap-2">
+            <p id="event-dday" class={`${initialActionState?.dday !== null ? '' : 'hidden '}text-xs text-slate-500`}>
+              <span id="event-dday-label">{initialActionState?.ddayLabel}</span>
+              <span
+                id="event-dday-value"
+                class={`font-bold ${initialActionState?.ddayClass ?? ''}`}
+              >
+                {initialActionState?.dday === null ? '' : initialActionState?.dday === 0 ? 'D-day' : `D-${initialActionState?.dday}`}
+              </span>
+            </p>
+
+            <a
+              id="event-apply-link"
+              href={event.formUrl ?? '#'}
+              target="_blank"
+              rel="noopener noreferrer"
+              data-track-event="click_event_apply"
+              data-track-params={JSON.stringify({
+                event_slug: event.slug,
+                event_title: event.title,
+                event_kind: event.kind ?? 'unknown',
+                event_audience: event.audience ?? 'unknown',
+                event_status: 'recruiting',
+                destination_url: event.formUrl ?? '',
+              })}
+              class={`${initialActionState?.mode === 'link' ? '' : 'hidden '}${initialActionState?.buttonClass ?? ''}`}
+            >
+              접수하기
+              <LucideIcon name="external-link" size={14} />
+            </a>
+
+            <button
+              id="event-action-disabled"
+              type="button"
+              disabled
+              class={`${initialActionState?.mode === 'disabled' && initialActionState.visible ? '' : 'hidden '}${initialActionState?.buttonClass ?? ''}`}
+            >
+              {initialActionState?.mode === 'disabled' ? initialActionState.label : ''}
+            </button>
+          </div>
+        </Container>
+      </section>
+
+      <section class="bg-slate-50 border-t border-slate-100 py-10 lg:py-14">
+        <Container maxWidth="5xl" className="flex flex-col gap-6">
+          <div id="event-tabs" class="flex border-b border-slate-200">
+            {tabs.map((tab) => (
+              <button
+                type="button"
+                data-event-tab-button
+                data-tab-id={tab.id}
+                data-track-event="select_event_tab"
+                data-track-params={JSON.stringify({
+                  event_slug: event.slug,
+                  event_title: event.title,
+                  event_kind: event.kind ?? 'unknown',
+                  event_audience: event.audience ?? 'unknown',
+                  tab_id: tab.id,
+                  tab_label: tab.label,
+                })}
+                class={`${tab.id === 'notices' ? 'text-blue-600 border-blue-500' : 'text-slate-400 border-transparent hover:text-slate-600'} ${
+                  tab.enabled ? '' : 'hidden '
+                }px-4 py-2.5 text-xs font-black border-b-2 -mb-px transition-colors`}
+              >
+                {tab.label}
+              </button>
+            ))}
+          </div>
+
+          <div data-event-panel="notices" class="flex flex-col gap-3">
+            {noticeCards.length === 0 ? (
+              <div class="flex flex-col items-center justify-center py-14 gap-3 text-center">
+                <div class="w-12 h-12 rounded-2xl bg-slate-50 flex items-center justify-center">
+                  <LucideIcon name="clock" size={20} className="text-slate-300" />
+                </div>
+                <div class="flex flex-col gap-1">
+                  <p class="text-sm font-bold text-slate-400">준비 중이에요</p>
+                  <p class="text-xs text-slate-300 leading-relaxed">행사 안내가 곧 업데이트될 예정이에요.</p>
+                </div>
+              </div>
+            ) : (
+              <div class="grid sm:grid-cols-2 gap-3">
+                {noticeCards.map((card) => (
+                  <Card className="p-5 flex flex-col gap-3">
+                    <div class="flex items-center gap-2">
+                      <LucideIcon name={card.icon} size={14} className="text-blue-400 shrink-0" />
+                      <p class="text-xs font-black text-slate-700">{card.title}</p>
+                    </div>
+                    {card.kind === 'list' ? (
+                      <ul class="pl-4 list-disc marker:text-slate-300 flex flex-col gap-1">
+                        {(card.items ?? []).map((item) => (
+                          <li class="text-sm text-slate-500 leading-relaxed break-keep text-pretty">
+                            <ResponsiveText text={item} />
+                          </li>
+                        ))}
+                      </ul>
+                    ) : (
+                      <p class="text-sm text-slate-500 leading-relaxed break-keep text-pretty">
+                        <ResponsiveText text={card.text ?? ''} />
+                      </p>
+                    )}
+                  </Card>
+                ))}
+              </div>
+            )}
+          </div>
+
+          <div data-event-panel="fee" class="hidden flex flex-col gap-3">
+            {feeCards.length === 0 ? (
+              <div class="flex flex-col items-center justify-center py-14 gap-3 text-center">
+                <div class="w-12 h-12 rounded-2xl bg-slate-50 flex items-center justify-center">
+                  <LucideIcon name="credit-card" size={20} className="text-slate-300" />
+                </div>
+                <div class="flex flex-col gap-1">
+                  <p class="text-sm font-bold text-slate-400">책정 중이에요</p>
+                  <p class="text-xs text-slate-300 leading-relaxed">참여비 및 환불 규정이 곧 업데이트될 예정이에요.</p>
+                </div>
+              </div>
+            ) : (
+              <div class="grid sm:grid-cols-2 gap-3">
+                {feeCards.map((card) => (
+                  <Card className="p-5 flex flex-col gap-3">
+                    <div class="flex items-center gap-2">
+                      <LucideIcon name={card.icon} size={14} className="text-blue-400 shrink-0" />
+                      <p class="text-xs font-black text-slate-700">{card.title}</p>
+                    </div>
+                    {card.kind === 'fee' ? (
+                      <div class="flex flex-col gap-2">
+                        <ul class="flex flex-col gap-1.5">
+                          {(card.entries ?? []).map((entry) => (
+                            <li class="flex items-baseline justify-between gap-2 text-sm">
+                              <span class="text-xs font-black text-slate-400">{entry.label}</span>
+                              <span class="font-bold text-slate-700">{entry.value}</span>
+                            </li>
+                          ))}
+                        </ul>
+                        {card.note && (
+                          <p class="text-xs text-slate-400 pt-1 border-t border-slate-100 text-right">
+                            <ResponsiveText text={card.note} />
+                          </p>
+                        )}
+                      </div>
+                    ) : (
+                      <ul class="pl-4 list-disc marker:text-slate-300 flex flex-col gap-1">
+                        {(card.items ?? []).map((item) => (
+                          <li class="text-sm text-slate-500 leading-relaxed break-keep text-pretty">
+                            <ResponsiveText text={item} />
+                          </li>
+                        ))}
+                      </ul>
+                    )}
+                  </Card>
+                ))}
+              </div>
+            )}
+          </div>
+
+          <div data-event-panel="registrants" class="hidden flex flex-col gap-3">
+            {!event.registrants ? (
+              <div class="flex flex-col items-center justify-center py-14 gap-3 text-center">
+                <div class="w-12 h-12 rounded-2xl bg-slate-50 flex items-center justify-center">
+                  <LucideIcon name="users" size={20} className="text-slate-300" />
+                </div>
+                <div class="flex flex-col gap-1">
+                  <p class="text-sm font-bold text-slate-400">집계 중이에요</p>
+                  <p class="text-xs text-slate-300 leading-relaxed">행사 종료 후 접수 데이터가 업데이트될 예정이에요.</p>
+                </div>
+              </div>
+            ) : (
+              <Card className="p-5 flex flex-col gap-4">
+                <div class="flex items-center justify-between">
+                  <p class="text-xs font-black text-slate-700">접수자</p>
+                  <span class="text-lg font-extrabold text-blue-600">{registrantTotal.toLocaleString()}명</span>
+                </div>
+
+                <ul class="flex flex-col gap-1.5 border-t border-slate-100 pt-4">
+                  {registrantEntries.map(([key, value]) => (
+                    <li class="flex items-center justify-between text-sm">
+                      <span class="flex items-center gap-1.5 text-xs font-black text-slate-400">
+                        <span
+                          class="w-2 h-2 rounded-full shrink-0"
+                          style={{
+                            backgroundColor:
+                              key === 'regular'
+                                ? '#1d4ed8'
+                                : key === 'members'
+                                  ? '#60a5fa'
+                                  : key === 'external'
+                                    ? '#64748b'
+                                    : '#cbd5e1',
+                          }}
+                        ></span>
+                        {participantLabel[key] ?? key}
+                      </span>
+                      <span class="font-bold text-slate-700">{value.toLocaleString()}명</span>
+                    </li>
+                  ))}
+                </ul>
+
+                {fillRate !== null && (
+                  <div class="flex flex-col gap-2 border-t border-slate-100 pt-4">
+                    <div class="flex items-baseline justify-between">
+                      <span class="text-xs font-black text-slate-400">정원 대비</span>
+                      <span class="text-xs text-slate-400">
+                        {registrantTotal.toLocaleString()} / {(event.capacity as number).toLocaleString()}명&nbsp;&nbsp;
+                        <span class="text-lg font-extrabold text-blue-600">{Math.round(fillRate * 100)}%</span>
+                      </span>
+                    </div>
+                    <div class="w-full h-2 bg-transparent rounded-full flex">
+                      {registrantEntries.map(([key, value]) => (
+                        <div
+                          class="relative group h-full first:rounded-l-full"
+                          style={{
+                            width: `${(value / (event.capacity as number)) * 100}%`,
+                            backgroundColor:
+                              key === 'regular'
+                                ? '#1d4ed8'
+                                : key === 'members'
+                                  ? '#60a5fa'
+                                  : key === 'external'
+                                    ? '#64748b'
+                                    : '#cbd5e1',
+                          }}
+                        >
+                          <div class="absolute bottom-full left-1/2 -translate-x-1/2 mb-1.5 px-2.5 py-1 rounded-md text-xs font-medium bg-slate-800 text-white whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-10">
+                            {participantLabel[key]} {value.toLocaleString()}명
+                          </div>
+                        </div>
+                      ))}
+                      {vacancy > 0 && (
+                        <div class="relative group h-full flex-1 bg-slate-100 rounded-r-full">
+                          <div class="absolute bottom-full left-1/2 -translate-x-1/2 mb-1.5 px-2.5 py-1 rounded-md text-xs font-medium bg-slate-800 text-white whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-10">
+                            공석 {vacancy.toLocaleString()}석
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                )}
+              </Card>
+            )}
+          </div>
+
+          <div data-event-panel="results" class="hidden flex flex-col gap-3">
+            {!event.attendees && !event.completions ? (
+              <div class="flex flex-col items-center justify-center py-14 gap-3 text-center">
+                <div class="w-12 h-12 rounded-2xl bg-slate-50 flex items-center justify-center">
+                  <LucideIcon name="bar-chart-2" size={20} className="text-slate-300" />
+                </div>
+                <div class="flex flex-col gap-1">
+                  <p class="text-sm font-bold text-slate-400">집계 중이에요</p>
+                  <p class="text-xs text-slate-300 leading-relaxed">행사 종료 후 참여 결과가 업데이트될 예정이에요.</p>
+                </div>
+              </div>
+            ) : (
+              <div class="flex flex-col gap-3">
+                {event.attendees && (
+                  <Card className="p-5 flex flex-col gap-4">
+                    <div class="flex items-center justify-between">
+                      <p class="text-xs font-black text-slate-700">총 참여</p>
+                      <span class="text-lg font-extrabold text-blue-600">{attendeeTotal.toLocaleString()}명</span>
+                    </div>
+                    {attendeeRows.length > 0 && (
+                      <div class="border-t border-slate-100 pt-4">
+                        <table class="w-full text-xs">
+                          <thead>
+                            <tr>
+                              <th class="text-left pb-2 font-black text-slate-400 w-1/4"></th>
+                              <th class="text-right pb-2 font-black text-slate-400">접수</th>
+                              <th class="text-right pb-2 font-black text-slate-400">참여</th>
+                              <th class="pb-2 w-2/5"></th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            {attendeeRows.map((row) => (
+                              <tr class="border-t border-slate-50">
+                                <td class="py-1.5 font-black text-slate-500">{row.label}</td>
+                                <td class="py-1.5 text-right font-bold text-slate-400">{row.registrant > 0 ? `${row.registrant}명` : '-'}</td>
+                                <td class="py-1.5 text-right font-bold text-slate-700">{row.value > 0 ? `${row.value}명` : '-'}</td>
+                                <td class="py-1.5 pl-3">
+                                  {row.percent !== null ? (
+                                    <div class="flex items-center gap-2">
+                                      <div class="flex-1 h-1.5 bg-slate-100 rounded-full overflow-hidden">
+                                        <div class="h-full bg-blue-400 rounded-full" style={{ width: `${row.percent}%` }}></div>
+                                      </div>
+                                      <span class="font-bold text-slate-500 w-9 text-right">{Math.round(row.percent)}%</span>
+                                    </div>
+                                  ) : (
+                                    <span class="text-slate-300">-</span>
+                                  )}
+                                </td>
+                              </tr>
+                            ))}
+                          </tbody>
+                        </table>
+                      </div>
+                    )}
+                  </Card>
+                )}
+
+                {event.completions && (
+                  <Card className="p-5 flex flex-col gap-4">
+                    <div class="flex items-center justify-between">
+                      <p class="text-xs font-black text-slate-700">총 수료</p>
+                      <span class="text-lg font-extrabold text-blue-600">{completionTotal.toLocaleString()}명</span>
+                    </div>
+                    {completionRows.length > 0 && (
+                      <div class="border-t border-slate-100 pt-4">
+                        <table class="w-full text-xs">
+                          <thead>
+                            <tr>
+                              <th class="text-left pb-2 font-black text-slate-400 w-1/4"></th>
+                              <th class="text-right pb-2 font-black text-slate-400">접수</th>
+                              <th class="text-right pb-2 font-black text-slate-400">수료</th>
+                              <th class="pb-2 w-2/5"></th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            {completionRows.map((row) => (
+                              <tr class="border-t border-slate-50">
+                                <td class="py-1.5 font-black text-slate-500">{row.label}</td>
+                                <td class="py-1.5 text-right font-bold text-slate-400">{row.registrant > 0 ? `${row.registrant}명` : '-'}</td>
+                                <td class="py-1.5 text-right font-bold text-slate-700">{row.value > 0 ? `${row.value}명` : '-'}</td>
+                                <td class="py-1.5 pl-3">
+                                  {row.percent !== null ? (
+                                    <div class="flex items-center gap-2">
+                                      <div class="flex-1 h-1.5 bg-slate-100 rounded-full overflow-hidden">
+                                        <div class="h-full bg-blue-400 rounded-full" style={{ width: `${row.percent}%` }}></div>
+                                      </div>
+                                      <span class="font-bold text-slate-500 w-9 text-right">{Math.round(row.percent)}%</span>
+                                    </div>
+                                  ) : (
+                                    <span class="text-slate-300">-</span>
+                                  )}
+                                </td>
+                              </tr>
+                            ))}
+                          </tbody>
+                        </table>
+                      </div>
+                    )}
+                    {registrantMap.operator && (
+                      <div class="flex flex-wrap justify-end gap-3 border-t border-slate-100 pt-3 mt-1">
+                        <span class="text-xs text-slate-400">
+                          운영진 <span class="font-bold text-slate-500">{registrantMap.operator}명</span> 참여
+                        </span>
+                      </div>
+                    )}
+                  </Card>
+                )}
+              </div>
+            )}
+          </div>
+
+          <div data-event-panel="related" class="hidden">
+            <div class="grid sm:grid-cols-2 gap-3">
+              {relatedRecord.journalPath && (
+                <a
+                  href={relatedRecord.journalPath}
+                  data-track-event="click_blog_from_event"
+                  data-track-params={JSON.stringify({
+                    event_slug: event.slug,
+                    event_title: event.title,
+                    link_type: 'journal',
+                    destination_url: relatedRecord.journalPath,
+                  })}
+                  class="bg-white rounded-2xl border border-slate-100 p-5 flex flex-col gap-4 hover:border-blue-200 hover:bg-blue-50/30 transition-colors"
+                >
+                  <div class="flex items-center gap-2">
+                    <LucideIcon name="file-text" size={14} className="text-blue-400 shrink-0" />
+                    <p class="text-xs font-black text-slate-700">행사 일지</p>
+                  </div>
+                  <div class="flex flex-col gap-1">
+                    <p class="text-sm font-extrabold text-slate-700 break-keep">행사 현장과 운영 기록을 블로그에서 확인할 수 있어요.</p>
+                    <p class="text-sm text-slate-500 leading-relaxed break-keep">행사 스케치와 사진, 진행 흐름을 블로그 일지에서 이어서 볼 수 있습니다.</p>
+                  </div>
+                  <span class="inline-flex items-center gap-1.5 text-xs font-black text-blue-600">
+                    행사 일지 보러가기
+                    <LucideIcon name="external-link" size={12} />
+                  </span>
+                </a>
+              )}
+
+              {relatedRecord.reviewPath && (
+                <a
+                  href={relatedRecord.reviewPath}
+                  data-track-event="click_blog_from_event"
+                  data-track-params={JSON.stringify({
+                    event_slug: event.slug,
+                    event_title: event.title,
+                    link_type: 'review',
+                    destination_url: relatedRecord.reviewPath,
+                  })}
+                  class="bg-white rounded-2xl border border-slate-100 p-5 flex flex-col gap-4 hover:border-blue-200 hover:bg-blue-50/30 transition-colors"
+                >
+                  <div class="flex items-center gap-2">
+                    <LucideIcon name="message-square" size={14} className="text-blue-400 shrink-0" />
+                    <p class="text-xs font-black text-slate-700">후기</p>
+                  </div>
+                  <div class="flex flex-col gap-1">
+                    <p class="text-sm font-extrabold text-slate-700 break-keep">참여자 후기가 공개된 경우 블로그에서 모아볼 수 있어요.</p>
+                    <p class="text-sm text-slate-500 leading-relaxed break-keep">실제 참여자가 남긴 경험과 소감을 후기 아카이브에서 확인할 수 있습니다.</p>
+                  </div>
+                  <span class="inline-flex items-center gap-1.5 text-xs font-black text-blue-600">
+                    후기 보러가기
+                    <LucideIcon name="external-link" size={12} />
+                  </span>
+                </a>
+              )}
+            </div>
+          </div>
+        </Container>
+      </section>
+    </div>
+  )}
+
+  {event && (
+    <script is:inline define:vars={{ eventData: event, relatedRecord }}>
+      (() => {
+        const getStatus = (targetEvent) => {
+          const now = new Date();
+          const today = new Date(now);
+          today.setHours(0, 0, 0, 0);
+
+          const toDate = (value) => {
+            const date = new Date(value);
+            date.setHours(0, 0, 0, 0);
+            return date;
+          };
+
+          const eventStartDate = toDate(targetEvent.eventDate.start);
+          const eventEndDate = toDate(targetEvent.eventDate.end || targetEvent.eventDate.start);
+
+          if (today > eventEndDate) return 'past';
+
+          if (today >= eventStartDate && today <= eventEndDate) {
+            if (!targetEvent.eventDate.startTime) return 'today-ongoing';
+
+            const [startHour, startMinute] = targetEvent.eventDate.startTime.split(':').map(Number);
+            const eventStart = new Date(targetEvent.eventDate.start);
+            eventStart.setHours(startHour, startMinute, 0, 0);
+
+            const endDate = new Date(targetEvent.eventDate.end || targetEvent.eventDate.start);
+            const [endHour, endMinute] = (targetEvent.eventDate.endTime || '23:59').split(':').map(Number);
+            endDate.setHours(endHour, endMinute, 0, 0);
+
+            if (now < eventStart) return 'today-upcoming';
+            if (now <= endDate) return 'today-ongoing';
+            return 'past';
+          }
+
+          if (!targetEvent.recruitDate) return targetEvent.audience === 'operator' ? 'no-recruit' : 'planning';
+
+          const recruitStart = toDate(targetEvent.recruitDate.start);
+          const recruitEnd = toDate(targetEvent.recruitDate.end || targetEvent.recruitDate.start);
+
+          if (today < recruitStart) return 'before-recruit';
+          if (today <= recruitEnd) return 'recruiting';
+          return 'recruit-closed';
+        };
+
+        const isRecruitSoon = (targetEvent, status) => {
+          if (status !== 'before-recruit' || !targetEvent.recruitDate) return false;
+
+          const today = new Date();
+          today.setHours(0, 0, 0, 0);
+
+          const recruitStart = new Date(targetEvent.recruitDate.start);
+          recruitStart.setHours(0, 0, 0, 0);
+
+          return (recruitStart.getTime() - today.getTime()) / 86400000 <= 14;
+        };
+
+        const getActionState = (targetEvent, status) => {
+          const toDate = (value) => {
+            const date = new Date(value);
+            date.setHours(0, 0, 0, 0);
+            return date;
+          };
+
+          const today = new Date();
+          today.setHours(0, 0, 0, 0);
+          const diffDay = (value) => Math.ceil((toDate(value).getTime() - today.getTime()) / 86400000);
+
+          const dday =
+            status === 'before-recruit' && targetEvent.recruitDate
+              ? diffDay(targetEvent.recruitDate.start)
+              : status === 'recruiting' && targetEvent.recruitDate?.end
+                ? diffDay(targetEvent.recruitDate.end)
+                : null;
+
+          if (status === 'recruiting') {
+            return {
+              visible: true,
+              dday,
+              ddayLabel: '접수 마감까지',
+              ddayClass: 'text-emerald-500',
+              mode: targetEvent.formUrl ? 'link' : 'disabled',
+              label: targetEvent.formUrl ? '접수하기' : '접수 링크 준비 중',
+              buttonClass: targetEvent.formUrl
+                ? 'flex items-center justify-center gap-2 w-full py-3 rounded-xl bg-blue-600 text-white text-sm font-black hover:bg-blue-700 transition-colors'
+                : 'w-full py-3 rounded-xl bg-slate-100 text-slate-400 text-sm font-black cursor-not-allowed',
+            };
+          }
+
+          if (status === 'before-recruit') {
+            return {
+              visible: true,
+              dday,
+              ddayLabel: '접수 시작까지',
+              ddayClass: 'text-amber-500',
+              mode: 'disabled',
+              label: '접수 예정',
+              buttonClass: 'w-full py-3 rounded-xl bg-slate-100 text-slate-400 text-sm font-black cursor-not-allowed',
+            };
+          }
+
+          if (status === 'today-upcoming') {
+            return {
+              visible: true,
+              dday: null,
+              ddayLabel: '',
+              ddayClass: '',
+              mode: 'disabled',
+              label: `오늘 ${targetEvent.eventDate.startTime} 시작`,
+              buttonClass: 'w-full py-3 rounded-xl bg-slate-100 text-slate-400 text-sm font-black cursor-not-allowed',
+            };
+          }
+
+          if (status === 'today-ongoing') {
+            return {
+              visible: true,
+              dday: null,
+              ddayLabel: '',
+              ddayClass: '',
+              mode: 'disabled',
+              label: '행사 진행 중',
+              buttonClass: 'w-full py-3 rounded-xl bg-blue-50 text-blue-400 text-sm font-black cursor-not-allowed',
+            };
+          }
+
+          if (status === 'recruit-closed') {
+            return {
+              visible: true,
+              dday: null,
+              ddayLabel: '',
+              ddayClass: '',
+              mode: 'disabled',
+              label: '접수 마감',
+              buttonClass: 'w-full py-3 rounded-xl bg-slate-100 text-slate-400 text-sm font-black cursor-not-allowed',
+            };
+          }
+
+          return {
+            visible: false,
+            dday: null,
+            ddayLabel: '',
+            ddayClass: '',
+            mode: 'disabled',
+            label: '',
+            buttonClass: '',
+          };
+        };
+
+        const getTabState = (targetEvent, status) => ({
+          notices: true,
+          fee: isRecruitSoon(targetEvent, status) || ['recruiting', 'recruit-closed', 'today-upcoming', 'today-ongoing', 'past'].includes(status),
+          registrants: ['recruiting', 'recruit-closed', 'today-upcoming', 'today-ongoing', 'past'].includes(status),
+          results: status === 'past',
+          related: Boolean(relatedRecord.journalPath || relatedRecord.reviewPath),
+        });
+
+        const status = getStatus(eventData);
+        const actionState = getActionState(eventData, status);
+        const tabState = getTabState(eventData, status);
+
+        const backLink = document.getElementById('event-back-link');
+        const backLabel = document.getElementById('event-back-label');
+        const from = new URLSearchParams(window.location.search).get('from');
+
+        if (backLink && backLabel) {
+          if (from === 'upcoming') {
+            backLink.setAttribute('href', '/events/upcoming');
+            backLabel.textContent = '올해 행사 일정';
+          } else {
+            backLink.setAttribute('href', '/events/archive');
+            backLabel.textContent = '역대 행사';
+          }
+        }
+
+        const actionSection = document.getElementById('event-action-section');
+        const ddayRow = document.getElementById('event-dday');
+        const ddayLabel = document.getElementById('event-dday-label');
+        const ddayValue = document.getElementById('event-dday-value');
+        const applyLink = document.getElementById('event-apply-link');
+        const disabledButton = document.getElementById('event-action-disabled');
+
+        if (actionSection && ddayRow && ddayLabel && ddayValue && applyLink && disabledButton) {
+          actionSection.classList.toggle('hidden', !actionState.visible);
+
+          if (actionState.dday === null) {
+            ddayRow.classList.add('hidden');
+            ddayLabel.textContent = '';
+            ddayValue.textContent = '';
+            ddayValue.className = 'font-bold';
+          } else {
+            ddayRow.classList.remove('hidden');
+            ddayLabel.textContent = `${actionState.ddayLabel} `;
+            ddayValue.textContent = actionState.dday === 0 ? 'D-day' : `D-${actionState.dday}`;
+            ddayValue.className = `font-bold ${actionState.ddayClass}`;
+          }
+
+          if (actionState.mode === 'link') {
+            applyLink.className = actionState.buttonClass;
+            applyLink.classList.remove('hidden');
+            disabledButton.className = 'hidden';
+            disabledButton.textContent = '';
+          } else {
+            applyLink.className = 'hidden';
+            disabledButton.className = actionState.visible ? actionState.buttonClass : 'hidden';
+            disabledButton.textContent = actionState.label;
+          }
+        }
+
+        const tabButtons = Array.from(document.querySelectorAll('[data-event-tab-button]'));
+        const panels = Array.from(document.querySelectorAll('[data-event-panel]'));
+        const visibleTabs = [];
+
+        tabButtons.forEach((button) => {
+          const tabId = button.getAttribute('data-tab-id');
+          const enabled = tabId ? tabState[tabId] : false;
+          button.classList.toggle('hidden', !enabled);
+          if (enabled && tabId) {
+            visibleTabs.push(tabId);
+          }
+        });
+
+        let activeTab = visibleTabs.includes('notices') ? 'notices' : visibleTabs[0];
+
+        const activateTab = (tabId) => {
+          activeTab = tabId;
+
+          tabButtons.forEach((button) => {
+            const isActive = button.getAttribute('data-tab-id') === tabId;
+            button.classList.toggle('text-blue-600', isActive);
+            button.classList.toggle('border-blue-500', isActive);
+            button.classList.toggle('text-slate-400', !isActive);
+            button.classList.toggle('border-transparent', !isActive);
+          });
+
+          panels.forEach((panel) => {
+            panel.classList.toggle('hidden', panel.getAttribute('data-event-panel') !== tabId);
+          });
+        };
+
+        tabButtons.forEach((button) => {
+          button.addEventListener('click', () => {
+            const tabId = button.getAttribute('data-tab-id');
+            if (!tabId || button.classList.contains('hidden')) return;
+            activateTab(tabId);
+          });
+        });
+
+        if (activeTab) {
+          activateTab(activeTab);
+        }
+      })();
+    </script>
+  )}
+</SiteLayout>

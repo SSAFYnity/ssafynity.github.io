@@ -1,0 +1,20 @@
+---
+import SiteLayout from '~/layouts/SiteLayout.astro'
+---
+
+<SiteLayout
+  pathname="/404"
+  title="404 | SSAFYnity"
+  description="요청하신 페이지를 찾을 수 없습니다."
+  canonical="https://ssafynity.github.io/404.html"
+  noindex={true}
+>
+  <section class="min-h-screen flex flex-col items-center justify-center gap-4 bg-surface text-text px-6 text-center">
+    <p class="text-6xl font-bold text-primary">404</p>
+    <p class="text-xl font-semibold">페이지를 찾을 수 없습니다.</p>
+    <p class="text-text-muted">요청하신 페이지가 존재하지 않거나 이동되었습니다.</p>
+    <a href="/" class="mt-4 px-6 py-2 bg-primary text-white rounded-full hover:bg-primary-hover transition-colors">
+      홈으로 돌아가기
+    </a>
+  </section>
+</SiteLayout>

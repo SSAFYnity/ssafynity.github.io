@@ -1,0 +1,206 @@
+---
+import Container from '~/components/Container.astro'
+import LucideIcon from '~/components/LucideIcon.astro'
+import { siteData } from '@/data/siteData'
+
+interface Props {
+  pathname: string
+}
+
+const { pathname } = Astro.props
+
+const withBaseAsset = (path: string) => (path.startsWith('/') ? `${import.meta.env.BASE_URL}${path.slice(1)}` : path)
+
+const hasExactMatch = siteData.menu.some((category) =>
+  category.items.some((item) => !('external' in item && item.external) && pathname === item.path),
+)
+
+function isCategoryActive(items: typeof siteData.menu[number]['items']) {
+  return items.some((item) => {
+    if ('external' in item && item.external) return false
+    if (pathname === item.path) return true
+    if (hasExactMatch) return false
+    return pathname.startsWith(`${item.path}/`)
+  })
+}
+
+function isItemActive(item: typeof siteData.menu[number]['items'][number]) {
+  if ('external' in item && item.external) return false
+  return pathname === item.path
+}
+---
+
+<nav id="site-nav" class="fixed top-0 left-0 w-full z-50 pt-[max(env(safe-area-inset-top),0.5rem)] sm:pt-[env(safe-area-inset-top)] transition-all duration-500">
+  <Container maxWidth="7xl">
+    <div id="site-nav-inner" class="flex items-center py-4 lg:py-8 transition-all duration-500">
+      <a href="/" class="flex items-center gap-3 group">
+        <img src={withBaseAsset('/logo-rect.png')} alt="SSAFYnity" class="h-10 w-auto" />
+        <div class="flex flex-col">
+          <span class="text-lg font-bold tracking-tight text-slate-900 leading-none">SSAFYnity</span>
+          <span class="text-[10px] font-bold tracking-widest text-blue-800 uppercase">Alumni Association</span>
+        </div>
+      </a>
+
+      <div class="hidden lg:flex items-center gap-1 ml-auto">
+        {siteData.menu.map((category, index) => {
+          const openId = `desktop-nav-${index}`
+          const active = isCategoryActive(category.items)
+
+          return (
+            <div class="relative group/nav">
+              <button
+                type="button"
+                class={`desktop-nav-button flex items-center gap-1.5 px-3 py-2 rounded-md font-bold text-sm transition-all ${
+                  active
+                    ? 'text-blue-900 bg-blue-50/70'
+                    : 'text-slate-600 hover:text-blue-900 hover:bg-slate-50'
+                }`}
+                data-desktop-nav-trigger={openId}
+                aria-expanded="false"
+              >
+                {category.label}
+                <LucideIcon
+                  name="chevron-down"
+                  size={14}
+                  className="desktop-nav-chevron opacity-40 transition-transform duration-300"
+                />
+              </button>
+
+              <div class="absolute top-full left-0 pt-2 w-48 hidden group-hover/nav:block" data-desktop-nav-menu={openId}>
+                <div class="bg-white rounded-xl shadow-xl border border-slate-100 p-1.5">
+                  {category.items.map((item) => {
+                    const itemClass = `flex items-center gap-1.5 px-4 py-2.5 text-xs font-bold rounded-lg transition-colors w-full text-left ${
+                      isItemActive(item)
+                        ? 'text-blue-900 bg-blue-50'
+                        : 'text-slate-500 hover:text-blue-900 hover:bg-slate-50'
+                    }`
+
+                    if ('external' in item && item.external) {
+                      return (
+                        <a href={item.path} target="_blank" rel="noopener noreferrer" class={itemClass}>
+                          {item.label}
+                          <LucideIcon name="external-link" size={10} className="opacity-50" />
+                        </a>
+                      )
+                    }
+
+                    return (
+                      <a href={item.path} class={itemClass}>
+                        {item.label}
+                      </a>
+                    )
+                  })}
+                </div>
+              </div>
+            </div>
+          )
+        })}
+      </div>
+
+      <div class="flex items-center lg:hidden ml-auto">
+        <button
+          type="button"
+          id="mobile-nav-trigger"
+          aria-label="메뉴 열기"
+          aria-expanded="false"
+          class="lg:hidden p-2.5 min-h-11 min-w-11 text-slate-900 bg-slate-50 rounded-lg"
+        >
+          <LucideIcon name="menu" size={20} />
+        </button>
+      </div>
+    </div>
+  </Container>
+
+  <div id="mobile-nav-backdrop" class="fixed inset-0 bg-slate-950/30 opacity-0 pointer-events-none transition-opacity duration-300 lg:hidden"></div>
+  <aside
+    id="mobile-nav-panel"
+    class="fixed top-0 right-0 h-full w-full sm:w-80 bg-white shadow-2xl translate-x-full transition-transform duration-300 overflow-y-auto pb-[env(safe-area-inset-bottom)] lg:hidden"
+    aria-hidden="true"
+  >
+    <div class="p-6 sm:p-8 flex flex-col gap-6 sm:gap-8 pt-[calc(3.5rem+env(safe-area-inset-top))]">
+      <div class="flex items-center justify-between gap-3">
+        <p class="text-lg font-extrabold text-slate-900">메뉴</p>
+        <button
+          type="button"
+          id="mobile-nav-close"
+          aria-label="메뉴 닫기"
+          class="p-2.5 min-h-11 min-w-11 rounded-lg bg-slate-50 text-slate-700"
+        >
+          <LucideIcon name="x" size={18} />
+        </button>
+      </div>
+
+      {siteData.menu.map((category) => (
+        <div class="space-y-3">
+          <p class="text-base font-bold text-slate-900">{category.label}</p>
+          <div class="flex flex-col gap-1 pl-4 border-l-2 border-blue-900/10">
+            {category.items.map((item) => {
+              const itemClass = `flex items-center gap-1.5 text-sm font-bold py-2.5 px-2 min-h-11 rounded-lg transition-colors ${
+                isItemActive(item)
+                  ? 'text-blue-900 bg-blue-50'
+                  : 'text-slate-500 hover:text-blue-900 hover:bg-slate-50'
+              }`
+
+              if ('external' in item && item.external) {
+                return (
+                  <a href={item.path} target="_blank" rel="noopener noreferrer" class={itemClass}>
+                    {item.label}
+                    <LucideIcon name="external-link" size={10} className="opacity-50" />
+                  </a>
+                )
+              }
+
+              return <a href={item.path} class={itemClass}>{item.label}</a>
+            })}
+          </div>
+        </div>
+      ))}
+    </div>
+  </aside>
+
+  <script is:inline>
+    (() => {
+      const nav = document.getElementById('site-nav')
+      const navInner = document.getElementById('site-nav-inner')
+      const trigger = document.getElementById('mobile-nav-trigger')
+      const closeButton = document.getElementById('mobile-nav-close')
+      const backdrop = document.getElementById('mobile-nav-backdrop')
+      const panel = document.getElementById('mobile-nav-panel')
+
+      const syncScrolled = () => {
+        const isScrolled = window.scrollY > 20
+        nav?.classList.toggle('bg-white/95', isScrolled)
+        nav?.classList.toggle('backdrop-blur-md', isScrolled)
+        nav?.classList.toggle('border-b', isScrolled)
+        nav?.classList.toggle('border-slate-100', isScrolled)
+        nav?.classList.toggle('shadow-sm', isScrolled)
+        navInner?.classList.toggle('py-3', isScrolled)
+        navInner?.classList.toggle('lg:py-4', isScrolled)
+        navInner?.classList.toggle('py-4', !isScrolled)
+        navInner?.classList.toggle('lg:py-8', !isScrolled)
+      }
+
+      const setMobileOpen = (open) => {
+        if (!trigger || !backdrop || !panel) return
+        trigger.setAttribute('aria-expanded', open ? 'true' : 'false')
+        panel.setAttribute('aria-hidden', open ? 'false' : 'true')
+        backdrop.classList.toggle('opacity-100', open)
+        backdrop.classList.toggle('pointer-events-auto', open)
+        backdrop.classList.toggle('pointer-events-none', !open)
+        panel.classList.toggle('translate-x-full', !open)
+        document.body.classList.toggle('overflow-hidden', open)
+      }
+
+      syncScrolled()
+      window.addEventListener('scroll', syncScrolled, { passive: true })
+
+      trigger?.addEventListener('click', () => setMobileOpen(true))
+      closeButton?.addEventListener('click', () => setMobileOpen(false))
+      backdrop?.addEventListener('click', () => setMobileOpen(false))
+
+      panel?.querySelectorAll('a').forEach((link) => {
+        link.addEventListener('click', () => setMobileOpen(false))
+      })
+    })()
+  </script>
+</nav>

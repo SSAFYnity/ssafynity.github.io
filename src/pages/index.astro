@@ -1,0 +1,260 @@
+---
+import BlueSectionBadge from '~/components/BlueSectionBadge.astro'
+import Container from '~/components/Container.astro'
+import HeroLabel from '~/components/HeroLabel.astro'
+import LucideIcon from '~/components/LucideIcon.astro'
+import SiteLayout from '~/layouts/SiteLayout.astro'
+import { computed, allPartners } from '@/data/computed'
+import { siteData } from '@/data/siteData'
+import { withBaseAsset } from '@/lib/asset'
+
+const pathname = '/'
+
+const stats = [
+  { label: '함께하는 동문', value: computed.totalMembers, suffix: '명' },
+  { label: '정회원', value: siteData.stats[0].value, suffix: siteData.stats[0].suffix },
+  { label: '누적 행사 횟수', value: computed.totalEvents, suffix: '회' },
+  { label: '운영 연수', value: computed.operationYears, suffix: '년' },
+] as const
+
+const features = [
+  {
+    icon: 'globe',
+    iconBg: 'bg-blue-500',
+    title: '네트워크 확장',
+    desc: '전국 수료생들과 연결되고 현업 동문 네트워크를 넓혀가세요. 기수와 지역을 넘어 이어지는 관계.',
+    to: '/community/sns',
+  },
+  {
+    icon: 'trophy',
+    iconBg: 'bg-violet-400',
+    title: '기술적 교류',
+    desc: '세미나, 스터디, 행사를 통해 함께 성장하는 기회를 만들어가세요. 배움은 수료 이후에도 계속됩니다.',
+    to: '/events/upcoming',
+  },
+  {
+    icon: 'zap',
+    iconBg: 'bg-emerald-400',
+    title: '운영진 기여',
+    desc: '싸피니티를 직접 만들어가는 운영진으로 합류해보세요. 받은 도움을 다음 기수에게 되돌려주는 선순환.',
+    to: '/operator/apply',
+  },
+  {
+    icon: 'book-open',
+    iconBg: 'bg-rose-400',
+    title: '동아리 활동',
+    desc: '알고리즘, 독서, 사이드 프로젝트까지. 관심사가 같은 동문들과 함께하는 소모임을 만들어가세요.',
+    to: '/clubs',
+  },
+  {
+    icon: 'smile',
+    iconBg: 'bg-amber-400',
+    title: '친목 행사',
+    desc: '운동회, 포트락 파티, SSAFYnale까지. 함께 웃고 즐기는 자리가 우리를 더 단단하게 만듭니다.',
+    to: '/events/archive',
+  },
+  {
+    icon: 'badge-check',
+    iconBg: 'bg-sky-500',
+    title: '정회원 혜택',
+    desc: '연회비를 납부한 정회원에게는 모든 행사 무료 입장, 최우선 공지, 전용 굿즈 등 특별한 혜택이 주어집니다.',
+    to: '/join/premium',
+  },
+] as const
+
+const marqueePartners = [...allPartners, ...allPartners, ...allPartners, ...allPartners]
+---
+
+<SiteLayout pathname={pathname}>
+  <div class="flex flex-col">
+    <section class="relative overflow-hidden min-h-[80vh] flex items-center bg-[#edf1f8]">
+      <Container maxWidth="7xl" className="relative z-10 py-20 sm:py-28 lg:py-36">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+          <div class="astro-reveal" data-reveal-delay="0">
+            <HeroLabel>SSAFYnity</HeroLabel>
+            <div class="inline-flex items-center gap-2 px-3.5 py-1.5 border border-slate-400/50 text-slate-600 rounded-full mb-10 bg-white/40">
+              <span class="text-[10px] font-black uppercase tracking-widest">✦ SSAFY 수료생 동문 네트워크</span>
+            </div>
+            <h1 class="text-4xl sm:text-5xl md:text-6xl lg:text-[4.5rem] font-extrabold tracking-tight leading-[1.06] mb-8 text-balance">
+              <span class="text-slate-900">우리의 이야기가</span><br class="hidden sm:block" />
+              <span class="text-blue-600">계속되는 공간</span>
+            </h1>
+            <p class="text-base text-slate-600 leading-relaxed break-keep text-pretty max-w-md mb-10">
+              {siteData.brand.slogan}. 서로의 성장을 돕는 가장 <strong class="text-slate-800 font-semibold">안정적이고 전문적인</strong> 커뮤니티입니다.
+            </p>
+            <div class="flex flex-col sm:flex-row gap-3">
+              <a
+                href="/about/story"
+                class="px-7 py-4 bg-blue-600 text-white rounded-xl font-bold text-sm hover:bg-blue-700 transition-all duration-300 flex items-center justify-center gap-2 shadow-md shadow-blue-200"
+              >
+                싸피니티란?
+                <LucideIcon name="arrow-right" size={15} />
+              </a>
+              <a
+                href="/community/sns"
+                class="px-7 py-4 border-2 border-slate-800 text-slate-800 rounded-xl font-bold text-sm hover:bg-slate-800 hover:text-white transition-all flex items-center justify-center"
+              >
+                커뮤니티 둘러보기
+              </a>
+            </div>
+          </div>
+
+          <div class="hidden lg:block relative h-[420px] astro-reveal" data-reveal-delay="120">
+            <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[148px] h-[148px] bg-teal-400 rounded-full flex items-center justify-center shadow-2xl">
+              <LucideIcon name="users" size={60} strokeWidth={1.5} className="text-white" />
+            </div>
+            <div class="absolute top-[10%] right-[18%] w-[76px] h-[76px] bg-pink-300 rounded-2xl flex items-center justify-center shadow-xl rotate-[-5deg]">
+              <LucideIcon name="heart" size={32} strokeWidth={1.8} className="text-white" />
+            </div>
+            <div class="absolute top-[3%] right-[2%] w-[76px] h-[76px] bg-amber-300 rounded-2xl flex items-center justify-center shadow-xl rotate-[6deg]">
+              <LucideIcon name="star" size={32} strokeWidth={1.8} className="text-white" />
+            </div>
+            <div class="absolute top-[35%] left-[6%] w-[64px] h-[64px] bg-violet-400 rounded-2xl flex items-center justify-center shadow-lg rotate-[-3deg]">
+              <LucideIcon name="trophy" size={26} strokeWidth={1.8} className="text-white" />
+            </div>
+            <div class="absolute bottom-[26%] left-[18%] w-[64px] h-[64px] bg-emerald-400 rounded-2xl flex items-center justify-center shadow-lg rotate-[4deg]">
+              <LucideIcon name="zap" size={26} strokeWidth={1.8} className="text-white" />
+            </div>
+            <div class="absolute bottom-[12%] right-[12%] w-[76px] h-[76px] bg-white rounded-2xl flex items-center justify-center shadow-lg border border-slate-100 rotate-[3deg]">
+              <LucideIcon name="message-circle" size={30} strokeWidth={1.8} className="text-slate-400" />
+            </div>
+          </div>
+        </div>
+      </Container>
+    </section>
+
+    <section class="bg-white py-16 sm:py-20 lg:py-28 border-t border-slate-100">
+      <Container maxWidth="7xl">
+        <div class="astro-reveal flex flex-col sm:flex-row">
+          {stats.map((stat, index) => (
+            <div class={`flex-1 py-8 sm:py-0 sm:px-10 border-b last:border-b-0 sm:border-b-0 sm:border-l sm:first:border-l-0 border-slate-200 ${index === 0 ? 'sm:first:pl-0' : ''}`}>
+              <span class="text-[11px] font-black uppercase tracking-widest text-blue-600/60 block mb-2">
+                {stat.label}
+              </span>
+              <div class="flex items-baseline gap-1.5">
+                <span class="text-4xl sm:text-5xl font-black text-slate-900">{stat.value}</span>
+                <span class="text-xl font-bold text-slate-400">{stat.suffix}</span>
+              </div>
+            </div>
+          ))}
+        </div>
+      </Container>
+    </section>
+
+    <section class="bg-white py-16 sm:py-20 lg:py-28 border-t border-slate-100">
+      <Container maxWidth="7xl">
+        <div class="astro-reveal mb-16">
+          <BlueSectionBadge className="mb-6">Our Ecosystem</BlueSectionBadge>
+          <h2 class="text-3xl md:text-4xl lg:text-5xl font-extrabold text-slate-900 tracking-tight leading-tight text-balance">
+            동료들과 함께 만드는
+            <span class="hidden sm:inline"> </span>
+            <span class="block sm:inline text-blue-600 whitespace-nowrap">성장 생태계</span>
+          </h2>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          {features.map((feature, index) => (
+            <div class="astro-reveal" data-reveal-delay={String(index * 80)}>
+              <a
+                href={feature.to}
+                class="group flex flex-col h-full bg-white border border-slate-200 rounded-2xl p-8 hover:border-blue-200 hover:shadow-lg hover:shadow-blue-50 transition-all duration-300"
+              >
+                <div class={`w-12 h-12 ${feature.iconBg} rounded-xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300`}>
+                  <LucideIcon name={feature.icon} size={22} strokeWidth={2} className="text-white" />
+                </div>
+                <h3 class="text-lg font-extrabold text-slate-900 mb-3">{feature.title}</h3>
+                <p class="text-sm text-slate-500 leading-relaxed flex-1">{feature.desc}</p>
+                <div class="flex items-center gap-1.5 mt-6 text-blue-600 text-sm font-bold group-hover:gap-2.5 transition-all duration-300">
+                  자세히 보기 <LucideIcon name="arrow-right" size={14} />
+                </div>
+              </a>
+            </div>
+          ))}
+        </div>
+      </Container>
+    </section>
+
+    <section class="bg-slate-50 py-16 sm:py-20 lg:py-28 border-t border-slate-100">
+      <div class="astro-reveal text-center mb-12 px-6">
+        <BlueSectionBadge className="mb-5">후원 · 협력사</BlueSectionBadge>
+        <h2 class="text-3xl md:text-4xl font-extrabold text-slate-900 tracking-tight leading-tight text-balance">
+          우리의 비전에 공감하는
+          <span class="hidden sm:inline"> </span>
+          <span class="block sm:inline text-blue-600 whitespace-nowrap">후원·협력사</span>
+        </h2>
+      </div>
+
+      <div class="astro-reveal" data-reveal-delay="100">
+        {allPartners.length >= 6 ? (
+          <div class="relative overflow-hidden">
+            <div class="absolute left-0 top-0 bottom-0 w-24 bg-gradient-to-r from-slate-50 to-transparent z-10 pointer-events-none"></div>
+            <div class="absolute right-0 top-0 bottom-0 w-24 bg-gradient-to-l from-slate-50 to-transparent z-10 pointer-events-none"></div>
+            <div class="partner-marquee-track flex gap-6 w-max py-4">
+              {marqueePartners.map((partner) => (
+                <div class="flex flex-col items-center gap-2.5 w-36 sm:w-40 shrink-0">
+                  <div class="w-full h-16 sm:h-20 bg-white border border-slate-200 rounded-xl flex items-center justify-center shadow-sm">
+                    {partner.logo ? (
+                      <img
+                        src={withBaseAsset(partner.logo)}
+                        alt={partner.name}
+                        class="max-h-8 sm:max-h-10 max-w-[110px] sm:max-w-[120px] object-contain"
+                      />
+                    ) : (
+                      <span class="text-xs text-slate-400 font-bold">LOGO</span>
+                    )}
+                  </div>
+                  <span class="text-[11px] text-slate-500 font-bold text-center leading-tight break-keep">{partner.name}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+        ) : (
+          <div class="container mx-auto px-6 lg:px-12 max-w-7xl">
+            <div class="flex gap-4 py-4 overflow-x-auto sm:overflow-visible sm:flex-wrap sm:justify-center [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+              {allPartners.map((partner) => (
+                <div class="flex flex-col items-center gap-2.5 w-36 sm:w-40 shrink-0">
+                  <div class="w-full h-16 sm:h-20 bg-white border border-slate-200 rounded-xl flex items-center justify-center shadow-sm">
+                    {partner.logo ? (
+                      <img
+                        src={withBaseAsset(partner.logo)}
+                        alt={partner.name}
+                        class="max-h-8 sm:max-h-10 max-w-[110px] sm:max-w-[120px] object-contain"
+                      />
+                    ) : (
+                      <span class="text-xs text-slate-400 font-bold">LOGO</span>
+                    )}
+                  </div>
+                  <span class="text-[11px] text-slate-500 font-bold text-center leading-tight break-keep">{partner.name}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+      </div>
+
+      <div class="text-center mt-10">
+        <a
+          href="/about/partners"
+          class="inline-flex items-center gap-1.5 text-sm font-bold text-slate-500 hover:text-blue-600 transition-colors"
+        >
+          후원·협력사 자세히 보기 <LucideIcon name="arrow-right" size={14} />
+        </a>
+      </div>
+    </section>
+  </div>
+
+  <style>
+    .partner-marquee-track {
+      animation: partner-marquee 20s linear infinite;
+    }
+
+    @keyframes partner-marquee {
+      from {
+        transform: translateX(0%);
+      }
+      to {
+        transform: translateX(-50%);
+      }
+    }
+  </style>
+</SiteLayout>

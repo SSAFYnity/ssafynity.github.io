@@ -1,0 +1,210 @@
+---
+import Container from '~/components/Container.astro'
+import HeroLabel from '~/components/HeroLabel.astro'
+import LucideIcon from '~/components/LucideIcon.astro'
+import ResponsiveText from '~/components/ResponsiveText.astro'
+import SiteLayout from '~/layouts/SiteLayout.astro'
+import { EVENT_KIND } from '@/data/constants'
+
+const pathname = '/events/introduce'
+
+const regularEvents = [
+  {
+    icon: 'users',
+    type: '동문친목',
+    badge: 'Members Only',
+    desc: '동문들 간의 교류와 친목을 목적으로 열리는 행사입니다. 오직 동문회 회원만 참여할 수 있으며, 동문회의 정체성을 가장 잘 담고 있는 자리입니다.',
+    tags: ['정회원', '일반회원'],
+  },
+  {
+    icon: 'globe',
+    type: '공개 IT',
+    badge: 'Open to All',
+    desc: 'IT 업계 종사자·관심자 누구나 참여할 수 있는 개방형 행사입니다. SSAFY 동문과 외부 IT 인재가 함께 교류하며 커뮤니티의 영역을 넓힙니다.',
+    tags: ['정회원', '일반회원', '외부인'],
+  },
+] as const
+
+const ongoingFeatures = [
+  {
+    icon: 'refresh-cw',
+    title: '최소 6주 간격',
+    desc: '정기적인 만남을 보장하기 위해 최소 6주에 한 번 이상 개최됩니다.',
+  },
+  {
+    icon: 'calendar-x',
+    title: '정기행사 없는 달',
+    desc: '정기행사가 열리는 달에는 상시 행사를 진행하지 않습니다.',
+  },
+  {
+    icon: 'lock',
+    title: '정회원 전용',
+    desc: '상시 행사는 기본적으로 정회원만 참여할 수 있습니다. 극소수 공석에 한해 일반회원에게 개방될 수 있습니다.',
+  },
+] as const
+
+type EligibilityValue = boolean | 'partial'
+
+const eligibility: Array<{
+  label: string
+  member: EligibilityValue
+  general: EligibilityValue
+  outsider: EligibilityValue
+}> = [
+  {
+    label: '정기 · 동문친목',
+    member: true,
+    general: true,
+    outsider: false,
+  },
+  {
+    label: '정기 · 공개 IT',
+    member: true,
+    general: true,
+    outsider: true,
+  },
+  {
+    label: '상시 행사',
+    member: true,
+    general: 'partial',
+    outsider: false,
+  },
+]
+
+function getCellTypeClass(value: EligibilityValue) {
+  if (value === true) return 'text-blue-500'
+  if (value === 'partial') return 'text-amber-500'
+  return 'text-slate-300'
+}
+---
+
+<SiteLayout pathname={pathname}>
+  <div class="flex flex-col">
+    <section class="bg-white pt-20 sm:pt-24 pb-16 lg:pt-28 lg:pb-20 border-b border-slate-100">
+      <Container maxWidth="3xl">
+        <div class="astro-reveal">
+          <HeroLabel>Events</HeroLabel>
+          <h1 class="text-3xl md:text-4xl font-extrabold tracking-tight leading-[1.2] text-slate-900 mb-5 text-balance">
+            동문과 함께하는<br class="hidden sm:block" />
+            <span class="text-blue-600">싸피니티의 행사</span>
+          </h1>
+          <p class="text-sm text-slate-500 leading-relaxed break-keep text-pretty max-w-lg md:max-w-xl">
+            싸피니티는 동문 간의 교류와 성장을 위해 정기적으로 행사를 운영합니다. 행사의 종류와 참여 자격을 미리 확인해보세요.
+          </p>
+        </div>
+      </Container>
+    </section>
+
+    <section class="bg-slate-50 py-16 lg:py-20">
+      <Container maxWidth="3xl" className="flex flex-col gap-8">
+        <div class="astro-reveal">
+          <p class="text-[10px] font-black text-blue-600 uppercase tracking-widest mb-2">Regular Events</p>
+          <h2 class="text-lg font-extrabold text-slate-900 mb-2">정기 행사</h2>
+          <p class="text-sm text-slate-500 leading-relaxed break-keep text-pretty"><ResponsiveText text={EVENT_KIND.regular.desc} /></p>
+        </div>
+
+        <div class="grid sm:grid-cols-2 gap-4">
+          {regularEvents.map((item, index) => (
+            <div class="astro-reveal bg-white rounded-2xl border border-slate-100 p-6 flex flex-col gap-4" data-reveal-delay={String(index * 80)}>
+              <div class="flex items-start justify-between gap-3">
+                <div class="w-10 h-10 rounded-xl bg-blue-50 flex items-center justify-center shrink-0">
+                  <LucideIcon name={item.icon} size={20} className="w-5 h-5 text-blue-600" />
+                </div>
+                <span class="text-[10px] font-black px-2.5 py-1 rounded-full bg-slate-100 text-slate-500 shrink-0">{item.badge}</span>
+              </div>
+              <div>
+                <p class="text-base font-extrabold text-slate-900 mb-2">{item.type}</p>
+                <p class="text-sm text-slate-500 leading-relaxed break-keep">{item.desc}</p>
+              </div>
+              <div class="flex flex-wrap gap-1.5 mt-auto pt-2 border-t border-slate-100">
+                {item.tags.map((tag) => (
+                  <span class="text-[10px] font-black px-2 py-0.5 rounded-full bg-blue-50 text-blue-600">{tag}</span>
+                ))}
+              </div>
+            </div>
+          ))}
+        </div>
+      </Container>
+    </section>
+
+    <section class="bg-white py-16 lg:py-20 border-t border-slate-100">
+      <Container maxWidth="3xl" className="flex flex-col gap-8">
+        <div class="astro-reveal">
+          <p class="text-[10px] font-black text-blue-600 uppercase tracking-widest mb-2">Ongoing Events</p>
+          <h2 class="text-lg font-extrabold text-slate-900 mb-2">상시 행사</h2>
+          <p class="text-sm text-slate-500 leading-relaxed break-keep text-pretty"><ResponsiveText text={EVENT_KIND.ongoing.desc} /></p>
+        </div>
+
+        <div class="flex flex-col gap-3">
+          {ongoingFeatures.map((item, index) => (
+            <div class="astro-reveal flex items-start gap-4 bg-slate-50 rounded-2xl border border-slate-100 px-6 py-4" data-reveal-delay={String(index * 70)}>
+              <LucideIcon name={item.icon} size={16} className="w-4 h-4 text-blue-500 shrink-0 mt-0.5" />
+              <div>
+                <p class="text-sm font-extrabold text-slate-800 mb-0.5">{item.title}</p>
+                <p class="text-sm text-slate-500 leading-relaxed break-keep">{item.desc}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+      </Container>
+    </section>
+
+    <section class="bg-slate-50 py-16 lg:py-20 border-t border-slate-100">
+      <Container maxWidth="3xl">
+        <div class="astro-reveal">
+          <p class="text-[10px] font-black text-blue-600 uppercase tracking-widest mb-2">Eligibility</p>
+          <h2 class="text-lg font-extrabold text-slate-900 mb-6">참여 자격</h2>
+          <div class="bg-white rounded-2xl border border-slate-100 overflow-hidden">
+            <table class="w-full text-sm">
+              <thead>
+                <tr class="border-b border-slate-100">
+                  <th class="text-left px-6 py-4 text-xs font-black text-slate-500">행사 유형</th>
+                  <th class="px-4 py-4 text-xs font-black text-slate-500 text-center">정회원</th>
+                  <th class="px-4 py-4 text-xs font-black text-slate-500 text-center">일반회원</th>
+                  <th class="px-4 py-4 text-xs font-black text-slate-500 text-center">외부인</th>
+                </tr>
+              </thead>
+              <tbody>
+                {eligibility.map((item, index) => (
+                  <tr class={index < eligibility.length - 1 ? 'border-b border-slate-100' : ''}>
+                    <td class="px-6 py-4 font-extrabold text-slate-800 text-sm">{item.label}</td>
+                    <td class="px-4 py-4 text-center">
+                      {item.member === 'partial' ? (
+                        <span class={`text-[10px] font-black mx-auto block text-center ${getCellTypeClass(item.member)}`}>일부 공석</span>
+                      ) : item.member ? (
+                        <LucideIcon name="check" size={16} className={`w-4 h-4 mx-auto ${getCellTypeClass(item.member)}`} />
+                      ) : (
+                        <LucideIcon name="minus" size={16} className={`w-4 h-4 mx-auto ${getCellTypeClass(item.member)}`} />
+                      )}
+                    </td>
+                    <td class="px-4 py-4 text-center">
+                      {item.general === 'partial' ? (
+                        <span class={`text-[10px] font-black mx-auto block text-center ${getCellTypeClass(item.general)}`}>일부 공석</span>
+                      ) : item.general ? (
+                        <LucideIcon name="check" size={16} className={`w-4 h-4 mx-auto ${getCellTypeClass(item.general)}`} />
+                      ) : (
+                        <LucideIcon name="minus" size={16} className={`w-4 h-4 mx-auto ${getCellTypeClass(item.general)}`} />
+                      )}
+                    </td>
+                    <td class="px-4 py-4 text-center">
+                      {item.outsider === 'partial' ? (
+                        <span class={`text-[10px] font-black mx-auto block text-center ${getCellTypeClass(item.outsider)}`}>일부 공석</span>
+                      ) : item.outsider ? (
+                        <LucideIcon name="check" size={16} className={`w-4 h-4 mx-auto ${getCellTypeClass(item.outsider)}`} />
+                      ) : (
+                        <LucideIcon name="minus" size={16} className={`w-4 h-4 mx-auto ${getCellTypeClass(item.outsider)}`} />
+                      )}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+          <p class="text-xs text-slate-400 mt-3 leading-relaxed break-keep text-right">
+            정회원은 모든 행사에 우선 신청 기회가 주어집니다. 자세한 신청 방법은 각 행사 공지를 확인해주세요.
+          </p>
+        </div>
+      </Container>
+    </section>
+  </div>
+</SiteLayout>

@@ -1,0 +1,164 @@
+---
+import Container from '~/components/Container.astro'
+import HeroLabel from '~/components/HeroLabel.astro'
+import LucideIcon from '~/components/LucideIcon.astro'
+import ResponsiveText from '~/components/ResponsiveText.astro'
+import SiteLayout from '~/layouts/SiteLayout.astro'
+import { siteData } from '@/data/siteData'
+
+const pathname = '/about/values'
+
+const iconStyle = {
+  globe: { bg: 'bg-blue-500', ring: 'ring-blue-100', text: 'text-blue-500' },
+  'trending-up': { bg: 'bg-emerald-500', ring: 'ring-emerald-100', text: 'text-emerald-500' },
+  heart: { bg: 'bg-rose-400', ring: 'ring-rose-100', text: 'text-rose-400' },
+} as const
+
+const orbitPos = [
+  { top: 'calc(12% - 32px)', left: 'calc(50% - 32px)' },
+  { top: 'calc(69% - 32px)', left: 'calc(17% - 32px)' },
+  { top: 'calc(69% - 32px)', left: 'calc(83% - 32px)' },
+]
+
+const withBaseAsset = (path: string) => (path.startsWith('/') ? `${import.meta.env.BASE_URL}${path.slice(1)}` : path)
+const splitDescription = (text: string) => text.split('. ')
+---
+
+<SiteLayout pathname={pathname}>
+  <div class="flex flex-col">
+    <section class="bg-white pt-28 pb-24 lg:pt-36 lg:pb-32">
+      <Container maxWidth="5xl">
+        <div class="astro-reveal mb-16 lg:mb-20">
+          <HeroLabel>가치관</HeroLabel>
+          <h1 class="text-2xl md:text-3xl font-extrabold tracking-tight leading-[1.2] text-slate-900 mb-2">
+            싸피니티가 추구하는 것
+          </h1>
+          <p class="text-xl md:text-2xl font-black text-blue-600">
+            Our Values
+          </p>
+        </div>
+
+        <div class="astro-reveal relative mx-auto aspect-square w-full max-w-[360px] mb-16">
+          <svg
+            class="absolute inset-0 w-full h-full pointer-events-none"
+            viewBox="0 0 100 100"
+          >
+            <circle
+              cx="50"
+              cy="50"
+              r="38"
+              fill="none"
+              stroke="#e2e8f0"
+              stroke-width="0.6"
+              stroke-dasharray="2 1.5"
+            />
+          </svg>
+
+          <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-10 px-4 py-3 rounded-2xl bg-white shadow-md shadow-slate-200/60 border border-slate-100">
+            <img src={withBaseAsset('/logo-rect.png')} alt="SSAFYnity" class="h-10 w-auto" />
+          </div>
+
+          {siteData.values.map((value, index) => {
+            const style = iconStyle[value.icon as keyof typeof iconStyle]
+            const position = orbitPos[index]
+
+            return (
+              <div
+                class="absolute flex flex-col items-center gap-2"
+                style={`top:${position.top};left:${position.left};`}
+              >
+                <div class={`w-16 h-16 rounded-full ${style.bg} ring-4 ${style.ring} flex items-center justify-center shadow-md`}>
+                  <LucideIcon
+                    name={value.icon as keyof typeof iconStyle}
+                    size={26}
+                    strokeWidth={1.8}
+                    className="text-white"
+                  />
+                </div>
+                <span class="text-sm font-black text-slate-700 whitespace-nowrap">
+                  {value.title}
+                </span>
+              </div>
+            )
+          })}
+        </div>
+
+        <div class="astro-reveal text-center mb-16">
+          <p class="text-[3rem] leading-none font-black text-blue-100 select-none">"</p>
+          <p class="text-lg md:text-xl font-bold text-slate-700 leading-relaxed max-w-xl mx-auto -mt-3 break-keep text-pretty">
+            <ResponsiveText text={siteData.brand.vision} />
+          </p>
+          <div class="mt-6 w-8 h-0.5 bg-blue-300 mx-auto" />
+          <p class="mt-4 text-[10px] font-black text-slate-400 tracking-[0.25em] uppercase">
+            SSAFYnity Vision
+          </p>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-8">
+          {siteData.values.map((value) => {
+            const style = iconStyle[value.icon as keyof typeof iconStyle]
+            const parts = splitDescription(value.desc)
+
+            return (
+              <div class="astro-reveal text-left sm:text-center">
+                <div class="inline-flex items-center justify-center w-12 h-12 rounded-full border border-slate-200 mb-4">
+                  <LucideIcon
+                    name={value.icon as keyof typeof iconStyle}
+                    size={22}
+                    strokeWidth={1.8}
+                    className={style.text}
+                  />
+                </div>
+                <h3 class="font-black text-slate-900 mb-2">{value.title}</h3>
+                <p class="text-sm text-slate-500 leading-relaxed break-keep text-pretty">
+                  {parts.map((part, index) => {
+                    const chunk = index < parts.length - 1 ? `${part}.` : part
+                    return (
+                      <Fragment>
+                        {index > 0 && <span class="hidden sm:inline"> </span>}
+                        {index > 0 && <br class="block sm:hidden" />}
+                        <span>{chunk}</span>
+                      </Fragment>
+                    )
+                  })}
+                </p>
+              </div>
+            )
+          })}
+        </div>
+      </Container>
+    </section>
+  </div>
+
+  <script is:inline>
+    (() => {
+      const reveals = document.querySelectorAll('.astro-reveal')
+      if (reveals.length === 0) return
+
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+          if (!entry.isIntersecting) return
+          entry.target.classList.add('is-visible')
+          observer.unobserve(entry.target)
+        })
+      }, { threshold: 0.12 })
+
+      reveals.forEach((element) => observer.observe(element))
+    })()
+  </script>
+
+  <style>
+    .astro-reveal {
+      opacity: 0;
+      transform: translateY(20px);
+      transition:
+        opacity 0.7s cubic-bezier(0.22, 1, 0.36, 1),
+        transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    .astro-reveal.is-visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  </style>
+</SiteLayout>

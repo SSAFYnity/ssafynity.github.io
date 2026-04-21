@@ -1,0 +1,129 @@
+---
+import '../site/index.css'
+
+interface Props {
+  title?: string
+  description?: string
+  canonical?: string
+  noindex?: boolean
+}
+
+const {
+  title = 'SSAFYnity',
+  description = 'SSAFY 수료생들이 직접 운영하는 동문회 SSAFYnity 공식 홈페이지. 행사, 운영진, 동아리, 멤버십 정보를 확인하세요.',
+  canonical = `https://ssafynity.github.io${Astro.url.pathname}`,
+  noindex = false,
+} = Astro.props
+
+const enableAnalytics = import.meta.env.PROD
+---
+
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    {noindex && <meta name="robots" content="noindex, follow" />}
+    <meta name="theme-color" content="#1E3A8A" />
+    <meta
+      name="google-site-verification"
+      content="xWE3kfqYc75gEiII_BGzPNT7R_eHhDrBGHW7OlLz1-M"
+    />
+    <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+    <link rel="canonical" href={canonical} />
+    <meta property="og:site_name" content="SSAFYnity" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content="https://ssafynity.github.io/logo-rect.png" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content="https://ssafynity.github.io/logo-rect.png" />
+    {enableAnalytics && (
+      <>
+        <script is:inline async src="https://www.googletagmanager.com/gtag/js?id=G-2W9HFYG765"></script>
+        <script is:inline>
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+          gtag('config', 'G-2W9HFYG765');
+        </script>
+      </>
+    )}
+  </head>
+  <body>
+    <slot />
+    <script is:inline>
+      (() => {
+        const selector = '.astro-reveal, [data-reveal]';
+        const reveals = Array.from(document.querySelectorAll(selector));
+
+        if ('IntersectionObserver' in window && reveals.length > 0) {
+          const observer = new IntersectionObserver((entries) => {
+            entries.forEach((entry) => {
+              if (!entry.isIntersecting) return;
+
+              const target = entry.target;
+              const delay = target.getAttribute('data-reveal-delay');
+              if (delay) {
+                target.style.transitionDelay = `${delay}ms`;
+              }
+
+              target.classList.add('is-visible');
+              observer.unobserve(target);
+            });
+          }, { threshold: 0.12 });
+
+          reveals.forEach((element) => observer.observe(element));
+        } else {
+          reveals.forEach((element) => element.classList.add('is-visible'));
+        }
+
+        document.addEventListener('click', (event) => {
+          const target = event.target instanceof Element ? event.target.closest('[data-track-event]') : null;
+          if (!target || typeof window.gtag !== 'function') return;
+
+          const eventName = target.getAttribute('data-track-event');
+          if (!eventName) return;
+
+          let params = {};
+          const rawParams = target.getAttribute('data-track-params');
+
+          if (rawParams) {
+            try {
+              params = JSON.parse(rawParams);
+            } catch (error) {
+              console.warn('Failed to parse data-track-params', error);
+            }
+          }
+
+          window.gtag('event', eventName, {
+            page_path: `${window.location.pathname}${window.location.search}`,
+            page_title: document.title,
+            ...params,
+          });
+        });
+      })();
+    </script>
+    <style is:global>
+      .astro-reveal,
+      [data-reveal] {
+        opacity: 0;
+        transform: translateY(20px);
+        transition:
+          opacity 0.7s cubic-bezier(0.22, 1, 0.36, 1),
+          transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+      }
+
+      .astro-reveal.is-visible,
+      [data-reveal].is-visible {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    </style>
+  </body>
+</html>

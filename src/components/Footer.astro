@@ -1,0 +1,183 @@
+---
+import BrandIcon from '~/components/BrandIcon.astro'
+import Container from '~/components/Container.astro'
+import LucideIcon from '~/components/LucideIcon.astro'
+import { siteData } from '@/data/siteData'
+
+const withBaseAsset = (path: string) => (path.startsWith('/') ? `${import.meta.env.BASE_URL}${path.slice(1)}` : path)
+
+function isUsableSnsUrl(url: string) {
+  return url.trim().length > 0 && !url.includes('[업데이트 필요]')
+}
+
+function getSnsDisabledHint(name: string) {
+  if (name === '카카오톡 오픈카톡') return '링크는 공개하지 않으며, 정회원에게만 별도로 안내합니다.'
+  return '준비 중입니다.'
+}
+
+const footerSns = siteData.sns.filter((channel) => channel.showInFooter)
+---
+
+<footer>
+  <section class="sm:hidden bg-white border-t border-slate-100 py-8">
+    <Container maxWidth="7xl">
+      <div class="flex items-center justify-between gap-4">
+        <a href="/" class="inline-flex items-center">
+          <img src={withBaseAsset('/logo.svg')} alt="SSAFYnity" class="h-8 w-auto" />
+        </a>
+
+        <div class="flex gap-1.5 flex-nowrap justify-end overflow-x-auto [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+          {footerSns.map((channel) => {
+            const usable = isUsableSnsUrl(channel.url)
+            const iconName = channel.icon as 'discord' | 'github' | 'gmail' | 'instagram' | 'kakao' | 'linkedin'
+
+            if (!usable) {
+              return (
+                <div
+                  aria-label={channel.name}
+                  aria-disabled="true"
+                  title={getSnsDisabledHint(channel.name)}
+                  class="shrink-0 w-8 h-8 rounded-lg bg-slate-50 border border-slate-100 flex items-center justify-center text-slate-300 cursor-not-allowed opacity-70"
+                >
+                  <BrandIcon name={iconName} size={15} />
+                </div>
+              )
+            }
+
+            return (
+              <a
+                href={channel.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label={channel.name}
+                class="shrink-0 w-8 h-8 rounded-lg bg-slate-50 border border-slate-100 flex items-center justify-center text-slate-400 hover:text-white hover:bg-blue-900 transition-all duration-300"
+              >
+                <BrandIcon name={iconName} size={15} />
+              </a>
+            )
+          })}
+        </div>
+      </div>
+
+      <div class="mt-6 pt-6 border-t border-slate-100 flex flex-col items-center gap-3">
+        <div class="flex items-center gap-6">
+          <a href={siteData.legal.privacyPath} class="text-[10px] font-black text-slate-400 hover:text-blue-900 transition-colors uppercase tracking-widest">
+            개인정보처리방침
+          </a>
+          <a href={siteData.legal.termsPath} class="text-[10px] font-black text-slate-400 hover:text-blue-900 transition-colors uppercase tracking-widest">
+            이용약관
+          </a>
+        </div>
+
+        <p class="text-[10px] font-black text-slate-300 uppercase tracking-widest text-center">
+          © {new Date().getFullYear()} SSAFYnity
+        </p>
+      </div>
+    </Container>
+  </section>
+
+  <section class="hidden sm:block bg-white border-t border-slate-100 pt-24 pb-16">
+    <Container maxWidth="7xl">
+      <div class="grid lg:grid-cols-12 gap-16 mb-24">
+        <div class="lg:col-span-5">
+          <a href="/" class="inline-block mb-10">
+            <img src={withBaseAsset('/logo.svg')} alt="SSAFYnity" class="h-12 w-auto" />
+          </a>
+
+          <p class="text-base text-slate-400 font-bold leading-relaxed max-w-sm mb-12 break-keep text-pretty">
+            {siteData.brand.slogan}
+          </p>
+
+          <div class="flex gap-4 flex-wrap">
+            {footerSns.map((channel) => {
+              const usable = isUsableSnsUrl(channel.url)
+              const iconName = channel.icon as 'discord' | 'github' | 'gmail' | 'instagram' | 'kakao' | 'linkedin'
+
+              return (
+                <div class="relative group/sns">
+                  {usable ? (
+                    <a
+                      href={channel.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      aria-label={channel.name}
+                      class="w-12 h-12 rounded-xl bg-slate-50 border border-slate-100 flex items-center justify-center text-slate-400 hover:text-white hover:bg-blue-900 transition-all duration-300 shadow-sm"
+                    >
+                      <BrandIcon name={iconName} size={20} />
+                    </a>
+                  ) : (
+                    <div
+                      aria-label={channel.name}
+                      aria-disabled="true"
+                      title={getSnsDisabledHint(channel.name)}
+                      class="w-12 h-12 rounded-xl bg-slate-50 border border-slate-100 flex items-center justify-center text-slate-300 cursor-not-allowed opacity-70 shadow-sm"
+                    >
+                      <BrandIcon name={iconName} size={20} />
+                    </div>
+                  )}
+                  <span class="absolute -top-9 left-1/2 -translate-x-1/2 text-[10px] font-bold bg-slate-900 text-white px-2 py-1 rounded whitespace-nowrap opacity-0 group-hover/sns:opacity-100 transition-opacity pointer-events-none">
+                    {channel.name}
+                  </span>
+                </div>
+              )
+            })}
+          </div>
+        </div>
+
+        <div class="lg:col-span-7 grid grid-cols-3 gap-12">
+          {siteData.menu.map((category) => (
+            <div>
+              <h5 class="text-[10px] font-black text-blue-900/30 uppercase tracking-[0.3em] mb-6">
+                {category.label}
+              </h5>
+              <ul class="space-y-4">
+                {category.items.map((item) => {
+                  const baseClass = 'text-[14px] font-bold text-slate-400 hover:text-blue-900 transition-colors flex items-center gap-2 group leading-snug break-keep'
+
+                  if ('external' in item && item.external) {
+                    return (
+                      <li>
+                        <a href={item.path} target="_blank" rel="noopener noreferrer" class={baseClass}>
+                          <span class="w-1 h-1 bg-blue-900 rounded-full scale-0 group-hover:scale-100 transition-transform"></span>
+                          {item.label}
+                          <LucideIcon name="external-link" size={10} className="opacity-40" />
+                        </a>
+                      </li>
+                    )
+                  }
+
+                  return (
+                    <li>
+                      <a href={item.path} class={baseClass}>
+                        <span class="w-1 h-1 bg-blue-900 rounded-full scale-0 group-hover:scale-100 transition-transform"></span>
+                        {item.label}
+                      </a>
+                    </li>
+                  )
+                })}
+              </ul>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <div class="pt-12 border-t border-slate-100 flex flex-row justify-between items-center">
+        <p class="text-[10px] font-black text-slate-300 uppercase tracking-widest">
+          © {new Date().getFullYear()} SSAFYnity. All rights reserved.
+        </p>
+        <div class="flex items-center gap-8">
+          <a href={siteData.legal.privacyPath} class="text-[10px] font-black text-slate-400 hover:text-blue-900 transition-colors uppercase tracking-widest">
+            개인정보처리방침
+          </a>
+          <a href={siteData.legal.termsPath} class="text-[10px] font-black text-slate-400 hover:text-blue-900 transition-colors uppercase tracking-widest">
+            이용약관
+          </a>
+        </div>
+      </div>
+
+      <p class="mt-5 text-[11px] font-bold leading-relaxed text-slate-400 break-keep">
+        동문회의 사전 허락 없는 무단 크롤링, 스크래핑, 복제 및 재배포를 금합니다.
+      </p>
+    </Container>
+  </section>
+</footer>

@@ -1,0 +1,131 @@
+---
+import BaseLayout from '~/layouts/BaseLayout.astro'
+import Footer from '~/components/Footer.astro'
+import Navbar from '~/components/Navbar.astro'
+
+interface Props {
+  pathname: string
+  title?: string
+  description?: string
+  canonical?: string
+  noindex?: boolean
+}
+
+const metaByPath: Record<string, { title: string; description: string }> = {
+  '/': {
+    title: 'SSAFYnity | SSAFY 수료생 동문회',
+    description: 'SSAFY 수료생들이 직접 운영하는 동문회 SSAFYnity 공식 홈페이지. 행사, 운영진, 동아리, 멤버십 정보를 확인하세요.',
+  },
+  '/about/story': {
+    title: '동문회 소개 | SSAFYnity',
+    description: 'SSAFYnity의 시작과 운영 철학, 연혁과 동문 분포를 소개합니다.',
+  },
+  '/about/values': {
+    title: '가치관 | SSAFYnity',
+    description: 'SSAFYnity가 추구하는 연결, 성장, 나눔의 가치를 소개합니다.',
+  },
+  '/about/partners': {
+    title: '후원·협력사 | SSAFYnity',
+    description: 'SSAFYnity와 함께하는 후원사와 협력 파트너를 확인하세요.',
+  },
+  '/operator/introduce': {
+    title: '운영진 소개 | SSAFYnity',
+    description: 'SSAFYnity 운영진의 활동 원칙과 협업 방식을 소개합니다.',
+  },
+  '/operator/organization': {
+    title: '운영 조직 | SSAFYnity',
+    description: 'SSAFYnity 운영진 조직 구성과 팀별 역할, 공통 업무를 확인하세요.',
+  },
+  '/operator/history': {
+    title: '운영진 연혁 | SSAFYnity',
+    description: 'SSAFYnity를 이어온 역대 운영진과 조직 변화를 살펴보세요.',
+  },
+  '/operator/apply': {
+    title: '운영진 지원 | SSAFYnity',
+    description: 'SSAFYnity 운영진 지원 자격, 활동 방식, 혜택과 모집 정보를 확인하세요.',
+  },
+  '/events/introduce': {
+    title: '행사 소개 | SSAFYnity',
+    description: 'SSAFYnity 정기 행사와 상시 행사 운영 방식, 참여 자격을 안내합니다.',
+  },
+  '/events/upcoming': {
+    title: '행사 일정 | SSAFYnity',
+    description: '올해 예정된 SSAFYnity 행사 일정과 접수 상태를 확인하세요.',
+  },
+  '/events/archive': {
+    title: '역대 행사 | SSAFYnity',
+    description: '지금까지 진행된 SSAFYnity 행사 기록을 연도별로 살펴보세요.',
+  },
+  '/clubs': {
+    title: '정식 동아리 | SSAFYnity',
+    description: 'SSAFYnity 공식 소속 동아리 목록과 활동 정보를 확인하세요.',
+  },
+  '/clubs/pre': {
+    title: '예비 동아리 | SSAFYnity',
+    description: '함께할 동문을 찾는 예비 동아리 모집 현황을 확인하세요.',
+  },
+  '/clubs/intro': {
+    title: '동아리 소개 | SSAFYnity',
+    description: 'SSAFYnity 동아리 제도와 등록 자격, 유지 조건, 혜택을 안내합니다.',
+  },
+  '/clubs/apply': {
+    title: '동아리 신청 | SSAFYnity',
+    description: '정식 동아리와 예비 동아리 신청 방법, 등록 기준을 확인하세요.',
+  },
+  '/join/membership': {
+    title: '동문회 가입 | SSAFYnity',
+    description: 'SSAFYnity 동문회원 가입 대상과 절차, 회원 유형을 안내합니다.',
+  },
+  '/join/premium': {
+    title: '정회원 안내 | SSAFYnity',
+    description: 'SSAFYnity 정회원 혜택과 신청 방법, 추천 대상을 확인하세요.',
+  },
+  '/join/partnership': {
+    title: '후원·제휴 문의 | SSAFYnity',
+    description: 'SSAFYnity와의 후원 및 제휴 협력 방식, 기대 효과, 문의 절차를 안내합니다.',
+  },
+  '/community/faq': {
+    title: 'FAQ | SSAFYnity',
+    description: '가입, 행사, 동아리, 커뮤니티 관련 자주 묻는 질문을 확인하세요.',
+  },
+  '/community/sns': {
+    title: '공식 채널 | SSAFYnity',
+    description: 'SSAFYnity 공식 메일과 SNS, 커뮤니티 채널 이용 방법을 안내합니다.',
+  },
+  '/privacy': {
+    title: '개인정보처리방침 | SSAFYnity',
+    description: 'SSAFYnity 개인정보처리방침을 확인하세요.',
+  },
+  '/terms': {
+    title: '이용약관 | SSAFYnity',
+    description: 'SSAFYnity 공식 홈페이지와 운영 채널 이용약관을 확인하세요.',
+  },
+}
+
+const {
+  pathname,
+  title,
+  description,
+  canonical = `https://ssafynity.github.io${pathname}`,
+  noindex = false,
+} = Astro.props
+
+const defaultMeta = metaByPath[pathname]
+const resolvedTitle = title ?? defaultMeta?.title
+const resolvedDescription = description ?? defaultMeta?.description
+---
+
+<BaseLayout
+  title={resolvedTitle}
+  description={resolvedDescription}
+  canonical={canonical}
+  noindex={noindex}
+>
+  <div class="flex flex-col min-h-screen">
+    <Navbar pathname={pathname} />
+    <main class="flex-1">
+      <slot />
+    </main>
+    <Footer />
+  </div>
+</BaseLayout>

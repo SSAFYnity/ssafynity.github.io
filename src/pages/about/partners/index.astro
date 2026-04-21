@@ -1,0 +1,555 @@
+---
+import Card from '~/components/Card.astro'
+import Container from '~/components/Container.astro'
+import HeroLabel from '~/components/HeroLabel.astro'
+import LucideIcon from '~/components/LucideIcon.astro'
+import ResponsiveText from '~/components/ResponsiveText.astro'
+import SiteLayout from '~/layouts/SiteLayout.astro'
+import { allPartners } from '@/data/computed'
+import { PARTNER_CATEGORY, PARTNER_TYPE_LABEL, type PartnerCategory, type PartnerType } from '@/data/constants'
+import { withBaseAsset } from '@/lib/asset'
+import { collapseNewlines } from '@/lib/text'
+
+const pathname = '/about/partners'
+const allLabel = '전체'
+
+const statusOptions = [
+  { key: 'all', label: '전체' },
+  { key: 'active', label: '현재' },
+  { key: 'inactive', label: '이전' },
+] as const
+
+const categoryKeys: PartnerCategory[] = ['founding', 'sponsor', 'alliance']
+
+const typeOptions: Array<{ key: PartnerType; label: string }> = [
+  { key: 'financial', label: PARTNER_TYPE_LABEL.financial },
+  { key: 'goods', label: PARTNER_TYPE_LABEL.goods },
+  { key: 'promotion', label: PARTNER_TYPE_LABEL.promotion },
+  { key: 'talent', label: PARTNER_TYPE_LABEL.talent },
+  { key: 'operations', label: PARTNER_TYPE_LABEL.operations },
+]
+
+const sortOptions = [
+  { key: 'name-asc', label: '가나다순' },
+  { key: 'period-desc', label: '최신 파트너 먼저' },
+  { key: 'period-asc', label: '오래된 파트너 먼저' },
+] as const
+
+function shouldShowMore(text: string) {
+  const collapsed = collapseNewlines(text)
+  return collapsed.length > 72 || collapsed !== text
+}
+---
+
+<SiteLayout pathname={pathname}>
+  <div class="flex flex-col">
+    <section class="bg-white pt-24 pb-10 lg:pt-28 lg:pb-14">
+      <Container maxWidth="5xl">
+        <div class="astro-reveal">
+          <HeroLabel>후원·협력사</HeroLabel>
+          <h1 class="text-2xl md:text-3xl font-extrabold tracking-tight leading-[1.2] text-slate-900 mb-2">
+            함께 만들어가는 공동체
+          </h1>
+          <p class="text-xl md:text-2xl font-black text-blue-600 mb-4">Our Partners</p>
+          <div class="flex items-end justify-between gap-4">
+            <p class="text-sm text-slate-500 leading-relaxed break-keep text-pretty max-w-xl">
+              <ResponsiveText
+                text={'SSAFYnity와 함께해주신 파트너를 소개합니다.\n분류와 지원 범위를 선택해 협력 형태를 확인할 수 있습니다.'}
+              />
+            </p>
+            <a
+              href="/join/partnership"
+              class="text-xs font-black text-blue-600 hover:text-blue-700 transition-colors shrink-0 pb-0.5"
+            >
+              후원 · 협력사 문의 →
+            </a>
+          </div>
+        </div>
+      </Container>
+    </section>
+
+    <section class="bg-slate-50 pt-10 pb-20 lg:pt-14 lg:pb-28 border-t border-slate-100">
+      <Container maxWidth="5xl">
+        <div class="bg-white border border-slate-200 rounded-2xl px-4 py-3 flex flex-col mb-8">
+          <div class="flex flex-col gap-3">
+            <div class="flex flex-wrap items-center gap-2">
+              {statusOptions.map((option) => (
+                <button
+                  type="button"
+                  data-partner-status={option.key}
+                  class={`partner-status-button px-3.5 py-2 sm:py-1.5 rounded-full text-sm sm:text-xs font-black border transition-colors ${
+                    option.key === 'active'
+                      ? 'bg-blue-600 text-white border-blue-600'
+                      : 'bg-white border-slate-200 text-slate-600 hover:border-blue-300 hover:text-blue-600'
+                  }`}
+                >
+                  {option.label}
+                </button>
+              ))}
+            </div>
+
+            <div class="flex flex-wrap items-center gap-2">
+              <button
+                type="button"
+                data-partner-category={allLabel}
+                class="partner-category-button px-3.5 py-2 sm:py-1.5 rounded-full text-sm sm:text-xs font-black border bg-blue-600 text-white border-blue-600 transition-colors"
+              >
+                전체
+              </button>
+              {categoryKeys.map((key) => (
+                <button
+                  type="button"
+                  data-partner-category={key}
+                  class="partner-category-button px-3.5 py-2 sm:py-1.5 rounded-full text-sm sm:text-xs font-black border bg-white border-slate-200 text-slate-600 hover:border-blue-300 hover:text-blue-600 transition-colors"
+                >
+                  {PARTNER_CATEGORY[key].label}
+                </button>
+              ))}
+            </div>
+
+            <div class="flex flex-wrap items-center gap-2">
+              {typeOptions.map((option) => (
+                <button
+                  type="button"
+                  data-partner-type={option.key}
+                  class="partner-type-button px-3.5 py-2 sm:py-1.5 rounded-full text-sm sm:text-xs font-black border bg-white border-slate-200 text-slate-600 hover:border-blue-300 hover:text-blue-600 transition-colors"
+                >
+                  {option.label}
+                </button>
+              ))}
+
+              <label class="sr-only" for="partner-sort">정렬</label>
+              <select
+                id="partner-sort"
+                class="px-3.5 pr-8 py-2 sm:py-1.5 rounded-full text-sm sm:text-xs font-black border bg-white border-slate-200 text-slate-600 hover:border-blue-300 focus:outline-none focus:border-blue-400"
+              >
+                {sortOptions.map((option) => (
+                  <option value={option.key}>{option.label}</option>
+                ))}
+              </select>
+
+              <button
+                type="button"
+                id="partner-reset"
+                class="text-[10px] font-black text-slate-400 hover:text-blue-500 transition-colors shrink-0 hidden"
+              >
+                초기화
+              </button>
+            </div>
+
+            <form id="partner-search-form" class="flex flex-col sm:flex-row items-stretch gap-2">
+              <input
+                id="partner-search-input"
+                type="search"
+                placeholder="협력사 검색"
+                class="flex-1 rounded-2xl border border-slate-200 px-4 py-2.5 text-sm text-slate-700 placeholder:text-slate-400 focus:outline-none focus:border-blue-400"
+              />
+              <button
+                type="submit"
+                class="rounded-2xl bg-slate-900 px-4 py-2.5 text-sm font-black text-white hover:bg-slate-800 transition-colors"
+              >
+                검색
+              </button>
+            </form>
+          </div>
+
+          <div id="partner-active-filters" class="hidden flex flex-wrap gap-1.5 pt-2.5 mt-2.5 border-t border-slate-100"></div>
+        </div>
+
+        <div id="partner-no-results" class="hidden flex flex-col items-center gap-4 py-20 text-center">
+          <p class="text-sm text-slate-400">해당 조건의 협력사가 아직 없습니다.</p>
+          <a
+            href="/join/partnership"
+            class="inline-flex items-center gap-1.5 px-5 py-2 rounded-full bg-blue-600 text-white text-xs font-black tracking-wide hover:bg-blue-700 transition-colors"
+          >
+            후원·제휴 문의하기
+          </a>
+        </div>
+
+        <div id="partner-grid" class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+          {allPartners.map((partner, index) => {
+            const inactive = partner.status === 'inactive'
+            const isFounding = partner.category === 'founding'
+            const displayTypes = partner.types.filter((type) => type !== 'founding')
+            const badgeVisible = isFounding ? [] : displayTypes.slice(0, 2)
+            const badgeHidden = isFounding ? displayTypes : displayTypes.slice(2)
+            const collapsedDesc = collapseNewlines(partner.desc)
+            const showMore = shouldShowMore(partner.desc)
+
+            return (
+              <div
+                class={`astro-reveal ${partner.status !== 'active' ? 'hidden' : ''}`}
+                data-reveal-delay={String(index * 60)}
+                data-partner-card
+                data-partner-status={partner.status}
+                data-partner-category={partner.category}
+                data-partner-types={partner.types.join(',')}
+                data-partner-name={partner.name.toLowerCase()}
+                data-partner-desc={collapsedDesc.toLowerCase()}
+                data-partner-keywords={(partner.keywords ?? []).join(',').toLowerCase()}
+                data-partner-period-start={partner.period?.start ?? ''}
+              >
+                <Card
+                  className={`group overflow-hidden flex flex-col h-full transition-all duration-200 ${
+                    inactive
+                      ? 'bg-white border-slate-200 hover:border-slate-300 hover:shadow-sm'
+                      : 'bg-white border-slate-200 hover:border-blue-200 hover:shadow-md'
+                  }`}
+                >
+                  <div class={`relative flex items-center justify-center h-28 ${inactive ? 'bg-slate-100' : 'bg-slate-50'}`}>
+                    <div class="absolute top-3 right-3 flex flex-row items-center flex-wrap justify-end gap-1">
+                      <span class={`text-[10px] font-black px-2 py-0.5 rounded-full ${PARTNER_CATEGORY[partner.category].style}`}>
+                        {PARTNER_CATEGORY[partner.category].label}
+                      </span>
+                      {badgeVisible.map((type) => (
+                        <span class="text-[10px] font-black tracking-widest uppercase px-2 py-0.5 rounded-full bg-slate-200/80 text-slate-400">
+                          {PARTNER_TYPE_LABEL[type]}
+                        </span>
+                      ))}
+                      {badgeHidden.length > 0 && (
+                        <span class="relative group/more cursor-default text-[10px] font-black px-2 py-0.5 rounded-full bg-slate-200/80 text-slate-400">
+                          {isFounding ? '+ALL' : `+${badgeHidden.length}`}
+                          <div class="absolute top-full right-0 mt-1 hidden group-hover/more:flex flex-col items-end gap-1 p-2 rounded-xl bg-white border border-slate-200 shadow-lg z-10">
+                            {badgeHidden.map((type) => (
+                              <span class="text-[10px] font-black tracking-widest uppercase px-2 py-0.5 rounded-full bg-slate-100 text-slate-500 whitespace-nowrap">
+                                {PARTNER_TYPE_LABEL[type]}
+                              </span>
+                            ))}
+                          </div>
+                        </span>
+                      )}
+                    </div>
+
+                    {partner.logo ? (
+                      <img
+                        src={withBaseAsset(partner.logo)}
+                        alt={partner.name}
+                        class={`h-20 sm:h-24 w-auto object-contain max-w-[90%] ${inactive ? 'grayscale opacity-40' : ''}`}
+                      />
+                    ) : (
+                      <span class={`text-base font-black px-10 text-center leading-snug ${inactive ? 'text-slate-400' : 'text-slate-700'}`}>
+                        {partner.name}
+                      </span>
+                    )}
+                  </div>
+
+                  <div class="flex flex-col gap-2.5 px-5 pt-4 pb-5 h-full">
+                    <p class={`text-sm font-black leading-snug ${inactive ? 'text-slate-400' : 'text-slate-800'}`}>
+                      {partner.name}
+                    </p>
+
+                    <div class="flex-1">
+                      <p
+                        data-partner-desc-collapsed
+                        class={`text-sm leading-relaxed break-keep ${inactive ? 'text-slate-400' : 'text-slate-500'}`}
+                      >
+                        {collapsedDesc}
+                      </p>
+                      <p
+                        data-partner-desc-expanded
+                        class={`hidden text-sm leading-relaxed break-keep ${inactive ? 'text-slate-400' : 'text-slate-500'}`}
+                      >
+                        <ResponsiveText text={partner.desc} newline="always" />
+                      </p>
+                    </div>
+
+                    <div class="flex items-center justify-between gap-2 pt-1">
+                      <p class="text-[11px] font-medium text-slate-400">
+                        {partner.period ? `${partner.period.start} ~ ${partner.period.end ?? '현재'}` : '싸피니티와 함께합니다'}
+                      </p>
+                      <div class="flex items-center gap-2 shrink-0">
+                        {showMore && (
+                          <button
+                            type="button"
+                            data-partner-toggle
+                            class="text-[11px] font-medium text-slate-400 hover:text-blue-500 transition-colors"
+                          >
+                            더보기
+                          </button>
+                        )}
+                        <a
+                          href={partner.url}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          aria-label={`${partner.name} 사이트 열기`}
+                          class="inline-flex text-slate-300 group-hover:text-blue-400 transition-colors"
+                        >
+                          <LucideIcon name="external-link" size={12} />
+                        </a>
+                      </div>
+                    </div>
+                  </div>
+                </Card>
+              </div>
+            )
+          })}
+        </div>
+      </Container>
+    </section>
+  </div>
+
+  <script is:inline define:vars={{ allLabel }}>
+    (() => {
+      const statusButtons = Array.from(document.querySelectorAll('.partner-status-button'));
+      const categoryButtons = Array.from(document.querySelectorAll('.partner-category-button'));
+      const typeButtons = Array.from(document.querySelectorAll('.partner-type-button'));
+      const sortSelect = document.getElementById('partner-sort');
+      const resetButton = document.getElementById('partner-reset');
+      const searchForm = document.getElementById('partner-search-form');
+      const searchInput = document.getElementById('partner-search-input');
+      const activeFilters = document.getElementById('partner-active-filters');
+      const noResults = document.getElementById('partner-no-results');
+      const grid = document.getElementById('partner-grid');
+      const cards = Array.from(document.querySelectorAll('[data-partner-card]'));
+
+      if (!sortSelect || !resetButton || !searchForm || !searchInput || !activeFilters || !noResults || !grid) {
+        return;
+      }
+
+      const state = {
+        status: 'active',
+        category: allLabel,
+        types: new Set(),
+        query: '',
+        sort: sortSelect.value,
+      };
+
+      const setToggleStyles = (button, active) => {
+        button.classList.toggle('bg-blue-600', active);
+        button.classList.toggle('text-white', active);
+        button.classList.toggle('border-blue-600', active);
+        button.classList.toggle('bg-white', !active);
+        button.classList.toggle('text-slate-600', !active);
+        button.classList.toggle('border-slate-200', !active);
+      };
+
+      const makeBadge = (label, type, value) => {
+        const wrapper = document.createElement('span');
+        wrapper.className = 'inline-flex items-center gap-1 rounded-full bg-blue-50 pl-2.5 pr-1.5 py-1 text-[10px] font-black text-blue-600';
+
+        const text = document.createElement('span');
+        text.textContent = label;
+        wrapper.appendChild(text);
+
+        const button = document.createElement('button');
+        button.type = 'button';
+        button.className = 'flex items-center hover:text-blue-800 transition-colors';
+        button.dataset.filterType = type;
+        button.dataset.filterValue = value;
+        button.setAttribute('aria-label', `${label} 필터 해제`);
+        button.innerHTML = '&times;';
+        wrapper.appendChild(button);
+
+        return wrapper;
+      };
+
+      const renderActiveFilters = () => {
+        activeFilters.innerHTML = '';
+
+        if (state.status !== 'active') {
+          const label = statusButtons.find((button) => button.getAttribute('data-partner-status') === state.status)?.textContent?.trim() ?? state.status;
+          activeFilters.appendChild(makeBadge(label, 'status', state.status));
+        }
+
+        if (state.category !== allLabel) {
+          const label = categoryButtons.find((button) => button.getAttribute('data-partner-category') === state.category)?.textContent?.trim() ?? state.category;
+          activeFilters.appendChild(makeBadge(label, 'category', state.category));
+        }
+
+        state.types.forEach((type) => {
+          const label = typeButtons.find((button) => button.getAttribute('data-partner-type') === type)?.textContent?.trim() ?? type;
+          activeFilters.appendChild(makeBadge(label, 'type', type));
+        });
+
+        if (state.query) {
+          activeFilters.appendChild(makeBadge(state.query, 'query', state.query));
+        }
+
+        const hasFilter = activeFilters.childElementCount > 0;
+        activeFilters.classList.toggle('hidden', !hasFilter);
+        resetButton.classList.toggle('hidden', !hasFilter);
+      };
+
+      const comparePartners = (left, right) => {
+        if (state.sort === 'name-asc') {
+          return (left.getAttribute('data-partner-name') ?? '').localeCompare(
+            right.getAttribute('data-partner-name') ?? '',
+            'ko',
+          );
+        }
+
+        const leftPeriod = left.getAttribute('data-partner-period-start') ?? '';
+        const rightPeriod = right.getAttribute('data-partner-period-start') ?? '';
+
+        if (!leftPeriod && !rightPeriod) return 0;
+        if (!leftPeriod) return 1;
+        if (!rightPeriod) return -1;
+
+        if (state.sort === 'period-asc') {
+          return leftPeriod.localeCompare(rightPeriod);
+        }
+
+        return rightPeriod.localeCompare(leftPeriod);
+      };
+
+      const applyFilters = () => {
+        const query = state.query.trim().toLowerCase();
+
+        const filtered = cards.filter((card) => {
+          const status = card.getAttribute('data-partner-status') ?? '';
+          const category = card.getAttribute('data-partner-category') ?? '';
+          const types = (card.getAttribute('data-partner-types') ?? '').split(',').filter(Boolean);
+          const haystack = [
+            card.getAttribute('data-partner-name') ?? '',
+            card.getAttribute('data-partner-desc') ?? '',
+            card.getAttribute('data-partner-keywords') ?? '',
+          ].join(' ');
+
+          if (state.status !== 'all' && status !== state.status) return false;
+          if (state.category !== allLabel && category !== state.category) return false;
+          if (state.types.size > 0 && !Array.from(state.types).some((type) => types.includes(type))) return false;
+          if (query && !haystack.includes(query)) return false;
+          return true;
+        });
+
+        const ordered = [
+          ...filtered.filter((card) => (card.getAttribute('data-partner-status') ?? '') === 'active').sort(comparePartners),
+          ...filtered.filter((card) => (card.getAttribute('data-partner-status') ?? '') === 'inactive').sort(comparePartners),
+        ];
+
+        cards.forEach((card) => card.classList.add('hidden'));
+        ordered.forEach((card) => {
+          card.classList.remove('hidden');
+          grid.appendChild(card);
+        });
+
+        noResults.classList.toggle('hidden', ordered.length > 0);
+        grid.classList.toggle('hidden', ordered.length === 0);
+        renderActiveFilters();
+      };
+
+      const resetAll = () => {
+        state.status = 'active';
+        state.category = allLabel;
+        state.types.clear();
+        state.query = '';
+        sortSelect.value = 'name-asc';
+        state.sort = 'name-asc';
+        searchInput.value = '';
+
+        statusButtons.forEach((button) => {
+          setToggleStyles(button, button.getAttribute('data-partner-status') === 'active');
+        });
+        categoryButtons.forEach((button) => {
+          setToggleStyles(button, button.getAttribute('data-partner-category') === allLabel);
+        });
+        typeButtons.forEach((button) => setToggleStyles(button, false));
+
+        applyFilters();
+      };
+
+      statusButtons.forEach((button) => {
+        button.addEventListener('click', () => {
+          state.status = button.getAttribute('data-partner-status') ?? 'active';
+          statusButtons.forEach((target) => setToggleStyles(target, target === button));
+          applyFilters();
+        });
+      });
+
+      categoryButtons.forEach((button) => {
+        button.addEventListener('click', () => {
+          state.category = button.getAttribute('data-partner-category') ?? allLabel;
+          categoryButtons.forEach((target) => setToggleStyles(target, target === button));
+          applyFilters();
+        });
+      });
+
+      typeButtons.forEach((button) => {
+        button.addEventListener('click', () => {
+          const value = button.getAttribute('data-partner-type');
+          if (!value) return;
+
+          if (state.types.has(value)) {
+            state.types.delete(value);
+          } else {
+            state.types.add(value);
+          }
+
+          setToggleStyles(button, state.types.has(value));
+          applyFilters();
+        });
+      });
+
+      sortSelect.addEventListener('change', () => {
+        state.sort = sortSelect.value;
+        applyFilters();
+      });
+
+      searchForm.addEventListener('submit', (event) => {
+        event.preventDefault();
+        state.query = searchInput.value.trim();
+        applyFilters();
+      });
+
+      resetButton.addEventListener('click', resetAll);
+
+      activeFilters.addEventListener('click', (event) => {
+        const target = event.target instanceof Element ? event.target.closest('[data-filter-type]') : null;
+        if (!target) return;
+
+        const type = target.getAttribute('data-filter-type');
+        const value = target.getAttribute('data-filter-value');
+
+        if (type === 'status') {
+          state.status = 'active';
+          statusButtons.forEach((button) => {
+            setToggleStyles(button, button.getAttribute('data-partner-status') === 'active');
+          });
+        }
+
+        if (type === 'category') {
+          state.category = allLabel;
+          categoryButtons.forEach((button) => {
+            setToggleStyles(button, button.getAttribute('data-partner-category') === allLabel);
+          });
+        }
+
+        if (type === 'type' && value) {
+          state.types.delete(value);
+          typeButtons.forEach((button) => {
+            if (button.getAttribute('data-partner-type') === value) {
+              setToggleStyles(button, false);
+            }
+          });
+        }
+
+        if (type === 'query') {
+          state.query = '';
+          searchInput.value = '';
+        }
+
+        applyFilters();
+      });
+
+      grid.addEventListener('click', (event) => {
+        const toggle = event.target instanceof Element ? event.target.closest('[data-partner-toggle]') : null;
+        if (!toggle) return;
+
+        const card = toggle.closest('[data-partner-card]');
+        if (!card) return;
+
+        const collapsed = card.querySelector('[data-partner-desc-collapsed]');
+        const expanded = card.querySelector('[data-partner-desc-expanded]');
+
+        if (!collapsed || !expanded) return;
+
+        const isExpanded = !expanded.classList.contains('hidden');
+        collapsed.classList.toggle('hidden', !isExpanded);
+        expanded.classList.toggle('hidden', isExpanded);
+        toggle.textContent = isExpanded ? '더보기' : '접기';
+      });
+
+      applyFilters();
+    })();
+  </script>
+</SiteLayout>

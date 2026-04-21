@@ -1,0 +1,161 @@
+---
+import BrandIcon from '~/components/BrandIcon.astro'
+import Activity from '@lucide/astro/icons/activity'
+import ArrowLeft from '@lucide/astro/icons/arrow-left'
+import ArrowLeftRight from '@lucide/astro/icons/arrow-left-right'
+import ArrowRight from '@lucide/astro/icons/arrow-right'
+import BadgeCheck from '@lucide/astro/icons/badge-check'
+import Bell from '@lucide/astro/icons/bell'
+import BellRing from '@lucide/astro/icons/bell-ring'
+import BookOpen from '@lucide/astro/icons/book-open'
+import Building2 from '@lucide/astro/icons/building-2'
+import Calendar from '@lucide/astro/icons/calendar'
+import CalendarCheck2 from '@lucide/astro/icons/calendar-check-2'
+import CalendarDays from '@lucide/astro/icons/calendar-days'
+import CalendarPlus from '@lucide/astro/icons/calendar-plus'
+import CalendarX from '@lucide/astro/icons/calendar-x'
+import Check from '@lucide/astro/icons/check'
+import ChevronDown from '@lucide/astro/icons/chevron-down'
+import ChevronRight from '@lucide/astro/icons/chevron-right'
+import Clock from '@lucide/astro/icons/clock'
+import CodeXml from '@lucide/astro/icons/code-xml'
+import Copy from '@lucide/astro/icons/copy'
+import CreditCard from '@lucide/astro/icons/credit-card'
+import Crown from '@lucide/astro/icons/crown'
+import Dumbbell from '@lucide/astro/icons/dumbbell'
+import ExternalLink from '@lucide/astro/icons/external-link'
+import FileText from '@lucide/astro/icons/file-text'
+import Gamepad2 from '@lucide/astro/icons/gamepad-2'
+import Gift from '@lucide/astro/icons/gift'
+import Globe from '@lucide/astro/icons/globe'
+import Heart from '@lucide/astro/icons/heart'
+import Layers from '@lucide/astro/icons/layers'
+import Lightbulb from '@lucide/astro/icons/lightbulb'
+import Link from '@lucide/astro/icons/link'
+import Lock from '@lucide/astro/icons/lock'
+import Mail from '@lucide/astro/icons/mail'
+import MapPin from '@lucide/astro/icons/map-pin'
+import Menu from '@lucide/astro/icons/menu'
+import Megaphone from '@lucide/astro/icons/megaphone'
+import MessageCircle from '@lucide/astro/icons/message-circle'
+import MessageSquare from '@lucide/astro/icons/message-square'
+import Minus from '@lucide/astro/icons/minus'
+import Monitor from '@lucide/astro/icons/monitor'
+import Network from '@lucide/astro/icons/network'
+import Package from '@lucide/astro/icons/package'
+import Palette from '@lucide/astro/icons/palette'
+import RefreshCw from '@lucide/astro/icons/refresh-cw'
+import Scale from '@lucide/astro/icons/scale'
+import Search from '@lucide/astro/icons/search'
+import Send from '@lucide/astro/icons/send'
+import ShieldCheck from '@lucide/astro/icons/shield-check'
+import Smile from '@lucide/astro/icons/smile'
+import Star from '@lucide/astro/icons/star'
+import Target from '@lucide/astro/icons/target'
+import Trophy from '@lucide/astro/icons/trophy'
+import TrendingUp from '@lucide/astro/icons/trending-up'
+import TriangleAlert from '@lucide/astro/icons/triangle-alert'
+import UserCheck from '@lucide/astro/icons/user-check'
+import UserPlus from '@lucide/astro/icons/user-plus'
+import UserRound from '@lucide/astro/icons/user-round'
+import Users from '@lucide/astro/icons/users'
+import Wifi from '@lucide/astro/icons/wifi'
+import X from '@lucide/astro/icons/x'
+import Zap from '@lucide/astro/icons/zap'
+import ChartNoAxesColumn from '@lucide/astro/icons/chart-no-axes-column'
+import CircleCheck from '@lucide/astro/icons/circle-check'
+import CircleX from '@lucide/astro/icons/circle-x'
+
+const iconComponents = {
+  activity: Activity,
+  'alert-triangle': TriangleAlert,
+  'arrow-left': ArrowLeft,
+  'arrow-left-right': ArrowLeftRight,
+  'arrow-right': ArrowRight,
+  'badge-check': BadgeCheck,
+  'bar-chart-2': ChartNoAxesColumn,
+  bell: Bell,
+  'bell-ring': BellRing,
+  'book-open': BookOpen,
+  'building-2': Building2,
+  calendar: Calendar,
+  'calendar-check-2': CalendarCheck2,
+  'calendar-days': CalendarDays,
+  'calendar-plus': CalendarPlus,
+  'calendar-x': CalendarX,
+  check: Check,
+  'check-circle-2': CircleCheck,
+  clock: Clock,
+  'chevron-down': ChevronDown,
+  'chevron-right': ChevronRight,
+  code2: CodeXml,
+  copy: Copy,
+  crown: Crown,
+  'credit-card': CreditCard,
+  dumbbell: Dumbbell,
+  'external-link': ExternalLink,
+  'file-text': FileText,
+  'gamepad-2': Gamepad2,
+  gift: Gift,
+  globe: Globe,
+  heart: Heart,
+  layers: Layers,
+  link: Link,
+  lightbulb: Lightbulb,
+  lock: Lock,
+  mail: Mail,
+  'map-pin': MapPin,
+  menu: Menu,
+  megaphone: Megaphone,
+  'message-circle': MessageCircle,
+  'message-square': MessageSquare,
+  monitor: Monitor,
+  minus: Minus,
+  network: Network,
+  package: Package,
+  palette: Palette,
+  'refresh-cw': RefreshCw,
+  scale: Scale,
+  search: Search,
+  send: Send,
+  'shield-check': ShieldCheck,
+  smile: Smile,
+  star: Star,
+  target: Target,
+  trophy: Trophy,
+  'trending-up': TrendingUp,
+  'user-check': UserCheck,
+  'user-plus': UserPlus,
+  'user-round': UserRound,
+  users: Users,
+  wifi: Wifi,
+  x: X,
+  'x-circle': CircleX,
+  zap: Zap,
+} as const
+
+type IconName = keyof typeof iconComponents | 'github'
+
+interface Props {
+  name: IconName
+  className?: string
+  size?: number | string
+  strokeWidth?: number | string
+}
+
+const {
+  name,
+  className = '',
+  size = 24,
+  strokeWidth = 2,
+} = Astro.props as Props
+
+const isBrandGithub = name === 'github'
+const IconComponent = isBrandGithub ? null : iconComponents[name]
+---
+
+{isBrandGithub ? (
+  <BrandIcon name="github" size={size} className={className} />
+) : (
+  IconComponent && <IconComponent size={size} stroke-width={strokeWidth} class={className} />
+)}

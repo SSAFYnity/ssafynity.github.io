@@ -1,0 +1,389 @@
+---
+import Card from '~/components/Card.astro'
+import Container from '~/components/Container.astro'
+import HeroLabel from '~/components/HeroLabel.astro'
+import SiteLayout from '~/layouts/SiteLayout.astro'
+import LucideIcon from '~/components/LucideIcon.astro'
+import { siteData } from '@/data/siteData'
+import { FAQ_CATEGORY_ORDER, FAQ_SECTIONS } from '@/data/faqs'
+import { ROUTES } from '@/lib/routes'
+
+const pathname = '/community/faq'
+const faqPageSize = 12
+
+const orderedSections = FAQ_CATEGORY_ORDER
+  .map((key) => FAQ_SECTIONS.find((section) => section.key === key))
+  .filter((section): section is (typeof FAQ_SECTIONS)[number] => section != null)
+
+function mainEmailUrl() {
+  return siteData.sns.find((channel) => channel.name === 'Gmail')?.url ?? 'mailto:ssafynity@gmail.com'
+}
+
+function mailtoWithTemplate(emailUrl: string, subject?: string, body?: readonly string[]) {
+  const base = emailUrl.startsWith('mailto:') ? emailUrl : `mailto:${emailUrl}`
+  const params: string[] = []
+
+  if (subject && subject.trim().length > 0) params.push(`subject=${encodeURIComponent(subject)}`)
+  if (body && body.length > 0) params.push(`body=${encodeURIComponent(body.join('\n'))}`)
+
+  if (params.length === 0) return base
+  return `${base}${base.includes('?') ? '&' : '?'}${params.join('&')}`
+}
+
+const emailUrl = mainEmailUrl()
+
+const allItems = orderedSections.flatMap((section, sectionIndex) =>
+  section.items.map((item, itemIndex) => ({
+    ...item,
+    categoryKey: section.key,
+    categoryLabel: section.title,
+    order: sectionIndex * 1000 + itemIndex,
+  })),
+)
+---
+
+<SiteLayout pathname={pathname}>
+  <div class="flex flex-col">
+    <section class="bg-white pt-20 sm:pt-24 pb-12 sm:pb-14 lg:pt-28 lg:pb-20 border-b border-slate-100">
+      <Container maxWidth="5xl">
+        <div class="astro-reveal">
+          <HeroLabel>Community</HeroLabel>
+          <h1 class="text-2xl md:text-3xl font-extrabold tracking-tight leading-[1.2] text-slate-900 mb-2">
+            FAQ
+          </h1>
+          <p class="text-xl md:text-2xl font-black text-blue-600 mb-4">Frequently Asked Questions</p>
+          <p class="text-sm text-slate-500 leading-relaxed break-keep text-pretty max-w-2xl">
+            자주 묻는 질문을 모았습니다. 원하는 답이 없다면 공식 채널로 문의해 주세요.
+          </p>
+        </div>
+      </Container>
+    </section>
+
+    <section class="bg-slate-50 pt-8 pb-12 sm:pt-10 sm:pb-14 lg:pt-14 lg:pb-20">
+      <Container maxWidth="5xl" className="flex flex-col gap-10 sm:gap-12">
+        <div class="astro-reveal">
+          <Card className="sticky sm:static top-[calc(4.5rem+env(safe-area-inset-top))] z-40 bg-white border border-slate-200 p-4 rounded-2xl mb-6 shadow-sm sm:shadow-none">
+            <div class="flex flex-col gap-3">
+              <div class="flex flex-wrap items-center justify-between gap-2">
+                <div class="flex flex-wrap gap-2">
+                  <button
+                    type="button"
+                    data-faq-category="all"
+                    class="faq-category-button flex items-center gap-1.5 pl-3.5 pr-3.5 py-2 sm:py-1.5 rounded-full text-sm sm:text-xs font-black border transition-colors bg-blue-600 text-white border-blue-600"
+                  >
+                    전체
+                  </button>
+                  {orderedSections.map((section) => (
+                    <button
+                      type="button"
+                      data-faq-category={section.key}
+                      class="faq-category-button flex items-center gap-1.5 pl-3.5 pr-3.5 py-2 sm:py-1.5 rounded-full text-sm sm:text-xs font-black border transition-colors bg-white border-slate-200 text-slate-600 hover:border-blue-300 hover:text-blue-600"
+                    >
+                      {section.title}
+                    </button>
+                  ))}
+                </div>
+
+                <button
+                  type="button"
+                  id="faq-reset"
+                  class="text-[10px] font-black text-slate-400 hover:text-blue-500 transition-colors shrink-0 hidden"
+                >
+                  초기화
+                </button>
+              </div>
+
+              <form id="faq-search-form" class="flex flex-wrap items-center gap-2">
+                <div class="w-full sm:flex-1">
+                  <input
+                    id="faq-search-input"
+                    type="search"
+                    placeholder="질문 검색"
+                    class="w-full rounded-2xl border border-slate-200 px-4 py-2.5 text-sm text-slate-700 placeholder:text-slate-400 focus:outline-none focus:border-blue-400"
+                  />
+                </div>
+                <button
+                  type="submit"
+                  class="rounded-2xl bg-slate-900 px-4 py-2.5 text-sm font-black text-white hover:bg-slate-800 transition-colors"
+                >
+                  검색
+                </button>
+              </form>
+            </div>
+
+            <div id="faq-active-filters" class="hidden flex flex-wrap gap-1.5 pt-2.5 mt-2.5 border-t border-slate-100"></div>
+          </Card>
+
+          <div id="faq-no-results" class="hidden flex flex-col items-center gap-3 py-20 text-center">
+            <p class="text-sm text-slate-400">조건에 맞는 질문이 없습니다.</p>
+            <button
+              type="button"
+              id="faq-empty-reset"
+              class="text-xs font-black text-blue-500 hover:text-blue-700 transition-colors"
+            >
+              필터 초기화
+            </button>
+          </div>
+
+          <div id="faq-grid" class="grid gap-3">
+            {allItems.map((item) => (
+              <Card
+                as="details"
+                data-faq-item
+                data-faq-category={item.categoryKey}
+                data-faq-question={item.q.toLowerCase()}
+                data-faq-category-label={item.categoryLabel.toLowerCase()}
+                data-faq-keywords={(item.keywords ?? []).join(',').toLowerCase()}
+                data-faq-order={String(item.order)}
+                className="group overflow-hidden border-slate-200/70 bg-white hover:border-slate-200 hover:shadow-sm transition-all"
+              >
+                <summary class="list-none cursor-pointer px-5 py-4 flex items-start justify-between gap-4 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-blue-200/80 transition-colors">
+                  <span class="min-w-0 text-sm font-extrabold text-slate-900 leading-relaxed break-keep group-open:text-blue-900">
+                    {item.q}
+                  </span>
+                  <span class="mt-0.5 shrink-0 text-slate-400 group-open:text-blue-600 group-open:rotate-180 transition-all">
+                    <LucideIcon name="chevron-down" size={18} />
+                  </span>
+                </summary>
+
+                <div class="px-5 pb-5">
+                  <div class="pt-3 border-t border-slate-100 group-open:border-blue-100">
+                    <div class="flex flex-col gap-2 text-sm text-slate-600 leading-relaxed break-keep">
+                      {item.a.paragraphs.map((paragraph) => (
+                        <p>{paragraph}</p>
+                      ))}
+
+                      {item.a.ctas && item.a.ctas.length > 0 && (
+                        <div class="flex flex-wrap gap-2 pt-1">
+                          {item.a.ctas.map((cta) => {
+                            const className = cta.variant === 'secondary'
+                              ? 'inline-flex items-center gap-2 text-xs font-black px-3.5 py-2 rounded-xl border border-slate-200 bg-white text-slate-700 hover:bg-slate-50 transition-colors'
+                              : 'inline-flex items-center gap-2 text-xs font-black px-3.5 py-2 rounded-xl bg-blue-600 text-white hover:bg-blue-700 transition-colors'
+
+                            return cta.kind === 'internal' ? (
+                              <a href={ROUTES[cta.to]} class={className}>
+                                {cta.label} <LucideIcon name="external-link" size={14} />
+                              </a>
+                            ) : (
+                              <a
+                                href={mailtoWithTemplate(emailUrl, cta.subject, cta.body)}
+                                class={className}
+                              >
+                                {cta.label} <LucideIcon name="mail" size={14} />
+                              </a>
+                            )
+                          })}
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                </div>
+              </Card>
+            ))}
+          </div>
+
+          <div id="faq-pagination" class="hidden flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 px-1 mt-6">
+            <p id="faq-pagination-status" class="text-[11px] font-black text-slate-400"></p>
+            <div class="flex flex-wrap items-center gap-1.5">
+              <button
+                type="button"
+                id="faq-prev"
+                class="w-10 h-10 sm:w-8 sm:h-8 flex items-center justify-center rounded-full border border-slate-200 text-slate-400 hover:border-blue-300 hover:text-blue-500 transition-colors disabled:opacity-30 disabled:cursor-not-allowed"
+              >
+                <LucideIcon name="arrow-left" size={14} />
+              </button>
+              <div id="faq-page-buttons" class="flex flex-wrap items-center gap-1.5"></div>
+              <button
+                type="button"
+                id="faq-next"
+                class="w-10 h-10 sm:w-8 sm:h-8 flex items-center justify-center rounded-full border border-slate-200 text-slate-400 hover:border-blue-300 hover:text-blue-500 transition-colors disabled:opacity-30 disabled:cursor-not-allowed"
+              >
+                <LucideIcon name="arrow-right" size={14} />
+              </button>
+            </div>
+          </div>
+        </div>
+      </Container>
+    </section>
+  </div>
+
+  <script is:inline define:vars={{ faqPageSize }}>
+    (() => {
+      const categoryButtons = Array.from(document.querySelectorAll('.faq-category-button'));
+      const resetButton = document.getElementById('faq-reset');
+      const emptyResetButton = document.getElementById('faq-empty-reset');
+      const searchForm = document.getElementById('faq-search-form');
+      const searchInput = document.getElementById('faq-search-input');
+      const activeFilters = document.getElementById('faq-active-filters');
+      const noResults = document.getElementById('faq-no-results');
+      const grid = document.getElementById('faq-grid');
+      const pagination = document.getElementById('faq-pagination');
+      const paginationStatus = document.getElementById('faq-pagination-status');
+      const pageButtons = document.getElementById('faq-page-buttons');
+      const prevButton = document.getElementById('faq-prev');
+      const nextButton = document.getElementById('faq-next');
+      const items = Array.from(document.querySelectorAll('[data-faq-item]'));
+
+      if (!resetButton || !emptyResetButton || !searchForm || !searchInput || !activeFilters || !noResults || !grid || !pagination || !paginationStatus || !pageButtons || !prevButton || !nextButton) {
+        return;
+      }
+
+      const state = {
+        category: 'all',
+        query: '',
+        page: 1,
+      };
+
+      const setCategoryStyle = (button, active) => {
+        button.classList.toggle('bg-blue-600', active);
+        button.classList.toggle('text-white', active);
+        button.classList.toggle('border-blue-600', active);
+        button.classList.toggle('bg-white', !active);
+        button.classList.toggle('text-slate-600', !active);
+        button.classList.toggle('border-slate-200', !active);
+      };
+
+      const buildPageRange = (current, total) => {
+        if (total <= 7) return Array.from({ length: total }, (_, index) => index + 1);
+
+        const pages = new Set([1, total, current - 2, current - 1, current, current + 1, current + 2]);
+        const list = [...pages].filter((page) => page >= 1 && page <= total).sort((left, right) => left - right);
+        const out = [];
+
+        for (let index = 0; index < list.length; index += 1) {
+          const page = list[index];
+          const prev = list[index - 1];
+          if (index > 0 && prev != null && page - prev > 1) out.push('...');
+          out.push(page);
+        }
+
+        return out;
+      };
+
+      const renderActiveFilters = () => {
+        const badges = [];
+        if (state.category !== 'all') {
+          const label = categoryButtons.find((button) => button.getAttribute('data-faq-category') === state.category)?.textContent?.trim() ?? state.category;
+          badges.push(`<span class="inline-flex items-center gap-1 rounded-full bg-blue-50 px-2.5 py-1 text-[10px] font-black text-blue-600">${label}</span>`);
+        }
+        if (state.query) {
+          badges.push(`<span class="inline-flex items-center gap-1 rounded-full bg-blue-50 px-2.5 py-1 text-[10px] font-black text-blue-600">${state.query}</span>`);
+        }
+
+        activeFilters.innerHTML = badges.join('');
+        activeFilters.classList.toggle('hidden', badges.length === 0);
+        resetButton.classList.toggle('hidden', badges.length === 0);
+      };
+
+      const renderPageButtons = (currentPage, totalPages) => {
+        pageButtons.innerHTML = '';
+
+        buildPageRange(currentPage, totalPages).forEach((value) => {
+          if (value === '...') {
+            const span = document.createElement('span');
+            span.className = 'px-1 text-xs font-black text-slate-300';
+            span.textContent = '...';
+            pageButtons.appendChild(span);
+            return;
+          }
+
+          const button = document.createElement('button');
+          button.type = 'button';
+          button.textContent = String(value);
+          button.className = value === currentPage
+            ? 'w-10 h-10 sm:w-8 sm:h-8 flex items-center justify-center rounded-full text-xs font-black bg-blue-600 text-white'
+            : 'w-10 h-10 sm:w-8 sm:h-8 flex items-center justify-center rounded-full text-xs font-black border border-slate-200 text-slate-500 hover:border-blue-300 hover:text-blue-500 transition-colors';
+          button.addEventListener('click', () => {
+            state.page = value;
+            applyFilters();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+          });
+          pageButtons.appendChild(button);
+        });
+      };
+
+      const applyFilters = () => {
+        const query = state.query.trim().toLowerCase();
+        const filteredItems = items
+          .filter((item) => state.category === 'all' || item.getAttribute('data-faq-category') === state.category)
+          .filter((item) => {
+            if (!query) return true;
+            const haystack = [
+              item.getAttribute('data-faq-question') ?? '',
+              item.getAttribute('data-faq-category-label') ?? '',
+              item.getAttribute('data-faq-keywords') ?? '',
+            ].join(' ');
+            return haystack.includes(query);
+          })
+          .sort((left, right) => Number(left.getAttribute('data-faq-order')) - Number(right.getAttribute('data-faq-order')));
+
+        const totalPages = Math.max(1, Math.ceil(filteredItems.length / faqPageSize));
+        state.page = Math.min(state.page, totalPages);
+
+        const pageStart = (state.page - 1) * faqPageSize;
+        const pageEnd = Math.min(pageStart + faqPageSize, filteredItems.length);
+        const visibleItems = filteredItems.slice(pageStart, pageEnd);
+
+        items.forEach((item) => item.classList.add('hidden'));
+        visibleItems.forEach((item) => {
+          item.classList.remove('hidden');
+          grid.appendChild(item);
+        });
+
+        noResults.classList.toggle('hidden', filteredItems.length > 0);
+        grid.classList.toggle('hidden', filteredItems.length === 0);
+        pagination.classList.toggle('hidden', filteredItems.length === 0 || totalPages <= 1);
+        prevButton.disabled = state.page === 1;
+        nextButton.disabled = state.page === totalPages;
+        paginationStatus.textContent = filteredItems.length === 0 ? '' : `${pageStart + 1}-${pageEnd} / ${filteredItems.length}`;
+        renderPageButtons(state.page, totalPages);
+        renderActiveFilters();
+      };
+
+      const resetAll = () => {
+        state.category = 'all';
+        state.query = '';
+        state.page = 1;
+        searchInput.value = '';
+        categoryButtons.forEach((button) => {
+          setCategoryStyle(button, button.getAttribute('data-faq-category') === 'all');
+        });
+        applyFilters();
+      };
+
+      categoryButtons.forEach((button) => {
+        button.addEventListener('click', () => {
+          state.category = button.getAttribute('data-faq-category') ?? 'all';
+          state.page = 1;
+          categoryButtons.forEach((target) => setCategoryStyle(target, target === button));
+          applyFilters();
+        });
+      });
+
+      searchForm.addEventListener('submit', (event) => {
+        event.preventDefault();
+        state.query = searchInput.value.trim();
+        state.page = 1;
+        applyFilters();
+      });
+
+      prevButton.addEventListener('click', () => {
+        if (state.page === 1) return;
+        state.page -= 1;
+        applyFilters();
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      });
+
+      nextButton.addEventListener('click', () => {
+        state.page += 1;
+        applyFilters();
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      });
+
+      resetButton.addEventListener('click', resetAll);
+      emptyResetButton.addEventListener('click', resetAll);
+
+      applyFilters();
+    })();
+  </script>
+</SiteLayout>

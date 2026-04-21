@@ -1,0 +1,330 @@
+---
+import Card from '~/components/Card.astro'
+import Container from '~/components/Container.astro'
+import HeroLabel from '~/components/HeroLabel.astro'
+import LucideIcon from '~/components/LucideIcon.astro'
+import SiteLayout from '~/layouts/SiteLayout.astro'
+import { allOperators } from '@/data/computed'
+
+const pathname = '/operator/history'
+const generations = [...allOperators].reverse()
+const leadershipGroups = ['임원진']
+
+const teamIcons = {
+  '기획국': 'file-text',
+  '기획팀': 'file-text',
+  '홍보국': 'megaphone',
+  '홍보팀': 'megaphone',
+  '운영국': 'users',
+  '소통국': 'message-circle',
+  '소통팀': 'message-circle',
+  '인사관리국': 'user-plus',
+  '인사팀': 'user-plus',
+  '경영지원국': 'credit-card',
+  '재무팀': 'credit-card',
+  '컨텐츠팀': 'file-text',
+  '디자인팀': 'palette',
+  '대외협력팀': 'globe',
+} as const
+---
+
+<SiteLayout pathname={pathname}>
+  <div class="flex flex-col">
+    <section class="bg-white pt-24 pb-16 lg:pt-28 lg:pb-20 border-b border-slate-100">
+      <Container maxWidth="5xl">
+        <div class="astro-reveal">
+          <HeroLabel>Operator History</HeroLabel>
+          <h1 class="text-3xl md:text-4xl font-extrabold tracking-tight leading-[1.2] text-slate-900 mb-5">
+            싸피니티를 지켜온<br class="hidden sm:block" />
+            <span class="text-blue-600">소중한 발자취</span>
+          </h1>
+          <p class="text-sm text-slate-500 leading-relaxed break-keep max-w-lg">
+            1기부터 현재까지, 열정으로 커뮤니티의 기반을 닦아온 역대 운영진을 소개합니다.
+          </p>
+        </div>
+      </Container>
+    </section>
+
+    <section class="bg-slate-50 py-16 lg:py-20 min-h-[800px]">
+      <Container maxWidth="5xl">
+        <div class="flex flex-col lg:flex-row gap-8 lg:gap-12">
+          <div class="lg:w-1/5 shrink-0 flex flex-col">
+            <div class="mt-0 mb-3 flex flex-col gap-1">
+              <p class="text-xs text-slate-400 flex items-center gap-1.5">
+                <span class="text-[10px] font-black text-blue-700 bg-blue-100 px-1.5 py-0.5 rounded shrink-0">임원진</span>
+                동문회 운영의 최종 결정권자
+              </p>
+              <div class="relative group/anon">
+                <div class="flex items-start gap-1.5 cursor-default">
+                  <span class="w-4 h-4 rounded-full bg-slate-200 text-slate-500 flex items-center justify-center text-[9px] font-black shrink-0 mt-0.5">?</span>
+                  <p class="text-xs text-slate-400 leading-relaxed">익명은 공개 거절 또는 미확인 인원</p>
+                </div>
+                <div class="absolute top-full left-0 mt-2 w-60 bg-slate-800 text-white text-xs rounded-xl p-3 leading-relaxed opacity-0 group-hover/anon:opacity-100 transition-opacity z-50 pointer-events-none shadow-lg">
+                  <div class="flex flex-col gap-1">
+                    <p>공개를 하고 싶은 경우, 아래 내용을 ssafynity 메일로 보내주세요.</p>
+                    <ul class="list-disc pl-4">
+                      <li><span class="font-semibold">(필수)</span> 본인 기수/캠퍼스/성명</li>
+                      <li><span class="font-semibold">(선택)</span> 대표 URL 1개</li>
+                    </ul>
+                  </div>
+                  <ul class="mt-2 text-slate-300 flex flex-col gap-0.5">
+                    <li>· 공개 후엔 비공개처리할 수 없습니다.</li>
+                    <li>· URL은 변경할 수 있습니다.</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+
+            <div class="flex lg:flex-col gap-2 overflow-x-auto pb-2 lg:pb-0">
+              {generations.map((generation, index) => (
+                <button
+                  type="button"
+                  data-operator-tab={String(index)}
+                  class={`operator-tab-button flex-shrink-0 px-5 py-4 rounded-xl border transition-all duration-200 text-left ${
+                    index === 0
+                      ? 'bg-blue-600 border-blue-600 text-white shadow-lg shadow-blue-600/20'
+                      : 'bg-white border-slate-100 text-slate-400 hover:border-blue-200 hover:bg-white'
+                  }`}
+                >
+                  <p class={`text-[10px] font-black uppercase tracking-widest mb-0.5 ${index === 0 ? 'text-blue-200' : 'text-slate-400'}`}>
+                    {generation.year}
+                  </p>
+                  <p class="text-base font-extrabold">{generation.generation}기 {generation.generation <= 2 ? '집행부' : '운영진'}</p>
+                </button>
+              ))}
+            </div>
+          </div>
+
+          <div class="flex-1 min-w-0">
+            {generations.map((current, index) => {
+              const executives = current.groups.find((group) => group.name === '임원진')
+              const councilMembers = executives?.members.filter((member) => member.council && !member.vacant) ?? []
+              const teams = current.groups.filter((group) => !leadershipGroups.includes(group.name))
+
+              return (
+                <Card
+                  data-operator-panel={String(index)}
+                  class:list={[
+                    'bg-white rounded-2xl border border-slate-100 p-8 lg:p-10 min-h-[480px]',
+                    index !== 0 && 'hidden',
+                  ]}
+                >
+                  <div class="mb-6 pb-6 border-b border-slate-100">
+                    <div class="flex sm:items-start justify-between gap-6 mb-4">
+                      <div class="flex flex-col gap-1.5">
+                        <h2 class="text-2xl font-extrabold text-slate-900">{current.generation}기 싸피니티</h2>
+                        <p class="text-xs font-black text-blue-600 uppercase tracking-widest">{current.year} Edition</p>
+                        {current.note && <p class="text-xs text-slate-400">{current.note}</p>}
+                      </div>
+                      {councilMembers.length > 0 && (
+                        <div class="flex flex-wrap gap-2 shrink-0">
+                          {councilMembers.map((member) => {
+                            const hasUrl = 'url' in member && member.url
+                            const content = (
+                              <>
+                                <p class="text-[10px] font-black text-blue-700 bg-blue-100 inline-block px-1.5 py-0.5 rounded mb-1">{member.role}</p>
+                                {'cohort' in member && member.cohort != null && (
+                                  <p class="text-[10px] text-slate-400 mb-0.5">
+                                    {member.cohort}기{('campus' in member && member.campus != null) ? ` · ${member.campus}` : ''}
+                                  </p>
+                                )}
+                                <p class="text-sm font-extrabold text-slate-800 whitespace-nowrap inline-flex items-center gap-1">
+                                  {member.name ?? '(공석)'}
+                                  {hasUrl && <LucideIcon name="external-link" size={12} className="text-blue-400 shrink-0" />}
+                                </p>
+                              </>
+                            )
+
+                            return hasUrl ? (
+                              <a
+                                href={member.url}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                class="bg-slate-50 border border-slate-100 rounded-xl px-4 py-3 text-center hover:border-blue-200 hover:bg-blue-50 transition-colors"
+                              >
+                                {content}
+                              </a>
+                            ) : (
+                              <div class="bg-slate-50 border border-slate-100 rounded-xl px-4 py-3 text-center">
+                                {content}
+                              </div>
+                            )
+                          })}
+                        </div>
+                      )}
+                    </div>
+
+                    <div class="flex flex-col sm:flex-row sm:justify-between sm:items-end gap-4">
+                      {current.achievements && current.achievements.length > 0 && (
+                        <div class="flex-1">
+                          <p class="text-[10px] font-black text-blue-600 uppercase tracking-widest mb-2">주요 성과</p>
+                          <ul class="flex flex-col gap-1.5">
+                            {current.achievements.map((item) => (
+                              <li class="flex items-start gap-2 text-sm text-slate-600">
+                                <span class="text-blue-400 font-black mt-0.5 shrink-0">·</span>
+                                {item.text}
+                              </li>
+                            ))}
+                          </ul>
+                        </div>
+                      )}
+                      <div class="flex gap-2 self-end sm:shrink-0">
+                        {current.memberCount != null && (
+                          <div class="rounded-xl px-4 py-3 text-center">
+                            <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">총원</p>
+                            <p class="text-sm font-extrabold text-slate-800">
+                              {current.memberCount}<span class="text-xs font-black text-slate-400 ml-0.5">명</span>
+                            </p>
+                          </div>
+                        )}
+                        {current.teamCount != null && (
+                          <div class="rounded-xl px-4 py-3 text-center">
+                            <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">
+                              {current.generation <= 2 ? '국 수' : '팀 수'}
+                            </p>
+                            <p class="text-sm font-extrabold text-slate-800">
+                              {current.teamCount}
+                              <span class="text-xs font-black text-slate-400 ml-0.5">{current.generation <= 2 ? '국' : '팀'}</span>
+                            </p>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+
+                  {teams.length > 0 && (
+                    <div>
+                      <p class="text-[10px] font-black text-blue-600 uppercase tracking-widest mb-3">
+                        {current.generation <= 2 ? '전담 국' : '전담 팀'}
+                      </p>
+                      <div class={`grid sm:grid-cols-2 gap-3 ${teams.length % 3 === 1 ? 'lg:grid-cols-2' : 'lg:grid-cols-3'}`}>
+                        {teams.map((group) => {
+                          const activeMembers = [...group.members.filter((member) => !member.vacant)].sort((left, right) => {
+                            const leftLead = left.role.endsWith('장') ? 0 : 1
+                            const rightLead = right.role.endsWith('장') ? 0 : 1
+                            if (leftLead !== rightLead) return leftLead - rightLead
+                            const leftAnon = left.name?.endsWith('00') ? 1 : 0
+                            const rightAnon = right.name?.endsWith('00') ? 1 : 0
+                            return leftAnon - rightAnon
+                          })
+
+                          const iconName = teamIcons[group.name as keyof typeof teamIcons] ?? 'users'
+
+                          return (
+                            <div class="bg-slate-50 rounded-xl p-4 border border-slate-100">
+                              <div class="flex items-center gap-2 mb-3">
+                                <div class="w-7 h-7 rounded-lg bg-blue-50 flex items-center justify-center shrink-0">
+                                  <LucideIcon name={iconName} size={14} className="text-blue-600" />
+                                </div>
+                                <h3 class="text-sm font-extrabold text-slate-800">{group.name}</h3>
+                              </div>
+                              <div class="flex flex-col gap-1.5">
+                                {activeMembers.map((member) => {
+                                  const isExec = member.role.endsWith('장')
+                                  const isAnon = member.name?.endsWith('00') ?? false
+                                  const isConcurrent = 'concurrent' in member && member.concurrent
+                                  const hasUrl = 'url' in member && member.url
+
+                                  const badgeClass = isExec
+                                    ? 'text-blue-700 bg-blue-100'
+                                    : isConcurrent
+                                      ? 'text-slate-500 bg-slate-100'
+                                      : 'text-blue-600 bg-blue-50'
+
+                                  const meta = (
+                                    <span class="inline-flex items-center gap-1.5 flex-wrap">
+                                      <span class={`text-xs font-extrabold transition-colors ${isAnon ? 'text-slate-500' : 'text-slate-800 group-hover:text-blue-600'}`}>
+                                        {member.name ?? '(공석)'}
+                                      </span>
+                                      {'cohort' in member && member.cohort != null && (
+                                        <span class="text-[10px] text-slate-400 group-hover:text-blue-500 transition-colors">{member.cohort}기</span>
+                                      )}
+                                      {'campus' in member && member.campus != null && (
+                                        <span class="text-[10px] text-slate-400 group-hover:text-blue-500 transition-colors">{member.campus}</span>
+                                      )}
+                                      {hasUrl && <LucideIcon name="external-link" size={12} className="text-blue-300 shrink-0" />}
+                                    </span>
+                                  )
+
+                                  return hasUrl ? (
+                                    <a
+                                      href={member.url}
+                                      target="_blank"
+                                      rel="noopener noreferrer"
+                                      class="group flex items-center gap-1.5 flex-wrap"
+                                    >
+                                      <span class={`text-[10px] font-black px-1.5 py-0.5 rounded shrink-0 inline-block w-12 text-center ${badgeClass}`}>
+                                        {isConcurrent ? '겸직' : member.role}
+                                      </span>
+                                      {meta}
+                                    </a>
+                                  ) : (
+                                    <div class="flex items-center gap-1.5 flex-wrap">
+                                      <span class={`text-[10px] font-black px-1.5 py-0.5 rounded shrink-0 inline-block w-12 text-center ${badgeClass}`}>
+                                        {isConcurrent ? '겸직' : member.role}
+                                      </span>
+                                      {meta}
+                                    </div>
+                                  )
+                                })}
+                              </div>
+                            </div>
+                          )
+                        })}
+                      </div>
+                    </div>
+                  )}
+                </Card>
+              )
+            })}
+          </div>
+        </div>
+      </Container>
+    </section>
+
+    <section class="bg-blue-950 py-16">
+      <Container maxWidth="5xl" className="text-center">
+        <h2 class="text-xl font-extrabold text-white mb-3">함께 역사를 만들어갈 다음 주인공을 기다립니다.</h2>
+        <p class="text-sm text-blue-200 mb-8">여러분의 기여가 SSAFYnity 동문회의 내일을 바꿉니다.</p>
+        <a
+          href="/operator/apply"
+          class="inline-flex items-center gap-2 px-6 py-2.5 rounded-full bg-white text-blue-950 text-sm font-black tracking-wide hover:bg-blue-100 transition-colors"
+        >
+          운영진 지원하기
+        </a>
+      </Container>
+    </section>
+  </div>
+
+  <script is:inline>
+    (() => {
+      const tabs = Array.from(document.querySelectorAll('.operator-tab-button'));
+      const panels = Array.from(document.querySelectorAll('[data-operator-panel]'));
+
+      const activate = (index) => {
+        tabs.forEach((tab, tabIndex) => {
+          const active = tabIndex === index;
+          tab.classList.toggle('bg-blue-600', active);
+          tab.classList.toggle('border-blue-600', active);
+          tab.classList.toggle('text-white', active);
+          tab.classList.toggle('shadow-lg', active);
+          tab.classList.toggle('shadow-blue-600/20', active);
+          tab.classList.toggle('bg-white', !active);
+          tab.classList.toggle('border-slate-100', !active);
+          tab.classList.toggle('text-slate-400', !active);
+          const year = tab.querySelector('p');
+          year?.classList.toggle('text-blue-200', active);
+          year?.classList.toggle('text-slate-400', !active);
+        });
+
+        panels.forEach((panel) => {
+          panel.classList.toggle('hidden', panel.getAttribute('data-operator-panel') !== String(index));
+        });
+      };
+
+      tabs.forEach((tab, index) => {
+        tab.addEventListener('click', () => activate(index));
+      });
+    })();
+  </script>
+</SiteLayout>

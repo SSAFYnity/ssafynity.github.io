@@ -1,0 +1,50 @@
+---
+interface Props {
+  text: string
+  newline?: 'auto' | 'desktop' | 'mobile' | 'always' | 'space'
+}
+
+const { text, newline = 'auto' } = Astro.props
+
+const normalizeNewlines = (value: string) => value.replace(/\r\n?/g, '\n')
+const collapseNewlines = (value: string) => normalizeNewlines(value).replace(/\s*\n\s*/g, ' ')
+const escapeHtml = (value: string) =>
+  value
+    .replaceAll('&', '&amp;')
+    .replaceAll('<', '&lt;')
+    .replaceAll('>', '&gt;')
+    .replaceAll('"', '&quot;')
+    .replaceAll("'", '&#39;')
+
+const normalized = normalizeNewlines(text)
+const lines = normalized.split('\n')
+const mode =
+  newline === 'auto'
+    ? (lines.length >= 3 ? 'always' : 'desktop')
+    : newline
+
+const html =
+  newline === 'space'
+    ? escapeHtml(collapseNewlines(text))
+    : lines.length <= 1
+      ? escapeHtml(text)
+      : lines
+          .map((line, idx) => {
+            const chunk = escapeHtml(line.trim())
+
+            if (idx === 0) return chunk
+
+            if (mode === 'always') {
+              return `<br>${chunk}`
+            }
+
+            if (mode === 'mobile') {
+              return `<span class="hidden sm:inline"> </span><br class="sm:hidden">${chunk}`
+            }
+
+            return `<span class="sm:hidden"> </span><br class="hidden sm:block">${chunk}`
+          })
+          .join('')
+---
+
+<Fragment set:html={html} />

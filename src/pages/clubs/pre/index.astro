@@ -1,0 +1,522 @@
+---
+import Container from '~/components/Container.astro'
+import HeroLabel from '~/components/HeroLabel.astro'
+import LucideIcon from '~/components/LucideIcon.astro'
+import ResponsiveText from '~/components/ResponsiveText.astro'
+import SiteLayout from '~/layouts/SiteLayout.astro'
+import { PRE_CLUB_MIN_MEMBERS, allPreClubs } from '@/data/computed'
+import { collapseNewlines } from '@/lib/text'
+import { CLUB_CATEGORIES } from '@/data/constants'
+
+const pathname = '/clubs/pre'
+
+const filters = ['전체', '모집 중', '최소 인원 달성'] as const
+
+const sortOptions = [
+  { key: 'id-asc', label: '번호순' },
+  { key: 'member-desc', label: '인원 많은 순' },
+  { key: 'member-asc', label: '인원 적은 순' },
+  { key: 'since-desc', label: '등록 최신순' },
+  { key: 'since-asc', label: '등록 오래된 순' },
+] as const
+---
+
+<SiteLayout pathname={pathname}>
+  <div class="flex flex-col">
+    <section class="bg-white pt-24 pb-10 lg:pt-28 lg:pb-14 border-b border-slate-100">
+      <Container maxWidth="5xl">
+        <div class="astro-reveal">
+          <HeroLabel>Clubs</HeroLabel>
+          <h1 class="text-2xl md:text-3xl font-extrabold tracking-tight leading-[1.2] text-slate-900 mb-2">
+            함께할 사람을 찾고 있어요
+          </h1>
+          <p class="text-xl md:text-2xl font-black text-blue-600 mb-4">예비 동아리</p>
+          <div class="flex items-end justify-between gap-4">
+            <p class="text-sm text-slate-500 leading-relaxed break-keep text-pretty max-w-xl">
+              아직 인원이 부족하지만 동아리를 만들고 싶은 동문들의 모집 공간입니다. 5인 이상이 모이면 SSAFYnity가 단체 채팅방을 개설하고 정식 동아리 전환을 안내합니다.
+            </p>
+            <a
+              href="/clubs/apply"
+              class="text-xs font-black text-blue-600 hover:text-blue-700 transition-colors shrink-0 pb-0.5"
+            >
+              예비 동아리 참여 · 등록 →
+            </a>
+          </div>
+        </div>
+      </Container>
+    </section>
+
+    <section class="bg-slate-50 pt-8 pb-20 lg:pt-10">
+      <Container maxWidth="5xl" className="flex flex-col gap-6">
+        {allPreClubs.length === 0 ? (
+          <div class="astro-reveal flex flex-col items-center justify-center py-24 gap-4 text-center">
+            <div class="w-12 h-12 rounded-2xl bg-blue-50 flex items-center justify-center">
+              <span class="text-xl">👥</span>
+            </div>
+            <p class="text-sm font-extrabold text-slate-700">등록된 예비 동아리가 없습니다</p>
+            <p class="text-sm text-slate-400 break-keep">관심사가 있다면 직접 예비 동아리를 열어보세요.</p>
+            <a
+              href="/clubs/apply"
+              class="mt-2 px-5 py-2.5 rounded-xl bg-blue-600 text-white text-sm font-black hover:bg-blue-700 transition-colors"
+            >
+              예비 동아리 등록하기
+            </a>
+          </div>
+        ) : (
+          <>
+            <div class="sticky sm:static top-[calc(4.5rem+env(safe-area-inset-top))] z-40 mb-4">
+              <div class="bg-white border border-slate-200 rounded-2xl px-4 py-3 shadow-sm sm:shadow-none">
+                <div class="flex flex-col gap-2">
+                  <div class="flex items-center gap-2 overflow-x-auto pb-1 -mx-1 px-1 sm:overflow-visible sm:flex-wrap sm:pb-0 sm:mx-0 sm:px-0">
+                    <div class="relative shrink-0" data-pre-dropdown="filter">
+                      <button
+                        type="button"
+                        data-pre-dropdown-trigger
+                        aria-expanded="false"
+                        class="min-w-36 whitespace-nowrap flex items-center justify-between gap-1.5 pl-3.5 pr-2.5 py-2 sm:py-1.5 rounded-full text-sm sm:text-xs font-black border transition-colors bg-blue-600 text-white border-blue-600"
+                      >
+                        <span data-pre-dropdown-label>모집 중</span>
+                        <span data-pre-dropdown-icon class="flex items-center text-blue-200">
+                          <LucideIcon name="chevron-down" size={11} />
+                        </span>
+                      </button>
+                      <div
+                        data-pre-dropdown-menu
+                        class="hidden absolute top-full left-0 mt-1.5 bg-white border border-slate-200 rounded-xl shadow-lg z-20 w-[min(20rem,calc(100vw-2rem))] sm:w-max py-1"
+                      >
+                        {filters.map((filter, index) => (
+                          <button
+                            type="button"
+                            data-pre-option-group="filter"
+                            data-pre-option-value={filter}
+                            data-pre-option-label={filter}
+                            class={`flex items-center gap-2.5 w-full px-3.5 py-2 text-xs hover:bg-slate-50 transition-colors whitespace-normal sm:whitespace-nowrap ${
+                              index === 1 ? 'font-black text-blue-600' : 'font-medium text-slate-600'
+                            }`}
+                          >
+                            <span
+                              data-option-check
+                              class={`w-3.5 h-3.5 rounded flex items-center justify-center border transition-colors shrink-0 ${
+                                index === 1 ? 'border-blue-600 bg-blue-600' : 'border-slate-300'
+                              }`}
+                            >
+                              <span data-option-check-icon class={index === 1 ? 'leading-none' : 'hidden leading-none'}>
+                                <LucideIcon name="check" size={9} className="text-white" />
+                              </span>
+                            </span>
+                            {filter}
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+
+                    <div class="relative shrink-0" data-pre-dropdown="sort" data-pre-dropdown-placeholder="정렬">
+                      <button
+                        type="button"
+                        data-pre-dropdown-trigger
+                        aria-expanded="false"
+                        class="min-w-36 whitespace-nowrap flex items-center justify-between gap-1.5 pl-3 pr-2.5 py-2 sm:py-1.5 rounded-full text-sm sm:text-xs font-black border transition-colors bg-white border-slate-200 text-slate-600 hover:border-blue-300 hover:text-blue-600"
+                      >
+                        <span data-pre-dropdown-label>번호순</span>
+                        <span data-pre-dropdown-icon class="flex items-center text-slate-400">
+                          <LucideIcon name="chevron-down" size={11} />
+                        </span>
+                      </button>
+                      <div
+                        data-pre-dropdown-menu
+                        class="hidden absolute top-full right-0 mt-1.5 bg-white border border-slate-200 rounded-xl shadow-lg z-20 w-[min(20rem,calc(100vw-2rem))] sm:w-max py-1"
+                      >
+                        {sortOptions.map((option, index) => (
+                          <button
+                            type="button"
+                            data-pre-option-group="sort"
+                            data-pre-option-value={option.key}
+                            data-pre-option-label={option.label}
+                            class={`flex items-center gap-2.5 w-full px-3.5 py-2 text-xs hover:bg-slate-50 transition-colors whitespace-normal sm:whitespace-nowrap ${
+                              index === 0 ? 'font-black text-blue-600' : 'font-medium text-slate-600'
+                            }`}
+                          >
+                            <span
+                              data-option-check
+                              class={`w-3.5 h-3.5 rounded flex items-center justify-center border transition-colors shrink-0 ${
+                                index === 0 ? 'border-blue-600 bg-blue-600' : 'border-slate-300'
+                              }`}
+                            >
+                              <span data-option-check-icon class={index === 0 ? 'leading-none' : 'hidden leading-none'}>
+                                <LucideIcon name="check" size={9} className="text-white" />
+                              </span>
+                            </span>
+                            {option.label}
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+
+                    <button
+                      type="button"
+                      id="pre-reset"
+                      class="text-[10px] font-black text-slate-400 hover:text-blue-500 transition-colors shrink-0 hidden"
+                    >
+                      초기화
+                    </button>
+                  </div>
+
+                  <form id="pre-search-form" class="flex items-center gap-1.5 w-full">
+                    <div class="relative flex-1">
+                      <LucideIcon
+                        name="search"
+                        size={13}
+                        className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400"
+                      />
+                      <input
+                        id="pre-search-input"
+                        type="search"
+                        placeholder="소개 검색"
+                        class="pl-7 pr-4 py-2 sm:py-1.5 rounded-full text-sm sm:text-xs font-medium bg-white border border-slate-200 text-slate-700 placeholder:text-slate-400 outline-none focus:border-blue-300 transition-colors w-full"
+                      />
+                    </div>
+                    <button
+                      type="submit"
+                      class="flex items-center gap-1 pl-3 pr-3.5 py-2 sm:py-1.5 rounded-full text-sm sm:text-xs font-black bg-blue-600 text-white hover:bg-blue-700 transition-colors shrink-0"
+                    >
+                      <LucideIcon name="search" size={11} />
+                      검색
+                    </button>
+                  </form>
+                </div>
+              </div>
+            </div>
+
+            <div id="pre-no-results" class="hidden flex flex-col items-center gap-3 py-24 text-center">
+              <p class="text-sm text-slate-400">조건에 맞는 예비 동아리가 없습니다.</p>
+              <button
+                type="button"
+                id="pre-empty-reset"
+                class="text-xs font-black text-blue-500 hover:text-blue-700 transition-colors"
+              >
+                필터 초기화
+              </button>
+            </div>
+
+            <div id="pre-grid" class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+              {allPreClubs.map((club, index) => {
+                const isFull = club.memberCount >= PRE_CLUB_MIN_MEMBERS
+
+                return (
+                  <div
+                    class="astro-reveal"
+                    data-reveal-delay={String(index * 50)}
+                    data-pre-card
+                    data-pre-filter={isFull ? '최소 인원 달성' : '모집 중'}
+                    data-pre-id={String(club.id)}
+                    data-pre-member-count={String(club.memberCount)}
+                    data-pre-since={club.since}
+                    data-pre-desc={club.shortDesc.toLowerCase()}
+                  >
+                    <div class={`rounded-2xl p-6 flex flex-col gap-4 border ${isFull ? 'bg-slate-100 border-slate-200 opacity-60' : 'bg-white border-slate-100'}`}>
+                      <div class="flex items-start justify-between gap-2">
+                        <div class="flex items-center gap-1.5 flex-wrap">
+                          <span class={`text-[10px] font-black px-2.5 py-1 rounded-full ${isFull ? 'bg-slate-200 text-slate-500' : 'bg-blue-50 text-blue-600'}`}>
+                            {CLUB_CATEGORIES[club.category].label}
+                          </span>
+                          {isFull && (
+                            <span class="text-[10px] font-black px-2.5 py-1 rounded-full bg-slate-200 text-slate-500">
+                              최소 인원 달성
+                            </span>
+                          )}
+                        </div>
+                        <span class="text-[10px] font-black px-2 py-0.5 rounded-full bg-slate-100 text-slate-600">
+                          #{String(club.id).padStart(3, '0')}
+                        </span>
+                      </div>
+
+                      <div class="text-sm text-slate-600 leading-relaxed break-keep text-pretty">
+                        <ResponsiveText text={collapseNewlines(club.shortDesc)} />
+                      </div>
+
+                      {!isFull ? (
+                        <div class="flex flex-col gap-2">
+                          <div class="flex items-center justify-between text-xs">
+                            <span class="text-slate-400">현재 인원</span>
+                            <span class="font-black text-slate-700">
+                              {club.memberCount} / {PRE_CLUB_MIN_MEMBERS}명
+                            </span>
+                          </div>
+                          <div class="w-full h-1.5 bg-slate-200 rounded-full overflow-hidden">
+                            <div
+                              class="h-full bg-blue-400 rounded-full transition-all"
+                              style={`width:${Math.min((club.memberCount / PRE_CLUB_MIN_MEMBERS) * 100, 100)}%`}
+                            ></div>
+                          </div>
+                          <div class="text-xs text-slate-400">{club.since} 등록</div>
+                        </div>
+                      ) : (
+                        <div class="flex flex-col gap-1 border-t border-slate-200 pt-3 -mt-1">
+                          <p class="text-xs text-slate-500 leading-relaxed break-keep">
+                            최소 인원이 모였습니다. 구성원 논의 후 정식 동아리 전환을 준비합니다.
+                          </p>
+                          <p class="text-xs text-slate-400">{club.since} 등록{club.achievedAt ? ` · ${club.achievedAt} 달성` : ''}</p>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                )
+              })}
+            </div>
+          </>
+        )}
+      </Container>
+    </section>
+  </div>
+
+  {allPreClubs.length > 0 && (
+    <script is:inline>
+      (() => {
+        const dropdowns = Array.from(document.querySelectorAll('[data-pre-dropdown]'));
+        const optionButtons = Array.from(document.querySelectorAll('[data-pre-option-group]'));
+        const resetButton = document.getElementById('pre-reset');
+        const emptyResetButton = document.getElementById('pre-empty-reset');
+        const searchForm = document.getElementById('pre-search-form');
+        const searchInput = document.getElementById('pre-search-input');
+        const noResults = document.getElementById('pre-no-results');
+        const grid = document.getElementById('pre-grid');
+        const cards = Array.from(document.querySelectorAll('[data-pre-card]'));
+
+        if (
+          dropdowns.length === 0 ||
+          optionButtons.length === 0 ||
+          !resetButton ||
+          !emptyResetButton ||
+          !searchForm ||
+          !searchInput ||
+          !noResults ||
+          !grid
+        ) {
+          return;
+        }
+
+        const state = {
+          filter: '모집 중',
+          query: '',
+          sort: 'id-asc',
+        };
+
+        const setTriggerStyles = (trigger, active) => {
+          trigger.classList.toggle('bg-blue-600', active);
+          trigger.classList.toggle('text-white', active);
+          trigger.classList.toggle('border-blue-600', active);
+          trigger.classList.toggle('bg-white', !active);
+          trigger.classList.toggle('text-slate-600', !active);
+          trigger.classList.toggle('border-slate-200', !active);
+        };
+
+        const setOptionStyles = (button, active) => {
+          const check = button.querySelector('[data-option-check]');
+          const icon = button.querySelector('[data-option-check-icon]');
+
+          if (check) {
+            check.classList.toggle('bg-blue-600', active);
+            check.classList.toggle('border-blue-600', active);
+            check.classList.toggle('border-slate-300', !active);
+          }
+
+          if (icon) {
+            icon.classList.toggle('hidden', !active);
+          }
+
+          button.classList.toggle('font-black', active);
+          button.classList.toggle('text-blue-600', active);
+          button.classList.toggle('font-medium', !active);
+          button.classList.toggle('text-slate-600', !active);
+        };
+
+        const getDropdownElements = (group) => {
+          const dropdown = dropdowns.find((item) => item.getAttribute('data-pre-dropdown') === group);
+          if (!dropdown) return null;
+
+          return {
+            dropdown,
+            trigger: dropdown.querySelector('[data-pre-dropdown-trigger]'),
+            label: dropdown.querySelector('[data-pre-dropdown-label]'),
+            icon: dropdown.querySelector('[data-pre-dropdown-icon]'),
+            menu: dropdown.querySelector('[data-pre-dropdown-menu]'),
+          };
+        };
+
+        const getOptionButtons = (group) => {
+          return optionButtons.filter((button) => button.getAttribute('data-pre-option-group') === group);
+        };
+
+        const updateDropdown = (group) => {
+          const elements = getDropdownElements(group);
+          if (!elements || !elements.trigger || !elements.label || !elements.icon) return;
+
+          let active = false;
+          let label = '';
+
+          if (group === 'filter') {
+            const filterButtons = getOptionButtons('filter');
+            filterButtons.forEach((button) => {
+              const selected = (button.getAttribute('data-pre-option-value') ?? '') === state.filter;
+              setOptionStyles(button, selected);
+            });
+
+            label = state.filter;
+            active = state.filter !== '전체';
+          } else if (group === 'sort') {
+            const sortButtons = getOptionButtons('sort');
+            sortButtons.forEach((button) => {
+              const selected = (button.getAttribute('data-pre-option-value') ?? '') === state.sort;
+              setOptionStyles(button, selected);
+            });
+
+            label =
+              sortButtons.find((button) => (button.getAttribute('data-pre-option-value') ?? '') === state.sort)?.getAttribute('data-pre-option-label') ??
+              '정렬';
+            active = state.sort !== 'id-asc';
+          }
+
+          elements.label.textContent = label;
+          setTriggerStyles(elements.trigger, active);
+          elements.icon.classList.toggle('text-blue-200', active);
+          elements.icon.classList.toggle('text-slate-400', !active);
+        };
+
+        const updateAllDropdowns = () => {
+          updateDropdown('filter');
+          updateDropdown('sort');
+        };
+
+        const closeAllDropdowns = (exceptGroup) => {
+          dropdowns.forEach((dropdown) => {
+            const group = dropdown.getAttribute('data-pre-dropdown');
+            if (exceptGroup && group === exceptGroup) return;
+
+            const trigger = dropdown.querySelector('[data-pre-dropdown-trigger]');
+            const menu = dropdown.querySelector('[data-pre-dropdown-menu]');
+
+            if (trigger) {
+              trigger.setAttribute('aria-expanded', 'false');
+            }
+            if (menu) {
+              menu.classList.add('hidden');
+            }
+          });
+        };
+
+        const applyFilters = () => {
+          const query = state.query.trim().toLowerCase();
+
+          const visibleCards = cards.filter((card) => {
+            const filter = card.getAttribute('data-pre-filter') ?? '';
+            const desc = card.getAttribute('data-pre-desc') ?? '';
+
+            if (state.filter !== '전체' && filter !== state.filter) return false;
+            if (query && !desc.includes(query)) return false;
+            return true;
+          });
+
+          const sortedCards = [...visibleCards].sort((a, b) => {
+            switch (state.sort) {
+              case 'member-desc':
+                return Number(b.getAttribute('data-pre-member-count')) - Number(a.getAttribute('data-pre-member-count'));
+              case 'member-asc':
+                return Number(a.getAttribute('data-pre-member-count')) - Number(b.getAttribute('data-pre-member-count'));
+              case 'since-desc':
+                return (b.getAttribute('data-pre-since') ?? '').localeCompare(a.getAttribute('data-pre-since') ?? '');
+              case 'since-asc':
+                return (a.getAttribute('data-pre-since') ?? '').localeCompare(b.getAttribute('data-pre-since') ?? '');
+              case 'id-asc':
+              default:
+                return Number(a.getAttribute('data-pre-id')) - Number(b.getAttribute('data-pre-id'));
+            }
+          });
+
+          cards.forEach((card) => card.classList.add('hidden'));
+          sortedCards.forEach((card) => {
+            card.classList.remove('hidden');
+            grid.appendChild(card);
+          });
+
+          const hasFilter = state.filter !== '모집 중' || state.query.trim().length > 0;
+          resetButton.classList.toggle('hidden', !hasFilter);
+          noResults.classList.toggle('hidden', sortedCards.length > 0);
+          grid.classList.toggle('hidden', sortedCards.length === 0);
+        };
+
+        const resetAll = () => {
+          state.filter = '모집 중';
+          state.query = '';
+          state.sort = 'id-asc';
+          searchInput.value = '';
+          updateAllDropdowns();
+          applyFilters();
+          closeAllDropdowns();
+        };
+
+        dropdowns.forEach((dropdown) => {
+          const group = dropdown.getAttribute('data-pre-dropdown');
+          const trigger = dropdown.querySelector('[data-pre-dropdown-trigger]');
+          const menu = dropdown.querySelector('[data-pre-dropdown-menu]');
+
+          if (!group || !trigger || !menu) return;
+
+          trigger.addEventListener('click', () => {
+            const expanded = trigger.getAttribute('aria-expanded') === 'true';
+            closeAllDropdowns(expanded ? undefined : group);
+
+            if (!expanded) {
+              trigger.setAttribute('aria-expanded', 'true');
+              menu.classList.remove('hidden');
+            }
+          });
+        });
+
+        optionButtons.forEach((button) => {
+          button.addEventListener('click', () => {
+            const group = button.getAttribute('data-pre-option-group');
+            const value = button.getAttribute('data-pre-option-value');
+
+            if (!group || !value) return;
+
+            if (group === 'filter') {
+              state.filter = value;
+            } else if (group === 'sort') {
+              state.sort = value;
+            }
+
+            updateAllDropdowns();
+            applyFilters();
+            closeAllDropdowns();
+          });
+        });
+
+        searchForm.addEventListener('submit', (event) => {
+          event.preventDefault();
+          state.query = searchInput.value.trim();
+          applyFilters();
+        });
+
+        resetButton.addEventListener('click', resetAll);
+        emptyResetButton.addEventListener('click', resetAll);
+
+        document.addEventListener('click', (event) => {
+          if (!(event.target instanceof Node)) return;
+          const clickedInside = dropdowns.some((dropdown) => dropdown.contains(event.target));
+          if (!clickedInside) {
+            closeAllDropdowns();
+          }
+        });
+
+        document.addEventListener('keydown', (event) => {
+          if (event.key === 'Escape') {
+            closeAllDropdowns();
+          }
+        });
+
+        updateAllDropdowns();
+        applyFilters();
+      })();
+    </script>
+  )}
+</SiteLayout>

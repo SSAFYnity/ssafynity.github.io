@@ -22,17 +22,17 @@ jobs:
       - name: Node.js 설정
         uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version-file: .nvmrc
           cache: npm
 
       - name: 의존성 설치
         run: npm ci
 
+      - name: 타입 및 Astro 설정 검증
+        run: npm run check
+
       - name: 빌드
         run: npm run build
-
-      - name: SPA 404 처리 (직접 URL 접근 대응)
-        run: cp dist/index.html dist/404.html
 
       - name: Pages 설정
         uses: actions/configure-pages@v4

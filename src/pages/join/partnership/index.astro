@@ -1,0 +1,525 @@
+---
+import Card from '~/components/Card.astro'
+import Container from '~/components/Container.astro'
+import HeroLabel from '~/components/HeroLabel.astro'
+import Kicker from '~/components/Kicker.astro'
+import LucideIcon from '~/components/LucideIcon.astro'
+import SiteLayout from '~/layouts/SiteLayout.astro'
+import { computed } from '@/data/computed'
+import { PARTNER_TYPES, type PartnerType } from '@/data/constants'
+import { siteData } from '@/data/siteData'
+
+const pathname = '/join/partnership'
+
+const pillars = [
+  {
+    icon: 'globe',
+    en: 'Connection',
+    title: '연결',
+    desc: 'SSAFY 수료 이후에도 이어지는 네트워크',
+    points: ['기수 간 단절 해소', '지역 간 교류', '개발자 네트워크 확장'],
+  },
+  {
+    icon: 'trending-up',
+    en: 'Growth',
+    title: '성장',
+    desc: '함께 성장하는 개발자 커뮤니티',
+    points: ['커리어 정보 공유', '기술 교류', '멘토링 & 경험 공유'],
+  },
+  {
+    icon: 'lightbulb',
+    en: 'Opportunity',
+    title: '기회',
+    desc: '개발자와 기업이 만나는 접점',
+    points: ['채용 / 브랜딩 기회', '협업 및 제휴 기회', 'IT 인재 풀 연결'],
+  },
+] as const
+
+const itRoles = ['Backend', 'Frontend', 'AI / Data', 'Infra / DevOps'] as const
+
+const eventDirections = [
+  'SSAFY 수료생 네트워킹 강화',
+  '기업과 개발자의 만남 확대',
+  '커리어 & 기술 교류의 장',
+] as const
+
+const effects = [
+  {
+    icon: 'megaphone',
+    title: '광범위한 홍보 효과',
+    desc: '4,000명 이상의 IT 인재에게 서비스와 브랜드를 직접 알릴 수 있습니다.',
+  },
+  {
+    icon: 'bar-chart-2',
+    title: '브랜드 인지도 향상',
+    desc: '개발자 커뮤니티 내 긍정적인 브랜드 이미지를 쌓을 수 있습니다.',
+  },
+  {
+    icon: 'users',
+    title: '인재 발굴 기회',
+    desc: '검증된 IT 인재 풀과의 접점으로 잠재적인 채용 기회를 열 수 있습니다.',
+  },
+  {
+    icon: 'book-open',
+    title: '외부 인사이트 공유',
+    desc: '동문들을 대상으로 기술 트렌드와 산업 인사이트를 직접 전달할 수 있습니다.',
+  },
+  {
+    icon: 'bell-ring',
+    title: '내부 연락망 전체 홍보',
+    desc: '디스코드, 정회원 단톡 등 내부 채널 전체를 통해 공식 홍보가 진행됩니다.',
+  },
+] as const
+
+const partnershipTypes = [
+  {
+    key: 'sponsor',
+    label: '후원',
+    icon: 'arrow-right',
+    direction: '파트너 → SSAFYnity',
+    containerStyle: 'bg-blue-50',
+    iconColor: 'text-blue-600',
+    tagStyle: 'bg-blue-100 text-blue-700',
+    desc: '파트너가 SSAFYnity에 일방적으로 자원·역량을 제공하는 방식입니다. 별도의 반대급부 없이 순수하게 지원합니다.',
+    points: ['운영 독립성 보장', '간단한 절차 (2단계)', '유연한 지원 범위'],
+  },
+  {
+    key: 'alliance',
+    label: '제휴',
+    icon: 'arrow-left-right',
+    direction: '파트너 ↔ SSAFYnity',
+    containerStyle: 'bg-emerald-50',
+    iconColor: 'text-emerald-600',
+    tagStyle: 'bg-emerald-100 text-emerald-700',
+    desc: 'SSAFYnity와 파트너가 서로 주고받는 상호 협력 방식입니다. 양측 모두에게 실질적인 가치를 제공합니다.',
+    points: ['상호 이익 구조', '공동 활동·행사 협력', '협약서 체결'],
+  },
+] as const
+
+type ParticipationIconName = 'trending-up' | 'gift' | 'megaphone' | 'code2' | 'building-2'
+
+const participationIconMap: Partial<Record<PartnerType, ParticipationIconName>> = {
+  financial: 'trending-up',
+  goods: 'gift',
+  promotion: 'megaphone',
+  talent: 'code2',
+  operations: 'building-2',
+}
+
+const participationEntries = (Object.entries(PARTNER_TYPES) as [PartnerType, (typeof PARTNER_TYPES)[PartnerType]][])
+  .filter(([key]) => key !== 'founding')
+
+const partnerPerks = [
+  '웹사이트 공식 로고 노출',
+  '행사장 배너·현수막 설치',
+  '공식 블로그·SNS 소개 게시',
+  '내부 연락망 전체 홍보 (디스코드, 정회원 단톡 등)',
+] as const
+
+const sponsorSteps = ['문의 접수', '회신'] as const
+const allianceSteps = ['문의 접수', '협의 진행', '협약 체결', '진행·홍보'] as const
+
+const externalPartnershipEmail =
+  siteData.sns.find((channel) => channel.name === 'Gmail(대외협력)')?.url.replace(/^mailto:/, '') ??
+  siteData.brand.email
+---
+
+<SiteLayout pathname={pathname}>
+  <div class="flex flex-col">
+    <section class="bg-white pt-24 pb-14 lg:pt-28 lg:pb-20 border-b border-slate-100">
+      <Container maxWidth="3xl">
+        <div class="astro-reveal">
+          <HeroLabel>후원·제휴 문의</HeroLabel>
+          <h1 class="text-2xl md:text-3xl font-extrabold tracking-tight leading-[1.2] text-slate-900 mb-2">
+            SSAFYnity와 함께해요
+          </h1>
+          <p class="text-xl md:text-2xl font-black text-blue-600 mb-4">SSAFYnity Partnership</p>
+          <p class="text-sm text-slate-500 leading-relaxed break-keep text-pretty max-w-xl">
+            SSAFYnity와 함께할 파트너를 기다립니다. 후원·제휴 관련 문의를 남겨주시면 운영진이 확인 후 회신드립니다.
+          </p>
+        </div>
+      </Container>
+    </section>
+
+    <section class="bg-slate-50 py-14 lg:py-20">
+      <Container maxWidth="3xl" className="flex flex-col gap-16">
+        <div class="astro-reveal">
+          <Kicker className="text-blue-600 mb-2">SSAFYnity란</Kicker>
+          <p class="text-sm text-slate-500 leading-relaxed break-keep mb-6">
+            단순한 친목 모임이 아닌, 개발자 간 연결·성장·기회를 목표로 활동하는 커뮤니티입니다.
+          </p>
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+            {pillars.map((item, index) => (
+              <Card className="p-5 lg:p-6 flex flex-col gap-3 astro-reveal" data-reveal-delay={String(index * 60)}>
+                <div class="flex items-center gap-3">
+                  <div class="w-9 h-9 rounded-xl bg-blue-50 flex items-center justify-center shrink-0">
+                    <LucideIcon name={item.icon} size={18} className="text-blue-600" />
+                  </div>
+                  <div>
+                    <p class="text-[10px] font-black uppercase tracking-widest text-blue-400">{item.en}</p>
+                    <p class="text-sm font-extrabold text-slate-900">{item.title}</p>
+                  </div>
+                </div>
+                <p class="text-xs text-slate-500 leading-relaxed break-keep">{item.desc}</p>
+                <ul class="flex flex-col gap-1.5">
+                  {item.points.map((point) => (
+                    <li class="flex items-center gap-2 text-xs text-slate-600">
+                      <span class="w-1 h-1 rounded-full bg-blue-400 shrink-0"></span>
+                      {point}
+                    </li>
+                  ))}
+                </ul>
+              </Card>
+            ))}
+          </div>
+        </div>
+
+        <div class="astro-reveal" data-reveal-delay="40">
+          <Kicker className="text-blue-600 mb-4">커뮤니티 규모</Kicker>
+          <div class="grid grid-cols-3 gap-3 mb-4">
+            <Card className="p-5 flex flex-col items-center text-center gap-1">
+              <p class="text-xl font-black text-slate-900">
+                {computed.totalMembers.toLocaleString()}
+                <span class="text-sm font-black text-blue-600">명</span>
+              </p>
+              <p class="text-[11px] text-slate-500">함께하는 동문</p>
+            </Card>
+            <Card className="p-5 flex flex-col items-center text-center gap-1">
+              <p class="text-xl font-black text-slate-900">
+                {computed.cohortCount}
+                <span class="text-sm font-black text-blue-600">기수</span>
+              </p>
+              <p class="text-[11px] text-slate-500">참여 기수</p>
+            </Card>
+            <Card className="p-5 flex flex-col items-center text-center gap-1">
+              <p class="text-xl font-black text-slate-900">
+                {computed.operationYears}
+                <span class="text-sm font-black text-blue-600">년차</span>
+              </p>
+              <p class="text-[11px] text-slate-500">운영 연수</p>
+            </Card>
+          </div>
+          <Card className="p-5 lg:p-6 flex flex-col gap-3">
+            <div class="flex items-center gap-2">
+              <LucideIcon name="code2" size={16} className="text-blue-500" />
+              <p class="text-xs font-extrabold text-slate-800">다양한 IT 직군 분포</p>
+            </div>
+            <div class="flex flex-wrap gap-2">
+              {itRoles.map((role) => (
+                <span class="px-3 py-1.5 rounded-full bg-blue-50 text-xs font-bold text-blue-700">{role}</span>
+              ))}
+            </div>
+            <p class="text-xs text-slate-500 leading-relaxed">전국 단위 네트워크 기반, 지역·기수 구분 없이 활동합니다.</p>
+          </Card>
+        </div>
+
+        <div class="astro-reveal" data-reveal-delay="80">
+          <Kicker className="text-blue-600 mb-4">행사 방향</Kicker>
+          <Card className="p-5 lg:p-6 flex flex-col gap-5">
+            <div class="flex items-start gap-4">
+              <div class="w-9 h-9 rounded-xl bg-blue-50 flex items-center justify-center shrink-0">
+                <LucideIcon name="calendar-days" size={18} className="text-blue-600" />
+              </div>
+              <div class="flex flex-col gap-1">
+                <p class="text-sm font-extrabold text-slate-900">연 2회 대규모 네트워킹 행사</p>
+                <p class="text-xs text-slate-500 leading-relaxed break-keep">
+                  상반기·하반기 각 1회, 전국 단위 동문 네트워킹 행사를 운영합니다.
+                </p>
+              </div>
+            </div>
+            <div class="h-px bg-slate-100"></div>
+            <div class="flex flex-col gap-2">
+              {eventDirections.map((direction) => (
+                <div class="flex items-center gap-2 text-sm text-slate-700">
+                  <span class="w-1.5 h-1.5 rounded-full bg-blue-400 shrink-0"></span>
+                  {direction}
+                </div>
+              ))}
+            </div>
+            <div class="grid grid-cols-2 gap-3">
+              {(['상반기', '하반기'] as const).map((season) => (
+                <div class="flex flex-col items-center text-center px-3 py-3 rounded-xl bg-slate-50">
+                  <span class="text-[9px] font-black uppercase tracking-widest text-blue-400 mb-1">{season}</span>
+                  <span class="text-xs font-extrabold text-slate-700">1회</span>
+                </div>
+              ))}
+            </div>
+          </Card>
+        </div>
+
+        <div class="astro-reveal" data-reveal-delay="100">
+          <Kicker className="text-blue-600 mb-2">후원·제휴 기대효과</Kicker>
+          <p class="text-sm text-slate-500 leading-relaxed break-keep mb-6">
+            SSAFYnity와 함께할 때 얻을 수 있는 실질적인 가치입니다.
+          </p>
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            {effects.map((item, index) => (
+              <Card className={`p-5 flex items-start gap-4 astro-reveal${index === effects.length - 1 ? ' sm:col-span-2' : ''}`} data-reveal-delay={String(index * 50)}>
+                <div class="w-9 h-9 rounded-xl bg-blue-50 flex items-center justify-center shrink-0">
+                  <LucideIcon name={item.icon} size={18} className="text-blue-600" />
+                </div>
+                <div>
+                  <p class="text-sm font-extrabold text-slate-900 mb-1">{item.title}</p>
+                  <p class="text-xs text-slate-500 leading-relaxed break-keep">{item.desc}</p>
+                </div>
+              </Card>
+            ))}
+          </div>
+        </div>
+
+        <div class="astro-reveal" data-reveal-delay="120">
+          <Kicker className="text-blue-600 mb-2">후원·제휴란</Kicker>
+          <p class="text-sm text-slate-500 leading-relaxed break-keep mb-6">
+            협력 방식은 크게 두 가지입니다. 상황과 목적에 맞게 선택할 수 있습니다.
+          </p>
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            {partnershipTypes.map((typeItem) => (
+              <Card className="p-5 lg:p-6 flex flex-col gap-4">
+                <div class="flex items-start gap-3">
+                  <div class={`w-9 h-9 rounded-xl flex items-center justify-center shrink-0 ${typeItem.containerStyle}`}>
+                    <LucideIcon name={typeItem.icon} size={18} className={typeItem.iconColor} />
+                  </div>
+                  <div>
+                    <span class={`inline-block px-2.5 py-1 rounded-full text-xs font-black mb-1 ${typeItem.tagStyle}`}>{typeItem.label}</span>
+                    <p class="text-[10px] font-black tracking-wide text-slate-400">{typeItem.direction}</p>
+                  </div>
+                </div>
+                <p class="text-xs text-slate-500 leading-relaxed break-keep">{typeItem.desc}</p>
+                <ul class="flex flex-col gap-1.5">
+                  {typeItem.points.map((point) => (
+                    <li class="flex items-center gap-2 text-xs text-slate-600">
+                      <LucideIcon name="check-circle-2" size={14} className="text-slate-300 shrink-0" />
+                      {point}
+                    </li>
+                  ))}
+                </ul>
+              </Card>
+            ))}
+          </div>
+        </div>
+
+        <div class="astro-reveal" data-reveal-delay="140">
+          <Kicker className="text-blue-600 mb-2">참여 범위</Kicker>
+          <p class="text-sm text-slate-500 leading-relaxed break-keep mb-6">
+            후원사·제휴사 구분 없이 아래 범위 중 하나 이상을 선택할 수 있습니다.
+          </p>
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-4">
+            {participationEntries.map(([key, item]) => {
+              const iconName = participationIconMap[key]
+              return (
+                <Card className="p-4 lg:p-5 flex items-start gap-3">
+                  <div class="w-8 h-8 rounded-lg bg-slate-100 flex items-center justify-center shrink-0">
+                    {iconName && <LucideIcon name={iconName} size={16} className="text-slate-500" />}
+                  </div>
+                  <div class="flex flex-col gap-1">
+                    <p class="text-xs font-extrabold text-slate-800">{item.label}</p>
+                    <p class="text-xs text-slate-500 leading-relaxed">{item.desc}</p>
+                  </div>
+                </Card>
+              )
+            })}
+
+            <div class="border border-dashed border-slate-300 rounded-xl p-4 lg:p-5 flex items-start gap-3 bg-white">
+              <div class="w-8 h-8 rounded-lg bg-slate-100 flex items-center justify-center shrink-0">
+                <LucideIcon name="message-circle" size={16} className="text-slate-400" />
+              </div>
+              <div class="flex flex-col gap-1">
+                <p class="text-xs font-extrabold text-slate-500">그외 협의</p>
+                <p class="text-xs text-slate-400 leading-relaxed break-keep">
+                  위 항목에 해당하지 않더라도 괜찮습니다. 정해진 틀 밖에서도 함께 맞는 방식을 찾겠습니다.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <Card className="p-4 lg:p-5">
+            <p class="text-xs font-extrabold text-slate-800 mb-1">범위는 조합할 수 있어요</p>
+            <p class="text-xs text-slate-500 leading-relaxed break-keep">
+              예) 물품 후원 + 홍보 협력, 운영 지원 + 재능 기부 등 여러 범위를 함께 진행할 수 있습니다.
+            </p>
+          </Card>
+        </div>
+
+        <div class="astro-reveal" data-reveal-delay="160">
+          <Kicker className="text-blue-600 mb-2">파트너 혜택</Kicker>
+          <p class="text-sm text-slate-500 leading-relaxed break-keep mb-6">
+            후원사·제휴사 공통으로 제공되는 혜택입니다.
+          </p>
+          <Card className="p-5 lg:p-6">
+            <ul class="flex flex-col gap-3">
+              {partnerPerks.map((perk) => (
+                <li class="flex items-center gap-3">
+                  <LucideIcon name="check-circle-2" size={16} className="text-blue-500 shrink-0" />
+                  <span class="text-sm text-slate-700">{perk}</span>
+                </li>
+              ))}
+            </ul>
+          </Card>
+        </div>
+
+        <div class="astro-reveal" data-reveal-delay="180">
+          <Kicker className="text-blue-600 mb-4">신청 방법·절차</Kicker>
+
+          <Card className="p-4 lg:p-5 mb-6">
+            <p class="text-xs font-extrabold text-slate-800 mb-3">신청 방법</p>
+            <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-1.5">
+              {([
+                { step: 1, title: '후원·제휴 선택', sub: '아래 탭에서 1개 선택' },
+                { step: 2, title: '참여 범위 선택', sub: '위 목록에서 1개 이상' },
+                { step: 3, title: '이메일 문의', sub: '선택 내용과 함께 전송' },
+              ] as const).map((item, index, array) => (
+                <div class="flex items-center gap-1.5 flex-1">
+                  <div class="flex flex-col items-center gap-0.5 flex-1 text-center px-3 py-3 rounded-xl bg-slate-50">
+                    <span class="text-[9px] font-black uppercase tracking-widest text-blue-400">STEP {item.step}</span>
+                    <span class="text-xs font-extrabold text-slate-700">{item.title}</span>
+                    <span class="text-[10px] text-slate-400">{item.sub}</span>
+                  </div>
+                  {index < array.length - 1 && (
+                    <LucideIcon name="chevron-right" size={16} className="hidden sm:block text-slate-300 shrink-0" />
+                  )}
+                </div>
+              ))}
+            </div>
+          </Card>
+
+          <div class="flex gap-1 p-1 bg-slate-200 rounded-full mb-6">
+            <button
+              type="button"
+              data-partnership-tab="후원"
+              class="partnership-tab-button flex-1 px-6 py-2 rounded-full text-xs font-black transition-all bg-white text-blue-700 shadow-sm"
+            >
+              후원
+            </button>
+            <button
+              type="button"
+              data-partnership-tab="제휴"
+              class="partnership-tab-button flex-1 px-6 py-2 rounded-full text-xs font-black transition-all text-slate-500 hover:text-slate-700"
+            >
+              제휴
+            </button>
+          </div>
+
+          <div data-partnership-panel="후원">
+            <Card className="p-5 lg:p-6 flex flex-col gap-6">
+              <div>
+                <span class="inline-block px-2.5 py-1 rounded-full bg-blue-100 text-xs font-black text-blue-700 mb-2">후원</span>
+                <p class="text-xs text-slate-500 leading-relaxed break-keep">
+                  파트너가 SSAFYnity에 일방적으로 자원·역량을 제공합니다. 운영진 검토 후 회신드립니다.
+                </p>
+              </div>
+              <div>
+                <p class="text-xs font-extrabold text-slate-800 mb-3">진행 절차</p>
+                <div class="flex items-center gap-1.5">
+                  {sponsorSteps.map((step, index) => (
+                    <div class="flex items-center gap-1.5 flex-1">
+                      <div class="flex flex-col items-center gap-0.5 flex-1 text-center px-3 py-3 rounded-xl bg-slate-50">
+                        <span class="text-[9px] font-black uppercase tracking-widest text-blue-400">STEP {index + 1}</span>
+                        <span class="text-xs font-extrabold text-slate-700">{step}</span>
+                      </div>
+                      {index < sponsorSteps.length - 1 && (
+                        <LucideIcon name="chevron-right" size={16} className="text-slate-300 shrink-0" />
+                      )}
+                    </div>
+                  ))}
+                </div>
+              </div>
+              <div class="h-px bg-slate-100"></div>
+              <div class="flex flex-col gap-2">
+                <p class="text-xs font-extrabold text-slate-800">문의하기</p>
+                <a
+                  href={`mailto:${externalPartnershipEmail}`}
+                  data-track-event="click_partnership_contact"
+                  data-track-params={JSON.stringify({
+                    partnership_type: 'sponsor',
+                    cta_label: externalPartnershipEmail,
+                    destination_url: `mailto:${externalPartnershipEmail}`,
+                  })}
+                  class="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl bg-blue-600 text-white text-sm font-black hover:bg-blue-700 transition-colors"
+                >
+                  <LucideIcon name="mail" size={16} className="w-4 h-4" />
+                  {externalPartnershipEmail}
+                </a>
+              </div>
+            </Card>
+          </div>
+
+          <div data-partnership-panel="제휴" class="hidden">
+            <Card className="p-5 lg:p-6 flex flex-col gap-6">
+              <div>
+                <span class="inline-block px-2.5 py-1 rounded-full bg-emerald-100 text-xs font-black text-emerald-700 mb-2">제휴</span>
+                <p class="text-xs text-slate-500 leading-relaxed break-keep">
+                  SSAFYnity와 파트너가 서로 주고받는 상호 협력 방식입니다. 협약 체결 후 공동 활동을 진행합니다.
+                </p>
+              </div>
+              <div>
+                <p class="text-xs font-extrabold text-slate-800 mb-3">진행 절차</p>
+                <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-1.5">
+                  {allianceSteps.map((step, index) => (
+                    <div class="flex items-center gap-1.5 flex-1">
+                      <div class="flex flex-col items-center gap-0.5 flex-1 text-center px-3 py-3 rounded-xl bg-slate-50">
+                        <span class="text-[9px] font-black uppercase tracking-widest text-emerald-400">STEP {index + 1}</span>
+                        <span class="text-xs font-extrabold text-slate-700">{step}</span>
+                      </div>
+                      {index < allianceSteps.length - 1 && (
+                        <LucideIcon name="chevron-right" size={16} className="hidden sm:block text-slate-300 shrink-0" />
+                      )}
+                    </div>
+                  ))}
+                </div>
+              </div>
+              <div class="h-px bg-slate-100"></div>
+              <div class="flex flex-col gap-2">
+                <p class="text-xs font-extrabold text-slate-800">문의하기</p>
+                <a
+                  href={`mailto:${externalPartnershipEmail}`}
+                  data-track-event="click_partnership_contact"
+                  data-track-params={JSON.stringify({
+                    partnership_type: 'alliance',
+                    cta_label: externalPartnershipEmail,
+                    destination_url: `mailto:${externalPartnershipEmail}`,
+                  })}
+                  class="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl bg-emerald-600 text-white text-sm font-black hover:bg-emerald-700 transition-colors"
+                >
+                  <LucideIcon name="mail" size={16} className="w-4 h-4" />
+                  {externalPartnershipEmail}
+                </a>
+              </div>
+            </Card>
+          </div>
+        </div>
+      </Container>
+    </section>
+  </div>
+
+  <script is:inline>
+    (() => {
+      const buttons = Array.from(document.querySelectorAll('[data-partnership-tab]'));
+      const panels = Array.from(document.querySelectorAll('[data-partnership-panel]'));
+
+      const activate = (tabName) => {
+        buttons.forEach((button) => {
+          const isActive = button.getAttribute('data-partnership-tab') === tabName;
+          button.classList.toggle('bg-white', isActive);
+          button.classList.toggle('shadow-sm', isActive);
+          button.classList.toggle('text-blue-700', isActive && tabName === '후원');
+          button.classList.toggle('text-emerald-700', isActive && tabName === '제휴');
+          button.classList.toggle('text-slate-500', !isActive);
+          button.classList.toggle('hover:text-slate-700', !isActive);
+        });
+
+        panels.forEach((panel) => {
+          const isActive = panel.getAttribute('data-partnership-panel') === tabName;
+          panel.classList.toggle('hidden', !isActive);
+        });
+      };
+
+      buttons.forEach((button) => {
+        button.addEventListener('click', () => {
+          const tabName = button.getAttribute('data-partnership-tab');
+          if (!tabName) return;
+          activate(tabName);
+        });
+      });
+    })();
+  </script>
+</SiteLayout>

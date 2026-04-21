@@ -1,0 +1,18 @@
+---
+interface Props {
+  as?: keyof HTMLElementTagNameMap
+  className?: string
+}
+
+const {
+  as = 'p',
+  className = '',
+} = Astro.props as Props
+
+const Tag = as
+const baseClass = 'text-[10px] font-black uppercase tracking-widest'
+---
+
+<Tag class={`${baseClass}${className ? ` ${className}` : ''}`}>
+  <slot />
+</Tag>

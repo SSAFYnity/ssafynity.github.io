@@ -1,0 +1,625 @@
+---
+import Card from '~/components/Card.astro'
+import Container from '~/components/Container.astro'
+import HeroLabel from '~/components/HeroLabel.astro'
+import LucideIcon from '~/components/LucideIcon.astro'
+import SiteLayout from '~/layouts/SiteLayout.astro'
+import { allClubs } from '@/data/computed'
+import { CLUB_CATEGORIES, CLUB_CATEGORY_KEYS, MODE_CONFIG } from '@/data/constants'
+import { formatClubSince } from '@/lib/utils'
+
+const pathname = '/clubs'
+const allLabel = '전체'
+
+const categoryOptions = CLUB_CATEGORY_KEYS.map((key) => ({
+  key,
+  label: CLUB_CATEGORIES[key].label,
+}))
+
+const modeOptions = [
+  { key: 'online', label: MODE_CONFIG.online.label },
+  { key: 'offline', label: MODE_CONFIG.offline.label },
+] as const
+
+const sortOptions = [
+  { key: 'name-asc', label: '가나다순' },
+  { key: 'member-desc', label: '멤버 많은 순' },
+  { key: 'member-asc', label: '멤버 적은 순' },
+  { key: 'since-desc', label: '개설 최신순' },
+  { key: 'since-asc', label: '개설 오래된 순' },
+] as const
+---
+
+<SiteLayout pathname={pathname}>
+  <div class="flex flex-col">
+    <section class="bg-white pt-24 pb-10 lg:pt-28 lg:pb-14 border-b border-slate-100">
+      <Container maxWidth="5xl">
+        <div class="astro-reveal">
+          <HeroLabel>Clubs</HeroLabel>
+          <h1 class="text-2xl md:text-3xl font-extrabold tracking-tight leading-[1.2] text-slate-900 mb-2">
+            동문들이 만드는
+          </h1>
+          <p class="text-xl md:text-2xl font-black text-blue-600 mb-4">정식 동아리</p>
+          <p class="text-sm text-slate-500 leading-relaxed break-keep text-pretty max-w-xl">
+            SSAFYnity 공식 소속 동아리 목록입니다. 관심 있는 동아리에 직접 연락해 가입해보세요.
+          </p>
+        </div>
+      </Container>
+    </section>
+
+    <section class="bg-slate-50 pt-6 pb-20 lg:pt-8 lg:pb-24">
+      <Container maxWidth="5xl">
+        {allClubs.length === 0 ? (
+          <div class="astro-reveal flex flex-col items-center justify-center py-24 gap-4 text-center">
+            <div class="w-12 h-12 rounded-2xl bg-blue-50 flex items-center justify-center">
+              <LucideIcon name="users" size={24} className="text-blue-400" />
+            </div>
+            <p class="text-sm font-extrabold text-slate-700">등록된 정식 동아리가 없습니다.</p>
+            <p class="text-sm text-slate-400 break-keep">첫 번째 동아리를 만들어보세요.</p>
+            <a
+              href="/clubs/apply"
+              class="mt-2 px-5 py-2.5 rounded-xl bg-blue-600 text-white text-sm font-black hover:bg-blue-700 transition-colors"
+            >
+              동아리 신청하기
+            </a>
+          </div>
+        ) : (
+          <>
+            <div class="sticky sm:static top-[calc(4.5rem+env(safe-area-inset-top))] z-40 bg-white border border-slate-200 rounded-2xl px-4 py-3 flex flex-col mb-5 shadow-sm sm:shadow-none">
+              <div class="flex items-center gap-2 overflow-x-auto pb-1 -mx-1 px-1 sm:overflow-visible sm:flex-nowrap sm:pb-0 sm:mx-0 sm:px-0">
+                <div class="relative shrink-0" data-club-dropdown="category" data-club-dropdown-placeholder="카테고리">
+                  <button
+                    type="button"
+                    data-club-dropdown-trigger
+                    aria-expanded="false"
+                    class="flex items-center gap-1.5 pl-3.5 pr-2.5 py-2 sm:py-1.5 rounded-full text-sm sm:text-xs font-black border transition-colors bg-white border-slate-200 text-slate-600 hover:border-blue-300 hover:text-blue-600"
+                  >
+                    <span data-club-dropdown-label>카테고리</span>
+                    <span data-club-dropdown-icon class="flex items-center text-slate-400">
+                      <LucideIcon name="chevron-down" size={11} />
+                    </span>
+                  </button>
+                  <div
+                    data-club-dropdown-menu
+                    class="hidden absolute top-full left-0 mt-1.5 bg-white border border-slate-200 rounded-xl shadow-lg z-20 w-[min(20rem,calc(100vw-2rem))] sm:w-max py-1"
+                  >
+                    <button
+                      type="button"
+                      data-club-option-group="category"
+                      data-club-option-value={allLabel}
+                      data-club-option-label={allLabel}
+                      class="flex items-center gap-2.5 w-full px-3.5 py-2 text-xs font-medium text-slate-600 hover:bg-slate-50 transition-colors whitespace-normal sm:whitespace-nowrap"
+                    >
+                      <span
+                        data-option-check
+                        class="w-3.5 h-3.5 rounded flex items-center justify-center border border-blue-600 bg-blue-600 transition-colors shrink-0"
+                      >
+                        <span data-option-check-icon class="leading-none">
+                          <LucideIcon name="check" size={9} className="text-white" />
+                        </span>
+                      </span>
+                      {allLabel}
+                    </button>
+                    {categoryOptions.map((option) => (
+                      <button
+                        type="button"
+                        data-club-option-group="category"
+                        data-club-option-value={option.key}
+                        data-club-option-label={option.label}
+                        class="flex items-center gap-2.5 w-full px-3.5 py-2 text-xs font-medium text-slate-600 hover:bg-slate-50 transition-colors whitespace-normal sm:whitespace-nowrap"
+                      >
+                        <span
+                          data-option-check
+                          class="w-3.5 h-3.5 rounded flex items-center justify-center border border-slate-300 transition-colors shrink-0"
+                        >
+                          <span data-option-check-icon class="hidden leading-none">
+                            <LucideIcon name="check" size={9} className="text-white" />
+                          </span>
+                        </span>
+                        {option.label}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+
+                <div class="relative shrink-0" data-club-dropdown="modes" data-club-dropdown-placeholder="활동 형태">
+                  <button
+                    type="button"
+                    data-club-dropdown-trigger
+                    aria-expanded="false"
+                    class="flex items-center gap-1.5 pl-3.5 pr-2.5 py-2 sm:py-1.5 rounded-full text-sm sm:text-xs font-black border transition-colors bg-white border-slate-200 text-slate-600 hover:border-blue-300 hover:text-blue-600"
+                  >
+                    <span data-club-dropdown-label>활동 형태</span>
+                    <span data-club-dropdown-icon class="flex items-center text-slate-400">
+                      <LucideIcon name="chevron-down" size={11} />
+                    </span>
+                  </button>
+                  <div
+                    data-club-dropdown-menu
+                    class="hidden absolute top-full left-0 mt-1.5 bg-white border border-slate-200 rounded-xl shadow-lg z-20 w-[min(20rem,calc(100vw-2rem))] sm:w-max py-1"
+                  >
+                    {modeOptions.map((option) => (
+                      <button
+                        type="button"
+                        data-club-option-group="modes"
+                        data-club-option-value={option.key}
+                        data-club-option-label={option.label}
+                        class="flex items-center gap-2.5 w-full px-3.5 py-2 text-xs font-medium text-slate-600 hover:bg-slate-50 transition-colors whitespace-normal sm:whitespace-nowrap"
+                      >
+                        <span
+                          data-option-check
+                          class="w-3.5 h-3.5 rounded flex items-center justify-center border border-slate-300 transition-colors shrink-0"
+                        >
+                          <span data-option-check-icon class="hidden leading-none">
+                            <LucideIcon name="check" size={9} className="text-white" />
+                          </span>
+                        </span>
+                        {option.label}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+
+                <div class="relative shrink-0" data-club-dropdown="sort" data-club-dropdown-placeholder="정렬">
+                  <button
+                    type="button"
+                    data-club-dropdown-trigger
+                    aria-expanded="false"
+                    class="min-w-36 whitespace-nowrap flex items-center justify-between gap-1.5 pl-3 pr-2.5 py-2 sm:py-1.5 rounded-full text-sm sm:text-xs font-black border transition-colors bg-white border-slate-200 text-slate-600 hover:border-blue-300 hover:text-blue-600"
+                  >
+                    <span data-club-dropdown-label>가나다순</span>
+                    <span data-club-dropdown-icon class="flex items-center text-slate-400">
+                      <LucideIcon name="chevron-down" size={11} />
+                    </span>
+                  </button>
+                  <div
+                    data-club-dropdown-menu
+                    class="hidden absolute top-full right-0 mt-1.5 bg-white border border-slate-200 rounded-xl shadow-lg z-20 w-[min(20rem,calc(100vw-2rem))] sm:w-max py-1"
+                  >
+                    {sortOptions.map((option, index) => (
+                      <button
+                        type="button"
+                        data-club-option-group="sort"
+                        data-club-option-value={option.key}
+                        data-club-option-label={option.label}
+                        class={`flex items-center gap-2.5 w-full px-3.5 py-2 text-xs hover:bg-slate-50 transition-colors whitespace-normal sm:whitespace-nowrap ${
+                          index === 0 ? 'font-black text-blue-600' : 'font-medium text-slate-600'
+                        }`}
+                      >
+                        <span
+                          data-option-check
+                          class={`w-3.5 h-3.5 rounded flex items-center justify-center border transition-colors shrink-0 ${
+                            index === 0 ? 'border-blue-600 bg-blue-600' : 'border-slate-300'
+                          }`}
+                        >
+                          <span data-option-check-icon class={index === 0 ? 'leading-none' : 'hidden leading-none'}>
+                            <LucideIcon name="check" size={9} className="text-white" />
+                          </span>
+                        </span>
+                        {option.label}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+
+                <form id="club-search-form" class="flex items-center gap-1.5 min-w-[14rem] flex-1">
+                  <div class="relative flex-1">
+                    <LucideIcon
+                      name="search"
+                      size={13}
+                      className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400"
+                    />
+                    <input
+                      id="club-search-input"
+                      type="search"
+                      placeholder="동아리 검색"
+                      class="pl-7 pr-4 py-2 sm:py-1.5 rounded-full text-sm sm:text-xs font-medium bg-white border border-slate-200 text-slate-700 placeholder:text-slate-400 outline-none focus:border-blue-300 transition-colors w-full"
+                    />
+                  </div>
+                  <button
+                    type="submit"
+                    class="flex items-center gap-1 pl-3 pr-3.5 py-2 sm:py-1.5 rounded-full text-sm sm:text-xs font-black bg-blue-600 text-white hover:bg-blue-700 transition-colors shrink-0"
+                  >
+                    <LucideIcon name="search" size={11} />
+                    검색
+                  </button>
+                </form>
+
+                <button
+                  type="button"
+                  id="club-reset"
+                  class="text-[10px] font-black text-slate-400 hover:text-blue-500 transition-colors shrink-0 hidden"
+                >
+                  초기화
+                </button>
+              </div>
+
+              <div id="club-active-filters" class="hidden flex flex-wrap gap-1.5 pt-2.5 mt-2.5 border-t border-slate-100"></div>
+            </div>
+
+            <div id="club-no-results" class="hidden flex flex-col items-center gap-3 py-24 text-center">
+              <p class="text-sm text-slate-400">조건에 맞는 동아리가 없습니다.</p>
+              <button
+                type="button"
+                id="club-empty-reset"
+                class="text-xs font-black text-blue-500 hover:text-blue-700 transition-colors"
+              >
+                필터 초기화
+              </button>
+            </div>
+
+            <div id="club-grid" class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+              {allClubs.map((club, index) => (
+                <div
+                  class="astro-reveal"
+                  data-reveal-delay={String(index * 50)}
+                  data-club-card
+                  data-club-slug={club.slug}
+                  data-club-category={club.category}
+                  data-club-modes={(club.modes ?? []).join(',')}
+                  data-club-name={club.name.toLowerCase()}
+                  data-club-desc={club.shortDesc.toLowerCase()}
+                  data-club-keywords={(club.keywords ?? []).join(',').toLowerCase()}
+                  data-club-member-count={String(club.memberCount)}
+                  data-club-since={club.since}
+                >
+                  <Card
+                    as="a"
+                    href={`/clubs/${club.slug}`}
+                    className="flex flex-col gap-4 bg-white rounded-2xl border border-slate-100 p-6 h-full hover:border-blue-200 hover:shadow-sm transition-all"
+                  >
+                    <div class="flex flex-wrap items-center gap-1.5">
+                      <span class="text-[10px] font-black px-2.5 py-1 rounded-full bg-blue-50 text-blue-600">
+                        {CLUB_CATEGORIES[club.category].label}
+                      </span>
+                      {club.modes?.map((mode) => (
+                        <span class={`text-[10px] font-black px-2.5 py-1 rounded-full ${MODE_CONFIG[mode].className}`}>
+                          {MODE_CONFIG[mode].label}
+                        </span>
+                      ))}
+                    </div>
+                    <div class="flex flex-col gap-1.5 flex-1">
+                      <p class="text-base font-extrabold text-slate-900">{club.name}</p>
+                      <p class="text-sm text-slate-500 leading-relaxed break-keep text-pretty max-w-xl">{club.shortDesc}</p>
+                    </div>
+                    <div class="flex items-center gap-3 text-xs text-slate-400">
+                      <span>{formatClubSince(club.since)} 개설</span>
+                      <span>·</span>
+                      <span>{club.memberCount}명</span>
+                    </div>
+                  </Card>
+                </div>
+              ))}
+            </div>
+          </>
+        )}
+      </Container>
+    </section>
+  </div>
+
+  {allClubs.length > 0 && (
+    <script is:inline>
+      (() => {
+        const ALL = '전체';
+        const dropdowns = Array.from(document.querySelectorAll('[data-club-dropdown]'));
+        const optionButtons = Array.from(document.querySelectorAll('[data-club-option-group]'));
+        const resetButton = document.getElementById('club-reset');
+        const emptyResetButton = document.getElementById('club-empty-reset');
+        const searchForm = document.getElementById('club-search-form');
+        const searchInput = document.getElementById('club-search-input');
+        const activeFilters = document.getElementById('club-active-filters');
+        const noResults = document.getElementById('club-no-results');
+        const grid = document.getElementById('club-grid');
+        const cards = Array.from(document.querySelectorAll('[data-club-card]'));
+
+        if (
+          dropdowns.length === 0 ||
+          optionButtons.length === 0 ||
+          !resetButton ||
+          !emptyResetButton ||
+          !searchForm ||
+          !searchInput ||
+          !activeFilters ||
+          !noResults ||
+          !grid
+        ) {
+          return;
+        }
+
+        const state = {
+          category: ALL,
+          modes: new Set(),
+          query: '',
+          sort: 'name-asc',
+        };
+
+        const setTriggerStyles = (trigger, active) => {
+          trigger.classList.toggle('bg-blue-600', active);
+          trigger.classList.toggle('text-white', active);
+          trigger.classList.toggle('border-blue-600', active);
+          trigger.classList.toggle('bg-white', !active);
+          trigger.classList.toggle('text-slate-600', !active);
+          trigger.classList.toggle('border-slate-200', !active);
+        };
+
+        const setOptionStyles = (button, active) => {
+          const check = button.querySelector('[data-option-check]');
+          const icon = button.querySelector('[data-option-check-icon]');
+
+          if (check) {
+            check.classList.toggle('bg-blue-600', active);
+            check.classList.toggle('border-blue-600', active);
+            check.classList.toggle('border-slate-300', !active);
+          }
+
+          if (icon) {
+            icon.classList.toggle('hidden', !active);
+          }
+
+          button.classList.toggle('font-black', active);
+          button.classList.toggle('text-blue-600', active);
+          button.classList.toggle('font-medium', !active);
+          button.classList.toggle('text-slate-600', !active);
+        };
+
+        const getDropdownElements = (group) => {
+          const dropdown = dropdowns.find((item) => item.getAttribute('data-club-dropdown') === group);
+          if (!dropdown) return null;
+
+          return {
+            dropdown,
+            trigger: dropdown.querySelector('[data-club-dropdown-trigger]'),
+            label: dropdown.querySelector('[data-club-dropdown-label]'),
+            icon: dropdown.querySelector('[data-club-dropdown-icon]'),
+            menu: dropdown.querySelector('[data-club-dropdown-menu]'),
+          };
+        };
+
+        const getOptionButtons = (group) => {
+          return optionButtons.filter((button) => button.getAttribute('data-club-option-group') === group);
+        };
+
+        const updateDropdown = (group) => {
+          const elements = getDropdownElements(group);
+          if (!elements || !elements.trigger || !elements.label || !elements.icon) return;
+
+          const placeholder = elements.dropdown.getAttribute('data-club-dropdown-placeholder') ?? '';
+          let active = false;
+          let label = placeholder;
+
+          if (group === 'category') {
+            const categoryButtons = getOptionButtons('category');
+            categoryButtons.forEach((button) => {
+              const selected = (button.getAttribute('data-club-option-value') ?? '') === state.category;
+              setOptionStyles(button, selected);
+            });
+
+            active = state.category !== ALL;
+            if (active) {
+              label =
+                categoryButtons.find((button) => (button.getAttribute('data-club-option-value') ?? '') === state.category)?.getAttribute('data-club-option-label') ??
+                placeholder;
+            }
+          } else if (group === 'modes') {
+            const modeButtons = getOptionButtons('modes');
+            modeButtons.forEach((button) => {
+              const value = button.getAttribute('data-club-option-value') ?? '';
+              setOptionStyles(button, state.modes.has(value));
+            });
+
+            active = state.modes.size > 0;
+            if (state.modes.size === 1) {
+              const value = Array.from(state.modes)[0];
+              label =
+                modeButtons.find((button) => (button.getAttribute('data-club-option-value') ?? '') === value)?.getAttribute('data-club-option-label') ??
+                placeholder;
+            } else if (state.modes.size > 1) {
+              label = `${placeholder} ${state.modes.size}개`;
+            }
+          } else if (group === 'sort') {
+            const sortButtons = getOptionButtons('sort');
+            sortButtons.forEach((button) => {
+              const selected = (button.getAttribute('data-club-option-value') ?? '') === state.sort;
+              setOptionStyles(button, selected);
+            });
+
+            active = state.sort !== 'name-asc';
+            label =
+              sortButtons.find((button) => (button.getAttribute('data-club-option-value') ?? '') === state.sort)?.getAttribute('data-club-option-label') ??
+              placeholder;
+          }
+
+          elements.label.textContent = label;
+          setTriggerStyles(elements.trigger, active);
+          elements.icon.classList.toggle('text-blue-200', active);
+          elements.icon.classList.toggle('text-slate-400', !active);
+        };
+
+        const updateAllDropdowns = () => {
+          updateDropdown('category');
+          updateDropdown('modes');
+          updateDropdown('sort');
+        };
+
+        const closeAllDropdowns = (exceptGroup) => {
+          dropdowns.forEach((dropdown) => {
+            const group = dropdown.getAttribute('data-club-dropdown');
+            if (exceptGroup && group === exceptGroup) return;
+
+            const trigger = dropdown.querySelector('[data-club-dropdown-trigger]');
+            const menu = dropdown.querySelector('[data-club-dropdown-menu]');
+
+            if (trigger) {
+              trigger.setAttribute('aria-expanded', 'false');
+            }
+            if (menu) {
+              menu.classList.add('hidden');
+            }
+          });
+        };
+
+        const createBadge = (label) => {
+          const badge = document.createElement('span');
+          badge.className = 'inline-flex items-center gap-1 rounded-full bg-blue-50 px-2.5 py-1 text-[10px] font-black text-blue-600';
+          badge.textContent = label;
+          return badge;
+        };
+
+        const renderActiveFilters = () => {
+          const badges = [];
+
+          if (state.category !== ALL) {
+            const label =
+              getOptionButtons('category').find((button) => (button.getAttribute('data-club-option-value') ?? '') === state.category)?.getAttribute('data-club-option-label') ??
+              state.category;
+            badges.push(createBadge(label));
+          }
+
+          Array.from(state.modes).forEach((mode) => {
+            const label =
+              getOptionButtons('modes').find((button) => (button.getAttribute('data-club-option-value') ?? '') === mode)?.getAttribute('data-club-option-label') ??
+              mode;
+            badges.push(createBadge(label));
+          });
+
+          if (state.query) {
+            badges.push(createBadge(state.query));
+          }
+
+          activeFilters.replaceChildren(...badges);
+          activeFilters.classList.toggle('hidden', badges.length === 0);
+          resetButton.classList.toggle('hidden', badges.length === 0);
+        };
+
+        const applyFilters = () => {
+          const query = state.query.trim().toLowerCase();
+
+          const visibleCards = cards.filter((card) => {
+            const category = card.getAttribute('data-club-category') ?? '';
+            const modes = (card.getAttribute('data-club-modes') ?? '').split(',').filter(Boolean);
+            const haystack = [
+              card.getAttribute('data-club-name') ?? '',
+              card.getAttribute('data-club-desc') ?? '',
+              card.getAttribute('data-club-keywords') ?? '',
+            ].join(' ');
+
+            if (state.category !== ALL && category !== state.category) return false;
+            if (state.modes.size > 0 && !Array.from(state.modes).some((mode) => modes.includes(mode))) return false;
+            if (query && !haystack.includes(query)) return false;
+            return true;
+          });
+
+          const sortedCards = [...visibleCards].sort((a, b) => {
+            switch (state.sort) {
+              case 'member-desc':
+                return Number(b.getAttribute('data-club-member-count')) - Number(a.getAttribute('data-club-member-count'));
+              case 'member-asc':
+                return Number(a.getAttribute('data-club-member-count')) - Number(b.getAttribute('data-club-member-count'));
+              case 'since-desc':
+                return (b.getAttribute('data-club-since') ?? '').localeCompare(a.getAttribute('data-club-since') ?? '');
+              case 'since-asc':
+                return (a.getAttribute('data-club-since') ?? '').localeCompare(b.getAttribute('data-club-since') ?? '');
+              case 'name-asc':
+              default:
+                return (a.getAttribute('data-club-name') ?? '').localeCompare(b.getAttribute('data-club-name') ?? '', 'ko');
+            }
+          });
+
+          cards.forEach((card) => {
+            card.classList.add('hidden');
+          });
+
+          sortedCards.forEach((card) => {
+            card.classList.remove('hidden');
+            grid.appendChild(card);
+          });
+
+          noResults.classList.toggle('hidden', sortedCards.length > 0);
+          grid.classList.toggle('hidden', sortedCards.length === 0);
+          renderActiveFilters();
+        };
+
+        const resetAll = () => {
+          state.category = ALL;
+          state.modes.clear();
+          state.query = '';
+          state.sort = 'name-asc';
+          searchInput.value = '';
+          updateAllDropdowns();
+          applyFilters();
+          closeAllDropdowns();
+        };
+
+        dropdowns.forEach((dropdown) => {
+          const group = dropdown.getAttribute('data-club-dropdown');
+          const trigger = dropdown.querySelector('[data-club-dropdown-trigger]');
+          const menu = dropdown.querySelector('[data-club-dropdown-menu]');
+
+          if (!group || !trigger || !menu) return;
+
+          trigger.addEventListener('click', () => {
+            const expanded = trigger.getAttribute('aria-expanded') === 'true';
+            closeAllDropdowns(expanded ? undefined : group);
+
+            if (!expanded) {
+              trigger.setAttribute('aria-expanded', 'true');
+              menu.classList.remove('hidden');
+            }
+          });
+        });
+
+        optionButtons.forEach((button) => {
+          button.addEventListener('click', () => {
+            const group = button.getAttribute('data-club-option-group');
+            const value = button.getAttribute('data-club-option-value');
+
+            if (!group || !value) return;
+
+            if (group === 'category') {
+              state.category = value;
+              closeAllDropdowns();
+            } else if (group === 'modes') {
+              if (state.modes.has(value)) {
+                state.modes.delete(value);
+              } else {
+                state.modes.add(value);
+              }
+            } else if (group === 'sort') {
+              state.sort = value;
+              closeAllDropdowns();
+            }
+
+            updateAllDropdowns();
+            applyFilters();
+          });
+        });
+
+        searchForm.addEventListener('submit', (event) => {
+          event.preventDefault();
+          state.query = searchInput.value.trim();
+          applyFilters();
+        });
+
+        resetButton.addEventListener('click', resetAll);
+        emptyResetButton.addEventListener('click', resetAll);
+
+        document.addEventListener('click', (event) => {
+          if (!(event.target instanceof Node)) return;
+          const clickedInside = dropdowns.some((dropdown) => dropdown.contains(event.target));
+          if (!clickedInside) {
+            closeAllDropdowns();
+          }
+        });
+
+        document.addEventListener('keydown', (event) => {
+          if (event.key === 'Escape') {
+            closeAllDropdowns();
+          }
+        });
+
+        updateAllDropdowns();
+        applyFilters();
+      })();
+    </script>
+  )}
+</SiteLayout>

@@ -1,0 +1,923 @@
+---
+import Container from '~/components/Container.astro'
+import HeroLabel from '~/components/HeroLabel.astro'
+import LucideIcon from '~/components/LucideIcon.astro'
+import SiteLayout from '~/layouts/SiteLayout.astro'
+import { allEvents } from '@/data/computed'
+import {
+  EVENT_AUDIENCE,
+  EVENT_AUDIENCE_LABEL,
+  EVENT_FORMAT,
+  EVENT_FORMAT_LABEL,
+  EVENT_KIND,
+  EVENT_KIND_LABEL,
+  FORMAT_ORDER,
+  type Event,
+  type EventAudience,
+  type EventFormat,
+  type EventKind,
+} from '@/data/constants'
+import { withBaseAsset } from '@/lib/asset'
+import { EVENT_STATUS_CONFIG, formatEventDate, getEventStatus } from '@/lib/utils'
+
+const pathname = '/events/archive'
+const pageSize = 9
+
+const yearOptions = [...new Set(allEvents.map((event) => new Date(event.eventDate.start).getFullYear()))].sort((left, right) => right - left)
+const yearFilterOptions = yearOptions.map((year) => ({ key: String(year), label: `${year}년 ${year - 2021}대` }))
+const kindOptions = Object.entries(EVENT_KIND).map(([key, value]) => ({ key: key as EventKind, label: value.label }))
+const audienceOptions = Object.entries(EVENT_AUDIENCE).map(([key, value]) => ({ key: key as EventAudience, label: value.label }))
+const formatOptions = Object.entries(EVENT_FORMAT).map(([key, value]) => ({ key: key as EventFormat, label: value.label }))
+
+function getArchiveVisibility(event: Event) {
+  const today = new Date()
+  today.setHours(0, 0, 0, 0)
+
+  const eventEnd = new Date(event.eventDate.end ?? event.eventDate.start)
+  eventEnd.setHours(0, 0, 0, 0)
+
+  if (today > eventEnd) return true
+  if (!event.recruitDate) return event.audience === 'operator'
+
+  const recruitStart = new Date(event.recruitDate.start)
+  recruitStart.setHours(0, 0, 0, 0)
+  recruitStart.setDate(recruitStart.getDate() - 14)
+
+  return today >= recruitStart
+}
+
+function getEventRibbon(event: Event) {
+  const status = getEventStatus(event)
+
+  if (status === 'past' || status === 'no-recruit' || status === 'planning') {
+    return null
+  }
+
+  return EVENT_STATUS_CONFIG[status]
+}
+
+const initialVisibleEvents = allEvents.filter(getArchiveVisibility)
+const initialVisibleYears = new Set(initialVisibleEvents.map((event) => new Date(event.eventDate.start).getFullYear())).size
+---
+
+<SiteLayout pathname={pathname}>
+  <div class="flex flex-col">
+    <section class="bg-white pt-20 sm:pt-24 pb-10 lg:pt-28 lg:pb-14 border-b border-slate-100">
+      <Container maxWidth="5xl">
+        <div class="astro-reveal flex items-end justify-between gap-8">
+          <div>
+            <HeroLabel>Event Archive</HeroLabel>
+            <h1 class="text-2xl md:text-3xl font-extrabold tracking-tight leading-[1.2] text-slate-900 mb-2">
+              함께해온 모든 순간
+            </h1>
+            <p class="text-xl md:text-2xl font-black text-blue-600 mb-4">역대 행사</p>
+            <p class="text-sm text-slate-500 leading-relaxed break-keep text-pretty max-w-xl">
+              싸피니티가 지금까지 개최한 모든 행사를 한눈에 확인해보세요.
+            </p>
+          </div>
+          <div class="flex items-center gap-5 shrink-0 pb-0.5">
+            <div class="flex flex-col items-end gap-0.5">
+              <span id="archive-total-events" class="text-xl sm:text-2xl font-black text-slate-900">
+                {initialVisibleEvents.length}
+              </span>
+              <span class="text-xs text-slate-400">총 행사</span>
+            </div>
+            <div class="w-px h-8 bg-slate-200"></div>
+            <div class="flex flex-col items-end gap-0.5">
+              <span id="archive-total-years" class="text-xl sm:text-2xl font-black text-slate-900">
+                {initialVisibleYears}
+              </span>
+              <span class="text-xs text-slate-400">개 연도</span>
+            </div>
+          </div>
+        </div>
+      </Container>
+    </section>
+
+    <section class="bg-slate-50 pt-6 pb-14 lg:pt-8 lg:pb-20">
+      <Container maxWidth="5xl">
+        <div class="sticky sm:static top-[calc(4.5rem+env(safe-area-inset-top))] z-40 bg-white border border-slate-200 rounded-2xl px-4 py-3 flex flex-col mb-5 shadow-sm sm:shadow-none">
+          <div class="flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-center sm:gap-2">
+            <div class="flex items-center gap-2 overflow-x-auto pb-1 -mx-1 px-1 sm:flex-none sm:overflow-visible sm:flex-wrap sm:pb-0 sm:mx-0 sm:px-0">
+              <div class="relative shrink-0" data-dropdown="year" data-dropdown-placeholder="연도 및 기수">
+                <button
+                  type="button"
+                  data-dropdown-trigger
+                  aria-expanded="false"
+                  class="min-w-36 whitespace-nowrap flex items-center justify-between gap-1.5 pl-3 pr-2.5 py-2 sm:py-1.5 rounded-full text-sm sm:text-xs font-black border transition-colors bg-white border-slate-200 text-slate-600 hover:border-blue-300 hover:text-blue-600"
+                >
+                  <span data-dropdown-label>연도 및 기수</span>
+                  <span data-dropdown-icon class="flex items-center text-slate-400">
+                    <LucideIcon name="chevron-down" size={11} />
+                  </span>
+                </button>
+                <div
+                  data-dropdown-menu
+                  class="hidden absolute top-full left-0 mt-1.5 bg-white border border-slate-200 rounded-xl shadow-lg z-20 w-[min(20rem,calc(100vw-2rem))] sm:w-max py-1"
+                >
+                  {yearFilterOptions.map((option) => (
+                    <button
+                      type="button"
+                      data-filter-group="year"
+                      data-filter-value={option.key}
+                      data-filter-label={option.label}
+                      class="flex items-center gap-2.5 w-full px-3.5 py-2 text-xs font-medium text-slate-600 hover:bg-slate-50 transition-colors whitespace-normal sm:whitespace-nowrap"
+                    >
+                      <span
+                        data-option-check
+                        class="w-3.5 h-3.5 rounded flex items-center justify-center border border-slate-300 transition-colors shrink-0"
+                      >
+                        <span data-option-check-icon class="hidden leading-none">
+                          <LucideIcon name="check" size={9} className="text-white" />
+                        </span>
+                      </span>
+                      {option.label}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              <div class="relative shrink-0" data-dropdown="kind" data-dropdown-placeholder="종류">
+                <button
+                  type="button"
+                  data-dropdown-trigger
+                  aria-expanded="false"
+                  class="min-w-28 whitespace-nowrap flex items-center justify-between gap-1.5 pl-3 pr-2.5 py-2 sm:py-1.5 rounded-full text-sm sm:text-xs font-black border transition-colors bg-white border-slate-200 text-slate-600 hover:border-blue-300 hover:text-blue-600"
+                >
+                  <span data-dropdown-label>종류</span>
+                  <span data-dropdown-icon class="flex items-center text-slate-400">
+                    <LucideIcon name="chevron-down" size={11} />
+                  </span>
+                </button>
+                <div
+                  data-dropdown-menu
+                  class="hidden absolute top-full left-0 mt-1.5 bg-white border border-slate-200 rounded-xl shadow-lg z-20 w-[min(20rem,calc(100vw-2rem))] sm:w-max py-1"
+                >
+                  {kindOptions.map((option) => (
+                    <button
+                      type="button"
+                      data-filter-group="kind"
+                      data-filter-value={option.key}
+                      data-filter-label={option.label}
+                      class="flex items-center gap-2.5 w-full px-3.5 py-2 text-xs font-medium text-slate-600 hover:bg-slate-50 transition-colors whitespace-normal sm:whitespace-nowrap"
+                    >
+                      <span
+                        data-option-check
+                        class="w-3.5 h-3.5 rounded flex items-center justify-center border border-slate-300 transition-colors shrink-0"
+                      >
+                        <span data-option-check-icon class="hidden leading-none">
+                          <LucideIcon name="check" size={9} className="text-white" />
+                        </span>
+                      </span>
+                      {option.label}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              <div class="relative shrink-0" data-dropdown="audience" data-dropdown-placeholder="대상">
+                <button
+                  type="button"
+                  data-dropdown-trigger
+                  aria-expanded="false"
+                  class="min-w-28 whitespace-nowrap flex items-center justify-between gap-1.5 pl-3 pr-2.5 py-2 sm:py-1.5 rounded-full text-sm sm:text-xs font-black border transition-colors bg-white border-slate-200 text-slate-600 hover:border-blue-300 hover:text-blue-600"
+                >
+                  <span data-dropdown-label>대상</span>
+                  <span data-dropdown-icon class="flex items-center text-slate-400">
+                    <LucideIcon name="chevron-down" size={11} />
+                  </span>
+                </button>
+                <div
+                  data-dropdown-menu
+                  class="hidden absolute top-full left-0 mt-1.5 bg-white border border-slate-200 rounded-xl shadow-lg z-20 w-[min(20rem,calc(100vw-2rem))] sm:w-max py-1"
+                >
+                  {audienceOptions.map((option) => (
+                    <button
+                      type="button"
+                      data-filter-group="audience"
+                      data-filter-value={option.key}
+                      data-filter-label={option.label}
+                      class="flex items-center gap-2.5 w-full px-3.5 py-2 text-xs font-medium text-slate-600 hover:bg-slate-50 transition-colors whitespace-normal sm:whitespace-nowrap"
+                    >
+                      <span
+                        data-option-check
+                        class="w-3.5 h-3.5 rounded flex items-center justify-center border border-slate-300 transition-colors shrink-0"
+                      >
+                        <span data-option-check-icon class="hidden leading-none">
+                          <LucideIcon name="check" size={9} className="text-white" />
+                        </span>
+                      </span>
+                      {option.label}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              <div class="relative shrink-0" data-dropdown="format" data-dropdown-placeholder="방식">
+                <button
+                  type="button"
+                  data-dropdown-trigger
+                  aria-expanded="false"
+                  class="min-w-28 whitespace-nowrap flex items-center justify-between gap-1.5 pl-3 pr-2.5 py-2 sm:py-1.5 rounded-full text-sm sm:text-xs font-black border transition-colors bg-white border-slate-200 text-slate-600 hover:border-blue-300 hover:text-blue-600"
+                >
+                  <span data-dropdown-label>방식</span>
+                  <span data-dropdown-icon class="flex items-center text-slate-400">
+                    <LucideIcon name="chevron-down" size={11} />
+                  </span>
+                </button>
+                <div
+                  data-dropdown-menu
+                  class="hidden absolute top-full left-0 mt-1.5 bg-white border border-slate-200 rounded-xl shadow-lg z-20 w-[min(20rem,calc(100vw-2rem))] sm:w-max py-1"
+                >
+                  {formatOptions.map((option) => (
+                    <button
+                      type="button"
+                      data-filter-group="format"
+                      data-filter-value={option.key}
+                      data-filter-label={option.label}
+                      class="flex items-center gap-2.5 w-full px-3.5 py-2 text-xs font-medium text-slate-600 hover:bg-slate-50 transition-colors whitespace-normal sm:whitespace-nowrap"
+                    >
+                      <span
+                        data-option-check
+                        class="w-3.5 h-3.5 rounded flex items-center justify-center border border-slate-300 transition-colors shrink-0"
+                      >
+                        <span data-option-check-icon class="hidden leading-none">
+                          <LucideIcon name="check" size={9} className="text-white" />
+                        </span>
+                      </span>
+                      {option.label}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            </div>
+
+            <div class="flex flex-wrap items-center gap-2 sm:flex-1 sm:min-w-[18rem]">
+              <form id="archive-search-form" class="flex items-center gap-1.5 flex-1 min-w-[120px]">
+                <div class="relative flex-1">
+                  <LucideIcon
+                    name="search"
+                    size={13}
+                    className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400"
+                  />
+                  <input
+                    id="archive-search-input"
+                    type="search"
+                    placeholder="행사 검색"
+                    class="pl-7 pr-4 py-2 sm:py-1.5 rounded-full text-sm sm:text-xs font-medium bg-white border border-slate-200 text-slate-700 placeholder:text-slate-400 outline-none focus:border-blue-300 transition-colors w-full"
+                  />
+                </div>
+                <button
+                  type="submit"
+                  class="flex items-center gap-1 pl-3 pr-3.5 py-2 sm:py-1.5 rounded-full text-sm sm:text-xs font-black bg-blue-600 text-white hover:bg-blue-700 transition-colors shrink-0"
+                >
+                  <LucideIcon name="search" size={11} />
+                  검색
+                </button>
+              </form>
+
+              <button
+                type="button"
+                id="archive-reset"
+                class="text-[10px] font-black text-slate-400 hover:text-blue-500 transition-colors shrink-0 hidden"
+              >
+                초기화
+              </button>
+            </div>
+          </div>
+
+          <div id="archive-active-filters" class="hidden flex flex-wrap gap-1.5 pt-2.5 mt-2.5 border-t border-slate-100"></div>
+        </div>
+
+        <div id="archive-no-results" class="hidden flex flex-col items-center gap-3 py-24 text-center">
+          <p class="text-sm text-slate-400">조건에 맞는 행사가 없습니다.</p>
+          <button
+            type="button"
+            id="archive-empty-reset"
+            class="text-xs font-black text-blue-500 hover:text-blue-700 transition-colors"
+          >
+            필터 초기화
+          </button>
+        </div>
+
+        <div id="archive-grid" class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+          {allEvents.map((event, index) => {
+            const year = new Date(event.eventDate.start).getFullYear()
+            const ribbon = getEventRibbon(event)
+            const initiallyVisible = getArchiveVisibility(event)
+
+            return (
+              <div
+                class={`astro-reveal ${!initiallyVisible ? 'hidden' : ''}`}
+                data-reveal-delay={String(index * 40)}
+                data-event-card
+                data-event-slug={event.slug}
+                data-event-start={event.eventDate.start}
+                data-event-end={event.eventDate.end ?? event.eventDate.start}
+                data-event-start-time={event.eventDate.startTime ?? ''}
+                data-event-end-time={event.eventDate.endTime ?? ''}
+                data-event-recruit-start={event.recruitDate?.start ?? ''}
+                data-event-recruit-end={event.recruitDate?.end ?? event.recruitDate?.start ?? ''}
+                data-event-year={String(year)}
+                data-event-kind={event.kind ?? ''}
+                data-event-audience={event.audience ?? ''}
+                data-event-formats={(event.format ?? []).join(',')}
+                data-event-title={event.title.toLowerCase()}
+                data-event-summary={event.summary.toLowerCase()}
+                data-event-keywords={(event.keywords ?? []).join(',').toLowerCase()}
+              >
+                <a
+                  href={`/events/archive/${event.slug}?from=archive`}
+                  class="group flex flex-col bg-white border border-slate-200 rounded-2xl overflow-hidden hover:border-blue-200 hover:shadow-md transition-all duration-200 h-full"
+                >
+                  <div class="relative aspect-video overflow-hidden bg-slate-100 shrink-0">
+                    {event.img ? (
+                      <img
+                        src={withBaseAsset(event.img)}
+                        alt={event.title}
+                        class="w-full h-full object-cover object-top group-hover:scale-[1.03] transition-transform duration-300"
+                      />
+                    ) : (
+                      <div class="w-full h-full bg-gradient-to-br from-blue-50 to-slate-100 flex items-center justify-center">
+                        <span class="text-4xl font-black text-slate-200">{year}</span>
+                      </div>
+                    )}
+
+                    <div
+                      data-event-ribbon
+                      class={`absolute bottom-0 left-0 right-0 py-2 text-center text-xs font-black tracking-wide ${
+                        ribbon ? ribbon.className : 'hidden'
+                      }`}
+                    >
+                      {ribbon?.label}
+                    </div>
+
+                    <div class="absolute top-2 right-2 flex flex-wrap justify-end gap-1">
+                      {event.kind && (
+                        <span class="text-[10px] font-black px-2.5 py-1 rounded-full backdrop-blur-sm bg-white/90 text-blue-600 shadow-md ring-1 ring-black/5">
+                          {EVENT_KIND_LABEL[event.kind]}
+                        </span>
+                      )}
+                      {event.audience && (
+                        <span class="text-[10px] font-black px-2.5 py-1 rounded-full backdrop-blur-sm bg-white/90 text-slate-500 shadow-md ring-1 ring-black/5">
+                          {EVENT_AUDIENCE_LABEL[event.audience]}
+                        </span>
+                      )}
+                      {[...(event.format ?? [])].sort((left, right) => FORMAT_ORDER.indexOf(left) - FORMAT_ORDER.indexOf(right)).map((format) => (
+                        <span class="text-[10px] font-black px-2.5 py-1 rounded-full backdrop-blur-sm bg-white/90 text-slate-400 shadow-md ring-1 ring-black/5">
+                          {EVENT_FORMAT_LABEL[format]}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+
+                  <div class="flex flex-col gap-2.5 px-5 pt-5 pb-4 flex-1">
+                    <p class="text-sm font-extrabold text-slate-900 leading-snug group-hover:text-blue-600 transition-colors">
+                      {event.title}
+                    </p>
+
+                    <div class="flex flex-col gap-1 text-xs text-slate-400">
+                      <div class="flex items-center gap-1.5">
+                        <LucideIcon name="calendar-days" size={11} className="shrink-0" />
+                        <span class="truncate">{formatEventDate(event.eventDate)}</span>
+                      </div>
+                      <div class="flex items-center gap-1.5 min-h-[1rem]">
+                        {event.location && (
+                          <>
+                            <LucideIcon name="map-pin" size={11} className="shrink-0" />
+                            <span class="truncate">{event.location}</span>
+                          </>
+                        )}
+                      </div>
+                    </div>
+
+                    <div class="relative group/summary flex items-end gap-1 mt-auto pt-4 border-t border-slate-100">
+                      <p class="text-xs text-slate-500 leading-relaxed break-keep line-clamp-1 flex-1">
+                        {event.summary}
+                      </p>
+                      <LucideIcon
+                        name="chevron-right"
+                        size={13}
+                        className="shrink-0 text-slate-300 group-hover:text-blue-400 transition-colors mb-0.5"
+                      />
+                      <div class="pointer-events-none absolute bottom-full left-0 mb-2 w-full bg-slate-800 text-white text-xs rounded-lg px-3 py-2 leading-relaxed break-keep opacity-0 group-hover/summary:opacity-100 transition-opacity duration-150 z-10 shadow-lg">
+                        {event.summary}
+                      </div>
+                    </div>
+                  </div>
+                </a>
+              </div>
+            )
+          })}
+        </div>
+
+        <div id="archive-pagination" class="hidden items-center justify-center gap-2 mt-12"></div>
+      </Container>
+    </section>
+  </div>
+
+  <script is:inline define:vars={{ pageSize }}>
+    (() => {
+      const dropdowns = Array.from(document.querySelectorAll('[data-dropdown]'));
+      const optionButtons = Array.from(document.querySelectorAll('[data-filter-group]'));
+      const resetButton = document.getElementById('archive-reset');
+      const emptyResetButton = document.getElementById('archive-empty-reset');
+      const searchForm = document.getElementById('archive-search-form');
+      const searchInput = document.getElementById('archive-search-input');
+      const activeFilters = document.getElementById('archive-active-filters');
+      const noResults = document.getElementById('archive-no-results');
+      const grid = document.getElementById('archive-grid');
+      const pagination = document.getElementById('archive-pagination');
+      const totalEvents = document.getElementById('archive-total-events');
+      const totalYears = document.getElementById('archive-total-years');
+      const cards = Array.from(document.querySelectorAll('[data-event-card]'));
+
+      if (
+        !resetButton ||
+        !emptyResetButton ||
+        !searchForm ||
+        !searchInput ||
+        !activeFilters ||
+        !noResults ||
+        !grid ||
+        !pagination ||
+        !totalEvents ||
+        !totalYears
+      ) {
+        return;
+      }
+
+      const ribbonClasses = {
+        'today-upcoming': 'bg-orange-500 text-white',
+        'today-ongoing': 'bg-blue-600 text-white',
+        recruiting: 'bg-emerald-500 text-white',
+        'recruit-closed': 'bg-slate-700 text-white',
+        'before-recruit': 'bg-amber-500 text-white',
+      };
+
+      const ribbonLabels = {
+        'today-upcoming': '오늘 시작',
+        'today-ongoing': '진행 중',
+        recruiting: '접수 중',
+        'recruit-closed': '접수 마감',
+        'before-recruit': '접수 예정',
+      };
+
+      const state = {
+        years: new Set(),
+        kinds: new Set(),
+        audiences: new Set(),
+        formats: new Set(),
+        query: '',
+        page: 0,
+      };
+
+      const filterGroups = ['year', 'kind', 'audience', 'format'];
+
+      const groupSets = {
+        year: state.years,
+        kind: state.kinds,
+        audience: state.audiences,
+        format: state.formats,
+      };
+
+      const setTriggerStyles = (button, icon, active) => {
+        button.classList.toggle('bg-blue-600', active);
+        button.classList.toggle('text-white', active);
+        button.classList.toggle('border-blue-600', active);
+        button.classList.toggle('bg-white', !active);
+        button.classList.toggle('text-slate-600', !active);
+        button.classList.toggle('border-slate-200', !active);
+        button.classList.toggle('hover:border-blue-300', !active);
+        button.classList.toggle('hover:text-blue-600', !active);
+
+        if (icon) {
+          icon.classList.toggle('text-blue-200', active);
+          icon.classList.toggle('text-slate-400', !active);
+        }
+      };
+
+      const setOptionStyles = (button, active) => {
+        const check = button.querySelector('[data-option-check]');
+        const icon = button.querySelector('[data-option-check-icon]');
+
+        if (!check || !icon) return;
+
+        check.classList.toggle('bg-blue-600', active);
+        check.classList.toggle('border-blue-600', active);
+        check.classList.toggle('border-slate-300', !active);
+        icon.classList.toggle('hidden', !active);
+      };
+
+      const getDropdownElements = (group) => {
+        const dropdown = dropdowns.find((item) => item.getAttribute('data-dropdown') === group);
+        if (!dropdown) return null;
+
+        return {
+          dropdown,
+          trigger: dropdown.querySelector('[data-dropdown-trigger]'),
+          label: dropdown.querySelector('[data-dropdown-label]'),
+          icon: dropdown.querySelector('[data-dropdown-icon]'),
+          menu: dropdown.querySelector('[data-dropdown-menu]'),
+        };
+      };
+
+      const getOptionButtons = (group) =>
+        optionButtons.filter((button) => button.getAttribute('data-filter-group') === group);
+
+      const getOptionLabel = (group, value) =>
+        optionButtons.find(
+          (button) =>
+            button.getAttribute('data-filter-group') === group &&
+            button.getAttribute('data-filter-value') === value,
+        )?.getAttribute('data-filter-label') ?? value;
+
+      const updateDropdown = (group) => {
+        const elements = getDropdownElements(group);
+        if (!elements?.trigger || !elements.label) return;
+
+        const selectedValues = Array.from(groupSets[group]);
+        const placeholder = elements.dropdown.getAttribute('data-dropdown-placeholder') ?? '';
+
+        const label =
+          selectedValues.length === 0
+            ? placeholder
+            : selectedValues.length === 1
+              ? getOptionLabel(group, selectedValues[0])
+              : `${placeholder} ${selectedValues.length}개`;
+
+        elements.label.textContent = label;
+        setTriggerStyles(elements.trigger, elements.icon, selectedValues.length > 0);
+
+        getOptionButtons(group).forEach((button) => {
+          const value = button.getAttribute('data-filter-value') ?? '';
+          setOptionStyles(button, groupSets[group].has(value));
+        });
+      };
+
+      const updateAllDropdowns = () => {
+        filterGroups.forEach(updateDropdown);
+      };
+
+      const closeAllDropdowns = () => {
+        dropdowns.forEach((dropdown) => {
+          const trigger = dropdown.querySelector('[data-dropdown-trigger]');
+          const menu = dropdown.querySelector('[data-dropdown-menu]');
+
+          trigger?.setAttribute('aria-expanded', 'false');
+          menu?.classList.add('hidden');
+        });
+      };
+
+      const toDate = (value) => {
+        if (!value) return null;
+        const date = new Date(value);
+        date.setHours(0, 0, 0, 0);
+        return date;
+      };
+
+      const getEventStatus = (card) => {
+        const now = new Date();
+        const today = new Date(now);
+        today.setHours(0, 0, 0, 0);
+
+        const eventStartDate = toDate(card.getAttribute('data-event-start'));
+        const eventEndDate = toDate(card.getAttribute('data-event-end'));
+
+        if (!eventStartDate || !eventEndDate) return 'past';
+        if (today > eventEndDate) return 'past';
+
+        if (today >= eventStartDate && today <= eventEndDate) {
+          const startTime = card.getAttribute('data-event-start-time');
+          if (!startTime) return 'today-ongoing';
+
+          const [startHour, startMinute] = startTime.split(':').map(Number);
+          const eventStart = new Date(card.getAttribute('data-event-start'));
+          eventStart.setHours(startHour, startMinute, 0, 0);
+
+          const endDate = new Date(card.getAttribute('data-event-end'));
+          const endTime = (card.getAttribute('data-event-end-time') || '23:59').split(':').map(Number);
+          endDate.setHours(endTime[0], endTime[1], 0, 0);
+
+          if (now < eventStart) return 'today-upcoming';
+          if (now <= endDate) return 'today-ongoing';
+          return 'past';
+        }
+
+        const recruitStart = toDate(card.getAttribute('data-event-recruit-start'));
+        const recruitEnd = toDate(card.getAttribute('data-event-recruit-end'));
+        const audience = card.getAttribute('data-event-audience');
+
+        if (!recruitStart || !recruitEnd) {
+          return audience === 'operator' ? 'no-recruit' : 'planning';
+        }
+
+        if (today < recruitStart) return 'before-recruit';
+        if (today <= recruitEnd) return 'recruiting';
+        return 'recruit-closed';
+      };
+
+      const isEventVisible = (card) => {
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
+
+        const eventEnd = toDate(card.getAttribute('data-event-end'));
+        if (eventEnd && today > eventEnd) return true;
+
+        const recruitStart = toDate(card.getAttribute('data-event-recruit-start'));
+        if (!recruitStart) {
+          return card.getAttribute('data-event-audience') === 'operator';
+        }
+
+        recruitStart.setDate(recruitStart.getDate() - 14);
+        return today >= recruitStart;
+      };
+
+      const updateRibbon = (card) => {
+        const ribbon = card.querySelector('[data-event-ribbon]');
+        if (!ribbon) return;
+
+        const status = getEventStatus(card);
+        if (!(status in ribbonClasses)) {
+          ribbon.className = 'hidden';
+          ribbon.textContent = '';
+          return;
+        }
+
+        ribbon.className = `absolute bottom-0 left-0 right-0 py-2 text-center text-xs font-black tracking-wide ${ribbonClasses[status]}`;
+        ribbon.textContent = ribbonLabels[status];
+      };
+
+      const makeBadge = (label, type, value) => {
+        const wrapper = document.createElement('span');
+        wrapper.className = 'inline-flex items-center gap-1 rounded-full bg-blue-50 pl-2.5 pr-1.5 py-1 text-[10px] font-black text-blue-600';
+
+        const text = document.createElement('span');
+        text.textContent = label;
+        wrapper.appendChild(text);
+
+        const button = document.createElement('button');
+        button.type = 'button';
+        button.className = 'flex items-center hover:text-blue-800 transition-colors';
+        button.dataset.filterType = type;
+        button.dataset.filterValue = value;
+        button.setAttribute('aria-label', `${label} 필터 해제`);
+        button.innerHTML = '&times;';
+        wrapper.appendChild(button);
+
+        return wrapper;
+      };
+
+      const renderActiveFilters = () => {
+        activeFilters.innerHTML = '';
+
+        state.years.forEach((year) => {
+          activeFilters.appendChild(makeBadge(`${year}년 ${Number(year) - 2021}대`, 'year', year));
+        });
+
+        state.kinds.forEach((kind) => {
+          activeFilters.appendChild(makeBadge(getOptionLabel('kind', kind), 'kind', kind));
+        });
+
+        state.audiences.forEach((audience) => {
+          activeFilters.appendChild(makeBadge(getOptionLabel('audience', audience), 'audience', audience));
+        });
+
+        state.formats.forEach((format) => {
+          activeFilters.appendChild(makeBadge(getOptionLabel('format', format), 'format', format));
+        });
+
+        if (state.query) {
+          activeFilters.appendChild(makeBadge(state.query, 'query', state.query));
+        }
+
+        const hasFilter = activeFilters.childElementCount > 0;
+        activeFilters.classList.toggle('hidden', !hasFilter);
+        resetButton.classList.toggle('hidden', !hasFilter);
+      };
+
+      const scrollToTop = () => {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      };
+
+      const renderPagination = (totalPages) => {
+        pagination.innerHTML = '';
+        pagination.classList.toggle('hidden', totalPages <= 1);
+        pagination.classList.toggle('flex', totalPages > 1);
+
+        if (totalPages <= 1) return;
+
+        const createButton = (label, disabled, onClick, active = false) => {
+          const button = document.createElement('button');
+          button.type = 'button';
+          button.disabled = disabled;
+          button.textContent = label;
+
+          if (active) {
+            button.className = 'w-10 h-10 sm:w-8 sm:h-8 flex items-center justify-center rounded-full text-xs font-black bg-blue-600 text-white';
+          } else {
+            button.className = 'w-10 h-10 sm:w-8 sm:h-8 flex items-center justify-center rounded-full border border-slate-200 text-slate-500 hover:border-blue-300 hover:text-blue-500 transition-colors disabled:opacity-30 disabled:cursor-not-allowed disabled:hover:border-slate-200 disabled:hover:text-slate-500';
+          }
+
+          button.addEventListener('click', onClick);
+          return button;
+        };
+
+        pagination.appendChild(
+          createButton('‹', state.page === 0, () => {
+            state.page -= 1;
+            applyFilters();
+            scrollToTop();
+          }),
+        );
+
+        for (let page = 0; page < totalPages; page += 1) {
+          pagination.appendChild(
+            createButton(String(page + 1), false, () => {
+              state.page = page;
+              applyFilters();
+              scrollToTop();
+            }, state.page === page),
+          );
+        }
+
+        pagination.appendChild(
+          createButton('›', state.page === totalPages - 1, () => {
+            state.page += 1;
+            applyFilters();
+            scrollToTop();
+          }),
+        );
+      };
+
+      const applyFilters = () => {
+        cards.forEach(updateRibbon);
+
+        const baseVisibleCards = cards.filter(isEventVisible);
+        const baseYears = new Set(baseVisibleCards.map((card) => Number(card.getAttribute('data-event-year'))));
+        totalEvents.textContent = String(baseVisibleCards.length);
+        totalYears.textContent = String(baseYears.size);
+
+        const query = state.query.trim().toLowerCase();
+
+        const filtered = baseVisibleCards.filter((card) => {
+          const year = card.getAttribute('data-event-year') ?? '';
+          const kind = card.getAttribute('data-event-kind') ?? '';
+          const audience = card.getAttribute('data-event-audience') ?? '';
+          const formats = (card.getAttribute('data-event-formats') ?? '').split(',').filter(Boolean);
+          const haystack = [
+            card.getAttribute('data-event-title') ?? '',
+            card.getAttribute('data-event-summary') ?? '',
+            card.getAttribute('data-event-keywords') ?? '',
+          ].join(' ');
+
+          if (state.years.size > 0 && !state.years.has(year)) return false;
+          if (state.kinds.size > 0 && !state.kinds.has(kind)) return false;
+          if (state.audiences.size > 0 && !state.audiences.has(audience)) return false;
+          if (state.formats.size > 0 && !Array.from(state.formats).some((format) => formats.includes(format))) return false;
+          if (query && !haystack.includes(query)) return false;
+          return true;
+        });
+
+        const sorted = [...filtered].sort((left, right) =>
+          (right.getAttribute('data-event-start') ?? '').localeCompare(left.getAttribute('data-event-start') ?? ''),
+        );
+
+        const totalPages = Math.max(1, Math.ceil(sorted.length / pageSize));
+        if (state.page >= totalPages) {
+          state.page = totalPages - 1;
+        }
+
+        const pageStart = state.page * pageSize;
+        const pageEnd = pageStart + pageSize;
+        const paginated = sorted.slice(pageStart, pageEnd);
+
+        cards.forEach((card) => card.classList.add('hidden'));
+        paginated.forEach((card) => {
+          card.classList.remove('hidden');
+          grid.appendChild(card);
+        });
+
+        noResults.classList.toggle('hidden', sorted.length > 0);
+        grid.classList.toggle('hidden', sorted.length === 0);
+
+        renderActiveFilters();
+        renderPagination(totalPages);
+      };
+
+      const resetAll = () => {
+        state.years.clear();
+        state.kinds.clear();
+        state.audiences.clear();
+        state.formats.clear();
+        state.query = '';
+        state.page = 0;
+        searchInput.value = '';
+        updateAllDropdowns();
+        applyFilters();
+      };
+
+      const toggleSetValue = (set, value) => {
+        if (set.has(value)) {
+          set.delete(value);
+          return false;
+        }
+
+        set.add(value);
+        return true;
+      };
+
+      dropdowns.forEach((dropdown) => {
+        const group = dropdown.getAttribute('data-dropdown');
+        const trigger = dropdown.querySelector('[data-dropdown-trigger]');
+        const menu = dropdown.querySelector('[data-dropdown-menu]');
+
+        if (!group || !trigger || !menu) return;
+
+        trigger.addEventListener('click', (event) => {
+          event.stopPropagation();
+          const isExpanded = trigger.getAttribute('aria-expanded') === 'true';
+          closeAllDropdowns();
+
+          if (!isExpanded) {
+            trigger.setAttribute('aria-expanded', 'true');
+            menu.classList.remove('hidden');
+          }
+        });
+
+        menu.addEventListener('click', (event) => {
+          event.stopPropagation();
+        });
+      });
+
+      optionButtons.forEach((button) => {
+        button.addEventListener('click', () => {
+          const group = button.getAttribute('data-filter-group');
+          const value = button.getAttribute('data-filter-value');
+
+          if (!group || !value) return;
+
+          state.page = 0;
+          toggleSetValue(groupSets[group], value);
+          updateDropdown(group);
+          applyFilters();
+        });
+      });
+
+      searchForm.addEventListener('submit', (event) => {
+        event.preventDefault();
+        state.query = searchInput.value.trim();
+        state.page = 0;
+        applyFilters();
+      });
+
+      resetButton.addEventListener('click', resetAll);
+      emptyResetButton.addEventListener('click', resetAll);
+      document.addEventListener('click', closeAllDropdowns);
+      document.addEventListener('keydown', (event) => {
+        if (event.key === 'Escape') {
+          closeAllDropdowns();
+        }
+      });
+
+      activeFilters.addEventListener('click', (event) => {
+        const target = event.target instanceof Element ? event.target.closest('[data-filter-type]') : null;
+        if (!target) return;
+
+        const type = target.getAttribute('data-filter-type');
+        const value = target.getAttribute('data-filter-value');
+        state.page = 0;
+
+        if (type === 'year' && value) {
+          state.years.delete(value);
+          updateDropdown('year');
+        }
+
+        if (type === 'kind' && value) {
+          state.kinds.delete(value);
+          updateDropdown('kind');
+        }
+
+        if (type === 'audience' && value) {
+          state.audiences.delete(value);
+          updateDropdown('audience');
+        }
+
+        if (type === 'format' && value) {
+          state.formats.delete(value);
+          updateDropdown('format');
+        }
+
+        if (type === 'query') {
+          state.query = '';
+          searchInput.value = '';
+        }
+
+        applyFilters();
+      });
+
+      updateAllDropdowns();
+      applyFilters();
+    })();
+  </script>
+</SiteLayout>

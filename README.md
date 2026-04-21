@@ -1,51 +1,46 @@
-# SSAFYnity 공식 홈페이지
+# SSAFYnity Renewal
 
-> 싸피 수료생들이 직접 운영하는 동문회
+GitHub Pages 안에서 `#` 없는 정적 경로를 유지하기 위한 공식 홈페이지 마이그레이션 준비 프로젝트입니다.
 
-**[ssafynity.github.io](https://ssafynity.github.io)**
+## 목표
 
-삼성 청년 SW 아카데미(SSAFY) 수료생이라면 누구나 가입할 수 있는 동문회 SSAFYnity의 공식 홈페이지입니다.
+- 기존 `ssafynity.github.io`의 경로 구조를 그대로 유지합니다.
+- 기존 콘텐츠, 데이터, 스타일, 인터랙션 코드를 그대로 재사용합니다.
+- Astro 정적 출력으로 각 경로마다 실제 HTML 파일을 생성합니다.
+- GitHub Pages 배포 구조 안에서 직접 접속 가능한 URL을 보장합니다.
 
-## 스택
+## 현재 구조
 
-- Vite + React + TypeScript
-- Tailwind CSS + shadcn/ui
-- GitHub Pages + GitHub Actions
+- `src/site`
+  기존 `ssafynity.github.io/src`에서 React 라우팅 레이어를 걷어내고, Astro에서 재사용하는 데이터·유틸리티·스타일 소스입니다.
+- `src/pages`
+  실제 Astro 파일 라우팅 엔트리입니다.
+- `src/components`
+  Astro 페이지가 공통으로 사용하는 프레젠테이션 컴포넌트입니다.
+- `../.migration-snapshot/ssafynity-renewal/src`
+  원본 React 구현을 비교 검증용으로 보관한 외부 스냅샷입니다. 리뉴얼 프로젝트의 라이브 빌드와 타입체크에는 포함되지 않습니다.
+- `public`
+  기존 `ssafynity.github.io/public` 전체를 그대로 복사한 정적 자산입니다.
+- `scripts/generate-astro-pages.mjs`
+  경로 누락이 생기지 않도록 Astro 페이지 파일을 보조 생성하는 스크립트입니다.
+- `scripts/verify-migration.mjs`
+  원본과 리뉴얼의 데이터/정적 자산 동일성, 정적 라우트 생성 여부, 대표 페이지 출력 결과를 검증하는 스크립트입니다.
 
-## 시작하기
+## 확인된 내용
 
-권장 실행 환경
+- `/events/archive/2025-night-of-ssafynity` 같은 상세 경로가 실제 정적 파일로 생성됩니다.
+- `/community`는 `/community/sns`로 정적 리다이렉트됩니다.
+- 원본 `data`와 `public`은 현재 리뉴얼 복사본과 동일합니다.
+- 라우팅은 더 이상 React Router 중심이 아니라 Astro 파일 라우팅 기준입니다.
+- 라이브 페이지 출력에는 React island와 React Router 호환 런타임이 남아 있지 않습니다.
 
-- Node.js `22.12.0` 이상
-- npm `10` 이상
+## 실행 명령
+
+기본 터미널 Node가 낮을 수 있으므로, 로컬에서는 아래처럼 Node 20 이상으로 실행하는 것을 권장합니다.
 
 ```bash
-nvm use
-npm install
-npm run dev
+PATH="/opt/homebrew/opt/node@20/bin:$PATH" npm install
+PATH="/opt/homebrew/opt/node@20/bin:$PATH" npm run generate:pages
+PATH="/opt/homebrew/opt/node@20/bin:$PATH" npm run build
+PATH="/opt/homebrew/opt/node@20/bin:$PATH" npm run verify:migration
 ```
-
-`nvm`을 쓰지 않는 경우에도 Node 버전을 먼저 `22.12.0` 이상으로 맞춰주세요.
-
-## 배포
-
-`main` 브랜치에 push하면 GitHub Actions가 자동으로 빌드 및 배포합니다.
-
-> **주의**: 배포는 실사용 중인 서비스에 즉시 반영됩니다. 운영진 검토 후 머지해 주세요.
-
-## 기여하기
-
-운영진이라면 누구나 기여할 수 있습니다.
-
-1. 작업할 이슈를 확인하거나 새 이슈를 생성합니다.
-2. 브랜치를 만들어 작업합니다. (`feature/이슈번호-설명`)
-3. Pull Request를 열고 리뷰를 요청합니다.
-4. 콘텐츠(데이터) 업데이트는 `src/data/siteData.ts`를 수정합니다.
-
-## 문의
-
-ssafynity@gmail.com
-
-## 라이선스
-
-© 2026 SSAFYnity. 자세한 내용은 [LICENSE](./LICENSE) 파일을 참고하세요.
