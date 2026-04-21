@@ -2,6 +2,7 @@
 import BaseLayout from '~/layouts/BaseLayout.astro'
 import Footer from '~/components/Footer.astro'
 import Navbar from '~/components/Navbar.astro'
+import { toAbsoluteSiteUrl } from '@/lib/routes'
 
 interface Props {
   pathname: string
@@ -108,7 +109,7 @@ const {
   title,
   documentTitle = 'SSAFYnity',
   description,
-  canonical = `https://ssafynity.github.io${pathname}`,
+  canonical = toAbsoluteSiteUrl(pathname),
   noindex = false,
 } = Astro.props
 

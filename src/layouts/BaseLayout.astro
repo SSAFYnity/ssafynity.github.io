@@ -1,5 +1,6 @@
 ---
 import '../site/index.css'
+import { toAbsoluteSiteUrl } from '@/lib/routes'
 
 interface Props {
   title?: string
@@ -13,7 +14,7 @@ const {
   title = 'SSAFYnity',
   documentTitle = title,
   description = 'SSAFY 수료생들이 직접 운영하는 동문회 SSAFYnity 공식 홈페이지. 행사, 운영진, 동아리, 멤버십 정보를 확인하세요.',
-  canonical = `https://ssafynity.github.io${Astro.url.pathname}`,
+  canonical = toAbsoluteSiteUrl(Astro.url.pathname),
   noindex = false,
 } = Astro.props
 

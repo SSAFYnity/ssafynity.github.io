@@ -18,6 +18,25 @@ const distRoot = path.join(currentRoot, 'dist')
 const eventsDir = path.join(currentData, 'events')
 const clubsDir = path.join(currentData, 'clubs')
 const allowedPublicExtraOnRight = new Set(['404.html'])
+const FILE_PATH_PATTERN = /\/[^/]+\.[a-z0-9]+$/i
+
+function normalizeSitePath(routePath) {
+  if (!routePath || routePath === '/') {
+    return '/'
+  }
+
+  const normalizedPath = routePath.startsWith('/') ? routePath : `/${routePath}`
+
+  if (FILE_PATH_PATTERN.test(normalizedPath)) {
+    return normalizedPath
+  }
+
+  return normalizedPath.endsWith('/') ? normalizedPath : `${normalizedPath}/`
+}
+
+function toAbsoluteSiteUrl(routePath) {
+  return `https://ssafynity.github.io${normalizeSitePath(routePath)}`
+}
 
 function createComparisonRoot(rootPath) {
   return {
@@ -179,7 +198,7 @@ async function verifyBuiltRoutes() {
 
   for (const routePath of representativeRoutes) {
     const html = await fs.readFile(routeToDistFile(routePath), 'utf8')
-    const expectedCanonical = `https://ssafynity.github.io${routePath === '/' ? '' : routePath}`
+    const expectedCanonical = toAbsoluteSiteUrl(routePath)
 
     if (html.includes('<astro-island')) {
       throw new Error(`${routePath} 페이지에 Astro island가 남아 있습니다.`)
