@@ -111,13 +111,16 @@ function isItemActive(item: typeof siteData.menu[number]['items'][number]) {
     </div>
   </Container>
 
-  <div id="mobile-nav-backdrop" class="fixed inset-0 bg-slate-950/30 opacity-0 pointer-events-none transition-opacity duration-300 lg:hidden"></div>
+  <div
+    id="mobile-nav-backdrop"
+    class="fixed inset-0 z-[55] bg-slate-950/30 opacity-0 pointer-events-none transition-opacity duration-300 lg:hidden"
+  ></div>
   <aside
     id="mobile-nav-panel"
-    class="fixed top-0 right-0 h-full w-full sm:w-80 bg-white shadow-2xl translate-x-full transition-transform duration-300 overflow-y-auto pb-[env(safe-area-inset-bottom)] lg:hidden"
+    class="fixed top-0 right-0 z-[60] h-full w-[min(100vw,24rem)] max-w-full bg-white shadow-2xl translate-x-full transition-transform duration-300 overflow-y-auto overscroll-contain pb-[env(safe-area-inset-bottom)] lg:hidden"
     aria-hidden="true"
   >
-    <div class="p-6 sm:p-8 flex flex-col gap-6 sm:gap-8 pt-[calc(3.5rem+env(safe-area-inset-top))]">
+    <div class="flex flex-col gap-6 p-6 pt-[calc(5rem+env(safe-area-inset-top))] sm:gap-8 sm:p-8 sm:pt-[calc(5.5rem+env(safe-area-inset-top))]">
       <div class="flex items-center justify-between gap-3">
         <p class="text-lg font-extrabold text-slate-900">메뉴</p>
         <button
