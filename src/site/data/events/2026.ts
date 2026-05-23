@@ -5,13 +5,39 @@ import type { Event } from '@/data/constants'
 
 export const events2026: Event[] = [
   {
-    slug:      '2026-ongoing-event-may',
-    title:     '5월 상시행사 (변동 가능성 있음)',
-    eventDate: { start: '2026-05-01', precision: 'month' },
-    format:    ['online'],
-    kind:      'ongoing',
-    audience:  'regular',
-    summary:   '2026년 5월 중 진행 예정인 정회원 전용 상시 행사',
+    slug:        '2026-online-tetris-tournament',
+    title:       '온라인 테트리스 대회',
+    eventDate:   { start: '2026-05-31', startTime: '22:00' },
+    recruitDate: { start: '2026-05-23', end: '2026-05-30' },
+    format:      ['online'],
+    kind:        'special',
+    audience:    'members',
+    summary:     '정회원과 일반회원이 함께 참여하는 온라인 테트리스 대회',
+    img:         '/events/2026-online-tetris-tournament.png',
+    formUrl:     'https://forms.gle/PGmSAYTmFthqiRUc8',
+    capacity:    'unlimited',
+    notices: {
+      fee: {
+        regular: '무료',
+        members: 2000,
+        note:    '상품 및 행사 진행비\n접수 내역 확인 및 참가비 입금까지 완료되어야 최종 신청이 완료됩니다',
+      },
+      refund: [
+        '행사 3일 이내 취소 시 환불 불가',
+        '환불 가능 기간 내 요청 시 전액 환불',
+        '환불 대상자는 행사 종료 후 일괄 처리됩니다',
+      ],
+      custom: [
+        {
+          title: '상품 안내',
+          body:  '1등: OpenAI 3만원권\n2등: 배민 1만원권',
+        },
+        {
+          title: '유의사항',
+          body:  '상품 규모는 접수 인원에 따라 확대 또는 축소될 수 있습니다.',
+        },
+      ],
+    },
   },
   {
     slug:      '2026-first-regular-event',
