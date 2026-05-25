@@ -443,8 +443,11 @@ export const publicOperatorProfiles = [
   },
   {
     operatorId: "operator-076",
-    name: "박00",
-    anonymous: true
+    name: "박민우",
+    cohort: 13,
+    campus: "서울",
+    url: "https://www.instagram.com/m.__.nnn",
+    anonymous: false
   }
 ] as const satisfies readonly PublicOperatorProfile[]
 

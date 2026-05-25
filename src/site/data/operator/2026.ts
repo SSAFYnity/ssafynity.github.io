@@ -47,7 +47,7 @@ export const operator2026 = {
       members: [
         { role: '팀장', name: '박진우', cohort: 11, campus: '광주', url: 'https://github.com/jjinwo0' },
         { role: '팀원', name: '이수련', cohort: 8, campus: '서울', url: 'https://www.linkedin.com/in/suryeon-lee-538242228' },
-        { role: '팀원', name: '박00' },
+        { role: '팀원', name: '박민우', cohort: 13, campus: '서울', url: 'https://www.instagram.com/m.__.nnn' },
       ],
     },
   ],
