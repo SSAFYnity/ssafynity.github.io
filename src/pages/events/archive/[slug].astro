@@ -335,16 +335,42 @@ const tabs = [
               <div class="flex flex-col gap-6 lg:w-64 shrink-0">
                 <div class="flex flex-col gap-2">
                   {eventImages.length > 0 ? (
-                    <div class="flex overflow-x-auto snap-x snap-mandatory [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden rounded-2xl">
-                      {eventImages.map((image, index) => (
-                        <div class="w-full aspect-square shrink-0 snap-center rounded-2xl overflow-hidden bg-slate-100 border border-slate-100">
-                          <img
-                            src={withBaseAsset(image)}
-                            alt={`${event.title} 이미지 ${index + 1}`}
-                            class="w-full h-full object-cover"
-                          />
-                        </div>
-                      ))}
+                    <div class="relative group">
+                      <div
+                        class="flex overflow-x-auto snap-x snap-mandatory [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden rounded-2xl"
+                        data-event-gallery
+                      >
+                        {eventImages.map((image, index) => (
+                          <div class="w-full aspect-square shrink-0 snap-center rounded-2xl overflow-hidden bg-slate-100 border border-slate-100">
+                            <img
+                              src={withBaseAsset(image)}
+                              alt={`${event.title} 이미지 ${index + 1}`}
+                              class="w-full h-full object-cover"
+                            />
+                          </div>
+                        ))}
+                      </div>
+
+                      {eventImages.length > 1 && (
+                        <>
+                          <button
+                            type="button"
+                            class="absolute left-3 top-1/2 -translate-y-1/2 z-10 inline-flex items-center justify-center w-9 h-9 rounded-full bg-white/80 text-slate-500 shadow-sm border border-white/70 hover:bg-white hover:text-slate-700 transition-colors opacity-100 lg:opacity-0 lg:group-hover:opacity-100"
+                            aria-label="이전 이미지 보기"
+                            data-gallery-prev
+                          >
+                            <span aria-hidden="true" class="text-base font-black">&lt;</span>
+                          </button>
+                          <button
+                            type="button"
+                            class="absolute right-3 top-1/2 -translate-y-1/2 z-10 inline-flex items-center justify-center w-9 h-9 rounded-full bg-white/80 text-slate-500 shadow-sm border border-white/70 hover:bg-white hover:text-slate-700 transition-colors opacity-100 lg:opacity-0 lg:group-hover:opacity-100"
+                            aria-label="다음 이미지 보기"
+                            data-gallery-next
+                          >
+                            <span aria-hidden="true" class="text-base font-black">&gt;</span>
+                          </button>
+                        </>
+                      )}
                     </div>
                   ) : (
                     <div class="w-full aspect-square rounded-2xl overflow-hidden bg-slate-100 border border-slate-100">
@@ -1240,6 +1266,20 @@ const tabs = [
 
         if (activeTab) {
           activateTab(activeTab);
+        }
+
+        const gallery = document.querySelector('[data-event-gallery]');
+        const prevButton = document.querySelector('[data-gallery-prev]');
+        const nextButton = document.querySelector('[data-gallery-next]');
+
+        if (gallery && prevButton && nextButton) {
+          const scrollByPage = (direction) => {
+            const width = gallery.clientWidth;
+            gallery.scrollBy({ left: width * direction, behavior: 'smooth' });
+          };
+
+          prevButton.addEventListener('click', () => scrollByPage(-1));
+          nextButton.addEventListener('click', () => scrollByPage(1));
         }
       })();
     </script>
