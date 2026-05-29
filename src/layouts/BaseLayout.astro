@@ -1,5 +1,6 @@
 ---
 import '../site/index.css'
+import { siteData } from '@/data/siteData'
 import { toAbsoluteSiteUrl } from '@/lib/routes'
 
 interface Props {
@@ -7,18 +8,25 @@ interface Props {
   documentTitle?: string
   description?: string
   canonical?: string
+  siteName?: string
+  structuredData?: Record<string, unknown> | Array<Record<string, unknown>>
   noindex?: boolean
 }
 
 const {
-  title = 'SSAFYnity',
+  title = siteData.brand.displayName,
   documentTitle = title,
-  description = 'SSAFY 수료생들이 직접 운영하는 동문회 SSAFYnity 공식 홈페이지. 행사, 운영진, 동아리, 멤버십 정보를 확인하세요.',
+  description = '싸피니티(SSAFYnity)는 SSAFY 수료생들이 직접 운영하는 공식 동문회입니다. 행사, 운영진, 동아리, 멤버십 정보를 확인하세요.',
   canonical = toAbsoluteSiteUrl(Astro.url.pathname),
+  siteName = siteData.brand.name,
+  structuredData,
   noindex = false,
 } = Astro.props
 
 const enableAnalytics = import.meta.env.PROD
+const structuredDataItems = structuredData
+  ? (Array.isArray(structuredData) ? structuredData : [structuredData])
+  : []
 ---
 
 <!doctype html>
@@ -36,7 +44,8 @@ const enableAnalytics = import.meta.env.PROD
     />
     <link rel="icon" type="image/x-icon" href="/favicon.ico" />
     <link rel="canonical" href={canonical} />
-    <meta property="og:site_name" content="SSAFYnity" />
+    <meta name="application-name" content={siteName} />
+    <meta property="og:site_name" content={siteName} />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     <meta property="og:type" content="website" />
@@ -46,6 +55,9 @@ const enableAnalytics = import.meta.env.PROD
     <meta name="twitter:title" content={title} />
     <meta name="twitter:description" content={description} />
     <meta name="twitter:image" content="https://ssafynity.github.io/logo-rect.png" />
+    {structuredDataItems.map((item) => (
+      <script type="application/ld+json" set:html={JSON.stringify(item)} />
+    ))}
     {enableAnalytics && (
       <>
         <script is:inline async src="https://www.googletagmanager.com/gtag/js?id=G-2W9HFYG765"></script>
