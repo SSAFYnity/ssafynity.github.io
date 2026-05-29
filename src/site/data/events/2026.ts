@@ -42,8 +42,8 @@ export const events2026: Event[] = [
   {
     slug:      '2026-first-regular-event',
     title:     '제4회 싸피인의 밤',
-    eventDate: { start: '2026-06-27' },
-    recruitDate: { start: '2026-06-01', end: '2026-06-26' },
+    eventDate: { start: '2026-06-27', startTime: '13:30', endTime: '22:00' },
+    recruitDate: { start: '2026-05-30', end: '2026-06-26' },
     location:  '아일랜드 이너프 강남점',
     locationUrl: { naver: 'https://naver.me/xGIPXKSS', kakao: 'https://place.map.kakao.com/1459847323' },
     format:    ['offline'],
@@ -52,35 +52,44 @@ export const events2026: Event[] = [
     summary:   '초록 또는 카키 드레스코드로 함께하는 상반기 동문회원 친목행사',
     img:       '/events/2026-first-regular-event.png',
     gallery: [
-      '/events/2026-first-regular-event-01.png',
       '/events/2026-first-regular-event-02.png',
       '/events/2026-first-regular-event-03.png',
       '/events/2026-first-regular-event-04.png',
       '/events/2026-first-regular-event-05.png',
     ],
+    formUrl:   'https://forms.gle/XPDarz4j5hnUf89K9',
     capacity:  100,
     notices: {
       fee: {
         regular: '무료',
-        members: '추후 공개',
+        members: 20000,
         note:    '참가비는 대관비, 주류, 다과 및 행사 진행비로 사용됩니다.\n접수 내역 확인 및 참가비 입금까지 완료되어야 최종 신청이 완료됩니다',
       },
       refund: [
         '행사 3일 이내 취소 시 환불 불가',
         '환불 대상자는 행사 종료 후 일괄 처리됩니다',
       ],
+      checklist: [
+        '본 행사는 동문회원만 신청 가능합니다.',
+        '아직 회원이 아니라면 동문회 가입신청도 함께 작성해주세요.',
+        '빠른 퇴실 및 늦은 입실이 필요한 경우 신청 폼에서 해당 여부를 함께 작성해주세요.',
+      ],
       custom: [
+        {
+          title: '타임테이블',
+          body:  '13:30 - 14:00 입장 및 접수\n14:00 - 14:20 오프닝\n14:20 - 17:30 [1부] Logic & Play\n17:30 - 18:00 Break Time\n18:00 - 21:30 [2부] Networking\n21:30 - 22:00 클로징',
+        },
         {
           title: '제공 사항',
           body:  '간식과 주류가 제공됩니다.',
         },
         {
-          title: '행사 구성',
-          body:  '1부: 간식 · 게임 · 행사\n2부: 주류 · 게임 · 프리토킹',
-        },
-        {
           title: '드레스코드',
           body:  '이번 행사의 메인 컬러는 초록색과 카키색입니다.\n드레스 포인트 컬러 또는 아이템으로 활용해주세요.',
+        },
+        {
+          title: '입퇴장 안내',
+          body:  '빠른 퇴실 및 늦은 입실이 가능합니다.\n운영 준비를 위해 신청 단계에서 관련 수요를 함께 조사하고 있습니다.',
         },
         {
           title: '음주 안내',
