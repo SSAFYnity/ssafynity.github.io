@@ -12,7 +12,7 @@ export const events2025: Event[] = [
     format:      ['online'],
     kind:        'special',
     audience:    'members',
-    summary:     '취업 준비 중인 동문 회원이 함께하는 온라인 자기계발 챌린지',
+    summary:     '기상인증·알고리즘·모각코·커밋인증으로 확장된 4기 취준챌린지',
     img:         '/events/Job-Preparation-Challenge-4th.jpg',
     capacity:    'unlimited',
     registrants: { members: 24, operator: 1 },
@@ -52,7 +52,7 @@ export const events2025: Event[] = [
     format:      ['online'],
     kind:        'special',
     audience:    'members',
-    summary:     '취업 준비 중인 동문 회원이 함께하는 온라인 자기계발 챌린지',
+    summary:     '현직자 1:1 상담 리워드와 함께 진행된 5기 취준챌린지 온라인 프로그램',
     img:         '/events/Job-Preparation-Challenge-5th.jpg',
     capacity:    'unlimited',
     registrants: { members: 42, regular: 3, operator: 1 },
@@ -93,7 +93,7 @@ export const events2025: Event[] = [
     format:    ['offline'],
     kind:      'regular',
     audience:  'members',
-    summary:   '새 운영진과 동문들이 함께하는 신년 네트워킹 파티',
+    summary:   '노란 드레스코드와 테이블 네트워킹으로 진행된 2025 싸피인의 밤',
     notices: {
       fee: {
         regular:  '무료',
@@ -137,7 +137,7 @@ export const events2025: Event[] = [
     format:      ['online'],
     kind:        'special',
     audience:    'members',
-    summary:     '취업 준비 중인 동문 회원이 함께하는 온라인 자기계발 챌린지',
+    summary:     '봄 시즌 자기계발 루틴을 함께 만드는 6기 취준챌린지 온라인 프로그램',
     img:         '/events/Job-Preparation-Challenge-6th.jpg',
     capacity:    'unlimited',
     registrants: { members: 24, regular: 1, operator: 1 },
@@ -177,7 +177,7 @@ export const events2025: Event[] = [
     format:      ['offline', 'recorded'],
     kind:      'regular',
     audience:  'open',
-    summary:   '동문회원이 직접 발표자로 나서 성장과 고민을 공유하는 IT 컨퍼런스',
+    summary:   '변화의 갈림길을 주제로 발표와 교류를 이어가는 제3회 SSAFYnale',
     notices: {
       fee: {
         regular:  '무료',

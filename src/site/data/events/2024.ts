@@ -111,7 +111,7 @@ export const events2024: Event[] = [
     format:      ['offline', 'recorded'],
     kind:      'regular',
     audience:  'open',
-    summary:   '동문회원이 직접 발표자로 나서 성장과 고민을 공유하는 IT 컨퍼런스',
+    summary:   '화합과 성장의 교차로를 주제로 열린 제2회 SSAFYnale 개발 컨퍼런스',
     notices: {
       fee: {
         regular:  '무료',
@@ -169,7 +169,7 @@ export const events2024: Event[] = [
     format:      ['online'],
     kind:        'special',
     audience:    'members',
-    summary:     '취업 준비 중인 동문 회원이 함께하는 온라인 자기계발 챌린지',
+    summary:     '기상인증·알고리즘·모각코로 시작한 첫 취준챌린지 온라인 자기계발 프로그램',
     img:         '/events/Job-Preparation-Challenge-1st.jpg',
     capacity:    'unlimited',
     registrants: { members: 83, regular: 5, operator: 1 },
@@ -213,7 +213,7 @@ export const events2024: Event[] = [
     format:      ['online'],
     kind:        'special',
     audience:    'members',
-    summary:     '취업 준비 중인 동문 회원이 함께하는 온라인 자기계발 챌린지',
+    summary:     '수료증과 현직자 상담 리워드가 포함된 2기 취준챌린지 온라인 프로그램',
     img:         '/events/Job-Preparation-Challenge-2nd.jpg',
     capacity:    'unlimited',
     registrants: { members: 43, operator: 1 },
@@ -254,7 +254,7 @@ export const events2024: Event[] = [
     format:     ['offline'],
     kind:       'regular',
     audience:   'members',
-    summary:    '동문들과 함께하는 가을 체육 행사',
+    summary:    '이촌한강공원에서 열린 제3회 SSAFYnity 가을 체육 행사',
     notices: {
       fee: {
         regular:  '무료',
@@ -303,7 +303,7 @@ export const events2024: Event[] = [
     format:      ['online'],
     kind:        'special',
     audience:    'members',
-    summary:     '취업 준비 중인 동문 회원이 함께하는 온라인 자기계발 챌린지',
+    summary:     '연말 취업 준비 루틴을 함께 만드는 3기 취준챌린지 온라인 프로그램',
     img:         '/events/Job-Preparation-Challenge-3rd.jpg',
     capacity:    'unlimited',
     registrants: { members: 38, regular: 2, operator: 1 },
@@ -344,7 +344,7 @@ export const events2024: Event[] = [
     format:      ['offline'],
     kind:        'regular',
     audience:    'open',
-    summary:     '현직 시니어 전문가를 초청한 커리어·기술 세미나',
+    summary:     '연사 강연과 팀 매칭 회식으로 이어지는 제2회 SSAFYnity 커리어 세미나',
     notices: {
       fee: {
         regular:  '무료',

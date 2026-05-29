@@ -13,7 +13,7 @@ export const events2023: Event[] = [
     format:      ['offline'],
     kind:        'regular',
     audience:    'members',
-    summary:     '새 운영진과 동문들이 함께하는 신년 네트워킹 파티',
+    summary:     '연분홍 드레스코드와 감사 사연 이벤트로 꾸민 제1회 싸피인의 밤',
     notices: {
       fee: {
         regular:  '무료',
@@ -55,7 +55,7 @@ export const events2023: Event[] = [
     eventDate: { start: '2023-03-25', startTime: '17:00', end: '2023-03-26', endTime: '11:00' },
     format:    ['offline'],
     audience:  'operator',
-    summary:   '1박 2일 집행부 워크숍 및 친목 도모',
+    summary:   '2대 집행부가 봄 시즌 운영 방향을 공유하고 팀워크를 다진 1박 2일 MT',
     notices: {
       custom: [
         {
@@ -81,7 +81,7 @@ export const events2023: Event[] = [
     format:    ['offline', 'recorded'],
     kind:      'regular',
     audience:  'members',
-    summary:   '동문회원이 직접 발표자로 나서 성장과 고민을 공유하는 IT 컨퍼런스',
+    summary:   '주니어 개발자 발표와 직무별 회식으로 이어진 첫 SSAFYnale 컨퍼런스',
     notices: {
       fee: {
         regular: '무료',
@@ -132,7 +132,7 @@ export const events2023: Event[] = [
     format:      ['offline'],
     kind:        'regular',
     audience:  'members',
-    summary:   '동문들과 함께하는 가을 체육 행사',
+    summary:   '뚝섬한강공원에서 팀전 경기와 네트워킹으로 진행된 제2회 가을체육대회',
     notices: {
       fee: {
         regular:  '무료',
@@ -181,7 +181,7 @@ export const events2023: Event[] = [
     format:    ['offline'],
     kind:      'regular',
     audience:  'open',
-    summary:   '현직 시니어 전문가를 초청한 커리어·기술 세미나',
+    summary:   '현직 시니어 전문가 강연과 네트워킹으로 구성된 제1회 SSAFYnity 세미나',
     notices: {
       fee: {
         regular:  '무료',

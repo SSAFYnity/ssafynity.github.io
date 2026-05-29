@@ -42,7 +42,7 @@ export const events2022: Event[] = [
     eventDate: { start: '2022-07-30', startTime: '17:00', end: '2022-07-31', endTime: '11:00' },
     format:    ['offline'],
     audience:  'operator',
-    summary:   '1박 2일 집행부 워크숍 및 친목 도모',
+    summary:   '초기 집행부가 대성리에서 친목과 협업 기반을 다진 1박 2일 운영 워크숍',
     notices: {
       custom: [
         {
@@ -101,7 +101,7 @@ export const events2022: Event[] = [
     format:      ['offline'],
     kind:        'regular',
     audience:    'members',
-    summary:     '동문들과 함께하는 가을 체육 행사',
+    summary:     '뚝섬한강공원에서 처음 열린 SSAFYnity 오프라인 가을 운동회',
     notices: {
       fee: {
         members: '무료',
