@@ -41,13 +41,53 @@ export const events2026: Event[] = [
   },
   {
     slug:      '2026-first-regular-event',
-    title:     '상반기 정기행사 - 동문회원 친목행사',
+    title:     '제4회 싸피인의 밤',
     eventDate: { start: '2026-06-27' },
-    recruitDate: { start: '2026-05-27', end: '2026-06-26' },
+    recruitDate: { start: '2026-06-01', end: '2026-06-26' },
+    location:  '아일랜드 이너프 강남점',
+    locationUrl: { naver: 'https://naver.me/xGIPXKSS', kakao: 'https://place.map.kakao.com/1459847323' },
     format:    ['offline'],
     kind:      'regular',
     audience:  'members',
-    summary:   '2026년 6월 27일 진행 예정인 상반기 정기행사',
+    summary:   '초록 또는 카키 드레스코드로 함께하는 상반기 동문회원 친목행사',
+    img:       '/events/2026-first-regular-event.png',
+    gallery: [
+      '/events/2026-first-regular-event-01.png',
+      '/events/2026-first-regular-event-02.png',
+      '/events/2026-first-regular-event-03.png',
+      '/events/2026-first-regular-event-04.png',
+      '/events/2026-first-regular-event-05.png',
+    ],
+    capacity:  100,
+    notices: {
+      fee: {
+        regular: '무료',
+        members: '추후 공개',
+        note:    '참가비는 대관비, 주류, 다과 및 행사 진행비로 사용됩니다.\n접수 내역 확인 및 참가비 입금까지 완료되어야 최종 신청이 완료됩니다',
+      },
+      refund: [
+        '행사 3일 이내 취소 시 환불 불가',
+        '환불 대상자는 행사 종료 후 일괄 처리됩니다',
+      ],
+      custom: [
+        {
+          title: '제공 사항',
+          body:  '간식과 주류가 제공됩니다.',
+        },
+        {
+          title: '행사 구성',
+          body:  '1부: 간식 · 게임 · 행사\n2부: 주류 · 게임 · 프리토킹',
+        },
+        {
+          title: '드레스코드',
+          body:  '이번 행사의 메인 컬러는 초록색과 카키색입니다.\n드레스 포인트 컬러 또는 아이템으로 활용해주세요.',
+        },
+        {
+          title: '음주 안내',
+          body:  '주류가 제공되는 행사입니다.\n즐거운 자리가 될 수 있도록 과음에 주의해주시고,\n음주 후 운전은 절대 금지되며 귀가 시 안전에 유의해주세요.',
+        },
+      ],
+    },
   },
   {
     slug:      '2026-ongoing-event-august',
