@@ -107,20 +107,21 @@ const metaByPath: Record<string, { title: string; description: string }> = {
 const {
   pathname,
   title,
-  documentTitle = 'SSAFYnity',
+  documentTitle,
   description,
   canonical = toAbsoluteSiteUrl(pathname),
   noindex = false,
 } = Astro.props
 
 const defaultMeta = metaByPath[pathname]
-const resolvedTitle = title ?? defaultMeta?.title
+const resolvedTitle = title ?? defaultMeta?.title ?? 'SSAFYnity'
+const resolvedDocumentTitle = documentTitle ?? resolvedTitle
 const resolvedDescription = description ?? defaultMeta?.description
 ---
 
 <BaseLayout
   title={resolvedTitle}
-  documentTitle={documentTitle}
+  documentTitle={resolvedDocumentTitle}
   description={resolvedDescription}
   canonical={canonical}
   noindex={noindex}
