@@ -124,6 +124,7 @@ export type Event = {
   keywords?:     string[]                // 검색용 태그
   summary:       string
   img?:          string
+  gallery?:      string[]                // 상세 페이지 추가 이미지 (첫 번째 대표 이미지는 img 사용)
   formUrl?:      string                  // 접수 폼 URL (만료되면 생략)
   capacity?:     number | 'unlimited'    // 정원 (숫자: 명, 'unlimited': 제한 없음)
   registrants?:  ParticipantBreakdown   // 최종 접수자

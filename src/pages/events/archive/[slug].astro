@@ -57,6 +57,11 @@ const formatIconName = {
 const relatedRecord = event ? getEventBlogRecord(event.slug) : {}
 const year = event ? new Date(event.eventDate.start).getFullYear() : new Date().getFullYear()
 const sortedFormats = event ? [...event.format].sort((left, right) => FORMAT_ORDER.indexOf(left) - FORMAT_ORDER.indexOf(right)) : []
+const eventImages = event
+  ? [event.img, ...(event.gallery ?? [])].filter(
+      (image, index, images): image is string => typeof image === 'string' && image.length > 0 && images.indexOf(image) === index,
+    )
+  : []
 
 function isRecruitSoon(targetEvent: Event, status: EventStatus) {
   if (status !== 'before-recruit' || !targetEvent.recruitDate) return false
@@ -328,12 +333,31 @@ const tabs = [
 
             <div class="flex flex-col lg:flex-row gap-8 lg:gap-12 lg:items-start">
               <div class="flex flex-col gap-6 lg:w-64 shrink-0">
-                <div class="w-full aspect-square rounded-2xl overflow-hidden bg-slate-100 border border-slate-100">
-                  {event.img ? (
-                    <img src={withBaseAsset(event.img)} alt={event.title} class="w-full h-full object-cover" />
+                <div class="flex flex-col gap-2">
+                  {eventImages.length > 0 ? (
+                    <div class="flex overflow-x-auto snap-x snap-mandatory [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden rounded-2xl">
+                      {eventImages.map((image, index) => (
+                        <div class="w-full aspect-square shrink-0 snap-center rounded-2xl overflow-hidden bg-slate-100 border border-slate-100">
+                          <img
+                            src={withBaseAsset(image)}
+                            alt={`${event.title} 이미지 ${index + 1}`}
+                            class="w-full h-full object-cover"
+                          />
+                        </div>
+                      ))}
+                    </div>
                   ) : (
-                    <div class="w-full h-full bg-gradient-to-br from-blue-50 to-slate-100 flex items-center justify-center">
-                      <span class="text-5xl font-black text-slate-200">{year}</span>
+                    <div class="w-full aspect-square rounded-2xl overflow-hidden bg-slate-100 border border-slate-100">
+                      <div class="w-full h-full bg-gradient-to-br from-blue-50 to-slate-100 flex items-center justify-center">
+                        <span class="text-5xl font-black text-slate-200">{year}</span>
+                      </div>
+                    </div>
+                  )}
+
+                  {eventImages.length > 1 && (
+                    <div class="flex items-center justify-between gap-2 px-1">
+                      <p class="text-[10px] font-black text-slate-400">총 {eventImages.length}장</p>
+                      <p class="text-[10px] text-slate-400">좌우로 넘겨 더 볼 수 있어요</p>
                     </div>
                   )}
                 </div>
