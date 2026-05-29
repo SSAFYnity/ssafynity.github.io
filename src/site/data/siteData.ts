@@ -42,7 +42,10 @@ export const siteData = {
 
   // ─── 브랜드 정보 ───────────────────────────────────────────────
   brand: {
-    name: 'SSAFYnity',
+    name: '싸피니티',
+    englishName: 'SSAFYnity',
+    displayName: '싸피니티 SSAFYnity',
+    alternateNames: ['SSAFYnity', '싸피니티 동문회', 'SSAFYnity 동문회'],
     slogan: '싸피 수료생들이 직접 운영하는 동문회',
     email: 'ssafynity@gmail.com',
     vision: '연결이 성장을 만들고, 성장이 다시 기여로 돌아오는 선순환\n싸피니티가 지향하는 공동체의 모습입니다.',
