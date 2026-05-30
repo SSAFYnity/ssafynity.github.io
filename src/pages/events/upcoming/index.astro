@@ -195,6 +195,14 @@ const hasPlanningEvents = events.some((event) => getEventStatus(event) === 'plan
                     })}
                     class={`${wrapperClass} group`}
                     data-reveal-delay={String(index * 60)}
+                    data-upcoming-event-card
+                    data-event-start={event.eventDate.start}
+                    data-event-end={event.eventDate.end ?? event.eventDate.start}
+                    data-event-start-time={event.eventDate.startTime ?? ''}
+                    data-event-end-time={event.eventDate.endTime ?? ''}
+                    data-event-recruit-start={event.recruitDate?.start ?? ''}
+                    data-event-recruit-end={event.recruitDate?.end ?? event.recruitDate?.start ?? ''}
+                    data-event-audience={event.audience ?? ''}
                   >
                     <div class={baseCardClass}>
                       {content}
@@ -204,7 +212,18 @@ const hasPlanningEvents = events.some((event) => getEventStatus(event) === 'plan
               }
 
               return (
-                <div class={wrapperClass} data-reveal-delay={String(index * 60)}>
+                <div
+                  class={wrapperClass}
+                  data-reveal-delay={String(index * 60)}
+                  data-upcoming-event-card
+                  data-event-start={event.eventDate.start}
+                  data-event-end={event.eventDate.end ?? event.eventDate.start}
+                  data-event-start-time={event.eventDate.startTime ?? ''}
+                  data-event-end-time={event.eventDate.endTime ?? ''}
+                  data-event-recruit-start={event.recruitDate?.start ?? ''}
+                  data-event-recruit-end={event.recruitDate?.end ?? event.recruitDate?.start ?? ''}
+                  data-event-audience={event.audience ?? ''}
+                >
                   <div class={baseCardClass}>
                     {content}
                   </div>
@@ -217,3 +236,94 @@ const hasPlanningEvents = events.some((event) => getEventStatus(event) === 'plan
     </section>
   </div>
 </SiteLayout>
+
+<script is:inline>
+  (() => {
+    const cards = Array.from(document.querySelectorAll('[data-upcoming-event-card]'))
+
+    if (cards.length === 0) return
+
+    const ribbonClasses = {
+      'today-upcoming': 'bg-orange-500 text-white',
+      'today-ongoing': 'bg-blue-600 text-white',
+      recruiting: 'bg-emerald-500 text-white',
+      'recruit-closed': 'bg-slate-700 text-white',
+      'before-recruit': 'bg-amber-500 text-white',
+    }
+
+    const ribbonLabels = {
+      'today-upcoming': '오늘 시작',
+      'today-ongoing': '진행 중',
+      recruiting: '접수 중',
+      'recruit-closed': '접수 마감',
+      'before-recruit': '접수 예정',
+    }
+
+    const toDate = (value) => {
+      if (!value) return null
+      const date = new Date(value)
+      date.setHours(0, 0, 0, 0)
+      return date
+    }
+
+    const getEventStatus = (card) => {
+      const now = new Date()
+      const today = new Date(now)
+      today.setHours(0, 0, 0, 0)
+
+      const eventStartDate = toDate(card.getAttribute('data-event-start'))
+      const eventEndDate = toDate(card.getAttribute('data-event-end'))
+
+      if (!eventStartDate || !eventEndDate) return 'past'
+      if (today > eventEndDate) return 'past'
+
+      if (today >= eventStartDate && today <= eventEndDate) {
+        const startTime = card.getAttribute('data-event-start-time')
+        if (!startTime) return 'today-ongoing'
+
+        const [startHour, startMinute] = startTime.split(':').map(Number)
+        const eventStart = new Date(card.getAttribute('data-event-start'))
+        eventStart.setHours(startHour, startMinute, 0, 0)
+
+        const endDate = new Date(card.getAttribute('data-event-end'))
+        const endTime = (card.getAttribute('data-event-end-time') || '23:59').split(':').map(Number)
+        endDate.setHours(endTime[0], endTime[1], 0, 0)
+
+        if (now < eventStart) return 'today-upcoming'
+        if (now <= endDate) return 'today-ongoing'
+        return 'past'
+      }
+
+      const recruitStart = toDate(card.getAttribute('data-event-recruit-start'))
+      const recruitEnd = toDate(card.getAttribute('data-event-recruit-end'))
+      const audience = card.getAttribute('data-event-audience')
+
+      if (!recruitStart || !recruitEnd) {
+        return audience === 'operator' ? 'no-recruit' : 'planning'
+      }
+
+      if (today < recruitStart) return 'before-recruit'
+      if (today <= recruitEnd) return 'recruiting'
+      return 'recruit-closed'
+    }
+
+    cards.forEach((card) => {
+      const ribbon = card.querySelector('[class*="absolute right-0 top-0 bottom-0 w-10"]')
+      const ribbonText = ribbon?.querySelector('span')
+
+      if (!ribbon || !ribbonText) return
+
+      const status = getEventStatus(card)
+
+      if (!(status in ribbonClasses)) {
+        ribbon.className = 'hidden'
+        ribbonText.textContent = ''
+        return
+      }
+
+      ribbon.className = `absolute right-0 top-0 bottom-0 w-10 flex items-center justify-center ${ribbonClasses[status]}`
+      ribbonText.className = 'text-[10px] font-semibold tracking-wider [writing-mode:vertical-rl]'
+      ribbonText.textContent = ribbonLabels[status]
+    })
+  })()
+</script>
