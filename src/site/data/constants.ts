@@ -95,6 +95,7 @@ export type EventNotices = {
   checklist?: string[]    // 필수 확인 사항 (항목별, \n 지원)
   items?:     string[]    // 준비물 (항목별, \n 지원)
   custom?:    { title: string; body: string }[]  // 기타 자유 형식 안내 (\n 지원)
+  resultsCustom?: { title: string; body: string }[]  // 참여 결과 탭에만 노출되는 자유 형식 정보 (\n 지원)
 }
 
 // ─── 행사 참여자 분류 ────────────────────────────────────────────────
