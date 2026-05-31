@@ -3,34 +3,34 @@ import { ROUTES } from '@/lib/routes'
 const memberStatsByCohort = [
   { cohort: 1, total: 166 },
   { cohort: 2, total: 178 },
-  { cohort: 3, total: 241 },
+  { cohort: 3, total: 239 },
   { cohort: 4, total: 177 },
   { cohort: 5, total: 305 },
-  { cohort: 6, total: 513 },
+  { cohort: 6, total: 512 },
   { cohort: 7, total: 566 },
   { cohort: 8, total: 562 },
   { cohort: 9, total: 497 },
-  { cohort: 10, total: 379 },
+  { cohort: 10, total: 380 },
   { cohort: 11, total: 221 },
-  { cohort: 12, total: 359 },
-  { cohort: 13, total: 254 },
-  { cohort: 14, total: 47 },
-  { cohort: 15, total: 30 },
+  { cohort: 12, total: 358 },
+  { cohort: 13, total: 253 },
+  { cohort: 14, total: 52 },
+  { cohort: 15, total: 36 },
 ] as const
 
 const memberStatsByCampus = [
-  { campus: '서울', total: 2079 },
+  { campus: '서울', total: 2087 },
   { campus: '대전', total: 796 },
-  { campus: '광주', total: 618 },
+  { campus: '광주', total: 617 },
   { campus: '구미', total: 672 },
   { campus: '부울경', total: 330 },
 ] as const
 
 const memberStatsSummary = {
   operator: 10,
-  general: 4449,
-  regular: 36,
-  total: 4495,
+  general: 4458,
+  regular: 34,
+  total: 4502,
 } as const
 
 // src/data/siteData.ts
