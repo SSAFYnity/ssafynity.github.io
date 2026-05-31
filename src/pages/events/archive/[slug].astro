@@ -845,7 +845,7 @@ const tabs = [
           </div>
 
           <div data-event-panel="results" class="hidden flex flex-col gap-3">
-            {!event.attendees && !event.completions ? (
+            {!event.attendees && !event.completions && !(event.notices?.resultsCustom?.length) ? (
               <div class="flex flex-col items-center justify-center py-14 gap-3 text-center">
                 <div class="w-12 h-12 rounded-2xl bg-slate-50 flex items-center justify-center">
                   <LucideIcon name="bar-chart-2" size={20} className="text-slate-300" />
@@ -891,6 +891,16 @@ const tabs = [
                                   ) : (
                                     <span class="text-slate-300">-</span>
                                   )}
+                                </td>
+                              </tr>
+                            ))}
+                            {(event.notices?.resultsCustom ?? []).map((item) => (
+                              <tr class="border-t border-slate-50">
+                                <td class="py-1.5 font-black text-slate-500">{item.title}</td>
+                                <td class="py-1.5 text-right font-bold text-slate-400">-</td>
+                                <td class="py-1.5 text-right font-bold text-slate-700">{item.body}</td>
+                                <td class="py-1.5 pl-3">
+                                  <span class="text-slate-300">-</span>
                                 </td>
                               </tr>
                             ))}
@@ -951,6 +961,7 @@ const tabs = [
                     )}
                   </Card>
                 )}
+
               </div>
             )}
           </div>
