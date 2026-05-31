@@ -7,7 +7,7 @@ export const events2026: Event[] = [
   {
     slug:        '2026-online-tetris-tournament',
     title:       '온라인 테트리스 대회',
-    eventDate:   { start: '2026-05-31', startTime: '22:00' },
+    eventDate:   { start: '2026-05-31', startTime: '22:00', endTime: '22:30' },
     recruitDate: { start: '2026-05-23', end: '2026-05-30' },
     format:      ['online'],
     kind:        'special',
@@ -16,6 +16,8 @@ export const events2026: Event[] = [
     img:         '/events/2026-online-tetris-tournament.png',
     formUrl:     'https://forms.gle/PGmSAYTmFthqiRUc8',
     capacity:    'unlimited',
+    registrants: { regular: 4, members: 6 },
+    attendees:   { regular: 4, members: 3, operator: 1 },
     notices: {
       fee: {
         regular: '무료',
@@ -35,6 +37,12 @@ export const events2026: Event[] = [
         {
           title: '유의사항',
           body:  '상품 규모는 접수 인원에 따라 확대 또는 축소될 수 있습니다.',
+        },
+      ],
+      resultsCustom: [
+        {
+          title: '라이브 시청',
+          body:  '최대 동시접속자 12명',
         },
       ],
     },
@@ -59,6 +67,7 @@ export const events2026: Event[] = [
     ],
     formUrl:   'https://forms.gle/XPDarz4j5hnUf89K9',
     capacity:  100,
+    registrants: { regular: 11, members: 2 },
     notices: {
       fee: {
         regular: '무료',
