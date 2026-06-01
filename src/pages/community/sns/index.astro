@@ -17,6 +17,7 @@ const iconNameMap = {
   github: 'github',
   gmail: 'gmail',
   discord: 'discord',
+  youtube: 'youtube',
 } as const
 
 type Channel = (typeof siteData.sns)[number] & { ready: boolean }
@@ -47,6 +48,11 @@ const detailsByName: Record<string, ChannelDetails> = {
     summary: ['사진 중심으로 소식을 전하는 공식 SNS입니다.', '이벤트 안내와 공유에 적합합니다.'],
     audience: ['인스타그램을 이용하는 동문회 관심자', '동문회원 및 외부 참여자 모두'],
     howto: ['공식 채널을 팔로우해 주세요.', '게시글 및 스토리로 올라오는 여러 소식을 확인해 주세요.'],
+  },
+  유튜브: {
+    summary: ['라이브 방송과 영상 아카이브를 모아두는 공식 채널입니다.', '온라인 행사 다시보기와 주요 영상 콘텐츠를 확인할 수 있습니다.'],
+    audience: ['영상으로 소식을 확인하고 싶은 누구나', '동문회원 및 외부 참여자 모두'],
+    howto: ['채널을 구독하고 새 영상 알림을 설정해 주세요.', '라이브 공지 또는 다시보기 업로드가 있으면 채널에서 바로 확인할 수 있습니다.'],
   },
   링크드인: {
     summary: ['커리어 플랫폼 특성에 맞춰 동문회 성과를 중심으로 공유합니다.', '시니어 연사 모집 등 대외 모집 공지가 주로 올라옵니다.'],

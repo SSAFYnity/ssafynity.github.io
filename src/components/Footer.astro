@@ -29,7 +29,7 @@ const footerSns = siteData.sns.filter((channel) => channel.showInFooter)
         <div class="flex gap-1.5 flex-nowrap justify-end overflow-x-auto [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
           {footerSns.map((channel) => {
             const usable = isUsableSnsUrl(channel.url)
-            const iconName = channel.icon as 'discord' | 'github' | 'gmail' | 'instagram' | 'kakao' | 'linkedin'
+            const iconName = channel.icon as 'discord' | 'github' | 'gmail' | 'instagram' | 'kakao' | 'linkedin' | 'youtube'
 
             if (!usable) {
               return (
@@ -91,7 +91,7 @@ const footerSns = siteData.sns.filter((channel) => channel.showInFooter)
           <div class="flex gap-4 flex-wrap">
             {footerSns.map((channel) => {
               const usable = isUsableSnsUrl(channel.url)
-              const iconName = channel.icon as 'discord' | 'github' | 'gmail' | 'instagram' | 'kakao' | 'linkedin'
+              const iconName = channel.icon as 'discord' | 'github' | 'gmail' | 'instagram' | 'kakao' | 'linkedin' | 'youtube'
 
               return (
                 <div class="relative group/sns">

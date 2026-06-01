@@ -119,6 +119,7 @@ export const siteData = {
     { name: '카카오톡 오픈카톡', url: '', desc: '정회원 전용 · 링크 비공개', color: '#FEE500', icon: 'kakao', showInFooter: false },
     { name: '디스코드', url: 'https://discord.gg/BzSF9xMfX6', desc: '실시간 소통', color: '#5865F2', icon: 'discord', showInFooter: true },
     { name: '인스타그램', url: 'https://www.instagram.com/ssafynity/', desc: '활동 사진 공유', color: '#E1306C', icon: 'instagram', showInFooter: true },
+    { name: '유튜브', url: 'https://www.youtube.com/channel/UCMy3Z7DsqJI1jcHBp-mOkoQ', desc: '영상 콘텐츠와 라이브 아카이브', color: '#FF0000', icon: 'youtube', showInFooter: true },
     { name: '링크드인', url: 'https://www.linkedin.com/company/ssafynity', desc: '커리어 네트워킹', color: '#0077B5', icon: 'linkedin', showInFooter: true },
     { name: '깃허브', url: 'https://github.com/SSAFYnity', desc: '오픈소스 기여', color: '#181717', icon: 'github', showInFooter: false },
   ],
