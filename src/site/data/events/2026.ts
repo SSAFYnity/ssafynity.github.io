@@ -67,7 +67,7 @@ export const events2026: Event[] = [
     ],
     formUrl:   'https://forms.gle/XPDarz4j5hnUf89K9',
     capacity:  100,
-    registrants: { regular: 11, members: 2 },
+    registrants: { regular: 13, members: 8 },
     notices: {
       fee: {
         regular: '무료',
