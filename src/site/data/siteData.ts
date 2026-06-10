@@ -1,36 +1,36 @@
 import { ROUTES } from '@/lib/routes'
 
 const memberStatsByCohort = [
-  { cohort: 1, total: 166 },
-  { cohort: 2, total: 178 },
-  { cohort: 3, total: 239 },
-  { cohort: 4, total: 177 },
-  { cohort: 5, total: 305 },
-  { cohort: 6, total: 512 },
-  { cohort: 7, total: 566 },
-  { cohort: 8, total: 562 },
-  { cohort: 9, total: 497 },
-  { cohort: 10, total: 380 },
-  { cohort: 11, total: 221 },
-  { cohort: 12, total: 358 },
-  { cohort: 13, total: 253 },
-  { cohort: 14, total: 52 },
-  { cohort: 15, total: 36 },
+  { cohort: 1, total: 171 },
+  { cohort: 2, total: 186 },
+  { cohort: 3, total: 252 },
+  { cohort: 4, total: 178 },
+  { cohort: 5, total: 312 },
+  { cohort: 6, total: 519 },
+  { cohort: 7, total: 573 },
+  { cohort: 8, total: 570 },
+  { cohort: 9, total: 501 },
+  { cohort: 10, total: 394 },
+  { cohort: 11, total: 232 },
+  { cohort: 12, total: 372 },
+  { cohort: 13, total: 282 },
+  { cohort: 14, total: 144 },
+  { cohort: 15, total: 46 },
 ] as const
 
 const memberStatsByCampus = [
-  { campus: '서울', total: 2087 },
-  { campus: '대전', total: 796 },
-  { campus: '광주', total: 617 },
-  { campus: '구미', total: 672 },
-  { campus: '부울경', total: 330 },
+  { campus: '서울', total: 2198 },
+  { campus: '대전', total: 842 },
+  { campus: '광주', total: 643 },
+  { campus: '구미', total: 701 },
+  { campus: '부울경', total: 348 },
 ] as const
 
 const memberStatsSummary = {
   operator: 10,
-  general: 4458,
-  regular: 34,
-  total: 4502,
+  general: 4687,
+  regular: 35,
+  total: 4732,
 } as const
 
 // src/data/siteData.ts
