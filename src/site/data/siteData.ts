@@ -10,27 +10,27 @@ const memberStatsByCohort = [
   { cohort: 7, total: 573 },
   { cohort: 8, total: 570 },
   { cohort: 9, total: 501 },
-  { cohort: 10, total: 394 },
+  { cohort: 10, total: 395 },
   { cohort: 11, total: 232 },
   { cohort: 12, total: 372 },
   { cohort: 13, total: 282 },
-  { cohort: 14, total: 144 },
+  { cohort: 14, total: 152 },
   { cohort: 15, total: 46 },
 ] as const
 
 const memberStatsByCampus = [
-  { campus: '서울', total: 2198 },
-  { campus: '대전', total: 842 },
-  { campus: '광주', total: 643 },
-  { campus: '구미', total: 701 },
+  { campus: '서울', total: 2202 },
+  { campus: '대전', total: 844 },
+  { campus: '광주', total: 645 },
+  { campus: '구미', total: 702 },
   { campus: '부울경', total: 348 },
 ] as const
 
 const memberStatsSummary = {
   operator: 10,
-  general: 4687,
-  regular: 35,
-  total: 4732,
+  general: 4694,
+  regular: 37,
+  total: 4741,
 } as const
 
 // src/data/siteData.ts
