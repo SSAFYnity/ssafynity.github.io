@@ -14,23 +14,23 @@ const memberStatsByCohort = [
   { cohort: 11, total: 232 },
   { cohort: 12, total: 372 },
   { cohort: 13, total: 282 },
-  { cohort: 14, total: 152 },
-  { cohort: 15, total: 46 },
+  { cohort: 14, total: 159 },
+  { cohort: 15, total: 49 },
 ] as const
 
 const memberStatsByCampus = [
-  { campus: '서울', total: 2202 },
-  { campus: '대전', total: 844 },
+  { campus: '서울', total: 2206 },
+  { campus: '대전', total: 846 },
   { campus: '광주', total: 645 },
-  { campus: '구미', total: 702 },
-  { campus: '부울경', total: 348 },
+  { campus: '구미', total: 704 },
+  { campus: '부울경', total: 350 },
 ] as const
 
 const memberStatsSummary = {
   operator: 10,
-  general: 4694,
-  regular: 37,
-  total: 4741,
+  general: 4703,
+  regular: 38,
+  total: 4751,
 } as const
 
 // src/data/siteData.ts
