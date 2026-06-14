@@ -117,7 +117,7 @@ function isItemActive(item: typeof siteData.menu[number]['items'][number]) {
   ></div>
   <aside
     id="mobile-nav-panel"
-    class="fixed top-0 right-0 z-[60] h-full w-[min(100vw,24rem)] max-w-full bg-white shadow-2xl translate-x-full transition-transform duration-300 overflow-y-auto overscroll-contain pb-[env(safe-area-inset-bottom)] lg:hidden"
+    class="mobile-viewport-panel fixed top-0 right-0 z-[60] w-[min(100vw,24rem)] max-w-full bg-white shadow-2xl translate-x-full transition-transform duration-300 overflow-y-auto overscroll-contain pb-[env(safe-area-inset-bottom)] lg:hidden"
     aria-hidden="true"
   >
     <div class="flex flex-col gap-6 p-6 pt-[calc(5rem+env(safe-area-inset-top))] sm:gap-8 sm:p-8 sm:pt-[calc(5.5rem+env(safe-area-inset-top))]">
@@ -185,13 +185,26 @@ function isItemActive(item: typeof siteData.menu[number]['items'][number]) {
 
       const setMobileOpen = (open) => {
         if (!trigger || !backdrop || !panel) return
+        const scrollY = window.scrollY
+
         trigger.setAttribute('aria-expanded', open ? 'true' : 'false')
         panel.setAttribute('aria-hidden', open ? 'false' : 'true')
         backdrop.classList.toggle('opacity-100', open)
         backdrop.classList.toggle('pointer-events-auto', open)
         backdrop.classList.toggle('pointer-events-none', !open)
         panel.classList.toggle('translate-x-full', !open)
-        document.body.classList.toggle('overflow-hidden', open)
+
+        if (open) {
+          document.body.dataset.scrollY = String(scrollY)
+          document.body.style.top = `-${scrollY}px`
+          document.body.classList.add('overflow-hidden')
+        } else {
+          const savedScrollY = Number(document.body.dataset.scrollY || '0')
+          document.body.classList.remove('overflow-hidden')
+          document.body.style.top = ''
+          delete document.body.dataset.scrollY
+          window.scrollTo(0, savedScrollY)
+        }
       }
 
       syncScrolled()

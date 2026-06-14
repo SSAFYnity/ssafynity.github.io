@@ -33,10 +33,53 @@
     --radius: 0.5rem
   }
 
+  html {
+    min-height: 100%;
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+    scrollbar-gutter: stable;
+  }
+
+  @supports not (scrollbar-gutter: stable) {
+    html {
+      overflow-y: scroll;
+    }
+  }
+
   body {
+    min-height: 100vh;
+    min-height: 100svh;
     font-family: 'Pretendard', sans-serif;
     @apply bg-surface text-text;
   }
+
+  body.overflow-hidden {
+    overscroll-behavior: none;
+    touch-action: none;
+  }
+
+  img,
+  svg,
+  video,
+  canvas {
+    max-width: 100%;
+  }
+
+  button,
+  input,
+  textarea,
+  select {
+    font: inherit;
+  }
+
+  @supports (-webkit-touch-callout: none) {
+    body.overflow-hidden {
+      position: fixed;
+      inset: 0;
+      width: 100%;
+    }
+  }
+
   :is(h1, h2, h3, h4, h5, h6) {
     text-wrap: balance;
   }
@@ -81,5 +124,24 @@
   .no-scrollbar::-webkit-scrollbar {
     display: none; /* Chrome/Safari */
   }
-}
 
+  .mobile-viewport-panel {
+    height: 100vh;
+    min-height: 100vh;
+    height: 100dvh;
+    min-height: 100dvh;
+  }
+
+  @supports (height: 100svh) {
+    .mobile-viewport-panel {
+      min-height: 100svh;
+    }
+  }
+
+  @supports (-webkit-touch-callout: none) and (not (height: 100dvh)) {
+    .mobile-viewport-panel {
+      height: -webkit-fill-available;
+      min-height: -webkit-fill-available;
+    }
+  }
+}
