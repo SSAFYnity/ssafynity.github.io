@@ -8,29 +8,29 @@ const memberStatsByCohort = [
   { cohort: 5, total: 312 },
   { cohort: 6, total: 519 },
   { cohort: 7, total: 573 },
-  { cohort: 8, total: 570 },
+  { cohort: 8, total: 571 },
   { cohort: 9, total: 501 },
-  { cohort: 10, total: 395 },
+  { cohort: 10, total: 396 },
   { cohort: 11, total: 232 },
-  { cohort: 12, total: 372 },
-  { cohort: 13, total: 282 },
-  { cohort: 14, total: 159 },
-  { cohort: 15, total: 49 },
+  { cohort: 12, total: 374 },
+  { cohort: 13, total: 283 },
+  { cohort: 14, total: 178 },
+  { cohort: 15, total: 59 },
 ] as const
 
 const memberStatsByCampus = [
-  { campus: '서울', total: 2206 },
-  { campus: '대전', total: 846 },
-  { campus: '광주', total: 645 },
-  { campus: '구미', total: 704 },
-  { campus: '부울경', total: 350 },
+  { campus: '서울', total: 2227 },
+  { campus: '대전', total: 848 },
+  { campus: '광주', total: 649 },
+  { campus: '구미', total: 705 },
+  { campus: '부울경', total: 356 },
 ] as const
 
 const memberStatsSummary = {
   operator: 10,
-  general: 4701,
+  general: 4735,
   regular: 40,
-  total: 4751,
+  total: 4785,
 } as const
 
 // src/data/siteData.ts
