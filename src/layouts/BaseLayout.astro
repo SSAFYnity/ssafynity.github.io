@@ -23,7 +23,8 @@ const {
   noindex = false,
 } = Astro.props
 
-const enableAnalytics = import.meta.env.PROD
+const GA_MEASUREMENT_ID = import.meta.env.PUBLIC_GA_MEASUREMENT_ID ?? ''
+const enableAnalytics = import.meta.env.PROD && GA_MEASUREMENT_ID.length > 0
 const structuredDataItems = structuredData
   ? (Array.isArray(structuredData) ? structuredData : [structuredData])
   : []
@@ -38,10 +39,6 @@ const structuredDataItems = structuredData
     <meta name="description" content={description} />
     {noindex && <meta name="robots" content="noindex, follow" />}
     <meta name="theme-color" content="#1E3A8A" />
-    <meta
-      name="google-site-verification"
-      content="xWE3kfqYc75gEiII_BGzPNT7R_eHhDrBGHW7OlLz1-M"
-    />
     <link rel="icon" type="image/x-icon" href="/favicon.ico" />
     <link rel="canonical" href={canonical} />
     <meta name="application-name" content={siteName} />
@@ -60,12 +57,16 @@ const structuredDataItems = structuredData
     ))}
     {enableAnalytics && (
       <>
-        <script is:inline async src="https://www.googletagmanager.com/gtag/js?id=G-2W9HFYG765"></script>
-        <script is:inline>
+        <script
+          is:inline
+          async
+          src={`https://www.googletagmanager.com/gtag/js?id=${GA_MEASUREMENT_ID}`}
+        ></script>
+        <script is:inline define:vars={{ GA_MEASUREMENT_ID }}>
           window.dataLayer = window.dataLayer || [];
           function gtag(){dataLayer.push(arguments);}
           gtag('js', new Date());
-          gtag('config', 'G-2W9HFYG765');
+          gtag('config', GA_MEASUREMENT_ID);
         </script>
       </>
     )}
