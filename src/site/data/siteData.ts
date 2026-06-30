@@ -27,7 +27,7 @@ const memberStatsByCampus = [
 ] as const
 
 const memberStatsSummary = {
-  operator: 10,
+  operator: 11,
   general: 4738,
   regular: 47,
   total: 4795,

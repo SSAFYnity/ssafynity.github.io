@@ -448,6 +448,13 @@ export const publicOperatorProfiles = [
     campus: "서울",
     url: "https://www.instagram.com/m.__.nnn",
     anonymous: false
+  },
+  {
+    operatorId: "operator-077",
+    name: "이지은",
+    cohort: 11,
+    campus: "서울",
+    anonymous: false
   }
 ] as const satisfies readonly PublicOperatorProfile[]
 
@@ -644,7 +651,8 @@ export const operatorAssignmentsByYear = {
     [
       "operator-011",
       "operator-070",
-      "operator-072"
+      "operator-072",
+      "operator-077"
     ],
     [
       "operator-069",

@@ -4,7 +4,7 @@
 export const operator2026 = {
   generation:   5,
   year:         2026,
-  memberCount:  10,
+  memberCount:  11,
   teamCount:    3,
   groups: [
     {
@@ -21,11 +21,12 @@ export const operator2026 = {
       name: '기획팀',
       nameEn: 'Planning',
       desc: '동문회 행사의 기획·준비 전반을 담당합니다.',
-      vacancies: 2,
+      vacancies: 1,
       members: [
         { role: '팀장', name: '김병완', cohort: 6, campus: '광주', url: 'https://www.linkedin.com/in/lactea94' },
         { role: '팀원', name: '이준호', cohort: 8, campus: '대전', url: 'https://github.com/LJH5' },
         { role: '팀원', name: '이도훈', cohort: 10, campus: '광주' },
+        { role: '팀원', name: '이지은', cohort: 11, campus: '서울' },
       ],
     },
     {
