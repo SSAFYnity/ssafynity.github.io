@@ -28,8 +28,8 @@ const memberStatsByCampus = [
 
 const memberStatsSummary = {
   operator: 11,
-  general: 4808,
-  regular: 52,
+  general: 4803,
+  regular: 57,
   total: 4871,
 } as const
 
