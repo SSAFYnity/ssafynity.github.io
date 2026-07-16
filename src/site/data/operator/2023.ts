@@ -1,4 +1,4 @@
-﻿// src/data/operator/2023.ts
+﻿// src/site/data/operator/2023.ts
 // 2대 SSAFYnity 집행부 (2023년)
 
 export const operator2023 = {

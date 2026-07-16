@@ -33,10 +33,10 @@ const memberStatsSummary = {
   total: 4871,
 } as const
 
-// src/data/siteData.ts
+// src/site/data/siteData.ts
 // 이 파일만 수정하면 전체 사이트에 반영됩니다.
 // 매년 운영진이 교체되므로 [업데이트 필요] 항목을 확인하세요.
-// 업데이트 위치 검색: grep -n "\[업데이트 필요\]" src/data/siteData.ts
+// 업데이트 위치 검색: rg -n "\[업데이트 필요\]" src/site/data/siteData.ts
 
 export const siteData = {
 
@@ -187,13 +187,13 @@ export const siteData = {
   ],
 
   // ─── 행사 ──────────────────────────────────────────────────────
-  // 상세 데이터는 src/data/events/{year}.ts 참조
+  // 상세 데이터는 src/site/data/events/{year}.ts 참조
   // 새 연도 추가 시: 파일 생성 후 eventYears 배열에 연도 추가
   upcomingEventYear: 2026,        // [업데이트 필요] 다가오는 행사가 있는 연도
   eventYears: [2022, 2023, 2024, 2025, 2026],
 
   // ─── 협력사 ────────────────────────────────────────────────────────
-  // 상세 데이터는 src/data/partners/{slug}.ts 참조
+  // 상세 데이터는 src/site/data/partners/{slug}.ts 참조
   // 새 협력사 추가 시: partners/{slug}.ts 생성 후 computed.ts의 allPartners에 추가
 
   // ─── 멤버십 ────────────────────────────────────────────────────
@@ -219,7 +219,7 @@ export const siteData = {
   },
 
   // ─── 운영진 기수 목록 ──────────────────────────────────────────
-  // 상세 데이터는 src/data/operator/{year}.ts 참조
+  // 상세 데이터는 src/site/data/operator/{year}.ts 참조
   // 새 기수 추가 시: 파일 생성 후 아래 배열에 한 줄 추가
   teamGenerations: [
     { generation: 1, year: 2022 },
@@ -230,13 +230,13 @@ export const siteData = {
   ],
 
   // ─── 동아리 목록 ───────────────────────────────────────────────
-  // 상세 데이터는 src/data/clubs/{slug}.ts 참조
+  // 상세 데이터는 src/site/data/clubs/{slug}.ts 참조
   // 새 동아리 추가 시: 파일 생성 후 아래 배열에 slug 추가
   clubSlugs: [
     'doljabi-climbing',
   ],
 
   // ─── FAQ ───────────────────────────────────────────────────────
-  // 상세 데이터는 src/data/faqs.ts 참조
+  // 상세 데이터는 src/site/data/faqs.ts 참조
 
 } as const

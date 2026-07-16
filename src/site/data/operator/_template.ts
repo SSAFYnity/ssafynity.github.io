@@ -1,4 +1,4 @@
-// src/data/operator/{year}.ts
+// src/site/data/operator/{year}.ts
 // {N}대 SSAFYnity 운영진 ({year}년)
 //
 // 추가 후 할 일:

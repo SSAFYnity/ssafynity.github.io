@@ -1,4 +1,4 @@
-// src/data/faqs.ts
+// src/site/data/faqs.ts
 // /community/faq 페이지 FAQ 데이터
 // 질문/답변 추가·수정·삭제 시 이 파일만 편집하세요.
 

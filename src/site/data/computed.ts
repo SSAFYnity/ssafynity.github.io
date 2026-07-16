@@ -1,16 +1,16 @@
-// src/data/computed.ts
+// src/site/data/computed.ts
 // 여러 데이터 파일을 조합해 자동으로 계산되는 값들.
 // 컴포넌트에서는 이 파일만 import해서 사용하세요.
 //
 // 새 연도 행사 파일 추가 시 (권장):
 //   1. events/{year}.ts 생성
-//   2. src/data/events/index.ts에 import 추가
-//   3. src/data/events/index.ts의 allEvents spread에 추가
+//   2. src/site/data/events/index.ts에 import 추가
+//   3. src/site/data/events/index.ts의 allEvents spread에 추가
 //
 // 새 운영진 연도 파일 추가 시 (권장):
 //   1. operator/{year}.ts 생성
-//   2. src/data/operator/index.ts에 import 추가
-//   3. src/data/operator/index.ts의 operatorData 배열에 추가
+//   2. src/site/data/operator/index.ts에 import 추가
+//   3. src/site/data/operator/index.ts의 operatorData 배열에 추가
 
 import { siteData } from './siteData'
 import { preClubs } from './preClubs'
@@ -66,7 +66,7 @@ export type Operator = {
 }
 
 export const allOperators: Operator[] = operatorData as unknown as Operator[]
-// 새 운영진 추가 시: src/data/operator/index.ts에 추가
+// 새 운영진 추가 시: src/site/data/operator/index.ts에 추가
 
 export const currentOperator: Operator = allOperators[allOperators.length - 1]
 

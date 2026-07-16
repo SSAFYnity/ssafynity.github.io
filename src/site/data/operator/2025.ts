@@ -1,4 +1,4 @@
-// src/data/operator/2025.ts
+// src/site/data/operator/2025.ts
 // 4대 SSAFYnity 운영진 (2025년)
 
 export const operator2025 = {

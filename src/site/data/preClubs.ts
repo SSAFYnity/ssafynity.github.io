@@ -1,4 +1,4 @@
-// src/data/preClubs.ts
+// src/site/data/preClubs.ts
 // 예비 동아리 목록. 정식 동아리와 달리 단일 파일로 관리합니다.
 // 예비 동아리는 상세 페이지가 없으며, id를 신청 시 참조 번호로 활용합니다.
 //

@@ -5,7 +5,7 @@
 export const club = {
   slug:        '[업데이트 필요]', // 파일명과 동일하게 (영문 소문자+하이픈, 예: futsal-club)
   name:        '[업데이트 필요]',
-  category:    '[업데이트 필요]' as const, // ClubCategoryKey: tech | sports | art | hobby | social | volunteer (src/data/constants.ts 참조)
+  category:    '[업데이트 필요]' as const, // ClubCategoryKey: tech | sports | art | hobby | social | volunteer (src/site/data/constants.ts 참조)
   shortDesc:   '[업데이트 필요]', // 카드에 표시되는 한 줄 소개
   desc:        '[업데이트 필요]', // 상세 페이지 긴 설명
   activities:  '[업데이트 필요]', // string 또는 string[]. 예: '매주 수요일 온라인' | ['온라인 미팅 (격주)', '오프라인 스프린트 (분기)']

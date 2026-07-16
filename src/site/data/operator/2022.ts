@@ -1,4 +1,4 @@
-﻿// src/data/operator/2022.ts
+﻿// src/site/data/operator/2022.ts
 // 1대 SSAFYnity 집행부 (2022년)
 
 export const operator2022 = {

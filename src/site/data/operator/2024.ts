@@ -1,4 +1,4 @@
-// src/data/operator/2024.ts
+// src/site/data/operator/2024.ts
 // 3대 SSAFYnity 운영진 (2024년)
 // concurrent: true — 해당 팀에서 겸직으로 활동하는 멤버
 
