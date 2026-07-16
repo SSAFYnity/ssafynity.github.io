@@ -1,0 +1,108 @@
+name: 배포 결과 Discord 알림
+
+on:
+  workflow_run:
+    workflows: ["빌드 및 GitHub Pages 배포"]
+    types: [completed]
+
+permissions:
+  contents: read
+
+jobs:
+  notify:
+    name: Discord 웹훅 전송
+    runs-on: ubuntu-latest
+    steps:
+      - name: 배포 결과 전송
+        env:
+          DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
+          REPOSITORY: ${{ github.event.workflow_run.repository.full_name }}
+          WORKFLOW_NAME: ${{ github.event.workflow_run.name }}
+          CONCLUSION: ${{ github.event.workflow_run.conclusion }}
+          BRANCH: ${{ github.event.workflow_run.head_branch }}
+          COMMIT_SHA: ${{ github.event.workflow_run.head_sha }}
+          RUN_NUMBER: ${{ github.event.workflow_run.run_number }}
+          RUN_URL: ${{ github.event.workflow_run.html_url }}
+          EVENT_NAME: ${{ github.event.workflow_run.event }}
+          ACTOR: ${{ github.event.workflow_run.actor.login }}
+          UPDATED_AT: ${{ github.event.workflow_run.updated_at }}
+        run: |
+          set -euo pipefail
+
+          if [ -z "${DISCORD_WEBHOOK_URL:-}" ]; then
+            echo "DISCORD_WEBHOOK_URL secret is not configured" >&2
+            exit 1
+          fi
+
+          case "$CONCLUSION" in
+            success)
+              STATUS_ICON='✅'
+              STATUS_LABEL='성공'
+              COLOR=5763719
+              ;;
+            failure)
+              STATUS_ICON='❌'
+              STATUS_LABEL='실패'
+              COLOR=15548997
+              ;;
+            cancelled)
+              STATUS_ICON='⏹️'
+              STATUS_LABEL='취소'
+              COLOR=9807270
+              ;;
+            skipped)
+              STATUS_ICON='⏭️'
+              STATUS_LABEL='스킵'
+              COLOR=16776960
+              ;;
+            timed_out)
+              STATUS_ICON='⏱️'
+              STATUS_LABEL='시간 초과'
+              COLOR=15158332
+              ;;
+            *)
+              STATUS_ICON='ℹ️'
+              STATUS_LABEL="$CONCLUSION"
+              COLOR=5793266
+              ;;
+          esac
+
+          SHORT_SHA="${COMMIT_SHA:0:7}"
+          PAYLOAD=$(jq -n \
+            --arg title "$STATUS_ICON 배포 workflow $STATUS_LABEL" \
+            --arg workflow "$WORKFLOW_NAME" \
+            --arg repository "$REPOSITORY" \
+            --arg branch "${BRANCH:-미지정}" \
+            --arg commit "$SHORT_SHA" \
+            --arg run_number "#$RUN_NUMBER" \
+            --arg event "$EVENT_NAME" \
+            --arg actor "${ACTOR:-미지정}" \
+            --arg run_url "$RUN_URL" \
+            --arg timestamp "$UPDATED_AT" \
+            --argjson color "$COLOR" \
+            ' {
+                username: "SSAFYnity 배포 알림",
+                allowed_mentions: { parse: [] },
+                embeds: [{
+                  title: $title,
+                  url: $run_url,
+                  color: $color,
+                  fields: [
+                    { name: "워크플로", value: ("`" + $workflow + "`"), inline: false },
+                    { name: "저장소", value: ("`" + $repository + "`"), inline: true },
+                    { name: "브랜치", value: ("`" + $branch + "`"), inline: true },
+                    { name: "커밋", value: ("`" + $commit + "`"), inline: true },
+                    { name: "실행 번호", value: ("`" + $run_number + "`"), inline: true },
+                    { name: "이벤트", value: ("`" + $event + "`"), inline: true },
+                    { name: "실행자", value: ("`" + $actor + "`"), inline: true }
+                  ],
+                  footer: { text: "GitHub Actions" },
+                  timestamp: $timestamp
+                }]
+              }')
+
+          curl --fail-with-body --silent --show-error \
+            --request POST \
+            --header 'Content-Type: application/json' \
+            --data "$PAYLOAD" \
+            "${DISCORD_WEBHOOK_URL}?wait=true"
