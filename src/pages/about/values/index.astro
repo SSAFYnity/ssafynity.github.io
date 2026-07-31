@@ -5,6 +5,7 @@ import LucideIcon from '~/components/LucideIcon.astro'
 import ResponsiveText from '~/components/ResponsiveText.astro'
 import SiteLayout from '~/layouts/SiteLayout.astro'
 import { siteData } from '@/data/siteData'
+import { withBaseAsset } from '@/lib/asset'
 
 const pathname = '/about/values'
 
@@ -20,7 +21,6 @@ const orbitPos = [
   { top: 'calc(69% - 32px)', left: 'calc(83% - 32px)' },
 ]
 
-const withBaseAsset = (path: string) => (path.startsWith('/') ? `${import.meta.env.BASE_URL}${path.slice(1)}` : path)
 const splitDescription = (text: string) => text.split('. ')
 ---
 

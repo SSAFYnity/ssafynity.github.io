@@ -2,14 +2,13 @@
 import Container from '~/components/Container.astro'
 import LucideIcon from '~/components/LucideIcon.astro'
 import { siteData } from '@/data/siteData'
+import { withBaseAsset } from '@/lib/asset'
 
 interface Props {
   pathname: string
 }
 
 const { pathname } = Astro.props
-
-const withBaseAsset = (path: string) => (path.startsWith('/') ? `${import.meta.env.BASE_URL}${path.slice(1)}` : path)
 
 const hasExactMatch = siteData.menu.some((category) =>
   category.items.some((item) => !('external' in item && item.external) && pathname === item.path),

@@ -1,0 +1,32 @@
+---
+interface Props {
+  tone?: 'brand' | 'neutral' | 'hero'
+  className?: string
+  class?: string
+}
+
+const {
+  tone = 'brand',
+  className = '',
+  class: classProp = '',
+  ...attrs
+} = Astro.props as Props
+
+const toneClasses = {
+  brand: 'px-3 py-1.5 bg-blue-50 border border-blue-100 text-blue-600',
+  neutral: 'px-3.5 py-1.5 bg-slate-50 border border-slate-200 text-slate-500',
+  hero: 'px-3.5 py-1.5 border border-slate-400/50 text-slate-600 bg-white/40',
+} as const
+---
+
+<div
+  {...attrs}
+  class={[
+    'inline-flex items-center gap-2 rounded-[var(--radius-pill)]',
+    toneClasses[tone],
+    classProp,
+    className,
+  ].filter(Boolean).join(' ')}
+>
+  <slot />
+</div>

@@ -1,5 +1,6 @@
 ---
 import BlueSectionBadge from '~/components/BlueSectionBadge.astro'
+import Badge from '~/components/Badge.astro'
 import Container from '~/components/Container.astro'
 import HeroLabel from '~/components/HeroLabel.astro'
 import LucideIcon from '~/components/LucideIcon.astro'
@@ -58,9 +59,9 @@ const marqueePartners = [...allPartners, ...allPartners, ...allPartners, ...allP
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
           <div class="astro-reveal" data-reveal-delay="0">
             <HeroLabel>싸피니티 SSAFYnity</HeroLabel>
-            <div class="inline-flex items-center gap-2 px-3.5 py-1.5 border border-slate-400/50 text-slate-600 rounded-full mb-10 bg-white/40">
+            <Badge tone="hero" className="mb-10">
               <span class="text-[10px] font-black uppercase tracking-widest">✦ SSAFY 수료생 동문 네트워크</span>
-            </div>
+            </Badge>
             <h1 class="text-4xl sm:text-5xl md:text-6xl lg:text-[4.5rem] font-extrabold tracking-tight leading-[1.06] mb-8 text-balance">
               <span class="text-slate-900">우리의 이야기가</span><br class="hidden sm:block" />
               <span class="text-blue-600">계속되는 공간</span>
