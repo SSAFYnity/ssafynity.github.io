@@ -106,12 +106,12 @@ export const events2026: Event[] = [
   },
   {
     slug:      '2026-ongoing-event-august',
-    title:     '8월 상시행사 (변동 가능성 있음)',
+    title:     '8월 정회원 온라인 게임 (날짜 투표 중)',
     eventDate: { start: '2026-08-01', precision: 'month' },
-    format:    ['offline'],
+    format:    ['online'],
     kind:      'ongoing',
     audience:  'regular',
-    summary:   '2026년 8월 중 진행 예정인 정회원 전용 상시 행사',
+    summary:   '정회원 오픈카카오톡방에서 날짜 투표를 진행 중인 8월 온라인 게임 행사',
   },
   {
     slug:      '2026-ongoing-event-september',

@@ -1042,6 +1042,20 @@ const tabs = [
             return date;
           };
 
+          // 월만 확정된 행사는 정렬용 1일이 지나도 종료로 전환하지 않는다.
+          if (targetEvent.eventDate.precision === 'month') {
+            if (!targetEvent.recruitDate) {
+              return targetEvent.audience === 'operator' ? 'no-recruit' : 'planning';
+            }
+
+            const recruitStart = toDate(targetEvent.recruitDate.start);
+            const recruitEnd = toDate(targetEvent.recruitDate.end || targetEvent.recruitDate.start);
+
+            if (today < recruitStart) return 'before-recruit';
+            if (today <= recruitEnd) return 'recruiting';
+            return 'recruit-closed';
+          }
+
           const eventStartDate = toDate(targetEvent.eventDate.start);
           const eventEndDate = toDate(targetEvent.eventDate.end || targetEvent.eventDate.start);
 

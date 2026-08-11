@@ -34,6 +34,18 @@ export function getEventStatus(event: SiteEvent): EventStatus {
   const today = new Date(now); today.setHours(0, 0, 0, 0)
   const toDate = (s: string) => { const d = new Date(s); d.setHours(0, 0, 0, 0); return d }
 
+  // 월만 확정된 행사는 내부 정렬 기준일을 실제 행사일로 취급하지 않는다.
+  if (event.eventDate.precision === 'month') {
+    if (!event.recruitDate) return event.audience === 'operator' ? 'no-recruit' : 'planning'
+
+    const recruitStart = toDate(event.recruitDate.start)
+    const recruitEnd   = toDate(event.recruitDate.end ?? event.recruitDate.start)
+
+    if (today < recruitStart) return 'before-recruit'
+    if (today <= recruitEnd)  return 'recruiting'
+    return 'recruit-closed'
+  }
+
   const eventStartDate = toDate(event.eventDate.start)
   const eventEndDate   = toDate(event.eventDate.end ?? event.eventDate.start)
 

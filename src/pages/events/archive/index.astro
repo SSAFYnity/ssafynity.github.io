@@ -314,6 +314,7 @@ const initialVisibleYears = new Set(initialVisibleEvents.map((event) => new Date
                 data-event-slug={event.slug}
                 data-event-start={event.eventDate.start}
                 data-event-end={event.eventDate.end ?? event.eventDate.start}
+                data-event-precision={event.eventDate.precision ?? 'day'}
                 data-event-start-time={event.eventDate.startTime ?? ''}
                 data-event-end-time={event.eventDate.endTime ?? ''}
                 data-event-recruit-start={event.recruitDate?.start ?? ''}
@@ -583,6 +584,21 @@ const initialVisibleYears = new Set(initialVisibleEvents.map((event) => new Date
 
         const eventStartDate = toDate(card.getAttribute('data-event-start'));
         const eventEndDate = toDate(card.getAttribute('data-event-end'));
+        const precision = card.getAttribute('data-event-precision');
+        const recruitStart = toDate(card.getAttribute('data-event-recruit-start'));
+        const recruitEnd = toDate(card.getAttribute('data-event-recruit-end'));
+        const audience = card.getAttribute('data-event-audience');
+
+        // 월만 확정된 행사는 정렬용 1일이 지나도 종료로 전환하지 않는다.
+        if (precision === 'month') {
+          if (!recruitStart || !recruitEnd) {
+            return audience === 'operator' ? 'no-recruit' : 'planning';
+          }
+
+          if (today < recruitStart) return 'before-recruit';
+          if (today <= recruitEnd) return 'recruiting';
+          return 'recruit-closed';
+        }
 
         if (!eventStartDate || !eventEndDate) return 'past';
         if (today > eventEndDate) return 'past';
@@ -603,10 +619,6 @@ const initialVisibleYears = new Set(initialVisibleEvents.map((event) => new Date
           if (now <= endDate) return 'today-ongoing';
           return 'past';
         }
-
-        const recruitStart = toDate(card.getAttribute('data-event-recruit-start'));
-        const recruitEnd = toDate(card.getAttribute('data-event-recruit-end'));
-        const audience = card.getAttribute('data-event-audience');
 
         if (!recruitStart || !recruitEnd) {
           return audience === 'operator' ? 'no-recruit' : 'planning';
