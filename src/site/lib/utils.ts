@@ -29,6 +29,45 @@ export const EVENT_STATUS_CONFIG: Record<EventStatus, { label: string; className
   'planning':       { label: '계획중',   className: 'bg-slate-200 text-slate-500' },
 }
 
+function isSameDay(left: Date, right: Date): boolean {
+  return left.getFullYear() === right.getFullYear()
+    && left.getMonth() === right.getMonth()
+    && left.getDate() === right.getDate()
+}
+
+/**
+ * 상태 값은 동작 판별에 사용하고, 화면 문구는 실제 접수일·행사 시각을 반영한다.
+ */
+export function getEventStatusLabel(event: SiteEvent, status = getEventStatus(event)): string {
+  const today = new Date()
+  today.setHours(0, 0, 0, 0)
+
+  if (status === 'today-upcoming') return '오늘 예정'
+  if (status === 'today-ongoing') return '오늘 진행 중'
+
+  if (status === 'recruiting' && event.recruitDate) {
+    const recruitStart = new Date(event.recruitDate.start)
+    recruitStart.setHours(0, 0, 0, 0)
+    const recruitEnd = new Date(event.recruitDate.end ?? event.recruitDate.start)
+    recruitEnd.setHours(0, 0, 0, 0)
+
+    if (isSameDay(today, recruitStart)) return '오늘 오픈'
+    if (isSameDay(today, recruitEnd)) return '오늘 마감'
+  }
+
+  if (status === 'before-recruit' && event.recruitDate) {
+    const recruitStart = new Date(event.recruitDate.start)
+    recruitStart.setHours(0, 0, 0, 0)
+    const daysUntil = Math.round((recruitStart.getTime() - today.getTime()) / 86400000)
+    return daysUntil <= 7 ? '곧 오픈' : '접수 예정'
+  }
+
+  if (status === 'no-recruit') return '운영진 행사'
+  if (status === 'planning') return '일정 조율 중'
+
+  return EVENT_STATUS_CONFIG[status].label
+}
+
 export function getEventStatus(event: SiteEvent): EventStatus {
   const now   = new Date()
   const today = new Date(now); today.setHours(0, 0, 0, 0)

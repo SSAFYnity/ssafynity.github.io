@@ -1,6 +1,5 @@
 ---
 import Container from '~/components/Container.astro'
-import HeroLabel from '~/components/HeroLabel.astro'
 import LucideIcon from '~/components/LucideIcon.astro'
 import SiteLayout from '~/layouts/SiteLayout.astro'
 import { allEvents } from '@/data/computed'
@@ -18,7 +17,7 @@ import {
   type EventKind,
 } from '@/data/constants'
 import { withBaseAsset } from '@/lib/asset'
-import { EVENT_STATUS_CONFIG, formatEventDate, getEventStatus } from '@/lib/utils'
+import { EVENT_STATUS_CONFIG, formatEventDate, getEventStatus, getEventStatusLabel } from '@/lib/utils'
 
 const pathname = '/events/archive'
 const pageSize = 9
@@ -32,6 +31,9 @@ const formatOptions = Object.entries(EVENT_FORMAT).map(([key, value]) => ({ key:
 function getArchiveVisibility(event: Event) {
   const today = new Date()
   today.setHours(0, 0, 0, 0)
+
+  const hasUnconfirmedDate = event.eventDate.precision === 'month' || Boolean(event.eventDate.candidates?.length)
+  if (hasUnconfirmedDate && !event.recruitDate) return event.audience === 'operator'
 
   const eventEnd = new Date(event.eventDate.end ?? event.eventDate.start)
   eventEnd.setHours(0, 0, 0, 0)
@@ -49,11 +51,14 @@ function getArchiveVisibility(event: Event) {
 function getEventRibbon(event: Event) {
   const status = getEventStatus(event)
 
-  if (status === 'past' || status === 'no-recruit' || status === 'planning') {
+  if (status === 'past' || status === 'planning') {
     return null
   }
 
-  return EVENT_STATUS_CONFIG[status]
+  return {
+    ...EVENT_STATUS_CONFIG[status],
+    label: getEventStatusLabel(event, status),
+  }
 }
 
 const initialVisibleEvents = allEvents.filter(getArchiveVisibility)
@@ -61,42 +66,27 @@ const initialVisibleYears = new Set(initialVisibleEvents.map((event) => new Date
 ---
 
 <SiteLayout pathname={pathname}>
-  <div class="flex flex-col">
-    <section class="bg-white pt-20 sm:pt-24 pb-10 lg:pt-28 lg:pb-14 border-b border-slate-100">
+  <div class="event-archive-page">
+    <section class="event-archive-intro">
       <Container maxWidth="5xl">
-        <div class="astro-reveal flex items-end justify-between gap-8">
+        <div class="event-archive-intro-grid">
           <div>
-            <HeroLabel>Event Archive</HeroLabel>
-            <h1 class="text-2xl md:text-3xl font-extrabold tracking-tight leading-[1.2] text-slate-900 mb-2">
-              함께해온 모든 순간
-            </h1>
-            <p class="text-xl md:text-2xl font-black text-blue-600 mb-4">역대 행사</p>
-            <p class="text-sm text-slate-500 leading-relaxed break-keep text-pretty max-w-xl">
+            <h1>역대 행사</h1>
+            <p>
               싸피니티가 지금까지 개최한 모든 행사를 한눈에 확인해보세요.
             </p>
           </div>
-          <div class="flex items-center gap-5 shrink-0 pb-0.5">
-            <div class="flex flex-col items-end gap-0.5">
-              <span id="archive-total-events" class="text-xl sm:text-2xl font-black text-slate-900">
-                {initialVisibleEvents.length}
-              </span>
-              <span class="text-xs text-slate-400">총 행사</span>
-            </div>
-            <div class="w-px h-8 bg-slate-200"></div>
-            <div class="flex flex-col items-end gap-0.5">
-              <span id="archive-total-years" class="text-xl sm:text-2xl font-black text-slate-900">
-                {initialVisibleYears}
-              </span>
-              <span class="text-xs text-slate-400">개 연도</span>
-            </div>
+          <div class="event-archive-count" aria-live="polite">
+            <span><b id="archive-total-events">{initialVisibleEvents.length}</b>개의 행사</span>
+            <span><b id="archive-total-years">{initialVisibleYears}</b>개 연도</span>
           </div>
         </div>
       </Container>
     </section>
 
-    <section class="bg-slate-50 pt-6 pb-14 lg:pt-8 lg:pb-20">
+    <section class="event-archive-surface">
       <Container maxWidth="5xl">
-        <div class="sticky sm:static top-[calc(4.5rem+env(safe-area-inset-top))] z-40 bg-white border border-slate-200 rounded-2xl px-4 py-3 flex flex-col mb-5 shadow-sm sm:shadow-none">
+        <div class="event-archive-toolbar sticky sm:static top-[calc(4.5rem+env(safe-area-inset-top))] z-40 bg-white border border-slate-200 px-4 py-3 flex flex-col mb-7">
           <div class="flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-center sm:gap-2">
             <div class="flex items-center gap-2 overflow-x-auto pb-1 -mx-1 px-1 sm:flex-none sm:overflow-visible sm:flex-wrap sm:pb-0 sm:mx-0 sm:px-0">
               <div class="relative shrink-0" data-dropdown="year" data-dropdown-placeholder="연도 및 기수">
@@ -289,6 +279,14 @@ const initialVisibleYears = new Set(initialVisibleEvents.map((event) => new Date
           <div id="archive-active-filters" class="hidden flex flex-wrap gap-1.5 pt-2.5 mt-2.5 border-t border-slate-100"></div>
         </div>
 
+        <div class="event-archive-viewbar">
+          <p>행사 기록 보기</p>
+          <div class="event-archive-view-switch" role="group" aria-label="행사 보기 방식">
+            <button type="button" data-archive-view="card" aria-pressed="true">카드</button>
+            <button type="button" data-archive-view="list" aria-pressed="false">목록</button>
+          </div>
+        </div>
+
         <div id="archive-no-results" class="hidden flex flex-col items-center gap-3 py-24 text-center">
           <p class="text-sm text-slate-400">조건에 맞는 행사가 없습니다.</p>
           <button
@@ -300,7 +298,7 @@ const initialVisibleYears = new Set(initialVisibleEvents.map((event) => new Date
           </button>
         </div>
 
-        <div id="archive-grid" class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+        <div id="archive-grid" class="event-archive-collection" data-view="card">
           {allEvents.map((event, index) => {
             const year = new Date(event.eventDate.start).getFullYear()
             const ribbon = getEventRibbon(event)
@@ -308,13 +306,14 @@ const initialVisibleYears = new Set(initialVisibleEvents.map((event) => new Date
 
             return (
               <div
-                class={`astro-reveal ${!initiallyVisible ? 'hidden' : ''}`}
+                class={`event-archive-item ${!initiallyVisible ? 'hidden' : ''}`}
                 data-reveal-delay={String(index * 40)}
                 data-event-card
                 data-event-slug={event.slug}
                 data-event-start={event.eventDate.start}
                 data-event-end={event.eventDate.end ?? event.eventDate.start}
                 data-event-precision={event.eventDate.precision ?? 'day'}
+                data-event-unconfirmed={String(event.eventDate.precision === 'month' || Boolean(event.eventDate.candidates?.length))}
                 data-event-start-time={event.eventDate.startTime ?? ''}
                 data-event-end-time={event.eventDate.endTime ?? ''}
                 data-event-recruit-start={event.recruitDate?.start ?? ''}
@@ -329,9 +328,9 @@ const initialVisibleYears = new Set(initialVisibleEvents.map((event) => new Date
               >
                 <a
                   href={`/events/archive/${event.slug}?from=archive`}
-                  class="group flex flex-col bg-white border border-slate-200 rounded-2xl overflow-hidden hover:border-blue-200 hover:shadow-md transition-all duration-200 h-full"
+                  class="event-archive-row group"
                 >
-                  <div class="relative aspect-video overflow-hidden bg-slate-100 shrink-0">
+                  <div class="event-archive-media relative overflow-hidden bg-slate-100 shrink-0">
                     {event.img ? (
                       <img
                         src={withBaseAsset(event.img)}
@@ -353,59 +352,29 @@ const initialVisibleYears = new Set(initialVisibleEvents.map((event) => new Date
                       {ribbon?.label}
                     </div>
 
-                    <div class="absolute top-2 right-2 flex flex-wrap justify-end gap-1">
-                      {event.kind && (
-                        <span class="text-[10px] font-black px-2.5 py-1 rounded-full backdrop-blur-sm bg-white/90 text-blue-600 shadow-md ring-1 ring-black/5">
-                          {EVENT_KIND_LABEL[event.kind]}
-                        </span>
-                      )}
-                      {event.audience && (
-                        <span class="text-[10px] font-black px-2.5 py-1 rounded-full backdrop-blur-sm bg-white/90 text-slate-500 shadow-md ring-1 ring-black/5">
-                          {EVENT_AUDIENCE_LABEL[event.audience]}
-                        </span>
-                      )}
+                  </div>
+
+                  <div class="event-archive-copy">
+                    <div class="event-archive-meta">
+                      <span>{year}</span>
+                      {event.kind && <span>{EVENT_KIND_LABEL[event.kind]}</span>}
+                      {event.audience && <span>{EVENT_AUDIENCE_LABEL[event.audience]}</span>}
                       {[...(event.format ?? [])].sort((left, right) => FORMAT_ORDER.indexOf(left) - FORMAT_ORDER.indexOf(right)).map((format) => (
-                        <span class="text-[10px] font-black px-2.5 py-1 rounded-full backdrop-blur-sm bg-white/90 text-slate-400 shadow-md ring-1 ring-black/5">
-                          {EVENT_FORMAT_LABEL[format]}
-                        </span>
+                        <span>{EVENT_FORMAT_LABEL[format]}</span>
                       ))}
                     </div>
-                  </div>
-
-                  <div class="flex flex-col gap-2.5 px-5 pt-5 pb-4 flex-1">
-                    <p class="text-sm font-extrabold text-slate-900 leading-snug group-hover:text-blue-600 transition-colors">
+                    <h2>
                       {event.title}
-                    </p>
+                    </h2>
 
-                    <div class="flex flex-col gap-1 text-xs text-slate-400">
-                      <div class="flex items-center gap-1.5">
-                        <LucideIcon name="calendar-days" size={11} className="shrink-0" />
-                        <span class="truncate">{formatEventDate(event.eventDate)}</span>
-                      </div>
-                      <div class="flex items-center gap-1.5 min-h-[1rem]">
-                        {event.location && (
-                          <>
-                            <LucideIcon name="map-pin" size={11} className="shrink-0" />
-                            <span class="truncate">{event.location}</span>
-                          </>
-                        )}
-                      </div>
+                    <div class="event-archive-facts">
+                      <span>{formatEventDate(event.eventDate)}</span>
+                      {event.location && <span>{event.location}</span>}
                     </div>
 
-                    <div class="relative group/summary flex items-end gap-1 mt-auto pt-4 border-t border-slate-100">
-                      <p class="text-xs text-slate-500 leading-relaxed break-keep line-clamp-1 flex-1">
-                        {event.summary}
-                      </p>
-                      <LucideIcon
-                        name="chevron-right"
-                        size={13}
-                        className="shrink-0 text-slate-300 group-hover:text-blue-400 transition-colors mb-0.5"
-                      />
-                      <div class="pointer-events-none absolute bottom-full left-0 mb-2 w-full bg-slate-800 text-white text-xs rounded-lg px-3 py-2 leading-relaxed break-keep opacity-0 group-hover/summary:opacity-100 transition-opacity duration-150 z-10 shadow-lg">
-                        {event.summary}
-                      </div>
-                    </div>
+                    <p>{event.summary}</p>
                   </div>
+                  <LucideIcon name="arrow-right" size={18} className="event-archive-arrow" />
                 </a>
               </div>
             )
@@ -416,6 +385,68 @@ const initialVisibleYears = new Set(initialVisibleEvents.map((event) => new Date
       </Container>
     </section>
   </div>
+
+  <style>
+    .event-archive-page { background: #fff; color: #0f172a; }
+    .event-archive-intro { padding: 150px 0 72px; border-bottom: 1px solid #e2e8f0; }
+    .event-archive-intro-grid { display: flex; align-items: end; justify-content: space-between; gap: 40px; }
+    .event-archive-intro h1 { margin: 0; font-size: clamp(2.8rem, 5.4vw, 4.8rem); font-weight: 850; letter-spacing: -0.035em; line-height: 1; }
+    .event-archive-intro p { max-width: 40rem; margin: 24px 0 0; color: #475569; font-size: 16px; font-weight: 550; line-height: 1.75; word-break: keep-all; }
+    .event-archive-count { display: flex; flex-wrap: wrap; gap: 10px 20px; color: #64748b; font-size: 13px; font-weight: 650; }
+    .event-archive-count b { color: #1e3a8a; font-weight: 800; font-variant-numeric: tabular-nums; }
+    .event-archive-surface { padding: 42px 0 104px; background: #f8fafc; }
+    .event-archive-toolbar { border-radius: 12px; box-shadow: none; }
+    .event-archive-viewbar { display: flex; align-items: center; justify-content: space-between; gap: 20px; margin: 0 0 18px; }
+    .event-archive-viewbar > p { color: #475569; font-size: 13px; font-weight: 750; }
+    .event-archive-view-switch { display: inline-flex; padding: 3px; border: 1px solid #cbd5e1; border-radius: 10px; background: #fff; }
+    .event-archive-view-switch button { min-width: 58px; min-height: 34px; padding: 0 12px; border-radius: 7px; color: #64748b; font-size: 12px; font-weight: 750; transition: color 160ms ease, background-color 160ms ease; }
+    .event-archive-view-switch button[aria-pressed='true'] { background: #e8eef8; color: #17346f; }
+    .event-archive-view-switch button:focus-visible { outline: 2px solid #2563eb; outline-offset: 2px; }
+    .event-archive-collection.hidden { display: none; }
+    .event-archive-media img { width: 100%; height: 100%; object-fit: cover; object-position: top; transition: transform 240ms ease; }
+    .event-archive-row:hover .event-archive-media img { transform: scale(1.02); }
+    .event-archive-copy { min-width: 0; }
+    .event-archive-meta { display: flex; flex-wrap: wrap; gap: 6px 14px; color: #64748b; font-size: 11px; font-weight: 700; }
+    .event-archive-copy h2 { margin: 12px 0 0; font-size: 21px; font-weight: 810; letter-spacing: -0.025em; line-height: 1.35; transition: color 160ms ease; }
+    .event-archive-row:hover h2 { color: #1d4ed8; }
+    .event-archive-facts { display: flex; flex-wrap: wrap; gap: 5px 18px; margin-top: 12px; color: #64748b; font-size: 12px; font-weight: 600; }
+    .event-archive-copy > p { max-width: 48rem; margin: 13px 0 0; color: #475569; font-size: 13px; font-weight: 550; line-height: 1.65; word-break: keep-all; }
+    .event-archive-arrow { color: #1e3a8a; }
+
+    .event-archive-collection[data-view='list'] { border-top: 1px solid #94a3b8; }
+    .event-archive-collection[data-view='list'] .event-archive-item { border-bottom: 1px solid #cbd5e1; }
+    .event-archive-collection[data-view='list'] .event-archive-row { display: grid; grid-template-columns: 220px minmax(0, 1fr) 28px; align-items: center; gap: 34px; min-height: 180px; padding: 24px 0; }
+    .event-archive-collection[data-view='list'] .event-archive-media { width: 220px; aspect-ratio: 16 / 10; }
+
+    .event-archive-collection[data-view='card'] { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; }
+    .event-archive-collection[data-view='card'] .event-archive-item { min-width: 0; }
+    .event-archive-collection[data-view='card'] .event-archive-row { display: flex; height: 100%; min-width: 0; flex-direction: column; overflow: hidden; border: 1px solid #cbd5e1; border-radius: 16px; background: #fff; transition: border-color 160ms ease, box-shadow 160ms ease; }
+    .event-archive-collection[data-view='card'] .event-archive-row:hover { border-color: #93a9cc; box-shadow: 0 10px 24px -20px rgba(15, 23, 42, 0.5); }
+    .event-archive-collection[data-view='card'] .event-archive-media { width: 100%; aspect-ratio: 16 / 10; }
+    .event-archive-collection[data-view='card'] .event-archive-copy { display: flex; flex: 1; flex-direction: column; padding: 20px 20px 18px; }
+    .event-archive-collection[data-view='card'] .event-archive-copy h2 { font-size: 18px; }
+    .event-archive-collection[data-view='card'] .event-archive-copy > p { display: -webkit-box; margin-top: auto; padding-top: 18px; overflow: hidden; border-top: 1px solid #e2e8f0; -webkit-box-orient: vertical; -webkit-line-clamp: 2; }
+    .event-archive-collection[data-view='card'] .event-archive-facts { margin-bottom: 18px; }
+    .event-archive-collection[data-view='card'] .event-archive-arrow { display: none; }
+    @media (max-width: 900px) {
+      .event-archive-collection[data-view='card'] { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    }
+    @media (max-width: 720px) {
+      .event-archive-intro { padding: 122px 0 52px; }
+      .event-archive-intro-grid { display: block; }
+      .event-archive-count { margin-top: 26px; }
+      .event-archive-surface { padding: 28px 0 72px; }
+      .event-archive-viewbar { margin-bottom: 14px; }
+      .event-archive-view-switch button { min-width: 62px; min-height: 40px; font-size: 13px; }
+      .event-archive-collection[data-view='list'] .event-archive-row { grid-template-columns: 92px minmax(0, 1fr) 20px; gap: 16px; min-height: 0; padding: 20px 0; }
+      .event-archive-collection[data-view='list'] .event-archive-media { width: 92px; aspect-ratio: 1; }
+      .event-archive-collection[data-view='list'] .event-archive-copy h2 { margin-top: 8px; font-size: 16px; }
+      .event-archive-collection[data-view='list'] .event-archive-copy > p,
+      .event-archive-collection[data-view='list'] .event-archive-facts { display: none; }
+      .event-archive-collection[data-view='list'] .event-archive-meta { gap: 4px 9px; font-size: 10px; }
+      .event-archive-collection[data-view='card'] { grid-template-columns: minmax(0, 1fr); }
+    }
+  </style>
 
   <script is:inline define:vars={{ pageSize }}>
     (() => {
@@ -432,6 +463,7 @@ const initialVisibleYears = new Set(initialVisibleEvents.map((event) => new Date
       const totalEvents = document.getElementById('archive-total-events');
       const totalYears = document.getElementById('archive-total-years');
       const cards = Array.from(document.querySelectorAll('[data-event-card]'));
+      const viewButtons = Array.from(document.querySelectorAll('[data-archive-view]'));
 
       if (
         !resetButton ||
@@ -454,14 +486,16 @@ const initialVisibleYears = new Set(initialVisibleEvents.map((event) => new Date
         recruiting: 'bg-emerald-500 text-white',
         'recruit-closed': 'bg-slate-700 text-white',
         'before-recruit': 'bg-amber-500 text-white',
+        'no-recruit': 'bg-slate-100 text-slate-500',
       };
 
       const ribbonLabels = {
-        'today-upcoming': '오늘 시작',
-        'today-ongoing': '진행 중',
+        'today-upcoming': '오늘 예정',
+        'today-ongoing': '오늘 진행 중',
         recruiting: '접수 중',
         'recruit-closed': '접수 마감',
         'before-recruit': '접수 예정',
+        'no-recruit': '운영진 행사',
       };
 
       const state = {
@@ -471,6 +505,21 @@ const initialVisibleYears = new Set(initialVisibleEvents.map((event) => new Date
         formats: new Set(),
         query: '',
         page: 0,
+        view: 'card',
+      };
+
+      try {
+        const savedView = window.localStorage.getItem('ssafynity:event-archive-view');
+        if (savedView === 'card' || savedView === 'list') state.view = savedView;
+      } catch {
+        // 저장소 접근이 제한된 환경에서는 기본 카드 보기를 유지한다.
+      }
+
+      const applyView = () => {
+        grid.dataset.view = state.view;
+        viewButtons.forEach((button) => {
+          button.setAttribute('aria-pressed', String(button.getAttribute('data-archive-view') === state.view));
+        });
       };
 
       const filterGroups = ['year', 'kind', 'audience', 'format'];
@@ -633,10 +682,15 @@ const initialVisibleYears = new Set(initialVisibleEvents.map((event) => new Date
         const today = new Date();
         today.setHours(0, 0, 0, 0);
 
+        const recruitStart = toDate(card.getAttribute('data-event-recruit-start'));
+        const hasUnconfirmedDate = card.getAttribute('data-event-unconfirmed') === 'true';
+        if (hasUnconfirmedDate && !recruitStart) {
+          return card.getAttribute('data-event-audience') === 'operator';
+        }
+
         const eventEnd = toDate(card.getAttribute('data-event-end'));
         if (eventEnd && today > eventEnd) return true;
 
-        const recruitStart = toDate(card.getAttribute('data-event-recruit-start'));
         if (!recruitStart) {
           return card.getAttribute('data-event-audience') === 'operator';
         }
@@ -657,7 +711,23 @@ const initialVisibleYears = new Set(initialVisibleEvents.map((event) => new Date
         }
 
         ribbon.className = `absolute bottom-0 left-0 right-0 py-2 text-center text-xs font-black tracking-wide ${ribbonClasses[status]}`;
-        ribbon.textContent = ribbonLabels[status];
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
+        const recruitStart = toDate(card.getAttribute('data-event-recruit-start'));
+        const recruitEnd = toDate(card.getAttribute('data-event-recruit-end'));
+        let label = ribbonLabels[status];
+
+        if (status === 'recruiting' && recruitStart && recruitEnd) {
+          if (today.getTime() === recruitStart.getTime()) label = '오늘 오픈';
+          if (today.getTime() === recruitEnd.getTime()) label = '오늘 마감';
+        }
+
+        if (status === 'before-recruit' && recruitStart) {
+          const daysUntil = Math.round((recruitStart.getTime() - today.getTime()) / 86400000);
+          label = daysUntil <= 7 ? '곧 오픈' : '접수 예정';
+        }
+
+        ribbon.textContent = label;
       };
 
       const makeBadge = (label, type, value) => {
@@ -885,6 +955,20 @@ const initialVisibleYears = new Set(initialVisibleEvents.map((event) => new Date
 
       resetButton.addEventListener('click', resetAll);
       emptyResetButton.addEventListener('click', resetAll);
+      viewButtons.forEach((button) => {
+        button.addEventListener('click', () => {
+          const view = button.getAttribute('data-archive-view');
+          if (view !== 'card' && view !== 'list') return;
+
+          state.view = view;
+          applyView();
+          try {
+            window.localStorage.setItem('ssafynity:event-archive-view', view);
+          } catch {
+            // 저장소 접근이 제한돼도 현재 페이지의 보기 전환은 유지한다.
+          }
+        });
+      });
       document.addEventListener('click', closeAllDropdowns);
       document.addEventListener('keydown', (event) => {
         if (event.key === 'Escape') {
@@ -928,6 +1012,7 @@ const initialVisibleYears = new Set(initialVisibleEvents.map((event) => new Date
         applyFilters();
       });
 
+      applyView();
       updateAllDropdowns();
       applyFilters();
     })();

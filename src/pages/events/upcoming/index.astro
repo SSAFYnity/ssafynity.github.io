@@ -1,30 +1,16 @@
 ---
 import Container from '~/components/Container.astro'
-import HeroLabel from '~/components/HeroLabel.astro'
 import LucideIcon from '~/components/LucideIcon.astro'
 import ResponsiveText from '~/components/ResponsiveText.astro'
 import SiteLayout from '~/layouts/SiteLayout.astro'
 import { allEvents, type Event } from '@/data/computed'
 import { EVENT_AUDIENCE_LABEL, EVENT_FORMAT_LABEL, EVENT_KIND_LABEL, FORMAT_ORDER } from '@/data/constants'
-import { EVENT_STATUS_CONFIG, formatEventDate, getEventStatus, type EventStatus } from '@/lib/utils'
+import { formatEventDate, getEventStatus, getEventStatusLabel, type EventStatus } from '@/lib/utils'
 import { siteData } from '@/data/siteData'
 
 const pathname = '/events/upcoming'
 const year = siteData.upcomingEventYear
 const monthLabels = ['1월', '2월', '3월', '4월', '5월', '6월', '7월', '8월', '9월', '10월', '11월', '12월'] as const
-
-function shouldShowRibbon(event: Event, status: EventStatus): boolean {
-  if (status === 'past' || status === 'planning' || status === 'no-recruit') return false
-  if (status === 'before-recruit') {
-    const today = new Date()
-    today.setHours(0, 0, 0, 0)
-    const recruitStart = new Date(event.recruitDate!.start)
-    recruitStart.setHours(0, 0, 0, 0)
-    const daysUntil = (recruitStart.getTime() - today.getTime()) / 86400000
-    return daysUntil <= 14
-  }
-  return true
-}
 
 function isClickable(event: Event, status: EventStatus): boolean {
   if (status === 'planning') return false
@@ -57,143 +43,85 @@ const hasPlanningEvents = events.some((event) => getEventStatus(event) === 'plan
 ---
 
 <SiteLayout pathname={pathname}>
-  <div class="flex flex-col">
-    <section class="bg-white pt-20 sm:pt-24 pb-10 lg:pt-28 lg:pb-14 border-b border-slate-100">
+  <div class="event-schedule-page">
+    <section class="event-schedule-intro">
       <Container maxWidth="5xl">
-        <div class="astro-reveal">
-          <HeroLabel>{year} Annual Events</HeroLabel>
-          <h1 class="text-2xl md:text-3xl font-extrabold tracking-tight leading-[1.2] text-slate-900 mb-2">
-            올 한 해, 싸피니티와 함께
-          </h1>
-          <p class="text-xl md:text-2xl font-black text-blue-600 mb-4">
-            {year} 행사 일정
-          </p>
-          <p class="text-sm text-slate-500 leading-relaxed break-keep text-pretty">
+        <div class="event-schedule-intro-grid">
+          <div>
+            <h1>{year} 행사 일정</h1>
+            <p>
             <ResponsiveText
               newline="mobile"
               text={`${year}년 싸피니티가 준비한 행사 라인업을 미리 확인하고,\n원하는 행사에 참여해보세요.`}
             />
-          </p>
+            </p>
+          </div>
+          <a href="/events/archive">
+            역대 행사 보기
+            <LucideIcon name="arrow-right" size={16} />
+          </a>
         </div>
       </Container>
     </section>
 
-    <section class="bg-slate-50 pt-6 pb-14 lg:pt-8 lg:pb-20">
+    <section class="event-schedule-surface">
       <Container maxWidth="5xl">
         {hasPlanningEvents && (
-          <div class="astro-reveal flex items-start gap-3 bg-blue-50 border border-blue-100 rounded-2xl px-4 sm:px-5 py-4 mb-3">
-            <span class="text-blue-400 text-base leading-none mt-0.5 shrink-0">ℹ</span>
-            <p class="text-xs text-blue-600 leading-relaxed break-keep">
+          <div class="event-schedule-note">
+            <LucideIcon name="info" size={16} className="shrink-0" />
+            <p>
               운영진이 동문회 운영을 감안하여 계획한 행사 후보 중, <span class="font-bold">최종 일정은 정회원 투표로 확정</span>됩니다.
             </p>
           </div>
         )}
 
         {events.length === 0 ? (
-          <div class="astro-reveal flex flex-col items-center gap-5 py-24 text-center">
-            <div class="w-14 h-14 rounded-full bg-slate-100 flex items-center justify-center">
-              <LucideIcon name="calendar-days" size={24} className="w-6 h-6 text-slate-300" />
-            </div>
-            <div class="flex flex-col gap-1.5">
-              <p class="text-sm font-bold text-slate-500">{year}년 행사를 기획하고 있습니다.</p>
-              <p class="text-xs text-slate-400 break-keep">운영진이 올해 일정을 열심히 준비 중이에요. 확정되는 대로 이 페이지에서 바로 만나볼 수 있어요.</p>
-            </div>
-            <a
-              href="/events/archive"
-              class="text-xs font-black text-blue-500 hover:text-blue-700 transition-colors"
-            >
-              역대 모든 행사 보기 →
-            </a>
+          <div class="event-schedule-empty">
+            <h2>{year}년 행사를 기획하고 있습니다.</h2>
+            <p>운영진이 올해 일정을 준비 중입니다. 확정되는 대로 이 페이지에서 안내합니다.</p>
+            <a href="/events/archive">역대 모든 행사 보기</a>
           </div>
         ) : (
-          <div class="flex flex-col gap-2.5">
+          <ol class="event-schedule-list">
             {events.map((event, index) => {
               const status = getEventStatus(event)
-              const config = EVENT_STATUS_CONFIG[status]
+              const statusLabel = getEventStatusLabel(event, status)
               const past = status === 'past'
               const eventDate = new Date(event.eventDate.start)
               const clickable = isClickable(event, status)
-              const wrapperClass = `astro-reveal ${clickable ? '' : ''}`
-              const baseCardClass = `relative overflow-hidden flex items-start gap-4 bg-white border rounded-2xl px-5 py-4 pr-14 ${
-                clickable
-                  ? `hover:border-blue-200 hover:shadow-md transition-all duration-200 ${past ? 'border-slate-100' : 'border-slate-200'}`
-                  : `${past ? 'border-slate-100' : 'border-slate-200'} cursor-default`
-              }`
 
               const content = (
                 <>
-                  <div class={`shrink-0 w-10 flex flex-col items-center pt-0.5 ${past ? 'opacity-40' : ''}`}>
-                    <span class="text-[10px] font-black text-blue-500">
-                      {monthLabels[eventDate.getMonth()]}
-                    </span>
-                    <span class={`text-2xl font-black leading-none ${past ? 'text-slate-400' : 'text-slate-800'}`}>
-                      {status === 'planning' ? '○' : String(eventDate.getDate()).padStart(2, '0')}
-                    </span>
-                  </div>
+                  <time class="event-schedule-date" datetime={event.eventDate.start}>
+                    <span>{monthLabels[eventDate.getMonth()]}</span>
+                    <strong>{status === 'planning' ? '미정' : String(eventDate.getDate()).padStart(2, '0')}</strong>
+                  </time>
 
-                  <div class={`w-px self-stretch shrink-0 ${past ? 'bg-slate-100' : 'bg-slate-200'}`}></div>
-
-                  <div class="flex-1 min-w-0 flex flex-col gap-1.5">
-                    <div class="flex flex-wrap items-center gap-1">
-                      {event.kind && (
-                        <span class="text-[10px] font-black px-2 py-0.5 rounded-full bg-blue-50 text-blue-600">
-                          {EVENT_KIND_LABEL[event.kind]}
-                        </span>
-                      )}
-                      {event.audience && (
-                        <span class="text-[10px] font-black px-2 py-0.5 rounded-full bg-slate-100 text-slate-500">
-                          {EVENT_AUDIENCE_LABEL[event.audience]}
-                        </span>
-                      )}
+                  <div class="event-schedule-copy">
+                    <div class="event-schedule-meta">
+                      {event.kind && <span>{EVENT_KIND_LABEL[event.kind]}</span>}
+                      {event.audience && <span>{EVENT_AUDIENCE_LABEL[event.audience]}</span>}
                       {[...event.format].sort((a, b) => FORMAT_ORDER.indexOf(a) - FORMAT_ORDER.indexOf(b)).map((format) => (
-                        <span class="text-[10px] font-black px-2 py-0.5 rounded-full bg-slate-100 text-slate-400">
-                          {EVENT_FORMAT_LABEL[format]}
-                        </span>
+                        <span>{EVENT_FORMAT_LABEL[format]}</span>
                       ))}
                     </div>
-
-                    <p class={`text-sm font-extrabold leading-snug transition-colors ${clickable ? 'group-hover:text-blue-600' : ''} ${past ? 'text-slate-400' : 'text-slate-900'}`}>
-                      {event.title}
-                    </p>
-
-                    <div class={`flex flex-wrap items-center gap-x-3 gap-y-0.5 text-xs ${past ? 'text-slate-300' : 'text-slate-400'}`}>
-                      <span class="flex items-center gap-1">
-                        <LucideIcon name="calendar-days" size={11} className="shrink-0" />
-                        {formatEventDate(event.eventDate)}
-                      </span>
-                      {event.location && (
-                        <span class="flex items-center gap-1">
-                          <LucideIcon name="map-pin" size={11} className="shrink-0" />
-                          {event.location}
-                        </span>
-                      )}
+                    <h2>{event.title}</h2>
+                    <p>{event.summary}</p>
+                    <div class="event-schedule-facts">
+                      <span>{formatEventDate(event.eventDate)}</span>
+                      {event.location && <span>{event.location}</span>}
                     </div>
                   </div>
 
-                  {shouldShowRibbon(event, status) && (
-                    <div class={`absolute right-0 top-0 bottom-0 w-10 flex items-center justify-center ${config.className}`}>
-                      <span class="text-[10px] font-semibold tracking-wider [writing-mode:vertical-rl]">
-                        {config.label}
-                      </span>
-                    </div>
-                  )}
+                  <span class="event-schedule-status" data-event-status data-status={status}>{statusLabel}</span>
+                  {clickable && <LucideIcon name="arrow-right" size={18} className="event-schedule-arrow" />}
                 </>
               )
 
               if (clickable) {
                 return (
-                  <a
-                    href={`/events/archive/${event.slug}?from=upcoming`}
-                    data-track-event="select_event_card"
-                    data-track-params={JSON.stringify({
-                      event_slug: event.slug,
-                      event_title: event.title,
-                      event_kind: event.kind ?? 'unknown',
-                      event_audience: event.audience ?? 'unknown',
-                      event_status: status,
-                      source_page: 'events_upcoming',
-                    })}
-                    class={`${wrapperClass} group`}
+                  <li
+                    class:list={['event-schedule-item', past && 'is-past']}
                     data-reveal-delay={String(index * 60)}
                     data-upcoming-event-card
                     data-event-start={event.eventDate.start}
@@ -205,16 +133,28 @@ const hasPlanningEvents = events.some((event) => getEventStatus(event) === 'plan
                     data-event-recruit-end={event.recruitDate?.end ?? event.recruitDate?.start ?? ''}
                     data-event-audience={event.audience ?? ''}
                   >
-                    <div class={baseCardClass}>
+                    <a
+                      href={`/events/archive/${event.slug}?from=upcoming`}
+                      data-track-event="select_event_card"
+                      data-track-params={JSON.stringify({
+                        event_slug: event.slug,
+                        event_title: event.title,
+                        event_kind: event.kind ?? 'unknown',
+                        event_audience: event.audience ?? 'unknown',
+                        event_status: status,
+                        source_page: 'events_upcoming',
+                      })}
+                      class="event-schedule-row"
+                    >
                       {content}
-                    </div>
-                  </a>
+                    </a>
+                  </li>
                 )
               }
 
               return (
-                <div
-                  class={wrapperClass}
+                <li
+                  class:list={['event-schedule-item', past && 'is-past', 'is-static']}
                   data-reveal-delay={String(index * 60)}
                   data-upcoming-event-card
                   data-event-start={event.eventDate.start}
@@ -226,18 +166,63 @@ const hasPlanningEvents = events.some((event) => getEventStatus(event) === 'plan
                   data-event-recruit-end={event.recruitDate?.end ?? event.recruitDate?.start ?? ''}
                   data-event-audience={event.audience ?? ''}
                 >
-                  <div class={baseCardClass}>
+                  <div class="event-schedule-row">
                     {content}
                   </div>
-                </div>
+                </li>
               )
             })}
-          </div>
+          </ol>
         )}
       </Container>
     </section>
   </div>
 </SiteLayout>
+
+<style>
+  .event-schedule-page { background: #fff; color: #0f172a; }
+  .event-schedule-intro { padding: 150px 0 72px; border-bottom: 1px solid #e2e8f0; }
+  .event-schedule-intro-grid { display: flex; align-items: end; justify-content: space-between; gap: 40px; }
+  .event-schedule-intro h1 { margin: 0; font-size: clamp(2.8rem, 5.4vw, 4.8rem); font-weight: 850; letter-spacing: -0.035em; line-height: 1; }
+  .event-schedule-intro p { max-width: 42rem; margin: 24px 0 0; color: #475569; font-size: 16px; font-weight: 550; line-height: 1.75; word-break: keep-all; }
+  .event-schedule-intro a { display: inline-flex; min-height: 44px; align-items: center; gap: 8px; border-bottom: 1px solid #94a3b8; color: #1e3a8a; font-size: 13px; font-weight: 750; }
+  .event-schedule-surface { padding: 52px 0 104px; background: #f8fafc; }
+  .event-schedule-note { display: flex; align-items: flex-start; gap: 10px; margin-bottom: 28px; padding: 0 0 18px; border-bottom: 1px solid #cbd5e1; color: #1e3a8a; }
+  .event-schedule-note p { font-size: 12px; line-height: 1.65; word-break: keep-all; }
+  .event-schedule-list { margin: 0; padding: 0; border-top: 1px solid #94a3b8; list-style: none; }
+  .event-schedule-item { border-bottom: 1px solid #cbd5e1; }
+  .event-schedule-row { display: grid; grid-template-columns: 82px minmax(0, 1fr) auto 28px; align-items: center; gap: 30px; min-height: 176px; padding: 28px 4px; }
+  a.event-schedule-row:hover h2 { color: #1d4ed8; }
+  .event-schedule-date { display: grid; align-self: stretch; align-content: center; border-right: 1px solid #cbd5e1; font-variant-numeric: tabular-nums; }
+  .event-schedule-date span { color: #2563eb; font-size: 12px; font-weight: 750; }
+  .event-schedule-date strong { margin-top: 7px; color: #0f172a; font-size: 32px; font-weight: 830; letter-spacing: -0.03em; }
+  .event-schedule-copy { min-width: 0; }
+  .event-schedule-meta { display: flex; flex-wrap: wrap; gap: 7px 14px; color: #64748b; font-size: 11px; font-weight: 700; }
+  .event-schedule-copy h2 { margin: 12px 0 0; font-size: 21px; font-weight: 810; letter-spacing: -0.025em; line-height: 1.35; transition: color 160ms ease; }
+  .event-schedule-copy > p { max-width: 52rem; margin: 9px 0 0; color: #475569; font-size: 13px; font-weight: 550; line-height: 1.6; word-break: keep-all; }
+  .event-schedule-facts { display: flex; flex-wrap: wrap; gap: 6px 18px; margin-top: 13px; color: #64748b; font-size: 12px; font-weight: 600; }
+  .event-schedule-status { min-width: 72px; color: #475569; font-size: 12px; font-weight: 800; text-align: right; white-space: nowrap; }
+  .event-schedule-status[data-status='recruiting'], .event-schedule-status[data-status='today-ongoing'] { color: #047857; }
+  .event-schedule-status[data-status='before-recruit'], .event-schedule-status[data-status='today-upcoming'] { color: #b45309; }
+  .event-schedule-arrow { color: #1e3a8a; }
+  .event-schedule-item.is-past { opacity: 0.62; }
+  .event-schedule-empty { padding: 84px 0; border-top: 1px solid #94a3b8; border-bottom: 1px solid #cbd5e1; }
+  .event-schedule-empty h2 { font-size: 24px; font-weight: 800; }
+  .event-schedule-empty p { margin-top: 12px; color: #64748b; }
+  .event-schedule-empty a { display: inline-block; margin-top: 24px; color: #1d4ed8; font-weight: 750; }
+  @media (max-width: 720px) {
+    .event-schedule-intro { padding: 122px 0 52px; }
+    .event-schedule-intro-grid { display: block; }
+    .event-schedule-intro a { margin-top: 26px; }
+    .event-schedule-surface { padding: 34px 0 72px; }
+    .event-schedule-row { grid-template-columns: 58px minmax(0, 1fr) auto; gap: 18px; min-height: 0; padding: 24px 0; }
+    .event-schedule-date strong { font-size: 24px; }
+    .event-schedule-copy h2 { font-size: 17px; }
+    .event-schedule-copy > p { display: none; }
+    .event-schedule-status { grid-column: 2; justify-self: start; min-width: 0; text-align: left; }
+    .event-schedule-arrow { grid-column: 3; grid-row: 1 / span 2; }
+  }
+</style>
 
 <script is:inline>
   (() => {
@@ -245,20 +230,15 @@ const hasPlanningEvents = events.some((event) => getEventStatus(event) === 'plan
 
     if (cards.length === 0) return
 
-    const ribbonClasses = {
-      'today-upcoming': 'bg-orange-500 text-white',
-      'today-ongoing': 'bg-blue-600 text-white',
-      recruiting: 'bg-emerald-500 text-white',
-      'recruit-closed': 'bg-slate-700 text-white',
-      'before-recruit': 'bg-amber-500 text-white',
-    }
-
     const ribbonLabels = {
-      'today-upcoming': '오늘 시작',
-      'today-ongoing': '진행 중',
+      'today-upcoming': '오늘 예정',
+      'today-ongoing': '오늘 진행 중',
       recruiting: '접수 중',
       'recruit-closed': '접수 마감',
       'before-recruit': '접수 예정',
+      'no-recruit': '운영진 행사',
+      planning: '일정 조율 중',
+      past: '종료',
     }
 
     const toDate = (value) => {
@@ -321,22 +301,28 @@ const hasPlanningEvents = events.some((event) => getEventStatus(event) === 'plan
     }
 
     cards.forEach((card) => {
-      const ribbon = card.querySelector('[class*="absolute right-0 top-0 bottom-0 w-10"]')
-      const ribbonText = ribbon?.querySelector('span')
-
-      if (!ribbon || !ribbonText) return
+      const statusText = card.querySelector('[data-event-status]')
+      if (!statusText) return
 
       const status = getEventStatus(card)
+      statusText.dataset.status = status
+      const today = new Date()
+      today.setHours(0, 0, 0, 0)
+      const recruitStart = toDate(card.getAttribute('data-event-recruit-start'))
+      const recruitEnd = toDate(card.getAttribute('data-event-recruit-end'))
+      let label = ribbonLabels[status] ?? statusText.textContent
 
-      if (!(status in ribbonClasses)) {
-        ribbon.className = 'hidden'
-        ribbonText.textContent = ''
-        return
+      if (status === 'recruiting' && recruitStart && recruitEnd) {
+        if (today.getTime() === recruitStart.getTime()) label = '오늘 오픈'
+        if (today.getTime() === recruitEnd.getTime()) label = '오늘 마감'
       }
 
-      ribbon.className = `absolute right-0 top-0 bottom-0 w-10 flex items-center justify-center ${ribbonClasses[status]}`
-      ribbonText.className = 'text-[10px] font-semibold tracking-wider [writing-mode:vertical-rl]'
-      ribbonText.textContent = ribbonLabels[status]
+      if (status === 'before-recruit' && recruitStart) {
+        const daysUntil = Math.round((recruitStart.getTime() - today.getTime()) / 86400000)
+        label = daysUntil <= 7 ? '곧 오픈' : '접수 예정'
+      }
+
+      statusText.textContent = label
     })
   })()
 </script>
