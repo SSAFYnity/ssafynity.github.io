@@ -106,7 +106,7 @@ export const events2026: Event[] = [
   },
   {
     slug:      '2026-ongoing-event-august',
-    title:     '멧챠 카멜리온 대전',
+    title:     '멧챠 카멜레온 대전',
     eventDate: { start: '2026-08-30', startTime: '20:00' },
     recruitDate: { start: '2026-08-21', end: '2026-08-28' },
     format:    ['online'],
