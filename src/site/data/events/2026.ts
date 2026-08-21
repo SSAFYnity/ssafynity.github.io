@@ -109,6 +109,7 @@ export const events2026: Event[] = [
     title:     '멧챠 카멜레온 대전',
     eventDate: { start: '2026-08-30', startTime: '20:00' },
     recruitDate: { start: '2026-08-21', end: '2026-08-28' },
+    formUrl:   'https://forms.gle/EpfAMxMAvKq3FxPG7',
     format:    ['online'],
     kind:      'ongoing',
     audience:  'regular',
