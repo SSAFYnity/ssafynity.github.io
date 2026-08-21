@@ -9,6 +9,8 @@ interface Props {
 }
 
 const { pathname } = Astro.props
+const isHomePath = pathname === '/'
+const blogUrl = import.meta.env.DEV ? siteData.sites.development.blog : siteData.sites.production.blog
 
 const hasExactMatch = siteData.menu.some((category) =>
   category.items.some((item) => !('external' in item && item.external) && pathname === item.path),
@@ -27,195 +29,586 @@ function isItemActive(item: typeof siteData.menu[number]['items'][number]) {
   if ('external' in item && item.external) return false
   return pathname === item.path
 }
+
+function resolveItemHref(item: typeof siteData.menu[number]['items'][number]) {
+  if (!import.meta.env.DEV || !item.path.startsWith(siteData.sites.production.blog)) return item.path
+  return item.path.replace(siteData.sites.production.blog, siteData.sites.development.blog)
+}
 ---
 
-<nav id="site-nav" class="fixed top-0 left-0 w-full z-50 pt-[max(env(safe-area-inset-top),0.5rem)] sm:pt-[env(safe-area-inset-top)] transition-all duration-500">
+<header class:list={['official-header', { 'is-home': isHomePath }]} data-site-header>
   <Container maxWidth="7xl">
-    <div id="site-nav-inner" class="flex items-center py-4 lg:py-8 transition-all duration-500">
-      <a href="/" class="flex items-center gap-3 group">
-        <img src={withBaseAsset('/logo-rect.png')} alt="SSAFYnity" class="h-10 w-auto" />
-        <div class="flex flex-col">
-          <span class="text-lg font-bold tracking-tight text-slate-900 leading-none">SSAFYnity</span>
-          <span class="text-[10px] font-bold tracking-widest text-blue-800 uppercase">Alumni Association</span>
-        </div>
+    <div class="official-header-inner">
+      <a href="/" class="official-brand" aria-label="SSAFYnity 공식 홈페이지 홈">
+        <img src={withBaseAsset('/logo-rect.png')} alt="" class="official-brand-mark" />
+        <span class="official-brand-copy">
+          <strong>SSAFYnity</strong>
+          <span>공식 홈페이지</span>
+        </span>
       </a>
 
-      <div class="hidden lg:flex items-center gap-1 ml-auto">
+      <nav class="official-desktop-nav" aria-label="공식 홈페이지 주요 메뉴">
         {siteData.menu.map((category, index) => {
-          const openId = `desktop-nav-${index}`
           const active = isCategoryActive(category.items)
+          const menuId = `official-nav-menu-${index}`
 
           return (
-            <div class="relative group/nav">
+            <div class:list={['official-nav-group', { 'is-active': active }]} data-nav-group>
               <button
                 type="button"
-                class={`desktop-nav-button flex items-center gap-1.5 px-3 py-2 rounded-md font-bold text-sm transition-all ${
-                  active
-                    ? 'text-blue-900 bg-blue-50/70'
-                    : 'text-slate-600 hover:text-blue-900 hover:bg-slate-50'
-                }`}
-                data-desktop-nav-trigger={openId}
+                class="official-nav-trigger"
                 aria-expanded="false"
+                aria-haspopup="true"
+                aria-controls={menuId}
+                data-nav-trigger
               >
-                {category.label}
-                <LucideIcon
-                  name="chevron-down"
-                  size={14}
-                  className="desktop-nav-chevron opacity-40 transition-transform duration-300"
-                />
+                <span>{category.label}</span>
+                <LucideIcon name="chevron-down" size={14} />
               </button>
-
-              <div class="absolute top-full left-0 pt-2 w-48 hidden group-hover/nav:block" data-desktop-nav-menu={openId}>
-                <div class="bg-white rounded-xl shadow-xl border border-slate-100 p-1.5">
-                  {category.items.map((item) => {
-                    const itemClass = `flex items-center gap-1.5 px-4 py-2.5 text-xs font-bold rounded-lg transition-colors w-full text-left ${
-                      isItemActive(item)
-                        ? 'text-blue-900 bg-blue-50'
-                        : 'text-slate-500 hover:text-blue-900 hover:bg-slate-50'
-                    }`
-
-                    if ('external' in item && item.external) {
-                      return (
-                        <a href={item.path} target="_blank" rel="noopener noreferrer" class={itemClass}>
-                          {item.label}
-                          <LucideIcon name="external-link" size={10} className="opacity-50" />
-                        </a>
-                      )
-                    }
-
-                    return (
-                      <a href={item.path} class={itemClass}>
-                        {item.label}
-                      </a>
-                    )
-                  })}
-                </div>
+              <div class="official-nav-menu" id={menuId} data-nav-menu hidden>
+                {category.items.map((item) => (
+                  <a
+                    class:list={['official-nav-menu-link', { 'is-active': isItemActive(item) }]}
+                    href={resolveItemHref(item)}
+                    target={'external' in item && item.external ? '_blank' : undefined}
+                    rel={'external' in item && item.external ? 'noopener noreferrer' : undefined}
+                  >
+                    <span>{item.label}</span>
+                    {'external' in item && item.external && <LucideIcon name="external-link" size={12} />}
+                  </a>
+                ))}
               </div>
             </div>
           )
         })}
-      </div>
+      </nav>
 
-      <div class="flex items-center lg:hidden ml-auto">
-        <button
-          type="button"
-          id="mobile-nav-trigger"
-          aria-label="메뉴 열기"
-          aria-expanded="false"
-          class="lg:hidden p-2.5 min-h-11 min-w-11 text-slate-900 bg-slate-50 rounded-lg"
-        >
-          <LucideIcon name="menu" size={20} />
-        </button>
-      </div>
+      <a class="official-site-switch" href={blogUrl}>
+        <span>블로그</span>
+        <LucideIcon name="arrow-right" size={15} />
+      </a>
+
+      <button
+        type="button"
+        class="official-mobile-toggle"
+        aria-label="메뉴 열기"
+        aria-controls="official-mobile-drawer"
+        aria-expanded="false"
+        data-mobile-toggle
+      >
+        <LucideIcon name="menu" size={21} />
+      </button>
     </div>
   </Container>
 
-  <div
-    id="mobile-nav-backdrop"
-    class="fixed inset-0 z-[55] bg-slate-950/30 opacity-0 pointer-events-none transition-opacity duration-300 lg:hidden"
-  ></div>
+  <div class="official-mobile-backdrop" data-mobile-backdrop></div>
   <aside
-    id="mobile-nav-panel"
-    class="mobile-viewport-panel fixed top-0 right-0 z-[60] w-[min(100vw,24rem)] max-w-full bg-white shadow-2xl translate-x-full transition-transform duration-300 overflow-y-auto overscroll-contain pb-[env(safe-area-inset-bottom)] lg:hidden"
+    id="official-mobile-drawer"
+    class="official-mobile-drawer"
+    aria-label="모바일 메뉴"
     aria-hidden="true"
+    data-mobile-drawer
   >
-    <div class="flex flex-col gap-6 p-6 pt-[calc(5rem+env(safe-area-inset-top))] sm:gap-8 sm:p-8 sm:pt-[calc(5.5rem+env(safe-area-inset-top))]">
-      <div class="flex items-center justify-between gap-3">
-        <p class="text-lg font-extrabold text-slate-900">메뉴</p>
-        <button
-          type="button"
-          id="mobile-nav-close"
-          aria-label="메뉴 닫기"
-          class="p-2.5 min-h-11 min-w-11 rounded-lg bg-slate-50 text-slate-700"
-        >
-          <LucideIcon name="x" size={18} />
-        </button>
-      </div>
-
-      {siteData.menu.map((category) => (
-        <div class="space-y-3">
-          <p class="text-base font-bold text-slate-900">{category.label}</p>
-          <div class="flex flex-col gap-1 pl-4 border-l-2 border-blue-900/10">
-            {category.items.map((item) => {
-              const itemClass = `flex items-center gap-1.5 text-sm font-bold py-2.5 px-2 min-h-11 rounded-lg transition-colors ${
-                isItemActive(item)
-                  ? 'text-blue-900 bg-blue-50'
-                  : 'text-slate-500 hover:text-blue-900 hover:bg-slate-50'
-              }`
-
-              if ('external' in item && item.external) {
-                return (
-                  <a href={item.path} target="_blank" rel="noopener noreferrer" class={itemClass}>
-                    {item.label}
-                    <LucideIcon name="external-link" size={10} className="opacity-50" />
-                  </a>
-                )
-              }
-
-              return <a href={item.path} class={itemClass}>{item.label}</a>
-            })}
-          </div>
-        </div>
-      ))}
+    <div class="official-mobile-head">
+      <a href="/" class="official-brand" aria-label="SSAFYnity 공식 홈페이지 홈">
+        <img src={withBaseAsset('/logo-rect.png')} alt="" class="official-brand-mark" />
+        <span class="official-brand-copy">
+          <strong>SSAFYnity</strong>
+          <span>공식 홈페이지</span>
+        </span>
+      </a>
+      <button type="button" class="official-mobile-close" aria-label="메뉴 닫기" data-mobile-close>
+        <LucideIcon name="x" size={20} />
+      </button>
     </div>
+
+    <a class="official-mobile-switch" href={blogUrl}>
+      <span>
+        <small>같은 사이트의 기록 공간</small>
+        <strong>공식 블로그로 이동</strong>
+      </span>
+      <LucideIcon name="arrow-right" size={17} />
+    </a>
+
+    <nav class="official-mobile-nav" aria-label="모바일 공식 홈페이지 메뉴">
+      {siteData.menu.map((category) => (
+        <section class="official-mobile-section">
+          <p>{category.label}</p>
+          <div>
+            {category.items.map((item) => (
+              <a
+                class:list={['official-mobile-link', { 'is-active': isItemActive(item) }]}
+                href={resolveItemHref(item)}
+                target={'external' in item && item.external ? '_blank' : undefined}
+                rel={'external' in item && item.external ? 'noopener noreferrer' : undefined}
+              >
+                <span>{item.label}</span>
+                {'external' in item && item.external && <LucideIcon name="external-link" size={12} />}
+              </a>
+            ))}
+          </div>
+        </section>
+      ))}
+    </nav>
   </aside>
+</header>
 
-  <script is:inline>
-    (() => {
-      const nav = document.getElementById('site-nav')
-      const navInner = document.getElementById('site-nav-inner')
-      const trigger = document.getElementById('mobile-nav-trigger')
-      const closeButton = document.getElementById('mobile-nav-close')
-      const backdrop = document.getElementById('mobile-nav-backdrop')
-      const panel = document.getElementById('mobile-nav-panel')
+<script>
+  const header = document.querySelector<HTMLElement>('[data-site-header]')
+  const mobileToggle = header?.querySelector<HTMLButtonElement>('[data-mobile-toggle]')
+  const mobileClose = header?.querySelector<HTMLButtonElement>('[data-mobile-close]')
+  const mobileDrawer = header?.querySelector<HTMLElement>('[data-mobile-drawer]')
+  const mobileBackdrop = header?.querySelector<HTMLElement>('[data-mobile-backdrop]')
+  const desktopGroups = header?.querySelectorAll<HTMLElement>('[data-nav-group]') ?? []
+  let desktopCloseTimer: number | undefined
 
-      const syncScrolled = () => {
-        const isScrolled = window.scrollY > 20
-        nav?.classList.toggle('bg-white/95', isScrolled)
-        nav?.classList.toggle('backdrop-blur-md', isScrolled)
-        nav?.classList.toggle('border-b', isScrolled)
-        nav?.classList.toggle('border-slate-100', isScrolled)
-        nav?.classList.toggle('shadow-sm', isScrolled)
-        navInner?.classList.toggle('py-3', isScrolled)
-        navInner?.classList.toggle('lg:py-4', isScrolled)
-        navInner?.classList.toggle('py-4', !isScrolled)
-        navInner?.classList.toggle('lg:py-8', !isScrolled)
+  const cancelDesktopClose = () => {
+    if (desktopCloseTimer === undefined) return
+    window.clearTimeout(desktopCloseTimer)
+    desktopCloseTimer = undefined
+  }
+
+  const closeDesktopGroups = () => {
+    cancelDesktopClose()
+    desktopGroups.forEach((group) => {
+      const trigger = group.querySelector<HTMLButtonElement>('[data-nav-trigger]')
+      const menu = group.querySelector<HTMLElement>('[data-nav-menu]')
+      group.classList.remove('is-open')
+      trigger?.setAttribute('aria-expanded', 'false')
+      if (menu) menu.hidden = true
+    })
+  }
+
+  const scheduleDesktopClose = () => {
+    cancelDesktopClose()
+    desktopCloseTimer = window.setTimeout(closeDesktopGroups, 160)
+  }
+
+  const openDesktopGroup = (group: HTMLElement) => {
+    const trigger = group.querySelector<HTMLButtonElement>('[data-nav-trigger]')
+    const menu = group.querySelector<HTMLElement>('[data-nav-menu]')
+    if (!trigger || !menu) return
+    closeDesktopGroups()
+    group.classList.add('is-open')
+    trigger.setAttribute('aria-expanded', 'true')
+    menu.hidden = false
+  }
+
+  const setMobileOpen = (open: boolean) => {
+    if (!header || !mobileToggle || !mobileDrawer || !mobileBackdrop) return
+    const isCurrentlyOpen = header.classList.contains('is-mobile-open')
+    if (open === isCurrentlyOpen) return
+    const scrollY = window.scrollY
+    header.classList.toggle('is-mobile-open', open)
+    mobileToggle.setAttribute('aria-expanded', open ? 'true' : 'false')
+    mobileDrawer.setAttribute('aria-hidden', open ? 'false' : 'true')
+
+    if (open) {
+      document.body.dataset.scrollY = String(scrollY)
+      document.body.style.top = `-${scrollY}px`
+      document.body.classList.add('overflow-hidden')
+      mobileClose?.focus()
+      return
+    }
+
+    const savedScrollY = Number(document.body.dataset.scrollY || '0')
+    document.body.classList.remove('overflow-hidden')
+    document.body.style.top = ''
+    delete document.body.dataset.scrollY
+    window.scrollTo(0, savedScrollY)
+    mobileToggle.focus()
+  }
+
+  const syncScrolled = () => header?.classList.toggle('is-scrolled', window.scrollY > 20)
+  syncScrolled()
+  window.addEventListener('scroll', syncScrolled, { passive: true })
+
+  desktopGroups.forEach((group) => {
+    const trigger = group.querySelector<HTMLButtonElement>('[data-nav-trigger]')
+    group.addEventListener('mouseenter', () => {
+      cancelDesktopClose()
+      openDesktopGroup(group)
+    })
+    group.addEventListener('mouseleave', scheduleDesktopClose)
+    group.addEventListener('focusin', cancelDesktopClose)
+    group.addEventListener('focusout', (event) => {
+      if (event.relatedTarget instanceof Node && group.contains(event.relatedTarget)) return
+      scheduleDesktopClose()
+    })
+    group.addEventListener('keydown', (event) => {
+      if (event.key !== 'Escape' || !group.classList.contains('is-open')) return
+      event.preventDefault()
+      event.stopPropagation()
+      closeDesktopGroups()
+      trigger?.focus()
+    })
+    trigger?.addEventListener('click', (event) => {
+      const keyboardToggleClose = event.detail === 0 && group.classList.contains('is-open')
+      keyboardToggleClose ? closeDesktopGroups() : openDesktopGroup(group)
+    })
+    trigger?.addEventListener('keydown', (event) => {
+      if (event.key === 'ArrowDown') {
+        event.preventDefault()
+        openDesktopGroup(group)
+        group.querySelector<HTMLAnchorElement>('[data-nav-menu] a')?.focus()
       }
+    })
+  })
 
-      const setMobileOpen = (open) => {
-        if (!trigger || !backdrop || !panel) return
-        const scrollY = window.scrollY
+  mobileToggle?.addEventListener('click', () => setMobileOpen(true))
+  mobileClose?.addEventListener('click', () => setMobileOpen(false))
+  mobileBackdrop?.addEventListener('click', () => setMobileOpen(false))
+  mobileDrawer?.querySelectorAll('a').forEach((link) => link.addEventListener('click', () => setMobileOpen(false)))
 
-        trigger.setAttribute('aria-expanded', open ? 'true' : 'false')
-        panel.setAttribute('aria-hidden', open ? 'false' : 'true')
-        backdrop.classList.toggle('opacity-100', open)
-        backdrop.classList.toggle('pointer-events-auto', open)
-        backdrop.classList.toggle('pointer-events-none', !open)
-        panel.classList.toggle('translate-x-full', !open)
+  document.addEventListener('click', (event) => {
+    if (!(event.target instanceof Node) || !header || header.contains(event.target)) return
+    closeDesktopGroups()
+  })
 
-        if (open) {
-          document.body.dataset.scrollY = String(scrollY)
-          document.body.style.top = `-${scrollY}px`
-          document.body.classList.add('overflow-hidden')
-        } else {
-          const savedScrollY = Number(document.body.dataset.scrollY || '0')
-          document.body.classList.remove('overflow-hidden')
-          document.body.style.top = ''
-          delete document.body.dataset.scrollY
-          window.scrollTo(0, savedScrollY)
-        }
-      }
+  window.addEventListener('keydown', (event) => {
+    if (event.key !== 'Escape') return
+    closeDesktopGroups()
+    setMobileOpen(false)
+  })
 
-      syncScrolled()
-      window.addEventListener('scroll', syncScrolled, { passive: true })
+  window.addEventListener('resize', () => {
+    if (window.innerWidth >= 1200) setMobileOpen(false)
+  })
+</script>
 
-      trigger?.addEventListener('click', () => setMobileOpen(true))
-      closeButton?.addEventListener('click', () => setMobileOpen(false))
-      backdrop?.addEventListener('click', () => setMobileOpen(false))
+<style>
+  .official-header {
+    position: fixed;
+    inset: 0 0 auto;
+    z-index: 50;
+    padding-top: env(safe-area-inset-top);
+    border-bottom: 1px solid transparent;
+    background: transparent;
+    transition: background-color 180ms ease, border-color 180ms ease;
+  }
 
-      panel?.querySelectorAll('a').forEach((link) => {
-        link.addEventListener('click', () => setMobileOpen(false))
-      })
-    })()
-  </script>
-</nav>
+  .official-header:not(.is-home),
+  .official-header.is-scrolled,
+  .official-header.is-mobile-open {
+    border-color: var(--color-border, #e2e8f0);
+    background: rgba(255, 255, 255, 0.98);
+  }
+
+  .official-header-inner {
+    display: flex;
+    min-height: 76px;
+    align-items: center;
+    gap: 24px;
+  }
+
+  .official-brand {
+    display: inline-flex;
+    flex: 0 0 auto;
+    align-items: center;
+    gap: 10px;
+    min-height: 44px;
+    color: #0f172a;
+    text-decoration: none;
+  }
+
+  .official-brand-mark {
+    width: auto;
+    height: 34px;
+  }
+
+  .official-brand-copy {
+    display: grid;
+    gap: 3px;
+    line-height: 1;
+  }
+
+  .official-brand-copy strong {
+    font-size: 16px;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+  }
+
+  .official-brand-copy span {
+    color: #64748b;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.03em;
+  }
+
+  .official-desktop-nav {
+    display: none;
+    align-items: stretch;
+    gap: 2px;
+    margin-left: auto;
+  }
+
+  .official-nav-group {
+    position: relative;
+  }
+
+  .official-nav-trigger {
+    position: relative;
+    display: inline-flex;
+    min-height: 44px;
+    align-items: center;
+    gap: 5px;
+    padding: 0 10px;
+    border: 0;
+    background: transparent;
+    color: #475569;
+    font-size: 14px;
+    font-weight: 700;
+    cursor: pointer;
+  }
+
+  .official-nav-trigger::after {
+    position: absolute;
+    right: 10px;
+    bottom: 3px;
+    left: 10px;
+    height: 2px;
+    background: #1e3a8a;
+    content: '';
+    opacity: 0;
+    transform: scaleX(0.45);
+    transition: opacity 160ms ease, transform 160ms ease;
+  }
+
+  .official-nav-group:is(.is-active, .is-open) .official-nav-trigger,
+  .official-nav-trigger:hover {
+    color: #0f172a;
+  }
+
+  .official-nav-group:is(.is-active, .is-open) .official-nav-trigger::after {
+    opacity: 1;
+    transform: scaleX(1);
+  }
+
+  .official-nav-group.is-open .official-nav-trigger :global(svg) {
+    transform: rotate(180deg);
+  }
+
+  .official-nav-menu {
+    position: absolute;
+    top: calc(100% + 8px);
+    left: 50%;
+    width: 196px;
+    padding: 7px;
+    border: 1px solid #cbd5e1;
+    border-radius: 14px;
+    background: #fff;
+    transform: translateX(-50%);
+  }
+
+  .official-nav-menu::before {
+    position: absolute;
+    right: 0;
+    bottom: 100%;
+    left: 0;
+    height: 9px;
+    content: '';
+  }
+
+  .official-nav-menu-link {
+    display: flex;
+    min-height: 40px;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    padding: 9px 11px;
+    border-radius: 8px;
+    color: #475569;
+    font-size: 13px;
+    font-weight: 650;
+    text-decoration: none;
+  }
+
+  .official-nav-menu-link:is(:hover, :focus-visible, .is-active) {
+    background: #eff6ff;
+    color: #1e3a8a;
+  }
+
+  .official-site-switch {
+    display: none;
+    min-height: 40px;
+    align-items: center;
+    gap: 7px;
+    padding: 0 13px;
+    border: 1px solid #cbd5e1;
+    border-radius: 10px;
+    color: #1e3a8a;
+    font-size: 13px;
+    font-weight: 750;
+    text-decoration: none;
+  }
+
+  .official-site-switch:hover {
+    border-color: #1e3a8a;
+    background: #eff6ff;
+  }
+
+  .official-mobile-toggle,
+  .official-mobile-close {
+    display: inline-grid;
+    width: 44px;
+    height: 44px;
+    place-items: center;
+    margin-left: auto;
+    border: 1px solid #cbd5e1;
+    border-radius: 10px;
+    background: #fff;
+    color: #0f172a;
+    cursor: pointer;
+  }
+
+  .official-mobile-backdrop {
+    position: fixed;
+    inset: 0;
+    z-index: 55;
+    background: rgba(15, 23, 42, 0.48);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 180ms ease;
+  }
+
+  .official-mobile-drawer {
+    position: fixed;
+    z-index: 60;
+    inset: 0 0 0 auto;
+    width: min(100%, 420px);
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    padding: calc(20px + env(safe-area-inset-top)) 20px calc(32px + env(safe-area-inset-bottom));
+    background: #fff;
+    transform: translateX(100%);
+    transition: transform 220ms ease;
+  }
+
+  .official-header.is-mobile-open .official-mobile-backdrop {
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  .official-header.is-mobile-open .official-mobile-drawer {
+    transform: translateX(0);
+  }
+
+  .official-mobile-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    padding-bottom: 18px;
+    border-bottom: 1px solid #e2e8f0;
+  }
+
+  .official-mobile-close {
+    margin-left: 0;
+  }
+
+  .official-mobile-switch {
+    display: flex;
+    min-height: 68px;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    margin: 18px 0 22px;
+    padding: 12px 14px;
+    border: 1px solid #bfdbfe;
+    border-radius: 12px;
+    background: #eff6ff;
+    color: #1e3a8a;
+    text-decoration: none;
+  }
+
+  .official-mobile-switch span {
+    display: grid;
+    gap: 3px;
+  }
+
+  .official-mobile-switch small {
+    color: #475569;
+    font-size: 11px;
+    font-weight: 650;
+  }
+
+  .official-mobile-switch strong {
+    font-size: 14px;
+    font-weight: 800;
+  }
+
+  .official-mobile-nav {
+    display: grid;
+  }
+
+  .official-mobile-section {
+    display: grid;
+    grid-template-columns: 88px minmax(0, 1fr);
+    gap: 12px;
+    padding: 17px 0;
+    border-bottom: 1px solid #e2e8f0;
+  }
+
+  .official-mobile-section > p {
+    margin: 10px 0 0;
+    color: #0f172a;
+    font-size: 13px;
+    font-weight: 800;
+  }
+
+  .official-mobile-section > div {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 2px 6px;
+  }
+
+  .official-mobile-link {
+    display: inline-flex;
+    min-height: 44px;
+    align-items: center;
+    gap: 5px;
+    padding: 8px;
+    border-radius: 8px;
+    color: #475569;
+    font-size: 13px;
+    font-weight: 650;
+    text-decoration: none;
+  }
+
+  .official-mobile-link:is(:hover, :focus-visible, .is-active) {
+    background: #eff6ff;
+    color: #1e3a8a;
+  }
+
+  @media (max-width: 419px) {
+    .official-mobile-section {
+      grid-template-columns: 76px minmax(0, 1fr);
+    }
+
+    .official-mobile-section > div {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  @media (min-width: 1200px) {
+    .official-desktop-nav,
+    .official-site-switch {
+      display: flex;
+    }
+
+    .official-mobile-toggle,
+    .official-mobile-backdrop,
+    .official-mobile-drawer {
+      display: none;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .official-header,
+    .official-nav-trigger::after,
+    .official-mobile-backdrop,
+    .official-mobile-drawer {
+      transition: none;
+    }
+  }
+</style>

@@ -58,8 +58,8 @@ export const siteData = {
       blog: 'https://ssafynity.github.io/blog',
     },
     development: {
-      official: 'http://127.0.0.1:4321',
-      blog: 'http://127.0.0.1:4322/blog',
+      official: 'http://127.0.0.1:4331',
+      blog: 'http://127.0.0.1:4332/blog',
     },
   },
 
