@@ -6,6 +6,50 @@
 
 @layer base {
   :root {
+    color-scheme: light;
+
+    /* SSAFYnity primitives. Keep these values local to this repository. */
+    --brand-navy-950: 23 37 84;
+    --brand-navy-800: 30 58 138;
+    --brand-blue-700: 29 78 216;
+    --brand-blue-600: 37 99 235;
+    --brand-blue-100: 219 234 254;
+    --brand-blue-50: 239 246 255;
+    --neutral-0: 255 255 255;
+    --neutral-50: 248 250 252;
+    --neutral-200: 226 232 240;
+    --neutral-300: 203 213 225;
+    --neutral-500: 100 116 139;
+    --neutral-600: 71 85 105;
+    --neutral-950: 15 23 42;
+
+    /* Semantic tokens used by the official-site UI. */
+    --color-canvas: rgb(var(--neutral-50));
+    --color-surface: rgb(var(--neutral-0));
+    --color-surface-inverse: rgb(var(--brand-navy-950));
+    --color-text-strong: rgb(var(--neutral-950));
+    --color-text-body: rgb(var(--neutral-600));
+    --color-text-muted: rgb(var(--neutral-500));
+    --color-text-inverse: rgb(var(--neutral-0));
+    --color-line: rgb(var(--neutral-200));
+    --color-line-strong: rgb(var(--neutral-300));
+    --color-action-primary: rgb(var(--brand-navy-800));
+    --color-action-primary-hover: rgb(var(--brand-navy-950));
+    --color-action-soft: rgb(var(--brand-blue-50));
+    --color-focus: rgb(var(--brand-blue-600));
+
+    --font-sans: 'Pretendard', sans-serif;
+    --measure-reading: 72ch;
+    --radius-control: 0.625rem;
+    --radius-panel: 0.875rem;
+    --radius-card: 1rem;
+    --radius-pill: 999px;
+    --duration-quick: 160ms;
+    --duration-standard: 240ms;
+    --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+    --elevation-raised: 0 10px 30px rgb(var(--neutral-950) / 0.08);
+    --elevation-overlay: 0 24px 64px rgb(var(--neutral-950) / 0.14);
+
     --background: 0 0% 100%;
     --foreground: 0 0% 3.9%;
     --card: 0 0% 100%;
@@ -30,9 +74,7 @@
     --chart-3: 197 37% 24%;
     --chart-4: 43 74% 66%;
     --chart-5: 27 87% 67%;
-    --radius: 0.5rem;
-    --radius-card: 1rem;
-    --radius-pill: 999px;
+    --radius: var(--radius-control);
   }
 
   html {
@@ -40,6 +82,8 @@
     -webkit-text-size-adjust: 100%;
     text-size-adjust: 100%;
     scrollbar-gutter: stable;
+    scrollbar-color: var(--color-line-strong) var(--color-canvas);
+    accent-color: var(--color-action-primary);
   }
 
   @supports not (scrollbar-gutter: stable) {
@@ -51,8 +95,20 @@
   body {
     min-height: 100vh;
     min-height: 100svh;
-    font-family: 'Pretendard', sans-serif;
+    font-family: var(--font-sans);
+    font-synthesis: none;
+    text-rendering: optimizeLegibility;
     @apply bg-surface text-text;
+  }
+
+  ::selection {
+    color: var(--color-text-strong);
+    background: rgb(var(--brand-blue-100) / 0.8);
+  }
+
+  :focus-visible {
+    outline: 3px solid var(--color-focus);
+    outline-offset: 3px;
   }
 
   body.overflow-hidden {
@@ -90,6 +146,10 @@
     text-wrap: pretty;
   }
 
+  :is(time, [data-numeric]) {
+    font-variant-numeric: tabular-nums;
+  }
+
   .dark {
     --background: 0 0% 3.9%;
     --foreground: 0 0% 98%;
@@ -115,6 +175,21 @@
     --chart-3: 30 80% 55%;
     --chart-4: 280 65% 60%;
     --chart-5: 340 75% 55%
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
   }
 }
 

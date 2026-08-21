@@ -13,6 +13,24 @@ export default {
         lg: 'var(--radius)',
         md: 'calc(var(--radius) - 2px)',
         sm: 'calc(var(--radius) - 4px)',
+        control: 'var(--radius-control)',
+        panel: 'var(--radius-panel)',
+        card: 'var(--radius-card)',
+        pill: 'var(--radius-pill)',
+      },
+      boxShadow: {
+        raised: 'var(--elevation-raised)',
+        overlay: 'var(--elevation-overlay)',
+      },
+      maxWidth: {
+        reading: 'var(--measure-reading)',
+      },
+      transitionDuration: {
+        quick: 'var(--duration-quick)',
+        standard: 'var(--duration-standard)',
+      },
+      transitionTimingFunction: {
+        'brand-out': 'var(--ease-out)',
       },
       colors: {
         // shadcn/ui tokens
@@ -53,17 +71,35 @@ export default {
           '5': 'hsl(var(--chart-5))',
         },
         // SSAFYnity semantic tokens
+        brand: {
+          navy: 'rgb(var(--brand-navy-800) / <alpha-value>)',
+          dark: 'rgb(var(--brand-navy-950) / <alpha-value>)',
+          DEFAULT: 'rgb(var(--brand-navy-800) / <alpha-value>)',
+          hover: 'rgb(var(--brand-navy-950) / <alpha-value>)',
+          soft: 'rgb(var(--brand-blue-50) / <alpha-value>)',
+        },
+        blue: {
+          600: 'rgb(var(--brand-navy-800) / <alpha-value>)',
+          700: 'rgb(var(--brand-navy-950) / <alpha-value>)',
+        },
         primary: {
-          DEFAULT: '#2563EB',
-          hover: '#1D4ED8',
+          DEFAULT: 'rgb(var(--brand-navy-800) / <alpha-value>)',
+          hover: 'rgb(var(--brand-navy-950) / <alpha-value>)',
         },
         surface: {
-          DEFAULT: '#FFFFFF',
-          muted: '#F8FAFC',
+          DEFAULT: 'rgb(var(--neutral-0) / <alpha-value>)',
+          muted: 'rgb(var(--neutral-50) / <alpha-value>)',
+          inverse: 'rgb(var(--brand-navy-950) / <alpha-value>)',
         },
         text: {
-          DEFAULT: '#0F172A',
-          muted: '#64748B',
+          DEFAULT: 'rgb(var(--neutral-950) / <alpha-value>)',
+          body: 'rgb(var(--neutral-600) / <alpha-value>)',
+          muted: 'rgb(var(--neutral-500) / <alpha-value>)',
+          inverse: 'rgb(var(--neutral-0) / <alpha-value>)',
+        },
+        line: {
+          DEFAULT: 'rgb(var(--neutral-200) / <alpha-value>)',
+          strong: 'rgb(var(--neutral-300) / <alpha-value>)',
         },
       },
     },
