@@ -1,0 +1,309 @@
+---
+import LucideIcon from '~/components/LucideIcon.astro'
+import { allEvents } from '@/data/computed'
+import { siteData } from '@/data/siteData'
+import { formatEventDate, getEventStatus, getEventStatusLabel } from '@/lib/utils'
+
+const publicEvents = allEvents.filter((event) => !event.internal)
+const activeEvents = publicEvents
+  .filter((event) => getEventStatus(event) !== 'past')
+  .sort((a, b) => a.eventDate.start.localeCompare(b.eventDate.start))
+
+const agendaEvents = (activeEvents.length > 0 ? activeEvents : [...publicEvents].reverse()).slice(0, 3)
+---
+
+<section class="official-masthead" aria-labelledby="official-masthead-title">
+  <div class="official-masthead__shell">
+    <div class="official-masthead__copy">
+      <h1 id="official-masthead-title">
+        <span>수료 뒤에도</span>
+        <span>이어지는 동문회</span>
+      </h1>
+      <p>
+        싸피니티는 {siteData.brand.slogan}입니다. 행사와 동아리, 운영 기록을 통해
+        기수와 지역을 넘어 계속 만날 수 있는 기반을 만듭니다.
+      </p>
+
+      <div class="official-masthead__actions">
+        <a class="official-masthead__primary" href="/join/membership">
+          동문회원 가입
+          <LucideIcon name="arrow-right" size={16} />
+        </a>
+        <a class="official-masthead__secondary" href="/events/upcoming">올해 행사 일정 보기</a>
+      </div>
+    </div>
+
+    <aside class="official-masthead__panel" aria-labelledby="official-masthead-panel-title">
+      <div class="official-masthead__panel-head">
+        <h2 id="official-masthead-panel-title">다가오는 일정</h2>
+        <a href="/events/upcoming">전체 일정</a>
+      </div>
+      <div class="official-masthead__agenda">
+        {agendaEvents.map((event) => {
+          const status = getEventStatusLabel(event, getEventStatus(event))
+          return (
+            <a href={`/events/archive/${event.slug}`} class="official-masthead__agenda-item">
+              <div class="official-masthead__agenda-meta">
+                <span>{status}</span>
+                <time datetime={event.eventDate.start}>{formatEventDate(event.eventDate)}</time>
+              </div>
+              <strong>{event.title}</strong>
+              <p>{event.summary}</p>
+            </a>
+          )
+        })}
+      </div>
+    </aside>
+  </div>
+</section>
+
+<style>
+  .official-masthead {
+    min-height: 720px;
+    padding: 156px 0 80px;
+    overflow: hidden;
+    background: var(--color-canvas);
+    color: var(--color-text-strong);
+  }
+
+  .official-masthead__shell {
+    display: grid;
+    width: min(100% - 40px, 1180px);
+    min-height: 484px;
+    margin-inline: auto;
+    gap: 72px;
+    align-items: center;
+  }
+
+  .official-masthead__copy {
+    max-width: 700px;
+  }
+
+  .official-masthead h1 {
+    display: grid;
+    margin: 0;
+    font-size: clamp(3.4rem, 6.2vw, 5.6rem);
+    font-weight: 850;
+    letter-spacing: -0.035em;
+    line-height: 0.98;
+    text-wrap: balance;
+  }
+
+  .official-masthead h1 span:last-child {
+    color: rgb(var(--brand-navy-950));
+  }
+
+  .official-masthead__copy > p {
+    max-width: 31rem;
+    margin: 30px 0 0;
+    color: var(--color-text-body);
+    font-size: 17px;
+    font-weight: 550;
+    line-height: 1.75;
+    word-break: keep-all;
+  }
+
+  .official-masthead__actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 18px;
+    margin-top: 38px;
+  }
+
+  .official-masthead__primary {
+    display: inline-flex;
+    min-height: 50px;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    padding: 0 20px;
+    border-radius: var(--radius-control);
+    background: var(--color-action-primary);
+    color: var(--color-text-inverse);
+    font-size: 14px;
+    font-weight: 800;
+    text-decoration: none;
+    transition: background-color var(--duration-quick) var(--ease-out);
+  }
+
+  .official-masthead__primary:hover {
+    background: var(--color-action-primary-hover);
+  }
+
+  .official-masthead__secondary {
+    min-height: 44px;
+    padding: 12px 0 8px;
+    border-bottom: 1px solid var(--color-line-strong);
+    color: var(--color-text-strong);
+    font-size: 14px;
+    font-weight: 750;
+    text-decoration: none;
+    transition:
+      border-color var(--duration-quick) var(--ease-out),
+      color var(--duration-quick) var(--ease-out);
+  }
+
+  .official-masthead__secondary:hover {
+    border-color: var(--color-action-primary);
+    color: var(--color-action-primary);
+  }
+
+  .official-masthead__panel {
+    min-height: 420px;
+    overflow: hidden;
+    border: 1px solid var(--color-line-strong);
+    border-radius: var(--radius-card);
+    background: var(--color-action-soft);
+    color: var(--color-text-strong);
+  }
+
+  .official-masthead__panel-head {
+    display: flex;
+    min-height: 62px;
+    align-items: center;
+    justify-content: space-between;
+    gap: 18px;
+    padding: 0 24px;
+    border-bottom: 1px solid var(--color-line-strong);
+  }
+
+  .official-masthead__panel-head h2 {
+    margin: 0;
+    color: var(--color-text-strong);
+    font-size: 15px;
+    font-weight: 800;
+  }
+
+  .official-masthead__panel-head a {
+    color: var(--color-action-primary);
+    font-size: 12px;
+    font-weight: 700;
+    text-decoration: none;
+  }
+
+  .official-masthead__agenda-item {
+    display: block;
+    padding: 22px 24px;
+    color: var(--color-text-strong);
+    text-decoration: none;
+  }
+
+  .official-masthead__agenda-item + .official-masthead__agenda-item {
+    border-top: 1px solid var(--color-line-strong);
+  }
+
+  .official-masthead__agenda-item:hover {
+    background: var(--color-surface);
+  }
+
+  .official-masthead__agenda-meta {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 9px;
+    margin-bottom: 9px;
+    color: var(--color-text-muted);
+    font-size: 11px;
+    font-weight: 700;
+  }
+
+  .official-masthead__agenda-meta span {
+    padding: 3px 7px;
+    border-radius: var(--radius-pill);
+    background: var(--color-surface);
+    border: 1px solid var(--color-line);
+    color: rgb(var(--brand-navy-800));
+  }
+
+  .official-masthead__agenda-item strong {
+    display: block;
+    font-size: 17px;
+    font-weight: 800;
+    line-height: 1.4;
+  }
+
+  .official-masthead__agenda-item p {
+    margin: 7px 0 0;
+    color: var(--color-text-body);
+    font-size: 12px;
+    font-weight: 560;
+    line-height: 1.55;
+  }
+
+  @media (min-width: 900px) {
+    .official-masthead__shell {
+      grid-template-columns: minmax(0, 1.18fr) minmax(330px, 0.72fr);
+    }
+  }
+
+  @media (max-width: 899px) {
+    .official-masthead {
+      min-height: auto;
+      padding: 132px 0 64px;
+    }
+
+    .official-masthead__shell {
+      min-height: 0;
+      gap: 52px;
+    }
+
+    .official-masthead__panel {
+      min-height: 0;
+    }
+  }
+
+  @media (max-width: 599px) {
+    .official-masthead {
+      padding: 118px 0 48px;
+    }
+
+    .official-masthead__shell {
+      width: min(100% - 32px, 1180px);
+      gap: 42px;
+    }
+
+    .official-masthead h1 {
+      font-size: clamp(2.8rem, 13vw, 3.45rem);
+      line-height: 1.01;
+    }
+
+    .official-masthead__copy > p {
+      margin-top: 24px;
+      font-size: 15px;
+      line-height: 1.7;
+    }
+
+    .official-masthead__actions {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 10px;
+      margin-top: 30px;
+    }
+
+    .official-masthead__primary,
+    .official-masthead__secondary {
+      width: 100%;
+      min-height: 48px;
+    }
+
+    .official-masthead__secondary {
+      display: grid;
+      place-items: center;
+      padding: 0;
+      border: 1px solid var(--color-line-strong);
+      border-radius: var(--radius-control);
+    }
+
+    .official-masthead__agenda-item {
+      padding: 18px 24px;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .official-masthead__primary,
+    .official-masthead__secondary {
+      transition: none;
+    }
+  }
+</style>
