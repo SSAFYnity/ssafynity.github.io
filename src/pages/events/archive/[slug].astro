@@ -301,8 +301,8 @@ const tabs = [
       </a>
     </div>
   ) : (
-    <div class="flex flex-col">
-      <section class="bg-white pt-24 pb-16 lg:pt-28 lg:pb-20">
+    <div class="event-detail-page flex flex-col">
+      <section class="event-detail-hero bg-white pt-24 pb-16 lg:pt-28 lg:pb-20">
         <Container maxWidth="5xl">
           <div class="astro-reveal flex flex-col gap-8">
             <a
@@ -313,6 +313,8 @@ const tabs = [
               <LucideIcon name="arrow-left" size={14} />
               <span id="event-back-label">역대 행사</span>
             </a>
+
+            <h1 class="sr-only">{event.title}</h1>
 
             <div class="lg:hidden flex flex-col gap-3">
               <div class="flex flex-wrap gap-2">
@@ -327,12 +329,12 @@ const tabs = [
                   </span>
                 )}
               </div>
-              <h1 class="text-2xl font-extrabold text-slate-900 leading-snug tracking-tight">{event.title}</h1>
-              <p class="text-sm text-slate-500 leading-relaxed break-keep">{event.summary}</p>
+              <p class="event-detail-title text-2xl font-extrabold text-slate-900 leading-snug tracking-tight" aria-hidden="true">{event.title}</p>
+              <p class="event-detail-summary text-sm text-slate-500 leading-relaxed break-keep">{event.summary}</p>
             </div>
 
-            <div class="flex flex-col lg:flex-row gap-8 lg:gap-12 lg:items-start">
-              <div class="flex flex-col gap-6 lg:w-64 shrink-0">
+            <div class="event-detail-overview flex flex-col lg:flex-row gap-8 lg:gap-12 lg:items-start">
+              <div class="event-detail-side flex flex-col gap-6 lg:w-64 shrink-0">
                 <div class="flex flex-col gap-2">
                   {eventImages.length > 0 ? (
                     <div class="relative group">
@@ -500,7 +502,7 @@ const tabs = [
                 </div>
               </div>
 
-              <div class="flex-1 min-w-0 flex flex-col gap-6">
+              <div class="event-detail-copy flex-1 min-w-0 flex flex-col gap-6">
                 <div class="hidden lg:flex flex-col gap-3">
                   <div class="flex flex-wrap gap-2">
                     {event.kind && (
@@ -514,11 +516,9 @@ const tabs = [
                       </span>
                     )}
                   </div>
-                  <h1 class="text-2xl md:text-3xl font-extrabold text-slate-900 leading-snug tracking-tight">{event.title}</h1>
-                  <p class="text-sm text-slate-500 leading-relaxed break-keep">{event.summary}</p>
+                  <p class="event-detail-title text-2xl md:text-3xl font-extrabold text-slate-900 leading-snug tracking-tight" aria-hidden="true">{event.title}</p>
+                  <p class="event-detail-summary text-sm text-slate-500 leading-relaxed break-keep">{event.summary}</p>
                 </div>
-
-                <hr class="hidden lg:block border-slate-100" />
 
                 <div class="flex flex-col gap-5">
                   {event.kind && (
@@ -599,7 +599,7 @@ const tabs = [
         </Container>
       </section>
 
-      <section id="event-action-section" class={`${initialActionState?.visible ? '' : 'hidden '}bg-white border-t border-b border-slate-100`}>
+      <section id="event-action-section" class={`${initialActionState?.visible ? '' : 'hidden '}event-detail-action bg-white border-t border-b border-slate-100`}>
         <Container maxWidth="5xl" className="py-4">
           <div class="flex flex-col gap-2">
             <p id="event-dday" class={`${initialActionState?.dday !== null ? '' : 'hidden '}text-xs text-slate-500`}>
@@ -644,7 +644,7 @@ const tabs = [
         </Container>
       </section>
 
-      <section class="bg-slate-50 border-t border-slate-100 py-10 lg:py-14">
+      <section class="event-detail-tabs bg-slate-50 border-t border-slate-100 py-10 lg:py-14">
         <Container maxWidth="5xl" className="flex flex-col gap-6">
           <div id="event-tabs" class="flex border-b border-slate-200">
             {tabs.map((tab) => (
@@ -1310,3 +1310,147 @@ const tabs = [
     </script>
   )}
 </SiteLayout>
+
+<style is:global>
+  .event-detail-page {
+    background: #fff;
+    color: #0f172a;
+  }
+
+  .event-detail-hero {
+    padding-top: 132px;
+    padding-bottom: 92px;
+  }
+
+  .event-detail-hero #event-back-link {
+    min-height: 44px;
+    align-items: center;
+    color: #64748b;
+    font-size: 12px;
+    font-weight: 700;
+  }
+
+  .event-detail-overview {
+    align-items: start;
+  }
+
+  .event-detail-side {
+    width: 100%;
+  }
+
+  .event-detail-side [data-event-gallery],
+  .event-detail-side [data-event-gallery] > div,
+  .event-detail-side > div:first-child > div:first-child {
+    border-radius: 14px;
+  }
+
+  .event-detail-side > div:last-child {
+    gap: 0;
+    border-top: 1px solid #cbd5e1;
+  }
+
+  .event-detail-side > div:last-child > div {
+    min-height: 72px;
+    align-items: center;
+    padding: 16px 0;
+    border-bottom: 1px solid #e2e8f0;
+  }
+
+  .event-detail-title {
+    margin: 0;
+    max-width: 16ch;
+    color: #0f172a;
+    font-size: clamp(2rem, 3.4vw, 3.5rem);
+    font-weight: 850;
+    letter-spacing: -0.035em;
+    line-height: 1.12;
+    text-wrap: balance;
+  }
+
+  .event-detail-summary {
+    max-width: 50rem;
+    color: #475569;
+    font-size: 16px;
+    font-weight: 500;
+    line-height: 1.7;
+  }
+
+  .event-detail-copy > div:last-child {
+    gap: 0;
+    border-top: 1px solid #cbd5e1;
+  }
+
+  .event-detail-copy > div:last-child > div {
+    padding: 20px 0;
+    border-bottom: 1px solid #e2e8f0;
+  }
+
+  .event-detail-copy > div:last-child > div > p {
+    font-size: 15px;
+  }
+
+  .event-detail-action > div > div {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 10px;
+  }
+
+  .event-detail-action :is(#event-apply-link, #event-action-disabled) {
+    width: 100%;
+    min-height: 50px;
+    border-radius: 10px;
+  }
+
+  .event-detail-action #event-dday {
+    font-size: 13px;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .event-detail-tabs {
+    padding-top: 48px;
+    padding-bottom: 104px;
+    background: #f8fafc;
+  }
+
+  .event-detail-tabs #event-tabs {
+    overflow-x: auto;
+    border-color: #cbd5e1;
+    scrollbar-width: thin;
+  }
+
+  .event-detail-tabs [data-event-tab-button] {
+    min-height: 48px;
+    flex: 0 0 auto;
+    padding-inline: 18px;
+    font-size: 13px;
+  }
+
+  .event-detail-tabs [data-event-panel] > .grid > *,
+  .event-detail-tabs [data-event-panel] > div:not(.grid) {
+    box-shadow: none;
+  }
+
+  @media (min-width: 1024px) {
+    .event-detail-overview {
+      display: grid;
+      grid-template-columns: minmax(330px, 0.82fr) minmax(0, 1.18fr);
+      gap: 76px;
+    }
+  }
+
+  @media (max-width: 1023px) {
+    .event-detail-hero {
+      padding-top: 112px;
+      padding-bottom: 64px;
+    }
+
+  }
+
+  @media (max-width: 640px) {
+    .event-detail-tabs {
+      padding-top: 36px;
+      padding-bottom: 72px;
+    }
+  }
+</style>
