@@ -216,9 +216,15 @@ const sortOptions = [
                     <div class={`rounded-2xl p-6 flex flex-col gap-4 border ${isFull ? 'bg-slate-100 border-slate-200 opacity-60' : 'bg-white border-slate-100'}`}>
                       <div class="flex items-start justify-between gap-2">
                         <div class="flex items-center gap-1.5 flex-wrap">
-                          <span class={`text-[10px] font-black px-2.5 py-1 rounded-full ${isFull ? 'bg-slate-200 text-slate-500' : 'bg-blue-50 text-blue-600'}`}>
-                            {CLUB_CATEGORIES[club.category].label}
-                          </span>
+                          {isFull ? (
+                            <span class="text-[10px] font-black px-2.5 py-1 rounded-full bg-slate-200 text-slate-600">
+                              {CLUB_CATEGORIES[club.category].label}
+                            </span>
+                          ) : (
+                            <span class="text-[10px] font-black px-2.5 py-1 rounded-full bg-blue-50 text-blue-700">
+                              {CLUB_CATEGORIES[club.category].label}
+                            </span>
+                          )}
                           {isFull && (
                             <span class="text-[10px] font-black px-2.5 py-1 rounded-full bg-slate-200 text-slate-500">
                               최소 인원 달성
