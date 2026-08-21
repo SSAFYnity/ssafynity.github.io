@@ -11,6 +11,8 @@ GitHub Pages 안에서 `#` 없는 정적 경로를 유지하기 위한 공식 �
 
 ## 현재 구조
 
+- `docs/design-system.md`
+  공식 홈페이지 저장소 안에서 완결되는 디자인 토큰과 UI 사용 기준입니다.
 - `src/site`
   기존 `ssafynity.github.io/src`에서 React 라우팅 레이어를 걷어내고, Astro에서 재사용하는 데이터·유틸리티·스타일 소스입니다.
 - `src/pages`
@@ -34,13 +36,19 @@ GitHub Pages 안에서 `#` 없는 정적 경로를 유지하기 위한 공식 �
 - 라우팅은 더 이상 React Router 중심이 아니라 Astro 파일 라우팅 기준입니다.
 - 라이브 페이지 출력에는 React island와 React Router 호환 런타임이 남아 있지 않습니다.
 
+## 디자인 시스템
+
+- 공식 홈페이지의 디자인 기준은 [`docs/design-system.md`](docs/design-system.md)를 따릅니다.
+- 디자인 토큰은 `src/site/index.css`와 `tailwind.config.ts`에 저장소 내부 값으로 선언합니다.
+- 블로그나 상위 작업공간 파일을 import하지 않으며, 이 저장소만으로 설치·빌드·배포할 수 있어야 합니다.
+
 ## 실행 명령
 
-기본 터미널 Node가 낮을 수 있으므로, 로컬에서는 아래처럼 Node 20 이상으로 실행하는 것을 권장합니다.
+Node.js 22.12.0 이상과 npm 10 이상이 필요합니다.
 
 ```bash
-PATH="/opt/homebrew/opt/node@20/bin:$PATH" npm install
-PATH="/opt/homebrew/opt/node@20/bin:$PATH" npm run generate:pages
-PATH="/opt/homebrew/opt/node@20/bin:$PATH" npm run build
-PATH="/opt/homebrew/opt/node@20/bin:$PATH" npm run verify:migration
+npm install
+npm run generate:pages
+npm run build
+npm run verify:migration
 ```
