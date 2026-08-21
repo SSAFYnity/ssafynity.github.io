@@ -106,12 +106,29 @@ export const events2026: Event[] = [
   },
   {
     slug:      '2026-ongoing-event-august',
-    title:     '8월 정회원 온라인 게임 (날짜 투표 중)',
-    eventDate: { start: '2026-08-01', precision: 'month' },
+    title:     '멧챠 카멜리온 대전',
+    eventDate: { start: '2026-08-30', startTime: '20:00' },
+    recruitDate: { start: '2026-08-21', end: '2026-08-28' },
     format:    ['online'],
     kind:      'ongoing',
     audience:  'regular',
-    summary:   '정회원 오픈카카오톡방에서 날짜 투표를 진행 중인 8월 온라인 게임 행사',
+    summary:   '정회원이 디스코드에서 함께 참여하고 유튜브 생중계로 진행하는 온라인 게임 행사',
+    img:       '/events/2026-ongoing-event-august.png',
+    notices: {
+      fee: {
+        regular: '무료',
+      },
+      checklist: [
+        '본 행사는 정회원만 참여 가능합니다.',
+        '접수 마감 전까지 정회원 승인이 완료되면 행사에 참여할 수 있습니다.',
+      ],
+      custom: [
+        {
+          title: '진행 플랫폼',
+          body:  '디스코드와 유튜브 생중계로 진행됩니다.',
+        },
+      ],
+    },
   },
   {
     slug:      '2026-ongoing-event-september',
