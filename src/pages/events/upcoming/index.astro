@@ -129,6 +129,8 @@ const hasPlanningEvents = events.some((event) => getEventStatus(event) === 'plan
                     data-event-precision={event.eventDate.precision ?? 'day'}
                     data-event-start-time={event.eventDate.startTime ?? ''}
                     data-event-end-time={event.eventDate.endTime ?? ''}
+                    data-event-unconfirmed={event.eventDate.precision === 'month' || Boolean(event.eventDate.candidates?.length) ? 'true' : 'false'}
+                    data-event-registration-channel={event.registrationChannel ?? ''}
                     data-event-recruit-start={event.recruitDate?.start ?? ''}
                     data-event-recruit-end={event.recruitDate?.end ?? event.recruitDate?.start ?? ''}
                     data-event-audience={event.audience ?? ''}
@@ -162,6 +164,8 @@ const hasPlanningEvents = events.some((event) => getEventStatus(event) === 'plan
                   data-event-precision={event.eventDate.precision ?? 'day'}
                   data-event-start-time={event.eventDate.startTime ?? ''}
                   data-event-end-time={event.eventDate.endTime ?? ''}
+                  data-event-unconfirmed={event.eventDate.precision === 'month' || Boolean(event.eventDate.candidates?.length) ? 'true' : 'false'}
+                  data-event-registration-channel={event.registrationChannel ?? ''}
                   data-event-recruit-start={event.recruitDate?.start ?? ''}
                   data-event-recruit-end={event.recruitDate?.end ?? event.recruitDate?.start ?? ''}
                   data-event-audience={event.audience ?? ''}
@@ -237,6 +241,7 @@ const hasPlanningEvents = events.some((event) => getEventStatus(event) === 'plan
       'recruit-closed': '접수 마감',
       'before-recruit': '접수 예정',
       'no-recruit': '운영진 행사',
+      announced: '참여 안내',
       planning: '일정 조율 중',
       past: '종료',
     }
@@ -290,6 +295,8 @@ const hasPlanningEvents = events.some((event) => getEventStatus(event) === 'plan
         if (now <= endDate) return 'today-ongoing'
         return 'past'
       }
+
+      if (card.getAttribute('data-event-registration-channel') && card.getAttribute('data-event-unconfirmed') !== 'true' && !recruitStart) return 'announced'
 
       if (!recruitStart || !recruitEnd) {
         return audience === 'operator' ? 'no-recruit' : 'planning'

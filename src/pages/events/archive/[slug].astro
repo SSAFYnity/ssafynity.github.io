@@ -528,7 +528,9 @@ const tabs = [
                       </p>
                       <ul class="pl-4 list-disc marker:text-slate-300">
                         <li class="text-sm text-slate-500 leading-relaxed break-keep text-pretty">
-                          <ResponsiveText text={EVENT_KIND[event.kind].desc} />
+                          <ResponsiveText text={event.kind === 'ongoing' && event.audience === 'regular'
+                            ? '비정기적인 소규모 행사로 진행됩니다.'
+                            : EVENT_KIND[event.kind].desc} />
                         </li>
                       </ul>
                     </div>
@@ -1076,6 +1078,8 @@ const tabs = [
             if (now <= endDate) return 'today-ongoing';
             return 'past';
           }
+
+          if (targetEvent.registrationChannel && !targetEvent.recruitDate && !targetEvent.eventDate.candidates?.length) return 'announced';
 
           if (!targetEvent.recruitDate) return targetEvent.audience === 'operator' ? 'no-recruit' : 'planning';
 

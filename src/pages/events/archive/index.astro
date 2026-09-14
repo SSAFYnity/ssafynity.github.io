@@ -39,7 +39,7 @@ function getArchiveVisibility(event: Event) {
   eventEnd.setHours(0, 0, 0, 0)
 
   if (today > eventEnd) return true
-  if (!event.recruitDate) return event.audience === 'operator'
+  if (!event.recruitDate) return Boolean(event.registrationChannel) || event.audience === 'operator'
 
   const recruitStart = new Date(event.recruitDate.start)
   recruitStart.setHours(0, 0, 0, 0)
@@ -316,6 +316,7 @@ const initialVisibleYears = new Set(initialVisibleEvents.map((event) => new Date
                 data-event-unconfirmed={String(event.eventDate.precision === 'month' || Boolean(event.eventDate.candidates?.length))}
                 data-event-start-time={event.eventDate.startTime ?? ''}
                 data-event-end-time={event.eventDate.endTime ?? ''}
+                data-event-registration-channel={event.registrationChannel ?? ''}
                 data-event-recruit-start={event.recruitDate?.start ?? ''}
                 data-event-recruit-end={event.recruitDate?.end ?? event.recruitDate?.start ?? ''}
                 data-event-year={String(year)}
@@ -481,6 +482,7 @@ const initialVisibleYears = new Set(initialVisibleEvents.map((event) => new Date
       }
 
       const ribbonClasses = {
+        announced: 'bg-blue-600 text-white',
         'today-upcoming': 'bg-orange-500 text-white',
         'today-ongoing': 'bg-blue-600 text-white',
         recruiting: 'bg-emerald-500 text-white',
@@ -490,6 +492,7 @@ const initialVisibleYears = new Set(initialVisibleEvents.map((event) => new Date
       };
 
       const ribbonLabels = {
+        announced: '참여 안내',
         'today-upcoming': '오늘 예정',
         'today-ongoing': '오늘 진행 중',
         recruiting: '접수 중',
@@ -669,6 +672,8 @@ const initialVisibleYears = new Set(initialVisibleEvents.map((event) => new Date
           return 'past';
         }
 
+        if (card.getAttribute('data-event-registration-channel') && card.getAttribute('data-event-unconfirmed') !== 'true' && !recruitStart) return 'announced';
+
         if (!recruitStart || !recruitEnd) {
           return audience === 'operator' ? 'no-recruit' : 'planning';
         }
@@ -692,7 +697,7 @@ const initialVisibleYears = new Set(initialVisibleEvents.map((event) => new Date
         if (eventEnd && today > eventEnd) return true;
 
         if (!recruitStart) {
-          return card.getAttribute('data-event-audience') === 'operator';
+          return Boolean(card.getAttribute('data-event-registration-channel')) || card.getAttribute('data-event-audience') === 'operator';
         }
 
         recruitStart.setDate(recruitStart.getDate() - 14);

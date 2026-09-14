@@ -113,6 +113,7 @@ export type Event = {
   title:         string
   eventDate:     EventDateRange          // 행사 날짜 (하루 또는 여러 날)
   recruitDate?:  RecruitDateRange        // 모집 기간 (시작 ~ 마감)
+  registrationChannel?: string          // 날짜 확정 후 별도 채널에서 참여 안내 (접수 기간·폼 없이 사용)
   location?:     string
   locationUrl?: {
     naver?:  string

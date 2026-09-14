@@ -17,6 +17,7 @@ export type EventStatus =
   | 'before-recruit'
   | 'no-recruit'
   | 'planning'
+  | 'announced'
 
 export const EVENT_STATUS_CONFIG: Record<EventStatus, { label: string; className: string }> = {
   'past':           { label: '종료',     className: 'bg-slate-100 text-slate-400' },
@@ -26,6 +27,7 @@ export const EVENT_STATUS_CONFIG: Record<EventStatus, { label: string; className
   'recruit-closed': { label: '접수 마감', className: 'bg-slate-700 text-white' },
   'before-recruit': { label: '접수 예정', className: 'bg-amber-500 text-white' },
   'no-recruit':     { label: '운영진',   className: 'bg-slate-100 text-slate-500' },
+  'announced':      { label: '참여 안내', className: 'bg-blue-600 text-white' },
   'planning':       { label: '계획중',   className: 'bg-slate-200 text-slate-500' },
 }
 
@@ -106,6 +108,8 @@ export function getEventStatus(event: SiteEvent): EventStatus {
     if (now <= eventEndDt)   return 'today-ongoing'
     return 'past'
   }
+
+  if (event.registrationChannel && !event.recruitDate && !event.eventDate.candidates?.length) return 'announced'
 
   if (!event.recruitDate) return event.audience === 'operator' ? 'no-recruit' : 'planning'
 

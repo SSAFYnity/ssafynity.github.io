@@ -48,7 +48,7 @@ export const events2026: Event[] = [
     },
   },
   {
-    slug:      '2026-first-regular-event',
+    slug:      '2026-night-of-ssafynity',
     title:     '제4회 싸피인의 밤',
     eventDate: { start: '2026-06-27', startTime: '13:30', endTime: '22:00' },
     recruitDate: { start: '2026-05-30', end: '2026-06-26' },
@@ -58,12 +58,12 @@ export const events2026: Event[] = [
     kind:      'regular',
     audience:  'members',
     summary:   '초록 또는 카키 드레스코드로 함께하는 상반기 동문회원 친목행사',
-    img:       '/events/2026-first-regular-event.png',
+    img:       '/events/2026-night-of-ssafynity.png',
     gallery: [
-      '/events/2026-first-regular-event-02.png',
-      '/events/2026-first-regular-event-03.png',
-      '/events/2026-first-regular-event-04.png',
-      '/events/2026-first-regular-event-05.png',
+      '/events/2026-night-of-ssafynity-02.png',
+      '/events/2026-night-of-ssafynity-03.png',
+      '/events/2026-night-of-ssafynity-04.png',
+      '/events/2026-night-of-ssafynity-05.png',
     ],
     formUrl:   'https://forms.gle/XPDarz4j5hnUf89K9',
     capacity:  100,
@@ -105,7 +105,7 @@ export const events2026: Event[] = [
     },
   },
   {
-    slug:      '2026-ongoing-event-august',
+    slug:      '2026-metcha-chameleon-tournament',
     title:     '멧챠 카멜레온 대전',
     eventDate: { start: '2026-08-30', startTime: '20:00' },
     recruitDate: { start: '2026-08-21', end: '2026-08-28' },
@@ -114,7 +114,7 @@ export const events2026: Event[] = [
     kind:      'ongoing',
     audience:  'regular',
     summary:   '정회원이 디스코드에서 함께 참여하고 유튜브 생중계로 진행하는 온라인 게임 행사',
-    img:       '/events/2026-ongoing-event-august.png',
+    img:       '/events/2026-metcha-chameleon-tournament.png',
     notices: {
       fee: {
         regular: '무료',
@@ -132,13 +132,38 @@ export const events2026: Event[] = [
     },
   },
   {
-    slug:      '2026-ongoing-event-september',
-    title:     '9월 상시행사 (변동 가능성 있음)',
-    eventDate: { start: '2026-09-01', precision: 'month' },
+    slug:      '2026-hangang-chicken',
+    title:     '9월 정회원 한강치킨모임',
+    eventDate: { start: '2026-09-20', startTime: '15:00', endTime: '19:00' },
+    location:  '뚝섬한강공원',
+    registrationChannel: '정회원 단톡방',
     format:    ['offline'],
     kind:      'ongoing',
     audience:  'regular',
-    summary:   '2026년 9월 중 진행 예정인 정회원 전용 상시 행사',
+    summary:   '뚝섬한강공원에서 치킨과 함께하는 정회원 전용 모임',
+    img:       '/events/2026-hangang-chicken.png',
+    notices: {
+      checklist: ['이번 행사는 정회원만 참여할 수 있습니다.'],
+      items: ['운영진 제공 항목 외 필요한 물품은 개인이 지참해 주세요.'],
+      custom: [
+        {
+          title: '운영진 제공',
+          body: '돗자리를 준비하고 치킨 비용을 지원합니다.',
+        },
+        {
+          title: '참여 신청 및 상세 안내',
+          body: '별도 접수 링크 없이 정회원 단톡방에서 참여 신청을 받습니다.\n상세 안내도 정회원 단톡방에 공지합니다.',
+        },
+        {
+          title: '집결 위치',
+          body: '뚝섬한강공원 내 정확한 집결 위치는 정회원 단톡방에서 실시간으로 소통하며 안내합니다.',
+        },
+        {
+          title: '진행 시간',
+          body: '공식 진행 시간은 15:00부터 19:00까지입니다.\n공식 시간 전후의 자유 모임은 선택 참여입니다.',
+        },
+      ],
+    },
   },
   {
     slug:      '2026-second-half-regular-event',
