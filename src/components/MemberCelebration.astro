@@ -1,0 +1,45 @@
+---
+const noticeUrl = import.meta.env.DEV
+  ? 'http://127.0.0.1:4322/blog/notice/018/'
+  : 'https://ssafynity.github.io/blog/notice/018/'
+---
+
+<section class="celebration" aria-labelledby="celebration-title">
+  <div class="celebration-inner">
+    <a href={noticeUrl} class="celebration-image" aria-label="5,000명 달성 이벤트 공지 확인">
+      <img src="/events/2026-5000-members.png" alt="동문회원 5,000명 달성 축하·후기 이벤트 뉴스카드" width="1254" height="1254" loading="lazy" />
+    </a>
+    <div class="celebration-copy">
+      <p class="celebration-period">이벤트 공개일 ~ 2026년 10월 15일</p>
+      <h2 id="celebration-title">동문회원 5,000명,<br />함께 축하해주세요</h2>
+      <p>축하 댓글이나 동문회 후기를 남겨주세요. 댓글 링크를 접수폼에 제출하거나, 접수폼에 후기를 직접 작성하면 참여가 완료됩니다.</p>
+      <ul>
+        <li><strong>1등</strong> ChatGPT Pro 1개월 · 1명</li>
+        <li><strong>2등</strong> 치킨 1마리 · 2명</li>
+        <li><strong>3등</strong> 오픽 수강권 · 50명</li>
+      </ul>
+      <p class="celebration-note">동문회원 확인 후 무작위 추첨 · 중복 참여 가점 없음<br />제출한 댓글·후기는 홈페이지에 게시될 수 있습니다.</p>
+      <div class="celebration-actions">
+        <a href={noticeUrl}>이벤트 공지 확인</a>
+        <a href="https://forms.gle/t9i7VzfmMEEe1RUFA" target="_blank" rel="noopener noreferrer">접수폼으로 참여하기</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .celebration { padding: 64px 24px; background: var(--color-canvas, #f8fafc); }
+  .celebration-inner { max-width: 1280px; margin: auto; display: grid; gap: 32px; align-items: center; }
+  .celebration-image img { display: block; width: 100%; height: auto; border-radius: 14px; }
+  .celebration-copy h2 { margin: 12px 0 20px; font-size: clamp(28px, 4vw, 44px); line-height: 1.25; font-weight: 800; color: #172554; }
+  .celebration-copy p { line-height: 1.8; word-break: keep-all; color: #475569; }
+  .celebration-period { margin: 0; font-weight: 700; }
+  .celebration-copy ul { padding: 0; list-style: none; line-height: 2.2; }
+  .celebration-copy li strong { margin-right: 12px; }
+  .celebration-note { font-size: 13px; }
+  .celebration-actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 24px; }
+  .celebration-actions a { display: inline-flex; align-items: center; min-height: 48px; padding: 0 18px; border-radius: 10px; background: #1e3a8a; color: white; font-weight: 700; }
+  .celebration-actions a:hover { background: #172554; }
+  .celebration a:focus-visible { outline: 3px solid #2563eb; outline-offset: 4px; }
+  @media (min-width: 768px) { .celebration-inner { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 48px; } }
+</style>
