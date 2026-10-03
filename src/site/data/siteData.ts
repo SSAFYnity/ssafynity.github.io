@@ -1,7 +1,7 @@
 import { ROUTES } from '@/lib/routes'
 
 const memberStatsByCohort = [
-  { cohort: 1, total: 171 },
+  { cohort: 1, total: 172 },
   { cohort: 2, total: 186 },
   { cohort: 3, total: 252 },
   { cohort: 4, total: 178 },
@@ -9,28 +9,29 @@ const memberStatsByCohort = [
   { cohort: 6, total: 519 },
   { cohort: 7, total: 573 },
   { cohort: 8, total: 571 },
-  { cohort: 9, total: 502 },
-  { cohort: 10, total: 399 },
+  { cohort: 9, total: 503 },
+  { cohort: 10, total: 400 },
   { cohort: 11, total: 232 },
   { cohort: 12, total: 374 },
-  { cohort: 13, total: 284 },
-  { cohort: 14, total: 241 },
-  { cohort: 15, total: 76 },
+  { cohort: 13, total: 288 },
+  { cohort: 14, total: 319 },
+  { cohort: 15, total: 141 },
+  { cohort: 16, total: 2 },
 ] as const
 
 const memberStatsByCampus = [
-  { campus: '서울', total: 2270 },
-  { campus: '대전', total: 859 },
-  { campus: '광주', total: 660 },
-  { campus: '구미', total: 713 },
-  { campus: '부울경', total: 369 },
+  { campus: '서울', total: 2347 },
+  { campus: '대전', total: 876 },
+  { campus: '광주', total: 681 },
+  { campus: '구미', total: 729 },
+  { campus: '부울경', total: 390 },
 ] as const
 
 const memberStatsSummary = {
   operator: 11,
-  general: 4803,
-  regular: 57,
-  total: 4871,
+  general: 4957,
+  regular: 55,
+  total: 5023,
 } as const
 
 // src/site/data/siteData.ts
@@ -184,6 +185,7 @@ export const siteData = {
     { year: 2024, month:  8, label: '인프콘 2024 참여',  desc: '첫 외부 행사 초청 — 싸피니티를 외부에 공식 소개한 첫 자리' },
     { year: 2025, month:  1, label: '동문 3,000명 돌파', desc: '동문 커뮤니티 3,000명 규모로 성장' },
     { year: 2025, month: 12, label: '동문 4,000명 돌파', desc: '14개 기수, 4,000명 이상의 동문이 함께하는 공동체로 성장' },
+    { year: 2026, month: 9, label: '동문 5,000명 돌파', desc: '16개 기수, 5,000명 이상의 동문이 함께하는 공동체로 성장' },
   ],
 
   // ─── 행사 ──────────────────────────────────────────────────────
