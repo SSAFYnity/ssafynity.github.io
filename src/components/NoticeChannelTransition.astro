@@ -3,8 +3,8 @@ import Container from '~/components/Container.astro'
 import LucideIcon from '~/components/LucideIcon.astro'
 import { siteData } from '@/data/siteData'
 
-// 블로그 notice/019는 초안이므로 발행 전까지 메인 안내도 개발 서버에서만 표시합니다.
-const noticeUrl = `${siteData.sites.development.blog}/notice/019/`
+const blogUrl = import.meta.env.DEV ? siteData.sites.development.blog : siteData.sites.production.blog
+const noticeUrl = `${blogUrl}/notice/019/`
 ---
 
 <section class="channel-notice" aria-labelledby="channel-notice-title">
