@@ -1,0 +1,46 @@
+---
+import Container from '~/components/Container.astro'
+import LucideIcon from '~/components/LucideIcon.astro'
+import { siteData } from '@/data/siteData'
+
+// 블로그 notice/019는 초안이므로 발행 전까지 메인 안내도 개발 서버에서만 표시합니다.
+const noticeUrl = `${siteData.sites.development.blog}/notice/019/`
+---
+
+<section class="channel-notice" aria-labelledby="channel-notice-title">
+  <Container maxWidth="7xl">
+    <div class="channel-notice-inner">
+      <a href={noticeUrl} class="channel-notice-image" aria-label="공지 수신 방법 변경 안내 자세히 보기">
+        <img src="/notices/2026-notice-channel-transition.png" alt="문자 안내 종료와 누구나 추가할 수 있는 SSAFYnity 카카오톡 채널 안내 뉴스카드" width="2160" height="2160" loading="lazy" />
+      </a>
+      <div class="channel-notice-copy">
+        <h2 id="channel-notice-title">동문회 소식,<br />이제 카카오톡으로 받아보세요</h2>
+        <p>이번 안내 문자를 마지막으로 모든 문자 안내를 종료합니다.<br />동문회원이 아니어도 누구나 카카오톡 채널을 추가하고, 원하지 않을 때 차단할 수 있습니다.</p>
+        <p>모든 공지는 홈페이지·인스타그램·링크드인·카카오톡 채널·디스코드에 동일하게 제공됩니다.</p>
+        <p>카카오톡 채널의 ‘채팅하기’로 운영진에게 직접 문의할 수 있습니다.</p>
+        <p class="channel-notice-note">개인별 안내는 이메일로 보내드립니다.</p>
+        <a href={noticeUrl} class="channel-notice-action">
+          공지 자세히 보기
+          <LucideIcon name="arrow-right" size={18} />
+        </a>
+      </div>
+    </div>
+  </Container>
+</section>
+
+<style>
+  .channel-notice { padding: 64px 0; background: var(--color-surface, #fff); }
+  .channel-notice-inner { display: grid; align-items: center; gap: 32px; }
+  .channel-notice-image { display: block; max-width: 440px; width: 100%; }
+  .channel-notice-image img { display: block; width: 100%; height: auto; border-radius: 14px; }
+  .channel-notice-copy { min-width: 0; }
+  .channel-notice-copy h2 { margin: 0 0 24px; color: var(--color-ink, #0f172a); font-size: clamp(28px, 3vw, 40px); font-weight: 800; line-height: 1.3; letter-spacing: -0.025em; word-break: keep-all; }
+  .channel-notice-copy p { max-width: 62ch; margin: 0 0 16px; color: var(--color-body, #475569); font-size: 16px; line-height: 1.8; word-break: keep-all; }
+  .channel-notice-copy .channel-notice-note { font-size: 14px; }
+  .channel-notice-action { display: inline-flex; align-items: center; gap: 10px; min-height: 48px; margin-top: 12px; padding: 0 20px; border-radius: 10px; background: var(--color-brand-navy, #1e3a8a); color: #fff; font-size: 15px; font-weight: 700; text-decoration: none; }
+  .channel-notice-action:hover { background: #172554; }
+  .channel-notice a:focus-visible { outline: 3px solid #2563eb; outline-offset: 4px; }
+  @media (min-width: 768px) {
+    .channel-notice-inner { grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr); gap: clamp(32px, 5vw, 72px); }
+  }
+</style>

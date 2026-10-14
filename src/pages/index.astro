@@ -2,6 +2,7 @@
 import Container from '~/components/Container.astro'
 import HomeHero from '~/components/HomeHero.astro'
 import MemberCelebration from '~/components/MemberCelebration.astro'
+import NoticeChannelTransition from '~/components/NoticeChannelTransition.astro'
 import LucideIcon from '~/components/LucideIcon.astro'
 import SiteLayout from '~/layouts/SiteLayout.astro'
 import { allEvents, allPartners, computed } from '@/data/computed'
@@ -62,6 +63,8 @@ const participationPaths = [
         </dl>
       </Container>
     </section>
+
+    {import.meta.env.DEV && <NoticeChannelTransition />}
 
     <MemberCelebration />
 
