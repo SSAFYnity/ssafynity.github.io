@@ -1,37 +1,37 @@
 import { ROUTES } from '@/lib/routes'
 
 const memberStatsByCohort = [
-  { cohort: 1, total: 172 },
+  { cohort: 1, total: 173 },
   { cohort: 2, total: 186 },
   { cohort: 3, total: 252 },
-  { cohort: 4, total: 178 },
+  { cohort: 4, total: 179 },
   { cohort: 5, total: 313 },
   { cohort: 6, total: 519 },
   { cohort: 7, total: 573 },
   { cohort: 8, total: 571 },
   { cohort: 9, total: 503 },
-  { cohort: 10, total: 400 },
-  { cohort: 11, total: 232 },
+  { cohort: 10, total: 401 },
+  { cohort: 11, total: 234 },
   { cohort: 12, total: 374 },
-  { cohort: 13, total: 288 },
-  { cohort: 14, total: 319 },
-  { cohort: 15, total: 141 },
-  { cohort: 16, total: 2 },
+  { cohort: 13, total: 291 },
+  { cohort: 14, total: 323 },
+  { cohort: 15, total: 156 },
+  { cohort: 16, total: 13 },
 ] as const
 
 const memberStatsByCampus = [
-  { campus: '서울', total: 2347 },
-  { campus: '대전', total: 876 },
-  { campus: '광주', total: 681 },
-  { campus: '구미', total: 729 },
-  { campus: '부울경', total: 390 },
+  { campus: '서울', total: 2360 },
+  { campus: '대전', total: 885 },
+  { campus: '광주', total: 685 },
+  { campus: '구미', total: 734 },
+  { campus: '부울경', total: 397 },
 ] as const
 
 const memberStatsSummary = {
   operator: 11,
-  general: 4957,
-  regular: 55,
-  total: 5023,
+  general: 4994,
+  regular: 56,
+  total: 5061,
 } as const
 
 // src/site/data/siteData.ts
