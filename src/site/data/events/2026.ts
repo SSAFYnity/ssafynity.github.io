@@ -168,6 +168,7 @@ export const events2026: Event[] = [
   {
     slug:      '2026-ssafynale',
     title:     '제4회 SSAFYnale',
+    img:       '/events/2026-ssafynale.png',
     speakerFormUrl: 'https://forms.gle/7LnEzCgAuhRUfGAj6',
     formUrl: 'https://forms.gle/yx8C633ozorbJ6pD9',
     eventDate: {
