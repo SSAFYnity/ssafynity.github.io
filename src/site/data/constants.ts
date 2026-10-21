@@ -94,7 +94,7 @@ export type EventNotices = {
   refund?:    string[]    // 환불 기준 (항목별, \n 지원)
   checklist?: string[]    // 필수 확인 사항 (항목별, \n 지원)
   items?:     string[]    // 준비물 (항목별, \n 지원)
-  custom?:    { title: string; body: string }[]  // 기타 자유 형식 안내 (\n 지원)
+  custom?:    ({ title: string } & ({ body: string; items?: never } | { items: string[]; body?: never }))[]  // 문단 또는 항목형 안내
   resultsCustom?: { title: string; body: string }[]  // 참여 결과 탭에만 노출되는 자유 형식 정보 (\n 지원)
 }
 
@@ -128,6 +128,7 @@ export type Event = {
   img?:          string
   gallery?:      string[]                // 상세 페이지 추가 이미지 (첫 번째 대표 이미지는 img 사용)
   formUrl?:      string                  // 접수 폼 URL (만료되면 생략)
+  speakerFormUrl?: string                // 발표자 전용 접수 폼 URL (참여자 formUrl과 구분)
   capacity?:     number | 'unlimited'    // 정원 (숫자: 명, 'unlimited': 제한 없음)
   registrants?:  ParticipantBreakdown   // 최종 접수자
   attendees?:    ParticipantBreakdown   // 실제 참여자

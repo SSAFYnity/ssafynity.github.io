@@ -106,7 +106,7 @@ function getActionState(targetEvent: Event, status: EventStatus) {
         : null
 
   const ddayClass = status === 'before-recruit' ? 'text-amber-500' : 'text-emerald-500'
-  const ddayLabel = status === 'before-recruit' ? '접수 시작까지' : '접수 마감까지'
+  const ddayLabel = status === 'before-recruit' ? '접수 시작까지' : targetEvent.speakerFormUrl ? '참여자 접수 마감까지' : '접수 마감까지'
 
   if (status === 'recruiting') {
     return {
@@ -115,7 +115,7 @@ function getActionState(targetEvent: Event, status: EventStatus) {
       ddayClass,
       ddayLabel,
       mode: targetEvent.formUrl ? 'link' : 'disabled',
-      label: targetEvent.formUrl ? '접수하기' : '접수 링크 준비 중',
+      label: targetEvent.formUrl ? '접수하기' : targetEvent.speakerFormUrl ? '참여자 접수 링크 준비 중' : '접수 링크 준비 중',
       buttonClass: targetEvent.formUrl
         ? 'flex items-center justify-center gap-2 w-full py-3 rounded-xl bg-blue-600 text-white text-sm font-black hover:bg-blue-700 transition-colors'
         : 'w-full py-3 rounded-xl bg-slate-100 text-slate-400 text-sm font-black cursor-not-allowed',
@@ -205,7 +205,9 @@ if (event?.notices?.items?.length) {
 }
 
 event?.notices?.custom?.forEach((item) => {
-  noticeCards.push({ icon: 'message-circle', title: item.title, kind: 'text', text: item.body })
+  noticeCards.push(item.items
+    ? { icon: 'message-circle', title: item.title, kind: 'list', items: item.items }
+    : { icon: 'message-circle', title: item.title, kind: 'text', text: item.body })
 })
 
 if (event?.notices?.fee) {
@@ -524,7 +526,7 @@ const tabs = [
                   {event.kind && (
                     <div class="flex flex-col gap-1">
                       <p class="text-sm font-extrabold text-slate-700">
-                        이번 행사는 <span class="text-blue-600">{EVENT_KIND_LABEL[event.kind]}</span> 행사예요.
+                        이번 행사는 <span class="text-blue-600">{EVENT_KIND_LABEL[event.kind]}</span>입니다.
                       </p>
                       <ul class="pl-4 list-disc marker:text-slate-300">
                         <li class="text-sm text-slate-500 leading-relaxed break-keep text-pretty">
@@ -539,7 +541,7 @@ const tabs = [
                   {event.audience && (
                     <div class="flex flex-col gap-1">
                       <p class="text-sm font-extrabold text-slate-700">
-                        참여 대상은 <span class="text-blue-600">{EVENT_AUDIENCE_LABEL[event.audience]}</span>이에요.
+                        참여 범위: <span class="text-blue-600">{EVENT_AUDIENCE_LABEL[event.audience]}</span>
                       </p>
                       <ul class="pl-4 list-disc marker:text-slate-300">
                         <li class="text-sm text-slate-500 leading-relaxed break-keep text-pretty">
@@ -614,6 +616,26 @@ const tabs = [
               </span>
             </p>
 
+            {event.speakerFormUrl && (
+              <a
+                id="event-speaker-apply-link"
+                href={event.speakerFormUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                data-track-event="click_event_apply"
+                data-track-params={JSON.stringify({
+                  event_slug: event.slug,
+                  event_title: event.title,
+                  application_type: 'speaker',
+                  destination_url: event.speakerFormUrl,
+                })}
+                class={`${initialStatus === 'recruiting' ? '' : 'hidden '}flex items-center justify-center gap-2 w-full py-3 rounded-xl bg-blue-600 text-white text-sm font-black hover:bg-blue-700 transition-colors`}
+              >
+                발표자로 지원하기
+                <LucideIcon name="external-link" size={14} />
+              </a>
+            )}
+
             <a
               id="event-apply-link"
               href={event.formUrl ?? '#'}
@@ -630,7 +652,7 @@ const tabs = [
               })}
               class={`${initialActionState?.mode === 'link' ? '' : 'hidden '}${initialActionState?.buttonClass ?? ''}`}
             >
-              접수하기
+              {event.speakerFormUrl ? '참여자 사전 신청하기' : '접수하기'}
               <LucideIcon name="external-link" size={14} />
             </a>
 
@@ -1125,10 +1147,10 @@ const tabs = [
             return {
               visible: true,
               dday,
-              ddayLabel: '접수 마감까지',
+              ddayLabel: targetEvent.speakerFormUrl ? '참여자 접수 마감까지' : '접수 마감까지',
               ddayClass: 'text-emerald-500',
               mode: targetEvent.formUrl ? 'link' : 'disabled',
-              label: targetEvent.formUrl ? '접수하기' : '접수 링크 준비 중',
+              label: targetEvent.formUrl ? '접수하기' : targetEvent.speakerFormUrl ? '참여자 접수 링크 준비 중' : '접수 링크 준비 중',
               buttonClass: targetEvent.formUrl
                 ? 'flex items-center justify-center gap-2 w-full py-3 rounded-xl bg-blue-600 text-white text-sm font-black hover:bg-blue-700 transition-colors'
                 : 'w-full py-3 rounded-xl bg-slate-100 text-slate-400 text-sm font-black cursor-not-allowed',
@@ -1226,6 +1248,11 @@ const tabs = [
         const ddayValue = document.getElementById('event-dday-value');
         const applyLink = document.getElementById('event-apply-link');
         const disabledButton = document.getElementById('event-action-disabled');
+        const speakerApplyLink = document.getElementById('event-speaker-apply-link');
+
+        if (speakerApplyLink) {
+          speakerApplyLink.classList.toggle('hidden', status !== 'recruiting');
+        }
 
         if (actionSection && ddayRow && ddayLabel && ddayValue && applyLink && disabledButton) {
           actionSection.classList.toggle('hidden', !actionState.visible);

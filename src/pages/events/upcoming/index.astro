@@ -94,7 +94,7 @@ const hasPlanningEvents = events.some((event) => getEventStatus(event) === 'plan
                 <>
                   <time class="event-schedule-date" datetime={event.eventDate.start}>
                     <span>{monthLabels[eventDate.getMonth()]}</span>
-                    <strong>{status === 'planning' ? '미정' : String(eventDate.getDate()).padStart(2, '0')}</strong>
+                    <strong>{event.eventDate.precision === 'month' || event.eventDate.candidates?.length ? '미정' : String(eventDate.getDate()).padStart(2, '0')}</strong>
                   </time>
 
                   <div class="event-schedule-copy">
