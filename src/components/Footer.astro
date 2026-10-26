@@ -1,4 +1,5 @@
 ---
+import FamilySites from './FamilySites.astro'
 import BrandIcon from '~/components/BrandIcon.astro'
 import Container from '~/components/Container.astro'
 import LucideIcon from '~/components/LucideIcon.astro'
@@ -75,6 +76,7 @@ const blogUrl = import.meta.env.DEV ? siteData.sites.development.blog : siteData
       <div>
         <a href={siteData.legal.privacyPath}>개인정보처리방침</a>
         <a href={siteData.legal.termsPath}>이용약관</a>
+        <FamilySites />
       </div>
     </div>
   </Container>
@@ -243,6 +245,7 @@ const blogUrl = import.meta.env.DEV ? siteData.sites.development.blog : siteData
     display: flex;
     flex-wrap: wrap;
     gap: 20px;
+    align-items: center;
   }
 
   .official-footer-meta a {

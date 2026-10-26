@@ -1,0 +1,49 @@
+<div class="family-sites" data-family-sites>
+  <button type="button" aria-expanded="false" aria-controls="family-sites-menu" data-family-toggle>
+    <span>패밀리 사이트</span>
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="m6 9 6 6 6-6" /></svg>
+  </button>
+  <div id="family-sites-menu" class="family-sites-menu" hidden>
+    <a href="https://ssafyens.ssafy.com" target="_blank" rel="noopener noreferrer">
+      <span>싸피엔스</span>
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M14 3h7v7m0-7L10 14M10 3H3v18h18v-7" /></svg>
+      <span class="sr-only">(새 탭에서 열림)</span>
+    </a>
+  </div>
+</div>
+
+<script>
+  document.querySelectorAll<HTMLElement>('[data-family-sites]').forEach((root) => {
+    const button = root.querySelector<HTMLButtonElement>('[data-family-toggle]')!
+    const menu = root.querySelector<HTMLElement>('.family-sites-menu')!
+    const close = () => { button.setAttribute('aria-expanded', 'false'); menu.hidden = true }
+    button.addEventListener('click', () => {
+      const open = button.getAttribute('aria-expanded') !== 'true'
+      button.setAttribute('aria-expanded', String(open))
+      menu.hidden = !open
+    })
+    document.addEventListener('click', (event) => { if (!root.contains(event.target as Node)) close() })
+    root.addEventListener('keydown', (event) => {
+      if (event.key === 'Escape') { close(); button.focus() }
+      if (event.key === 'ArrowDown') {
+        event.preventDefault()
+        button.setAttribute('aria-expanded', 'true')
+        menu.hidden = false
+        menu.querySelector('a')?.focus()
+      }
+    })
+    root.addEventListener('focusout', (event) => { if (!root.contains(event.relatedTarget as Node)) close() })
+  })
+</script>
+
+<style>
+  .family-sites { position: relative; width: 180px; }
+  .family-sites button { display: flex; align-items: center; justify-content: space-between; gap: 24px; width: 100%; min-height: 42px; padding: 10px 14px; border: 1px solid #64748b; border-radius: 6px; background: transparent; color: #e2e8f0; font: inherit; font-size: 12px; font-weight: 700; cursor: pointer; }
+  .family-sites button:hover, .family-sites button[aria-expanded='true'] { border-color: #cbd5e1; background: #334155; }
+  .family-sites button:focus-visible, .family-sites a:focus-visible { outline: 2px solid #93c5fd; outline-offset: 3px; }
+  .family-sites-menu { position: absolute; z-index: 20; bottom: calc(100% + 8px); left: 0; width: 100%; padding: 6px; border: 1px solid #64748b; border-radius: 6px; background: #1e293b; }
+  .family-sites-menu[hidden] { display: none; }
+  .family-sites-menu a { display: flex; align-items: center; justify-content: space-between; gap: 12px; min-height: 42px; padding: 10px; border-radius: 3px; color: #f8fafc; font-size: 13px; font-weight: 600; text-decoration: none; }
+  .family-sites-menu a:hover { background: #334155; }
+  .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0; }
+</style>
