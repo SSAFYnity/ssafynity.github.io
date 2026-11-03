@@ -17,6 +17,7 @@ import { preClubs } from './preClubs'
 import { allEvents } from './events'
 import { operatorData } from './operator'
 import { clubDoljabiClimbing } from './clubs/doljabi-climbing'
+import { clubFlyingSsafyboard } from './clubs/flying-ssafyboard'
 export type { PreClub } from './preClubs'
 export { PRE_CLUB_MIN_MEMBERS } from './preClubs'
 // 새 정식 동아리 추가 시: clubs/{slug}.ts 생성 후 import + allClubs에 추가
@@ -125,6 +126,7 @@ export type Club = {
 
 export const allClubs: Club[] = [
   clubDoljabiClimbing,
+  clubFlyingSsafyboard,
 ]
 // 새 정식 동아리 추가 시: clubs/{slug}.ts 생성 후 import + 여기에 추가
 

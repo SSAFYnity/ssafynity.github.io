@@ -236,6 +236,7 @@ export const siteData = {
   // 새 동아리 추가 시: 파일 생성 후 아래 배열에 slug 추가
   clubSlugs: [
     'doljabi-climbing',
+    'flying-ssafyboard',
   ],
 
   // ─── FAQ ───────────────────────────────────────────────────────
