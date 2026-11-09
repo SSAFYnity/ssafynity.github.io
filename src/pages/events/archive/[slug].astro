@@ -231,6 +231,10 @@ if (event?.notices?.refund?.length) {
   feeCards.push({ icon: 'refresh-cw', title: '환불 기준', kind: 'list', items: event.notices.refund })
 }
 
+if (event?.notices?.payment?.length) {
+  feeCards.push({ icon: 'credit-card', title: '입금 안내', kind: 'list', items: event.notices.payment })
+}
+
 const numericEntries = (value?: Record<string, number | undefined>) =>
   Object.entries(value ?? {}).filter((entry): entry is [string, number] => typeof entry[1] === 'number')
 

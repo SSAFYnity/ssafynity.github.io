@@ -4,7 +4,8 @@ import { fileURLToPath } from 'node:url'
 export default defineConfig({
   site: 'https://ssafynity.github.io',
   redirects: {
-    '/events/archive/2026-second-half-regular-event': '/events/archive/2026-ssafynale',
+    '/events/archive/2026-second-half-regular-event': '/events/archive/2026-career-party',
+    '/events/archive/2026-ssafynale': '/events/archive/2026-career-party',
   },
   vite: {
     resolve: {

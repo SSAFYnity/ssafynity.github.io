@@ -91,6 +91,7 @@ export type EventFee = {
 
 export type EventNotices = {
   fee?:       EventFee    // 참여비
+  payment?:   string[]    // 입금 안내 (항목별, \n 지원)
   refund?:    string[]    // 환불 기준 (항목별, \n 지원)
   checklist?: string[]    // 필수 확인 사항 (항목별, \n 지원)
   items?:     string[]    // 준비물 (항목별, \n 지원)
