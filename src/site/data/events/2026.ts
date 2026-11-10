@@ -174,7 +174,7 @@ export const events2026: Event[] = [
     recruitDate: { start: '2026-11-01', end: '2026-11-21' },
     location: '역삼 멀티캠퍼스 18층 대강의장',
     locationUrl: {
-      naver: 'https://naver.me/x5GzwAww',
+      naver: 'https://naver.me/GPdoBxUY',
       kakao: 'https://place.map.kakao.com/21414107',
       google: 'https://maps.app.goo.gl/7cw8g2vDrjxw1AQU9',
     },
