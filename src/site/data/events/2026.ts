@@ -182,7 +182,7 @@ export const events2026: Event[] = [
     kind: 'regular',
     audience: 'open',
     summary: '직무·도메인·취미를 주제로 경험을 나누는 커리어 네트워킹 파티',
-    registrants: { regular: 12, members: 6, external: 8 },
+    registrants: { regular: 13, members: 6, external: 8 },
     notices: {
       fee: {
         regular: '무료',
