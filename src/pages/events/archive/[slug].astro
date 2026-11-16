@@ -30,7 +30,7 @@ const event = allEvents.find((item) => item.slug === slug)
 const pathname = `/events/archive/${slug}`
 
 const participantOrder = ['regular', 'members', 'external', 'operator', 'partner', 'invited'] as const
-const registrantKeys = event?.slug === '2026-career-party'
+const registrantKeys: readonly string[] = event?.slug === '2026-career-party'
   ? ['regular', 'members', 'external', 'operator'] as const
   : ['regular', 'members', 'external'] as const
 
